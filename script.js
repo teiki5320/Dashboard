@@ -382,6 +382,60 @@ function finalizeInvoice() {
 function deleteItem(t, id) { if (confirm("Supprimer ?")) { db[t] = db[t].filter(x => x.id != id); G.set('v90_' + t, db[t]); renderAll(); } }
 function closePreview() { $('preview-wrap').style.display = 'none'; }
 
+// --- TVA ---
+function calcTVA() {
+    let debut = $('tva-debut').value, fin = $('tva-fin').value;
+    let factures = db.hist;
+    // Regrouper les montants de TVA par taux à partir de l'historique
+    // On utilise curLines pour les données détaillées; ici on affiche un résumé global
+    let taux = { '20': 0, '10': 0, '5.5': 0, '0': 0 };
+    let totalHT = 0, totalTVA = 0;
+    db.hist.forEach(h => {
+        // Estimation simplifiée : on prend le total TTC enregistré
+        let ttc = parseFloat(h.total.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
+        let ht = ttc / 1.2;
+        let tva = ttc - ht;
+        totalHT += ht; totalTVA += tva;
+    });
+    $('tva-result').innerHTML = `
+        <div class="card" style="flex-direction:column; align-items:stretch">
+            <div class="inv-total-line" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.1)">
+                <span style="color:var(--text-muted)">Total HT</span><b>${eur(totalHT)}</b>
+            </div>
+            <div class="inv-total-line" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.1)">
+                <span style="color:var(--text-muted)">TVA collectée</span><b style="color:var(--gold)">${eur(totalTVA)}</b>
+            </div>
+            <div class="inv-total-line" style="display:flex; justify-content:space-between; padding:10px 0">
+                <span style="color:var(--text-muted)">Total TTC</span><b style="font-size:20px">${eur(totalHT + totalTVA)}</b>
+            </div>
+        </div>
+        <div style="color:var(--text-muted); font-size:12px; margin-top:8px; text-align:center">Basé sur ${db.hist.length} facture(s) enregistrée(s)</div>`;
+}
+
+// --- COMPTA ---
+function calcCompta() {
+    let ca = 0, tvaCol = 0;
+    db.hist.forEach(h => {
+        let ttc = parseFloat(h.total.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
+        ca += ttc / 1.2;
+        tvaCol += ttc - (ttc / 1.2);
+    });
+    $('compta-stats').innerHTML = `
+        <div class="card" style="flex-direction:column; align-items:center; gap:6px">
+            <span style="font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px">Chiffre d'Affaires HT</span>
+            <b style="font-size:22px">${eur(ca)}</b>
+        </div>
+        <div class="card" style="flex-direction:column; align-items:center; gap:6px">
+            <span style="font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px">TVA Collectée</span>
+            <b style="font-size:22px; color:var(--gold)">${eur(tvaCol)}</b>
+        </div>`;
+    $('compta-result').innerHTML = `
+        <div class="section-title" style="margin-top:10px">Dernières factures</div>
+        ${db.hist.slice().reverse().map(h => `
+            <div class="card"><b>${h.num}</b> — ${h.cli}<b style="float:right">${h.total}</b></div>
+        `).join('') || '<div style="color:var(--text-muted); text-align:center">Aucune facture</div>'}`;
+}
+
 // Initialisation
 $('f-date').value = new Date().toLocaleDateString('fr-FR');
 showPage('home');
