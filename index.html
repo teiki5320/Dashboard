@@ -30,10 +30,12 @@
 
 <div id="page-home" class="page active">
     <div class="home-grid">
-        <div class="home-btn large" onclick="showPage('bl')"><span class="icon">🚚</span><span>Prise de Commandes (BL)</span></div>
-        <div class="home-btn large" onclick="showPage('facture')"><span class="icon">🧾</span><span>Facturation</span></div>
+        <div class="home-btn" onclick="showPage('bl')"><span class="icon">🚚</span><span>Prise de Commande</span></div>
+        <div class="home-btn" onclick="showPage('facture')"><span class="icon">🧾</span><span>Facturation</span></div>
         <div class="home-btn" onclick="showPage('stock')"><span class="icon">📦</span><span>Stock</span></div>
         <div class="home-btn" onclick="showPage('historique')"><span class="icon">🕐</span><span>Historique</span></div>
+        <div class="home-btn" onclick="showPage('tva')"><span class="icon">📊</span><span>TVA</span></div>
+        <div class="home-btn" onclick="showPage('compta')"><span class="icon">💼</span><span>Compta</span></div>
         <div class="home-btn large" onclick="showPage('parametres')"><span class="icon">⚙️</span><span>Paramètres Système</span></div>
     </div>
 </div>
@@ -111,6 +113,34 @@
 <div id="page-historique" class="page">
     <div class="section-title">Archives</div>
     <div id="list-hist"></div>
+</div>
+
+<div id="page-tva" class="page">
+    <div class="section-title">TVA</div>
+    <div id="tva-summary"></div>
+    <div class="card" style="flex-direction:column; align-items:stretch; margin-top:10px">
+        <label>Période</label>
+        <div class="r2" style="margin-bottom:14px">
+            <input type="month" id="tva-debut">
+            <input type="month" id="tva-fin">
+        </div>
+        <button class="btn btn-gold" onclick="calcTVA()">📊 CALCULER LA TVA</button>
+    </div>
+    <div id="tva-result" style="margin-top:20px"></div>
+</div>
+
+<div id="page-compta" class="page">
+    <div class="section-title">Comptabilité</div>
+    <div id="compta-stats" style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:20px"></div>
+    <div class="card" style="flex-direction:column; align-items:stretch">
+        <label>Période</label>
+        <div class="r2" style="margin-bottom:14px">
+            <input type="month" id="compta-debut">
+            <input type="month" id="compta-fin">
+        </div>
+        <button class="btn btn-gold" onclick="calcCompta()">💼 VOIR LE BILAN</button>
+    </div>
+    <div id="compta-result" style="margin-top:20px"></div>
 </div>
 
 <div id="mod-prod" class="modal-overlay"><div class="modal">
