@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gestion Pro v9.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+</head>
+<body>
+
+<header>
+    <div class="hd-left">
+        <button id="global-back" class="global-back-btn" onclick="showPage('home')">←</button>
+        <div class="hd-title" id="hd-page-name">Tableau de Bord</div>
+    </div>
+    <div class="hd-clock">
+        <div id="hd-date">...</div>
+        <div id="hd-time" style="font-size: 16px; color: var(--gold)">00:00</div>
+    </div>
+</header>
+
+<div id="page-home" class="page active">
+    <div class="home-grid">
+        <div class="home-btn large" onclick="showPage('bl')"><span class="icon">🚚</span><span>Prise de Commandes (BL)</span></div>
+        <div class="home-btn large" onclick="showPage('facture')"><span class="icon">🧾</span><span>Facturation</span></div>
+        <div class="home-btn" onclick="showPage('stock')"><span class="icon">📦</span><span>Stock</span></div>
+        <div class="home-btn" onclick="showPage('historique')"><span class="icon">🕐</span><span>Historique</span></div>
+        <div class="home-btn large" onclick="showPage('parametres')"><span class="icon">⚙️</span><span>Paramètres Système</span></div>
+    </div>
+</div>
+
+<div id="page-bl" class="page">
+    <div class="sub-tabs">
+        <div class="sub-tab active" id="tab-bl-prise" onclick="toggleBLTab('prise')">Nouveau Bon</div>
+        <div class="sub-tab" id="tab-bl-suivi" onclick="toggleBLTab('suivi')">En cours</div>
+    </div>
+    <div id="view-bl-prise">
+        <label>Sélection Client</label><select id="bl-cli-select"></select>
+        <div id="bl-prod-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px"></div>
+        <button class="btn btn-gold" style="margin-top:20px; height:50px" onclick="saveBL()">📦 ENREGISTRER LE BON</button>
+    </div>
+    <div id="view-bl-suivi" style="display:none"><div id="list-bl-encours"></div></div>
+</div>
+
+<div id="page-facture" class="page">
+    <div class="sub-tabs">
+        <div class="sub-tab active" id="tab-f-libre" onclick="toggleFactTab('libre')">Facture Libre</div>
+        <div class="sub-tab" id="tab-f-draft" onclick="toggleFactTab('draft')">En attente (BL)</div>
+    </div>
+    <div id="f-view-libre">
+        <div class="card" style="flex-direction: column; align-items: stretch">
+            <div class="r2">
+                <div class="field"><label>Émetteur</label><select id="f-ent"></select></div>
+                <div class="field"><label>Client</label><select id="f-cli"></select></div>
+            </div>
+            <div class="r2">
+                <div class="field"><label>N° Facture</label><input type="text" id="f-num" readonly style="background:#f0f0f0"></div>
+                <div class="field"><label>Date</label><input type="text" id="f-date"></div>
+            </div>
+        </div>
+        <div id="f-lines"></div>
+        <div style="display: flex; gap: 10px; margin-bottom: 15px">
+            <select id="f-prod-picker" style="margin-bottom:0"></select>
+            <button class="btn btn-gold" style="width: 60px; background:var(--header); color:var(--gold)" onclick="addLine()">＋</button>
+        </div>
+        <div class="card" style="background: var(--header); color: var(--gold); display: flex; justify-content: space-between;">
+            <span style="font-weight: 700">TOTAL TTC</span>
+            <b id="f-tot-ttc" style="font-size: 24px">0,00 €</b>
+        </div>
+        <button class="btn btn-gold" style="margin-top: 15px" onclick="previewInvoice()">👁 APERÇU FACTURE</button>
+    </div>
+    <div id="f-view-draft" style="display:none"><div id="list-drafts"></div></div>
+</div>
+
+<div id="page-stock" class="page">
+    <div class="section-title">État du Stock</div>
+    <div id="list-stock" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px"></div>
+    <div class="section-title" style="margin-top:20px">Ajustement Manuel</div>
+    <div class="card" style="flex-direction:column; align-items:stretch">
+        <select id="adj-prod" style="margin-bottom:10px"></select>
+        <div class="r2">
+            <input type="number" id="adj-qty" placeholder="Quantité (+/-)">
+            <button class="btn btn-gold" onclick="adjustStock()">OK</button>
+        </div>
+    </div>
+</div>
+
+<div id="page-parametres" class="page">
+    <div class="section-title">Produits / Services</div>
+    <div id="list-prods-settings"></div>
+    <button class="btn btn-gold" onclick="openProdModal()">＋ AJOUTER PRODUIT</button>
+
+    <div class="section-title" style="margin-top: 25px">Base Clients</div>
+    <div id="list-clis-settings"></div>
+    <button class="btn btn-gold" onclick="openCliModal()">＋ AJOUTER CLIENT</button>
+
+    <div class="section-title" style="margin-top: 25px">Mes Entreprises</div>
+    <div id="list-ents-settings"></div>
+    <button class="btn btn-gold" onclick="openEntModal()">＋ AJOUTER ÉMETTEUR</button>
+</div>
+
+<div id="page-historique" class="page">
+    <div class="section-title">Archives</div>
+    <div id="list-hist"></div>
+</div>
+
+<div id="mod-prod" class="modal-overlay"><div class="modal">
+    <div class="section-title" id="mp-title">Produit</div>
+    <input type="hidden" id="mp-id">
+    <div class="r2">
+        <div class="field"><label>Emoji</label><input type="text" id="mp-icon" placeholder="🥕"></div>
+        <div class="field"><label>Nom *</label><input type="text" id="mp-nom"></div>
+    </div>
+    <div class="field"><label>Description</label><textarea id="mp-desc"></textarea></div>
+    <div class="r2">
+        <div class="field"><label>Prix HT</label><input type="number" id="mp-prix" step="0.01"></div>
+        <div class="field"><label>Unité</label><select id="mp-unite"><option value="kg">kg</option><option value="unité">unité</option><option value="colis">colis</option></select></div>
+    </div>
+    <div class="field"><label>TVA (%)</label><select id="mp-tva"><option value="20">20%</option><option value="10">10%</option><option value="5.5">5.5%</option><option value="0">0%</option></select></div>
+    <button class="btn btn-gold" onclick="saveProd()">SAUVER</button>
+    <button class="btn btn-red" onclick="closeModals()" style="margin-top:10px">ANNULER</button>
+</div></div>
+
+<div id="mod-cli" class="modal-overlay"><div class="modal">
+    <div class="section-title" id="mc-title">Fiche Client</div>
+    <input type="hidden" id="mc-id">
+    <div class="field"><label>Nom / Société *</label><input type="text" id="mc-nom"></div>
+    <div class="field"><label>Adresse complète</label><input type="text" id="mc-adr"></div>
+    <div class="r2">
+        <div class="field"><label>CP / Ville</label><input type="text" id="mc-ville"></div>
+        <div class="field"><label>SIRET / TVA Intra</label><input type="text" id="mc-siret"></div>
+    </div>
+    <div class="field"><label>Email</label><input type="email" id="mc-email"></div>
+    <button class="btn btn-gold" onclick="saveCli()">SAUVER</button>
+    <button class="btn btn-red" onclick="closeModals()" style="margin-top:10px">ANNULER</button>
+</div></div>
+
+<div id="mod-ent" class="modal-overlay"><div class="modal">
+    <div class="section-title" id="me-title">Mon Entreprise</div>
+    <input type="hidden" id="me-id">
+    <div class="field"><label>Nom Commercial *</label><input type="text" id="me-nom"></div>
+    <div class="field"><label>Adresse Siège</label><input type="text" id="me-adr"></div>
+    <div class="r2">
+        <div class="field"><label>SIRET</label><input type="text" id="me-siret"></div>
+        <div class="field"><label>Ville / CP</label><input type="text" id="me-ville"></div>
+    </div>
+    <div class="field"><label>RIB / IBAN</label><input type="text" id="me-iban"></div>
+    <div class="field"><label>Mentions Pied de Facture</label><textarea id="me-mentions"></textarea></div>
+    <button class="btn btn-gold" onclick="saveEnt()">SAUVER</button>
+    <button class="btn btn-red" onclick="closeModals()" style="margin-top:10px">ANNULER</button>
+</div></div>
+
+<div class="action-bar" id="bl-bar" style="position:fixed; bottom:20px; left:15px; right:15px; background:var(--header); color:var(--gold); padding:15px; border-radius:15px; display:none; justify-content:space-between; align-items:center; z-index:8000;">
+    <div id="bl-count">0 sélectionné(s)</div>
+    <button class="btn btn-gold" style="width:auto; padding:10px 20px; background:#fff" onclick="processBLToDraft()">FACTURER LA SÉLECTION</button>
+</div>
+
+<div id="preview-wrap">
+    <div class="prev-actions" style="max-width:210mm; margin:10px auto; display:flex; gap:10px">
+        <button class="btn btn-gold" style="width:100px; background:#555; color:#fff" onclick="closePreview()">←</button>
+        <button class="btn btn-gold" style="flex:1" onclick="finalizeInvoice()">🖨 IMPRIMER & VALIDER</button>
+    </div>
+    <div id="sheet-holder"></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
