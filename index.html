@@ -31,13 +31,68 @@
 
 <div id="page-home" class="page active">
     <div class="home-grid">
-        <div class="home-btn" onclick="showPage('bl')"><span class="icon">🚚</span><span>Prise de Commande</span></div>
-        <div class="home-btn" onclick="showPage('facture')"><span class="icon">🧾</span><span>Facturation</span></div>
-        <div class="home-btn" onclick="showPage('stock')"><span class="icon">📦</span><span>Stock</span></div>
-        <div class="home-btn" onclick="showPage('historique')"><span class="icon">🕐</span><span>Historique</span></div>
-        <div class="home-btn" onclick="showPage('tva')"><span class="icon">📊</span><span>TVA</span></div>
-        <div class="home-btn" onclick="showPage('compta')"><span class="icon">💼</span><span>Compta</span></div>
-        <div class="home-btn large" onclick="showPage('parametres')"><span class="icon">⚙️</span><span>Paramètres Système</span></div>
+        <div class="home-btn" onclick="showPage('bl')">
+            <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="14" width="28" height="22" rx="3"/>
+                <path d="M30 20h8l6 8v8h-14V20z"/>
+                <circle cx="11" cy="38" r="4"/>
+                <circle cx="37" cy="38" r="4"/>
+                <line x1="2" y1="22" x2="30" y2="22"/>
+            </svg>
+            <span>Prise de Commande</span>
+        </div>
+        <div class="home-btn" onclick="showPage('facture')">
+            <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="10" y="4" width="28" height="40" rx="3"/>
+                <line x1="16" y1="14" x2="32" y2="14"/>
+                <line x1="16" y1="20" x2="32" y2="20"/>
+                <line x1="16" y1="26" x2="26" y2="26"/>
+                <path d="M26 34l3 3 6-6" stroke-width="2.5"/>
+            </svg>
+            <span>Facturation</span>
+        </div>
+        <div class="home-btn" onclick="showPage('stock')">
+            <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 14l18-10 18 10v20L24 44 6 34V14z"/>
+                <path d="M6 14l18 10 18-10"/>
+                <line x1="24" y1="24" x2="24" y2="44"/>
+                <path d="M15 9l18 10"/>
+            </svg>
+            <span>Stock</span>
+        </div>
+        <div class="home-btn" onclick="showPage('historique')">
+            <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="24" cy="24" r="18"/>
+                <polyline points="24,12 24,24 32,30"/>
+                <path d="M6 24H2M10 10L7 7" stroke-width="2"/>
+            </svg>
+            <span>Historique</span>
+        </div>
+        <div class="home-btn" onclick="showPage('tva')">
+            <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="4" width="40" height="40" rx="3"/>
+                <line x1="4" y1="36" x2="44" y2="36"/>
+                <polyline points="10,36 10,28 18,18 26,26 34,14 44,20"/>
+            </svg>
+            <span>TVA</span>
+        </div>
+        <div class="home-btn" onclick="showPage('compta')">
+            <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="6" y="18" width="36" height="26" rx="3"/>
+                <path d="M16 18V14a8 8 0 0116 0v4"/>
+                <circle cx="24" cy="31" r="4"/>
+                <line x1="24" y1="35" x2="24" y2="38"/>
+            </svg>
+            <span>Compta</span>
+        </div>
+        <div class="home-btn large" onclick="showPage('parametres')">
+            <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="24" cy="24" r="6"/>
+                <path d="M24 4v4M24 40v4M4 24h4M40 24h4M8.7 8.7l2.8 2.8M36.5 36.5l2.8 2.8M8.7 39.3l2.8-2.8M36.5 11.5l2.8-2.8"/>
+                <circle cx="24" cy="24" r="11" stroke-dasharray="3 3"/>
+            </svg>
+            <span>Paramètres Système</span>
+        </div>
     </div>
 </div>
 
