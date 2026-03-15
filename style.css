@@ -496,8 +496,9 @@ select {
 .inv-totals { margin-left: auto; width: 250px; margin-top: 20px; font-size: 14px; }
 .inv-total-line { display: flex; justify-content: space-between; padding: 5px 0; }
 .inv-total-final { border-top: 1px solid #4A4A4A; margin-top: 10px; padding-top: 10px; font-weight: 700; font-size: 18px; color: #1A1008; display: flex; justify-content: space-between; }
-.payment-box { background: #D8D2C2; margin-top: auto; padding: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 12px; }
+.payment-box { background: #D8D2C2; margin-top: auto; padding: 25px; display: flex; flex-direction: column; gap: 10px; font-size: 12px; }
 .payment-box h3 { font-family: 'DM Serif Display', serif; margin-bottom: 10px; font-size: 18px; color: #1A1008; }
+.payment-mentions { border-top: 1px solid #ccc; padding-top: 10px; width: 100%; font-size: 11px; color: #555; }
 
 /* ════════════════════════════════════════
    IMPRESSION
