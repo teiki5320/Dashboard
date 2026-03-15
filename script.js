@@ -366,9 +366,9 @@ function previewInvoice() {
                 <div class="inv-total-line"><span>Total HT</span><span>${eur(ht)}</span></div>
                 <div class="inv-total-final"><span>TOTAL TTC</span><span>${eur(ttc)}</span></div>
             </div>
-            <div class="payment-box">
+            <div class="payment-box" style="flex-direction: column;">
                 <div><h3>Coordonnées Bancaires</h3>IBAN: ${ent.iban}</div>
-                <div><h3>Notes</h3>${ent.mentions.replace(/\n/g, '<br>')}</div>
+                <div style="border-top: 1px solid #ccc; margin-top: 10px; padding-top: 10px; width: 100%; font-size: 11px; color: #555;">${ent.mentions.replace(/\n/g, '<br>')}</div>
             </div>
         </div>`;
     $('preview-wrap').style.display = 'block';
