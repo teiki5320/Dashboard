@@ -501,6 +501,142 @@ select {
 .payment-mentions { border-top: 1px solid #ccc; padding-top: 10px; width: 100%; font-size: 11px; color: #555; }
 
 /* ════════════════════════════════════════
+   TVA ASSISTANT
+════════════════════════════════════════ */
+.tva-drop {
+    border: 2px dashed rgba(255,255,255,0.15);
+    border-radius: 16px;
+    padding: 36px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all .2s;
+    background: rgba(255,255,255,0.04);
+}
+.tva-drop:hover, .tva-drop-active {
+    border-color: #4ade80 !important;
+    background: rgba(74,222,128,0.06) !important;
+}
+.tva-bank-tag {
+    background: rgba(74,222,128,0.1);
+    color: #4ade80;
+    border: 1px solid rgba(74,222,128,0.3);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.tva-stat {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 10px 16px;
+    text-align: center;
+    font-family: 'DM Sans', monospace;
+    font-weight: 700;
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.tva-stat small { font-size: 10px; font-weight: 400; opacity: .6; text-transform: uppercase; letter-spacing: .5px; }
+.tva-defaults-bar {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 8px 14px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.tva-sel {
+    background: rgba(255,255,255,0.08);
+    color: #e8eaf0;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+}
+.tva-sel:focus { border-color: #4ade80; }
+.tva-taux-zero { color: rgba(255,255,255,0.4); }
+.tva-taux-low  { color: #60a5fa; }
+.tva-taux-mid  { color: #a78bfa; }
+.tva-taux-high { color: #fb923c; }
+.tva-flt {
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all .15s;
+}
+.tva-flt-on         { background: #16a34a; color: #fff; }
+.tva-flt-off        { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.5); }
+.tva-flt-off:hover  { background: rgba(255,255,255,0.12); color: #fff; }
+.tva-flt-rejet-on   { background: #5b21b6; color: #fff; }
+.tva-flt-rejet-off  { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.5); }
+.tva-flt-rejet-off:hover { background: rgba(167,139,250,0.15); color: #a78bfa; }
+.tva-search {
+    background: rgba(255,255,255,0.07);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+    flex: 1;
+    min-width: 140px;
+}
+.tva-search:focus { border-color: #4ade80; }
+.tva-btn-ghost {
+    background: rgba(255,255,255,0.07);
+    color: rgba(255,255,255,0.6);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s;
+}
+.tva-btn-ghost:hover { background: rgba(255,255,255,0.12); color: #fff; }
+.tva-btn-export {
+    background: rgba(74,222,128,0.1);
+    color: #4ade80;
+    border: 1px solid rgba(74,222,128,0.3);
+    border-radius: 8px;
+    padding: 7px 14px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s;
+    white-space: nowrap;
+}
+.tva-btn-export:hover { background: rgba(74,222,128,0.2); }
+.tva-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.08);
+}
+.tva-table tr:hover td { background: rgba(255,255,255,0.03) !important; }
+
+/* ════════════════════════════════════════
    IMPRESSION
 ════════════════════════════════════════ */
 @media print {

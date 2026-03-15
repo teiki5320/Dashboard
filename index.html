@@ -6,6 +6,7 @@
     <title>Gestion Pro v9.0</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -116,17 +117,23 @@
 </div>
 
 <div id="page-tva" class="page">
-    <div class="section-title">TVA</div>
-    <div id="tva-summary"></div>
-    <div class="card" style="flex-direction:column; align-items:stretch; margin-top:10px">
-        <label>Période</label>
-        <div class="r2" style="margin-bottom:14px">
-            <input type="month" id="tva-debut">
-            <input type="month" id="tva-fin">
-        </div>
-        <button class="btn btn-gold" onclick="calcTVA()">📊 CALCULER LA TVA</button>
+    <div id="tva-drop-zone" class="tva-drop"
+         ondragover="tvaDragOver(event)"
+         ondragleave="tvaDragLeave(event)"
+         ondrop="tvaDrop(event)">
+        <div style="font-size:36px; margin-bottom:10px">📂</div>
+        <div style="font-size:15px; font-weight:600; margin-bottom:6px">Glisse tes fichiers Excel ici</div>
+        <div style="font-size:12px; opacity:.5; margin-bottom:18px">Colonnes Débit/Crédit séparées ou montant unique (±)</div>
+        <button class="btn btn-gold" onclick="document.getElementById('tva-file-input').click()">+ Ajouter un fichier</button>
+        <input type="file" id="tva-file-input" accept=".xlsx,.xls" style="display:none" onchange="tvaFileChange(event)">
+        <div id="tva-banks-list" style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center"></div>
     </div>
-    <div id="tva-result" style="margin-top:20px"></div>
+    <div id="tva-stats-bar" style="display:none"></div>
+    <div id="tva-toolbar" style="display:none"></div>
+    <div id="tva-table-wrap" style="display:none; overflow-x:auto; margin-top:10px"></div>
+    <div id="tva-info" style="display:none; margin-top:8px; font-size:12px; opacity:.5; line-height:1.7; text-align:center; padding:0 10px">
+        <b>ℹ️ Logique rejets :</b> Toute ligne avec "REJET" dans le libellé est classée en Rejet à 20% TVA — sa TVA annule celle du débit initial. À valider avec les factures avant dépôt CA3.
+    </div>
 </div>
 
 <div id="page-compta" class="page">
