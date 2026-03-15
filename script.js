@@ -390,34 +390,368 @@ function finalizeInvoice() {
 function deleteItem(t, id) { if (confirm("Supprimer ?")) { db[t] = db[t].filter(x => x.id != id); G.set('v90_' + t, db[t]); renderAll(); } }
 function closePreview() { $('preview-wrap').style.display = 'none'; }
 
-// --- TVA ---
-function calcTVA() {
-    let debut = $('tva-debut').value, fin = $('tva-fin').value;
-    let factures = db.hist;
-    // Regrouper les montants de TVA par taux à partir de l'historique
-    // On utilise curLines pour les données détaillées; ici on affiche un résumé global
-    let taux = { '20': 0, '10': 0, '5.5': 0, '0': 0 };
-    let totalHT = 0, totalTVA = 0;
-    db.hist.forEach(h => {
-        // Estimation simplifiée : on prend le total TTC enregistré
-        let ttc = parseFloat(h.total.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
-        let ht = ttc / 1.2;
-        let tva = ttc - ht;
-        totalHT += ht; totalTVA += tva;
+// --- TVA ASSISTANT ---
+const tvaState = {
+    rows: [], banks: [], filterType: 'tous', search: '',
+    defaultAchat: '20%', defaultVente: '5.5%'
+};
+
+const TVA_KW_EXACT = ['salaire','paie','msa','pret','pret','interet','interet','retard','remboursement','sie','ballanger','gauvrit','lebreton','perraudeau'];
+const TVA_KW_PARTIAL = ['cotis','retraite','agrica','impot','impot','tresor','tresor','assur','pacifica','caae','cnp','macif','maif','ag2r','prevoyance','revolut','virement','loyer'];
+
+function tvaDetectTaux(label, isDebit) {
+    const low = (label || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const words = low.split(/[\s\W]+/);
+    for (const kw of TVA_KW_EXACT) {
+        if (words.includes(kw.normalize('NFD').replace(/[\u0300-\u036f]/g, ''))) return '0%';
+    }
+    for (const kw of TVA_KW_PARTIAL) {
+        if (low.includes(kw.normalize('NFD').replace(/[\u0300-\u036f]/g, ''))) return '0%';
+    }
+    if (/rejet/i.test(label)) return '20%';
+    return isDebit ? '20%' : '5.5%';
+}
+
+function tvaParseAmount(val) {
+    if (val === null || val === undefined || val === '') return null;
+    if (typeof val === 'number') return val;
+    let s = String(val).replace(/[\u00a0\u202f\u2009\s]/g, '').replace('€', '');
+    if (s.match(/^-?\d+\.\d{3},\d+$/)) s = s.replace('.', '').replace(',', '.');
+    else s = s.replace(',', '.');
+    const n = parseFloat(s);
+    return isNaN(n) ? null : n;
+}
+
+function tvaParseExcel(buffer, bankName) {
+    const wb = XLSX.read(buffer, { type: 'array', cellDates: true, raw: true });
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: null, raw: true });
+    let headerRow = -1, colDate = -1, colLabel = -1, colDebit = -1, colCredit = -1, colMontant = -1;
+    for (let i = 0; i < rows.length; i++) {
+        const r = rows[i].map(c => String(c || '').toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' '));
+        const dIdx = r.findIndex(c => c === 'date' || c === 'date operation' || c === 'date op');
+        const dFallback = r.findIndex(c => c.startsWith('date'));
+        const finalD = dIdx >= 0 ? dIdx : dFallback;
+        const lIdx = r.findIndex(c => c === 'libelle' || c === 'nom de la contrepartie' || c.includes('contrepartie') || c.includes('libel') || c.includes('wording') || c.includes('label') || c.includes('operat') || c.includes('descrip'));
+        if (finalD >= 0 && lIdx >= 0) {
+            headerRow = i; colDate = finalD; colLabel = lIdx;
+            const dbIdx = r.findIndex(c => c.includes('debit'));
+            const crIdx = r.findIndex(c => c.includes('credit'));
+            if (dbIdx >= 0 && crIdx >= 0 && dbIdx !== crIdx) { colDebit = dbIdx; colCredit = crIdx; }
+            else {
+                const mIdx = r.findIndex(c => c.includes('montant') || c.includes('mont') || c.includes('amount') || c.includes('total'));
+                colMontant = mIdx >= 0 ? mIdx : -1;
+            }
+            break;
+        }
+    }
+    if (headerRow < 0) return [];
+    const result = [];
+    for (let i = headerRow + 1; i < rows.length; i++) {
+        const r = rows[i];
+        if (!r || r.every(c => c === null || c === '' || c === undefined)) continue;
+        const label = String(r[colLabel] || '').replace(/\n/g, ' ').trim();
+        if (!label) continue;
+        let debit = null, credit = null;
+        if (colDebit >= 0 && colCredit >= 0) {
+            debit = tvaParseAmount(r[colDebit]); credit = tvaParseAmount(r[colCredit]);
+        } else if (colMontant >= 0) {
+            const m = tvaParseAmount(r[colMontant]);
+            if (m !== null) { if (m < 0) debit = Math.abs(m); else credit = m; }
+        }
+        if (debit === null && credit === null) continue;
+        const dateRaw = r[colDate];
+        let dateStr = '';
+        if (dateRaw instanceof Date) {
+            dateStr = dateRaw.toLocaleDateString('fr-FR');
+        } else if (dateRaw) {
+            const s = String(dateRaw).trim();
+            const m = s.match(/(\d{2})[-/](\d{2})[-/](\d{4})/);
+            if (m) dateStr = `${m[1]}/${m[2]}/${m[3]}`;
+            else { const iso = s.match(/(\d{4})[-/](\d{2})[-/](\d{2})/); if (iso) dateStr = `${iso[3]}/${iso[2]}/${iso[1]}`; else dateStr = s; }
+        }
+        const isDebit = debit !== null && debit > 0;
+        const isRejet = /rejet/i.test(label);
+        result.push({
+            id: `${i}-${Math.random().toString(36).slice(2, 7)}`,
+            date: dateStr, label, montant: isDebit ? debit : credit,
+            type: isDebit ? 'achat' : (isRejet ? 'rejet' : 'vente'),
+            taux: tvaDetectTaux(label, isDebit),
+            source: bankName, isRejet
+        });
+    }
+    return result;
+}
+
+function tvaLoadFile(file) {
+    const name = file.name.replace(/\.xlsx?$/i, '');
+    const reader = new FileReader();
+    reader.onload = e => {
+        const parsed = tvaParseExcel(new Uint8Array(e.target.result), name);
+        tvaState.rows = tvaState.rows.filter(r => r.source !== name).concat(parsed).sort((a, b) => {
+            return a.date.split('/').reverse().join('').localeCompare(b.date.split('/').reverse().join(''));
+        });
+        if (!tvaState.banks.includes(name)) tvaState.banks.push(name);
+        const fi = $('tva-file-input'); if (fi) fi.value = '';
+        tvaRender();
+    };
+    reader.readAsArrayBuffer(file);
+}
+
+function tvaRemoveBank(name) {
+    tvaState.rows = tvaState.rows.filter(r => r.source !== name);
+    tvaState.banks = tvaState.banks.filter(b => b !== name);
+    tvaRender();
+}
+
+function tvaUpdate(id, field, val) {
+    const r = tvaState.rows.find(x => x.id === id);
+    if (r) { r[field] = val; tvaRenderTable(); tvaRenderStats(); }
+}
+
+function tvaApplyDefaults() {
+    tvaState.rows = tvaState.rows.map(r => ({
+        ...r, taux: r.taux === '0%' ? '0%' : (r.type === 'achat' || r.type === 'rejet') ? tvaState.defaultAchat : tvaState.defaultVente
+    }));
+    tvaRenderTable(); tvaRenderStats();
+}
+
+function tvaCalcTotaux() {
+    let tvaC = 0, tvaD = 0, tvaR = 0, htV = 0, htA = 0, ttcV = 0, ttcA = 0, ttcR = 0;
+    for (const r of tvaState.rows) {
+        const t = parseFloat(r.taux) / 100;
+        const ttc = r.montant || 0;
+        const ht = t > 0 ? ttc / (1 + t) : ttc;
+        const tva = ttc - ht;
+        if (r.type === 'vente')      { ttcV += ttc; htV += ht; tvaC += tva; }
+        else if (r.type === 'achat') { ttcA += ttc; htA += ht; tvaD += tva; }
+        else if (r.type === 'rejet') { ttcR += ttc; tvaR += tva; }
+    }
+    return { tvaC, tvaD, tvaR, tvaDeductibleNette: tvaD - tvaR, htV, htA, ttcV, ttcA, ttcR, solde: tvaC - (tvaD - tvaR) };
+}
+
+function tvaFmt(n) {
+    if (!n && n !== 0) return '—';
+    return n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+}
+
+function tvaFilteredRows() {
+    return tvaState.rows.filter(r => {
+        if (tvaState.filterType !== 'tous' && r.type !== tvaState.filterType) return false;
+        if (tvaState.search && !r.label.toLowerCase().includes(tvaState.search.toLowerCase())) return false;
+        return true;
     });
-    $('tva-result').innerHTML = `
-        <div class="card" style="flex-direction:column; align-items:stretch">
-            <div class="inv-total-line" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.1)">
-                <span style="color:var(--text-muted)">Total HT</span><b>${eur(totalHT)}</b>
+}
+
+function tvaRenderStats() {
+    const el = $('tva-stats-bar'); if (!el) return;
+    if (!tvaState.rows.length) { el.style.display = 'none'; return; }
+    const tot = tvaCalcTotaux();
+    const soldeColor = tot.solde >= 0 ? '#fbbf24' : '#4ade80';
+    el.style.cssText = 'display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; justify-content:center';
+    el.innerHTML = `
+        <div class="tva-stat">${tvaState.rows.length}<small>Transactions</small></div>
+        <div class="tva-stat" style="color:#4ade80">${tvaFmt(tot.tvaC)}<small>TVA collectée</small></div>
+        <div class="tva-stat" style="color:#fb923c">${tvaFmt(tot.tvaD)}<small>TVA déductible brute</small></div>
+        ${tot.tvaR > 0 ? `<div class="tva-stat" style="color:#a78bfa">${tvaFmt(tot.tvaR)}<small>TVA annulée (rejets)</small></div>` : ''}
+        <div class="tva-stat" style="color:${soldeColor}">${tvaFmt(Math.abs(tot.solde))}<small>${tot.solde >= 0 ? 'À reverser' : 'Crédit TVA'}</small></div>`;
+}
+
+function tvaRenderBanksList() {
+    const el = $('tva-banks-list'); if (!el) return;
+    el.innerHTML = tvaState.banks.map(b => {
+        const count = tvaState.rows.filter(r => r.source === b).length;
+        return `<span class="tva-bank-tag">✓ ${b} <span style="opacity:.7">(${count})</span> <span onclick="tvaRemoveBank('${b.replace(/'/g, "\\'")}')" style="cursor:pointer; margin-left:4px; opacity:.6">×</span></span>`;
+    }).join('');
+}
+
+function tvaRenderToolbar() {
+    const el = $('tva-toolbar'); if (!el) return;
+    if (!tvaState.rows.length) { el.style.display = 'none'; return; }
+    el.style.display = 'block';
+    const rejetCount = tvaState.rows.filter(r => r.isRejet).length;
+    const filtered = tvaFilteredRows();
+    const TAUX = ['0%', '5.5%', '10%', '20%'];
+    const mkFlt = (v, l, rejet = false) => {
+        const on = tvaState.filterType === v;
+        const cls = rejet ? (on ? 'tva-flt tva-flt-rejet-on' : 'tva-flt tva-flt-rejet-off') : (on ? 'tva-flt tva-flt-on' : 'tva-flt tva-flt-off');
+        return `<button class="${cls}" onclick="tvaState.filterType='${v}';tvaRenderTable();tvaRenderToolbar()">${l}</button>`;
+    };
+    el.innerHTML = `
+        <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px">
+            <div class="tva-defaults-bar">
+                <span style="font-size:12px; opacity:.6">Taux défaut :</span>
+                <label style="font-size:12px; color:#fb923c; display:flex; align-items:center; gap:5px">Achats
+                    <select class="tva-sel" onchange="tvaState.defaultAchat=this.value">
+                        ${TAUX.map(t => `<option${t === tvaState.defaultAchat ? ' selected' : ''}>${t}</option>`).join('')}
+                    </select>
+                </label>
+                <label style="font-size:12px; color:#4ade80; display:flex; align-items:center; gap:5px">Ventes
+                    <select class="tva-sel" onchange="tvaState.defaultVente=this.value">
+                        ${TAUX.map(t => `<option${t === tvaState.defaultVente ? ' selected' : ''}>${t}</option>`).join('')}
+                    </select>
+                </label>
+                <button class="btn tva-btn-ghost" onclick="tvaApplyDefaults()">Réappliquer</button>
             </div>
-            <div class="inv-total-line" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.1)">
-                <span style="color:var(--text-muted)">TVA collectée</span><b style="color:var(--gold)">${eur(totalTVA)}</b>
+            <div style="display:flex; gap:6px; flex-wrap:wrap">
+                ${mkFlt('tous','Tout')}${mkFlt('vente','Ventes')}${mkFlt('achat','Achats')}
+                ${mkFlt('rejet','Rejets' + (rejetCount ? ` (${rejetCount})` : ''), true)}
             </div>
-            <div class="inv-total-line" style="display:flex; justify-content:space-between; padding:10px 0">
-                <span style="color:var(--text-muted)">Total TTC</span><b style="font-size:20px">${eur(totalHT + totalTVA)}</b>
-            </div>
-        </div>
-        <div style="color:var(--text-muted); font-size:12px; margin-top:8px; text-align:center">Basé sur ${db.hist.length} facture(s) enregistrée(s)</div>`;
+            <input type="search" class="tva-search" placeholder="Rechercher…" value="${tvaState.search.replace(/"/g,'&quot;')}" oninput="tvaState.search=this.value;tvaRenderTable()">
+            <span style="font-size:12px; opacity:.6">${filtered.length} ligne${filtered.length > 1 ? 's' : ''}</span>
+            <button class="btn tva-btn-export" onclick="tvaExport()">📊 Export Excel</button>
+        </div>`;
+}
+
+function tvaRenderTable() {
+    const wrap = $('tva-table-wrap');
+    const info = $('tva-info');
+    if (!wrap) return;
+    if (!tvaState.rows.length) { wrap.style.display = 'none'; if (info) info.style.display = 'none'; return; }
+    wrap.style.display = 'block';
+    if (info) info.style.display = 'block';
+    const TAUX = ['0%', '5.5%', '10%', '20%'];
+    const filtered = tvaFilteredRows();
+    const tot = tvaCalcTotaux();
+
+    const rowsHtml = filtered.map((r, i) => {
+        const t = parseFloat(r.taux) / 100;
+        const ttc = r.montant || 0;
+        const ht = t > 0 ? ttc / (1 + t) : ttc;
+        const tva = ttc - ht;
+        const bg = i % 2 === 0 ? 'rgba(255,255,255,0.03)' : 'transparent';
+        const typeColor = r.type === 'vente' ? '#4ade80' : r.type === 'rejet' ? '#a78bfa' : '#fb923c';
+        const typeBg = r.type === 'vente' ? 'rgba(74,222,128,0.1)' : r.type === 'rejet' ? 'rgba(167,139,250,0.1)' : 'rgba(251,146,60,0.1)';
+        const typeBd = r.type === 'vente' ? 'rgba(74,222,128,0.3)' : r.type === 'rejet' ? 'rgba(167,139,250,0.3)' : 'rgba(251,146,60,0.3)';
+        const tvaColor = r.type === 'vente' ? '#4ade80' : r.type === 'rejet' ? '#a78bfa' : tva > 0 ? '#fb923c' : 'rgba(255,255,255,0.3)';
+        const tc = r.taux === '0%' ? 'zero' : r.taux === '5.5%' ? 'low' : r.taux === '10%' ? 'mid' : 'high';
+        const rid = r.id.replace(/'/g, "\\'");
+        return `<tr style="border-bottom:1px solid rgba(255,255,255,0.05)">
+            <td style="padding:9px 12px;background:${bg};font-size:11px;opacity:.7;white-space:nowrap">${r.date}</td>
+            <td style="padding:9px 12px;background:${bg};max-width:220px">
+                <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;color:${r.isRejet ? '#a78bfa' : 'inherit'}" title="${r.label.replace(/"/g,'&quot;')}">
+                    ${r.isRejet ? '<span style="font-size:10px;margin-right:4px;opacity:.7">⊘</span>' : ''}${r.label}
+                </div>
+            </td>
+            <td style="padding:9px 12px;background:${bg}"><span style="background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 8px;font-size:11px;opacity:.7">${r.source}</span></td>
+            <td style="padding:9px 12px;background:${bg}">
+                <select onchange="tvaUpdate('${rid}','type',this.value)" style="background:${typeBg};color:${typeColor};border:1px solid ${typeBd};border-radius:20px;padding:3px 8px;font-size:12px;font-weight:600;cursor:pointer;outline:none;font-family:inherit">
+                    <option value="vente"${r.type === 'vente' ? ' selected' : ''}>Vente</option>
+                    <option value="achat"${r.type === 'achat' ? ' selected' : ''}>Achat</option>
+                    <option value="rejet"${r.type === 'rejet' ? ' selected' : ''}>Rejet</option>
+                </select>
+            </td>
+            <td style="padding:9px 12px;background:${bg};text-align:right;font-weight:600;white-space:nowrap">${tvaFmt(ttc)}</td>
+            <td style="padding:9px 12px;background:${bg};text-align:center">
+                <select class="tva-sel tva-taux-${tc}" onchange="tvaUpdate('${rid}','taux',this.value)">
+                    ${TAUX.map(tx => `<option${tx === r.taux ? ' selected' : ''}>${tx}</option>`).join('')}
+                </select>
+            </td>
+            <td style="padding:9px 12px;background:${bg};text-align:right;font-size:12px;opacity:.7;white-space:nowrap">${t > 0 ? tvaFmt(ht) : '—'}</td>
+            <td style="padding:9px 12px;background:${bg};text-align:right;font-weight:700;white-space:nowrap;color:${tvaColor}">
+                ${tva > 0 ? (r.type === 'rejet' ? '−' : '') + tvaFmt(tva) : '—'}
+            </td>
+        </tr>`;
+    }).join('');
+
+    const rejetRow = tot.tvaR > 0 ? `
+        <tr style="background:rgba(167,139,250,0.07);border-top:1px solid rgba(167,139,250,0.3)">
+            <td colspan="4" style="padding:11px 14px;font-weight:700;color:#a78bfa;font-size:13px">REJETS (TVA annulée)</td>
+            <td style="padding:11px 14px;text-align:right;font-weight:700;color:#a78bfa">${tvaFmt(tot.ttcR)}</td>
+            <td></td><td></td>
+            <td style="padding:11px 14px;text-align:right;font-weight:800;color:#a78bfa;font-size:15px">−${tvaFmt(tot.tvaR)}</td>
+        </tr>` : '';
+    const soldeColor = tot.solde >= 0 ? '#fbbf24' : '#4ade80';
+    const soldeBg = tot.solde >= 0 ? 'rgba(251,191,36,0.05)' : 'rgba(74,222,128,0.05)';
+
+    wrap.innerHTML = `
+        <table class="tva-table">
+            <thead>
+                <tr style="background:rgba(255,255,255,0.04);border-bottom:2px solid rgba(255,255,255,0.1)">
+                    ${['Date','Libellé','Banque','Type','Montant TTC','Taux TVA','HT','TVA'].map((h, i) =>
+                        `<th style="padding:10px 12px;text-align:${i >= 4 ? 'right' : 'left'};font-size:11px;font-weight:600;letter-spacing:.5px;opacity:.5;white-space:nowrap">${h}</th>`
+                    ).join('')}
+                </tr>
+            </thead>
+            <tbody>${rowsHtml}</tbody>
+            <tfoot>
+                <tr style="background:rgba(74,222,128,0.07);border-top:2px solid rgba(74,222,128,0.3)">
+                    <td colspan="4" style="padding:11px 14px;font-weight:700;color:#4ade80;font-size:13px">TOTAL VENTES</td>
+                    <td style="padding:11px 14px;text-align:right;font-weight:700;color:#4ade80">${tvaFmt(tot.ttcV)}</td>
+                    <td></td>
+                    <td style="padding:11px 14px;text-align:right;font-weight:700;color:#4ade80">${tvaFmt(tot.htV)}</td>
+                    <td style="padding:11px 14px;text-align:right;font-weight:800;color:#4ade80;font-size:15px">${tvaFmt(tot.tvaC)}</td>
+                </tr>
+                <tr style="background:rgba(251,146,60,0.07);border-top:1px solid rgba(251,146,60,0.3)">
+                    <td colspan="4" style="padding:11px 14px;font-weight:700;color:#fb923c;font-size:13px">TOTAL ACHATS (brut)</td>
+                    <td style="padding:11px 14px;text-align:right;font-weight:700;color:#fb923c">${tvaFmt(tot.ttcA)}</td>
+                    <td></td>
+                    <td style="padding:11px 14px;text-align:right;font-weight:700;color:#fb923c">${tvaFmt(tot.htA)}</td>
+                    <td style="padding:11px 14px;text-align:right;font-weight:800;color:#fb923c;font-size:15px">${tvaFmt(tot.tvaD)}</td>
+                </tr>
+                ${rejetRow}
+                <tr style="border-top:1px solid rgba(255,255,255,0.08)">
+                    <td colspan="7" style="padding:11px 14px;font-size:12px;opacity:.5">TVA déductible nette (achats − rejets)</td>
+                    <td style="padding:11px 14px;text-align:right;font-weight:800;color:#fb923c;font-size:15px">${tvaFmt(tot.tvaDeductibleNette)}</td>
+                </tr>
+                <tr style="background:${soldeBg};border-top:2px solid rgba(255,255,255,0.1)">
+                    <td colspan="6" style="padding:14px;font-weight:700;color:${soldeColor};font-size:14px">
+                        ${tot.solde >= 0 ? '▶ TVA NETTE À REVERSER' : '▶ CRÉDIT DE TVA'}
+                        <span style="font-weight:400;font-size:12px;margin-left:8px;opacity:.6">collectée − déductible nette</span>
+                    </td>
+                    <td colspan="2" style="padding:14px;text-align:right;font-weight:800;color:${soldeColor};font-size:22px">${tvaFmt(Math.abs(tot.solde))}</td>
+                </tr>
+            </tfoot>
+        </table>`;
+}
+
+function tvaRender() {
+    tvaRenderBanksList();
+    tvaRenderStats();
+    tvaRenderToolbar();
+    tvaRenderTable();
+}
+
+function tvaDragOver(e) { e.preventDefault(); $('tva-drop-zone').classList.add('tva-drop-active'); }
+function tvaDragLeave() { $('tva-drop-zone').classList.remove('tva-drop-active'); }
+function tvaDrop(e) {
+    e.preventDefault();
+    $('tva-drop-zone').classList.remove('tva-drop-active');
+    Array.from(e.dataTransfer.files).filter(f => f.name.match(/\.xlsx?$/i)).forEach(tvaLoadFile);
+}
+function tvaFileChange(e) { if (e.target.files[0]) tvaLoadFile(e.target.files[0]); }
+
+function tvaExport() {
+    if (!window.XLSX) return alert('SheetJS non chargé');
+    const wb = XLSX.utils.book_new();
+    const headers = ['Date','Libellé','Banque','Type','Montant TTC','Taux TVA','HT','TVA'];
+    const dataRows = tvaState.rows.map(r => {
+        const t = parseFloat(r.taux) / 100;
+        const ttc = r.montant || 0;
+        const ht = t > 0 ? ttc / (1 + t) : ttc;
+        const tva = t > 0 ? ttc - ht : 0;
+        return [r.date, r.label, r.source, r.type === 'vente' ? 'Vente' : r.type === 'rejet' ? 'Rejet' : 'Achat', ttc, r.taux, t > 0 ? parseFloat(ht.toFixed(2)) : '', t > 0 ? parseFloat(tva.toFixed(2)) : ''];
+    });
+    const ws1 = XLSX.utils.aoa_to_sheet([headers, ...dataRows]);
+    ws1['!cols'] = [{wch:12},{wch:50},{wch:25},{wch:10},{wch:14},{wch:10},{wch:14},{wch:14}];
+    const tot = tvaCalcTotaux();
+    const ws2 = XLSX.utils.aoa_to_sheet([
+        ['RÉCAPITULATIF TVA', ''], ['', ''],
+        ['TVA collectée (ventes)', parseFloat(tot.tvaC.toFixed(2))],
+        ['TVA déductible brute (achats)', parseFloat(tot.tvaD.toFixed(2))],
+        ['TVA annulée (rejets)', parseFloat(tot.tvaR.toFixed(2))],
+        ['TVA déductible nette', parseFloat(tot.tvaDeductibleNette.toFixed(2))],
+        ['', ''],
+        [tot.solde >= 0 ? 'TVA NETTE À REVERSER' : 'CRÉDIT DE TVA', parseFloat(Math.abs(tot.solde).toFixed(2))],
+        ['', ''], ['DÉTAIL TTC', ''],
+        ['Total ventes TTC', parseFloat(tot.ttcV.toFixed(2))],
+        ['Total achats TTC', parseFloat(tot.ttcA.toFixed(2))],
+        ['Total rejets TTC', parseFloat(tot.ttcR.toFixed(2))],
+    ]);
+    ws2['!cols'] = [{wch:35},{wch:18}];
+    XLSX.utils.book_append_sheet(wb, ws1, 'Transactions');
+    XLSX.utils.book_append_sheet(wb, ws2, 'Récapitulatif TVA');
+    XLSX.writeFile(wb, 'TVA_' + new Date().toLocaleDateString('fr-FR').replace(/\//g, '-') + '.xlsx');
 }
 
 // --- COMPTA ---
