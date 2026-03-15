@@ -157,17 +157,25 @@ function renderSuiviBL() {
             </div>
         `).join('');
 
+        let total = b.items.reduce((s, i) => s + (i.qte * i.prix * (1 + (i.tva || 20) / 100)), 0);
+
         return `
         <div class="card" style="flex-direction: column; align-items: stretch; padding: 20px;">
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border); padding-bottom: 15px; margin-bottom: 10px;">
                 <div style="display: flex; align-items: center; gap: 15px;">
                     <input type="checkbox" style="width: 28px; height: 28px; cursor: pointer; accent-color: var(--gold);" ${isChecked} onchange="toggleBLSel(${b.id}, this.checked)">
                     <div>
-                        <b style="font-size: 18px; color: var(--header);">${b.cliNom}</b><br>
+                        <b style="font-size: 18px; color: var(--gold);">${b.cliNom}</b><br>
                         <small style="color: var(--sage); font-weight: 600;">📅 Date : ${b.date}</small>
                     </div>
                 </div>
-                <button class="btn btn-red" style="width: 40px; height: 40px; padding: 0; font-size: 16px; border-radius: 8px;" onclick="deleteItem('bls',${b.id})" title="Supprimer ce bon">✕</button>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="text-align: right;">
+                        <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Total TTC</div>
+                        <b style="font-size: 18px; color: var(--gold);">${eur(total)}</b>
+                    </div>
+                    <button class="btn btn-red" style="width: 40px; height: 40px; padding: 0; font-size: 16px; border-radius: 8px;" onclick="deleteItem('bls',${b.id})" title="Supprimer ce bon">✕</button>
+                </div>
             </div>
             
             <div>
