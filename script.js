@@ -334,7 +334,36 @@ function renderAll() {
     $('adj-prod').innerHTML = db.prods.map(p => `<option value="${p.id}">${p.nom}</option>`).join('');
     
     // 6. Historique des factures
-    $('list-hist').innerHTML = db.hist.slice().reverse().map(h => `<div class="card"><b>${h.num}</b> — ${h.cli} <b style="float:right">${h.total}</b></div>`).join('');
+    $('list-hist').innerHTML = db.hist.length === 0
+        ? `<div style="text-align:center; padding:40px 20px; opacity:.4; font-size:14px">Aucune facture archivée</div>`
+        : db.hist.slice().reverse().map(h => {
+            const itemsHtml = (h.items || []).map(i =>
+                `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.06); font-size:13px">
+                    <span>${i.icon || ''} ${i.nom}</span>
+                    <span style="opacity:.6">${i.qte} ${i.unite} × ${eur(i.prix)}</span>
+                    <span style="font-weight:600">${eur(i.qte * i.prix * (1 + (i.tva || 20) / 100))}</span>
+                </div>`
+            ).join('');
+            return `
+            <div class="card" style="flex-direction:column; align-items:stretch; gap:0; padding:0; overflow:hidden">
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border-bottom:1px solid rgba(255,255,255,0.08)">
+                    <div>
+                        <b style="font-size:16px; color:var(--gold)">🧾 ${h.num}</b>
+                        ${h.date ? `<span style="font-size:12px; opacity:.5; margin-left:10px">📅 ${h.date}</span>` : ''}
+                    </div>
+                    <button class="btn btn-red" style="width:34px; height:34px; padding:0; font-size:14px; border-radius:8px; flex-shrink:0" onclick="deleteHist(${h.id || 0}, '${h.num}')">✕</button>
+                </div>
+                <div style="padding:12px 16px; display:flex; gap:10px; flex-wrap:wrap; border-bottom:1px solid rgba(255,255,255,0.08)">
+                    ${h.ent ? `<span style="font-size:12px; opacity:.6">🏢 <b>${h.ent}</b></span><span style="opacity:.3">→</span>` : ''}
+                    <span style="font-size:13px; font-weight:600">👤 ${h.cli}</span>
+                </div>
+                ${itemsHtml ? `<div style="padding:8px 16px">${itemsHtml}</div>` : ''}
+                <div style="display:flex; justify-content:space-between; padding:12px 16px; background:rgba(255,255,255,0.04)">
+                    ${h.ht ? `<span style="font-size:12px; opacity:.5">HT : ${h.ht}</span>` : '<span></span>'}
+                    <b style="font-size:18px; color:var(--gold)">TTC : ${h.total}</b>
+                </div>
+            </div>`;
+        }).join('');
 }
 
 // --- IMPRESSION & FINALISATION ---
@@ -377,7 +406,19 @@ function previewInvoice() {
 function finalizeInvoice() {
     curLines.forEach(l => { let p = db.prods.find(x => x.id == l.pid); if (p) p.stock -= l.qte; });
     G.set('v90_prods', db.prods);
-    db.hist.push({ num: $('f-num').value, cli: db.clis.find(c => c.id == $('f-cli').value).nom, total: $('f-tot-ttc').innerText });
+    let ht = curLines.reduce((s, l) => s + (l.qte * l.prix), 0);
+    let ttc = curLines.reduce((s, l) => s + (l.qte * l.prix * (1 + (l.tva || 20) / 100)), 0);
+    let entObj = db.ents.find(e => e.id == $('f-ent').value);
+    db.hist.push({
+        id: Date.now(),
+        num: $('f-num').value,
+        date: $('f-date').value,
+        cli: db.clis.find(c => c.id == $('f-cli').value).nom,
+        ent: entObj ? entObj.nom : '',
+        items: curLines.map(l => ({ icon: l.icon, nom: l.nom, qte: l.qte, prix: l.prix, unite: l.unite, tva: l.tva })),
+        ht: eur(ht),
+        total: eur(ttc)
+    });
     G.set('v90_hist', db.hist);
     if (curDraftId) db.drafts = db.drafts.filter(d => d.id != curDraftId);
     G.set('v90_drafts', db.drafts);
@@ -388,6 +429,12 @@ function finalizeInvoice() {
 }
 
 function deleteItem(t, id) { if (confirm("Supprimer ?")) { db[t] = db[t].filter(x => x.id != id); G.set('v90_' + t, db[t]); renderAll(); } }
+function deleteHist(id, num) {
+    if (!confirm(`Supprimer la facture ${num} ?`)) return;
+    db.hist = id ? db.hist.filter(h => h.id != id) : db.hist.filter(h => h.num !== num);
+    G.set('v90_hist', db.hist);
+    renderAll();
+}
 function closePreview() { $('preview-wrap').style.display = 'none'; }
 
 // --- TVA ASSISTANT ---
