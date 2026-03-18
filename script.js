@@ -136,7 +136,9 @@ function saveBL() {
         if (q > 0) items.push({ pid: p.id, icon: p.icon, nom: p.nom, prix: p.prix, qte: q, unite: p.unite, tva: p.tva });
     });
     if (!items.length) return;
-    db.bls.push({ id: Date.now(), date: new Date().toLocaleDateString('fr-FR'), cid: $('bl-cli-select').value, cliNom: db.clis.find(c => c.id == $('bl-cli-select').value).nom, items, status: 'en-cours' });
+    const [y, m, d] = $('bl-date').value.split('-');
+    const dateStr = `${d}/${m}/${y}`;
+    db.bls.push({ id: Date.now(), date: dateStr, cid: $('bl-cli-select').value, cliNom: db.clis.find(c => c.id == $('bl-cli-select').value).nom, items, status: 'en-cours' });
     G.set('v90_bls', db.bls);
     alert("Livraison enregistrée !");
     showPage('home');
@@ -306,6 +308,7 @@ function adjustStock() {
 // --- RENDU GLOBAL DES LISTES ---
 function renderAll() {
     // 1. Sélecteur client pour le BL
+    $('bl-date').value = new Date().toISOString().split('T')[0];
     $('bl-cli-select').innerHTML = db.clis.map(c => `<option value="${c.id}">${c.nom}</option>`).join('');
     
     // 2. Grille des produits pour le BL (AVEC LES GROS BOUTONS CARRÉS)
