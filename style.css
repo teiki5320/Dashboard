@@ -144,19 +144,19 @@ header {
 .home-btn.large { grid-column: span 2; padding: 42px 22px; }
 
 .home-btn .icon {
-    width: 52px;
-    height: 52px;
-    color: rgba(255, 200, 200, 0.85);
-    filter: drop-shadow(0 3px 10px rgba(0,0,0,0.7))
-            drop-shadow(0 0 16px rgba(255,80,80,0.30));
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    color: rgba(180, 60, 60, 0.90);
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.60));
     transition: color 0.2s, filter 0.2s;
 }
 
 .home-btn:hover .icon,
 .home-btn:active .icon {
-    color: rgba(255, 230, 230, 1);
-    filter: drop-shadow(0 3px 10px rgba(0,0,0,0.7))
-            drop-shadow(0 0 22px rgba(255,100,100,0.55));
+    color: rgba(210, 80, 80, 1);
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.70))
+            drop-shadow(0 0 10px rgba(180,40,40,0.40));
 }
 
 .home-btn span:not(.icon) {
