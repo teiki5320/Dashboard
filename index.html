@@ -103,6 +103,7 @@
     </div>
     <div id="view-bl-prise">
         <div class="field" style="margin-bottom:10px"><label>Date</label><input type="date" id="bl-date"></div>
+        <label>Entreprise émettrice</label><select id="bl-ent-select" style="margin-bottom:10px"></select>
         <label>Sélection Client</label><select id="bl-cli-select" onchange="renderBLGrid()"></select>
         <div id="bl-prod-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px"></div>
         <button class="btn btn-gold" style="margin-top:20px; height:50px" onclick="saveBL()">📦 ENREGISTRER LE BON</button>

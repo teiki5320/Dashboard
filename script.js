@@ -232,7 +232,7 @@ function saveBL() {
     if (!items.length) return;
     const [y, m, d] = $('bl-date').value.split('-');
     const dateStr = `${d}/${m}/${y}`;
-    db.bls.push({ id: Date.now(), date: dateStr, cid: cliId, cliNom: db.clis.find(c => c.id == cliId).nom, items, status: 'en-cours' });
+    db.bls.push({ id: Date.now(), date: dateStr, cid: cliId, cliNom: db.clis.find(c => c.id == cliId).nom, entId: $('bl-ent-select').value, items, status: 'en-cours' });
     G.set('v90_bls', db.bls);
     alert("Livraison enregistrée !");
     showPage('home');
@@ -249,11 +249,11 @@ function renderSuiviBL() {
             <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border); font-size: 14px; color: #4A4A4A; padding-left: 45px;">
                 <span style="flex: 2;"><b>${i.icon} ${i.nom}</b></span>
                 <span style="flex: 1; text-align: center; color: var(--sage); font-weight: 700;">${i.qte} ${i.unite}</span>
-                <span style="flex: 1; text-align: right; opacity:.6">${i.poids ? (i.qte * i.poids).toFixed(2) + ' kg' : '—'}</span>
+                <span style="flex: 1; text-align: right; opacity:.6">${(() => { let pu = i.poids || db.prods.find(p => p.id == i.pid)?.poids || 0; return pu ? (i.qte * pu).toFixed(2) + ' kg' : '—'; })()}</span>
             </div>
         `).join('');
 
-        let poidsTotal = b.items.reduce((s, i) => s + (i.qte * (i.poids || 0)), 0);
+        let poidsTotal = b.items.reduce((s, i) => { let pu = i.poids || db.prods.find(p => p.id == i.pid)?.poids || 0; return s + i.qte * pu; }, 0);
 
         return `
         <div class="card" style="flex-direction: column; align-items: stretch; padding: 20px;">
@@ -418,8 +418,9 @@ function renderBLGrid() {
 
 // --- RENDU GLOBAL DES LISTES ---
 function renderAll() {
-    // 1. Sélecteur client pour le BL
+    // 1. Sélecteur client + entreprise pour le BL
     $('bl-date').value = new Date().toISOString().split('T')[0];
+    $('bl-ent-select').innerHTML = db.ents.map(e => `<option value="${e.id}">${e.nom}</option>`).join('');
     $('bl-cli-select').innerHTML = db.clis.map(c => `<option value="${c.id}">${c.nom}</option>`).join('');
 
     // 2. Grille des produits pour le BL
@@ -555,13 +556,14 @@ function closePreview() {
 function printBL(id) {
     let b = db.bls.find(x => x.id == id);
     if (!b) return;
-    let ent = db.ents[0] || null;
+    let ent = (b.entId ? db.ents.find(e => e.id == b.entId) : null) || db.ents[0] || null;
     let cli = db.clis.find(c => c.id == b.cid);
     let rows = '', poidsTotal = 0;
     b.items.forEach(i => {
-        let lpoids = i.qte * (i.poids || 0);
+        let pu = i.poids || db.prods.find(p => p.id == i.pid)?.poids || 0;
+        let lpoids = i.qte * pu;
         poidsTotal += lpoids;
-        rows += `<tr><td>${i.icon || ''} ${i.nom}</td><td style="text-align:center">${i.qte}</td><td style="text-align:center">${i.unite}</td><td style="text-align:right">${i.poids ? i.poids + ' kg' : '—'}</td><td style="text-align:right">${lpoids ? lpoids.toFixed(2) + ' kg' : '—'}</td></tr>`;
+        rows += `<tr><td>${i.icon || ''} ${i.nom}</td><td style="text-align:center">${i.qte}</td><td style="text-align:center">${i.unite}</td><td style="text-align:right">${pu ? pu + ' kg' : '—'}</td><td style="text-align:right">${lpoids ? lpoids.toFixed(2) + ' kg' : '—'}</td></tr>`;
     });
     $('sheet-holder').innerHTML = `
         <div class="inv-wrap" style="background:#fff">
