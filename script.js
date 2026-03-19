@@ -249,7 +249,8 @@ function renderSuiviBL() {
             <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border); font-size: 14px; color: #4A4A4A; padding-left: 45px;">
                 <span style="flex: 2;"><b>${i.icon} ${i.nom}</b></span>
                 <span style="flex: 1; text-align: center; color: var(--sage); font-weight: 700;">${i.qte} ${i.unite}</span>
-                <span style="flex: 1; text-align: right; opacity:.6">${(i.qte * getPoids(i)).toFixed(2)} kg</span>
+                <span style="flex: 1; text-align: right; opacity:.7">${eur(i.prix)} / ${i.unite}</span>
+                <span style="flex: 1; text-align: right; opacity:.5; font-size:12px">${(i.qte * getPoids(i)).toFixed(2)} kg</span>
             </div>
         `).join('');
 
@@ -267,8 +268,9 @@ function renderSuiviBL() {
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <div style="text-align: right;">
-                        <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Poids total</div>
-                        <b style="font-size: 18px; color: var(--gold);">${poidsTotal.toFixed(2)} kg</b>
+                        <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Total TTC</div>
+                        <b style="font-size: 16px; color: var(--gold);">${eur(b.items.reduce((s,i) => s + i.qte * i.prix * (1 + (i.tva||20)/100), 0))}</b>
+                        <div style="font-size: 11px; color: var(--text-muted); margin-top:2px">${poidsTotal.toFixed(2)} kg</div>
                     </div>
                     <button class="btn" style="width: 40px; height: 40px; padding: 0; font-size: 18px; border-radius: 8px; background:rgba(255,255,255,0.1)" onclick="printBL(${b.id})" title="Imprimer ce bon">🖨️</button>
                     <button class="btn btn-red" style="width: 40px; height: 40px; padding: 0; font-size: 16px; border-radius: 8px;" onclick="deleteItem('bls',${b.id})" title="Supprimer ce bon">✕</button>
