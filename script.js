@@ -127,9 +127,10 @@ function openProdModal(id = null) {
         $('mp-title').innerText = "Modifier Produit"; $('mp-id').value = p.id; $('mp-icon').value = p.icon;
         $('mp-nom').value = p.nom; $('mp-desc').value = p.desc || ''; $('mp-prix').value = p.prix;
         $('mp-unite').value = p.unite; $('mp-tva').value = p.tva || 20;
+        $('mp-poids').value = p.poids || '';
     } else {
         $('mp-title').innerText = "Nouveau Produit"; $('mp-id').value = ''; $('mp-icon').value = '';
-        $('mp-nom').value = ''; $('mp-desc').value = ''; $('mp-prix').value = '';
+        $('mp-nom').value = ''; $('mp-desc').value = ''; $('mp-prix').value = ''; $('mp-poids').value = '';
     }
     openModal('mod-prod');
 }
@@ -188,7 +189,7 @@ function openEntModal(id = null) {
 // --- SAUVEGARDES ---
 function saveProd() {
     let id = $('mp-id').value || Date.now();
-    let o = { id, icon: $('mp-icon').value || '📦', nom: $('mp-nom').value, desc: $('mp-desc').value, prix: parseFloat($('mp-prix').value) || 0, unite: $('mp-unite').value, tva: parseFloat($('mp-tva').value), stock: 0 };
+    let o = { id, icon: $('mp-icon').value || '📦', nom: $('mp-nom').value, desc: $('mp-desc').value, prix: parseFloat($('mp-prix').value) || 0, unite: $('mp-unite').value, tva: parseFloat($('mp-tva').value), poids: parseFloat($('mp-poids').value) || 0, stock: 0 };
     let ex = db.prods.find(p => p.id == id); if (ex) o.stock = ex.stock;
     db.prods = db.prods.filter(p => p.id != id); db.prods.push(o); G.set('v90_prods', db.prods); closeModals(); renderAll();
 }
@@ -226,7 +227,7 @@ function saveBL() {
     db.prods.forEach(p => {
         let q = parseInt($('qty-' + p.id).value);
         let prix = prixCli[p.id] !== undefined ? prixCli[p.id] : p.prix;
-        if (q > 0) items.push({ pid: p.id, icon: p.icon, nom: p.nom, prix: prix, qte: q, unite: p.unite, tva: p.tva });
+        if (q > 0) items.push({ pid: p.id, icon: p.icon, nom: p.nom, prix: prix, qte: q, unite: p.unite, tva: p.tva, poids: p.poids || 0 });
     });
     if (!items.length) return;
     const [y, m, d] = $('bl-date').value.split('-');
@@ -248,11 +249,11 @@ function renderSuiviBL() {
             <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border); font-size: 14px; color: #4A4A4A; padding-left: 45px;">
                 <span style="flex: 2;"><b>${i.icon} ${i.nom}</b></span>
                 <span style="flex: 1; text-align: center; color: var(--sage); font-weight: 700;">${i.qte} ${i.unite}</span>
-                <span style="flex: 1; text-align: right;">${eur(i.prix)} / ${i.unite}</span>
+                <span style="flex: 1; text-align: right; opacity:.6">${i.poids ? (i.qte * i.poids).toFixed(2) + ' kg' : '—'}</span>
             </div>
         `).join('');
 
-        let total = b.items.reduce((s, i) => s + (i.qte * i.prix * (1 + (i.tva || 20) / 100)), 0);
+        let poidsTotal = b.items.reduce((s, i) => s + (i.qte * (i.poids || 0)), 0);
 
         return `
         <div class="card" style="flex-direction: column; align-items: stretch; padding: 20px;">
@@ -266,8 +267,8 @@ function renderSuiviBL() {
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <div style="text-align: right;">
-                        <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Total TTC</div>
-                        <b style="font-size: 18px; color: var(--gold);">${eur(total)}</b>
+                        <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Poids total</div>
+                        <b style="font-size: 18px; color: var(--gold);">${poidsTotal.toFixed(2)} kg</b>
                     </div>
                     <button class="btn" style="width: 40px; height: 40px; padding: 0; font-size: 18px; border-radius: 8px; background:rgba(255,255,255,0.1)" onclick="printBL(${b.id})" title="Imprimer ce bon">🖨️</button>
                     <button class="btn btn-red" style="width: 40px; height: 40px; padding: 0; font-size: 16px; border-radius: 8px;" onclick="deleteItem('bls',${b.id})" title="Supprimer ce bon">✕</button>
@@ -401,18 +402,12 @@ function adjustStock() {
 
 // --- RENDU GRILLE BL ---
 function renderBLGrid() {
-    let cliId = $('bl-cli-select').value;
-    let prices = (cliId && db.prixCli[cliId]) ? db.prixCli[cliId] : {};
     $('bl-prod-grid').innerHTML = db.prods.map(p => {
-        let prix = prices[p.id] !== undefined ? prices[p.id] : p.prix;
-        let hasCustom = prices[p.id] !== undefined && prices[p.id] !== p.prix;
-        let prixLabel = hasCustom
-            ? `<span style="color:var(--gold);font-weight:700">${eur(prix)}</span> <small style="opacity:.4;text-decoration:line-through">${eur(p.prix)}</small>`
-            : `<span style="opacity:.6;font-size:13px">${eur(prix)}</span>`;
+        let poidsLabel = p.poids ? `<span style="opacity:.6;font-size:13px">${p.poids} kg / ${p.unite}</span>` : '';
         return `
         <div class="card" style="flex-direction:column; padding: 20px; align-items: center;">
             <div style="font-size: 18px; margin-bottom: 6px;">${p.icon} <b>${p.nom}</b></div>
-            <div style="margin-bottom: 12px; font-size:13px">${prixLabel} / ${p.unite}</div>
+            ${poidsLabel ? `<div style="margin-bottom: 12px;">${poidsLabel}</div>` : ''}
             <div style="display:flex; gap:12px; align-items:center; justify-content: center;">
                 <button class="btn btn-gold" style="width: 60px; height: 60px; padding: 0; font-size: 35px; border-radius: 12px; display: flex; align-items: center; justify-content: center; line-height: 1;" onclick="changeQty('${p.id}',-1)">−</button>
                 <input type="number" id="qty-${p.id}" value="0" style="width: 100px; height: 60px; text-align:center; font-size: 26px; font-weight: 700; border-radius: 12px; margin: 0; padding: 0; background: #fff; border: 2px solid var(--border); color: var(--header);">
@@ -562,15 +557,14 @@ function printBL(id) {
     if (!b) return;
     let ent = db.ents[0] || null;
     let cli = db.clis.find(c => c.id == b.cid);
-    let rows = '', ht = 0, ttc = 0;
+    let rows = '', poidsTotal = 0;
     b.items.forEach(i => {
-        let lht = i.prix * i.qte;
-        let lttc = lht * (1 + (i.tva || 20) / 100);
-        ht += lht; ttc += lttc;
-        rows += `<tr><td>${i.icon || ''} ${i.nom}</td><td style="text-align:center">${i.qte}</td><td style="text-align:center">${i.unite}</td><td>${eur(i.prix)}</td><td style="text-align:right">${eur(lht)}</td></tr>`;
+        let lpoids = i.qte * (i.poids || 0);
+        poidsTotal += lpoids;
+        rows += `<tr><td>${i.icon || ''} ${i.nom}</td><td style="text-align:center">${i.qte}</td><td style="text-align:center">${i.unite}</td><td style="text-align:right">${i.poids ? i.poids + ' kg' : '—'}</td><td style="text-align:right">${lpoids ? lpoids.toFixed(2) + ' kg' : '—'}</td></tr>`;
     });
     $('sheet-holder').innerHTML = `
-        <div class="inv-wrap">
+        <div class="inv-wrap" style="background:#fff">
             <h1>Bon de Livraison</h1>
             <div class="inv-header-grid">
                 <div>${ent ? `<b>Émetteur</b>${ent.nom}<br>${ent.adr}<br>${ent.ville}${ent.siret ? '<br>SIRET : ' + ent.siret : ''}` : ''}</div>
@@ -578,12 +572,11 @@ function printBL(id) {
             </div>
             <div style="margin-bottom:20px"><b>DATE :</b> ${b.date}</div>
             <table class="inv-table">
-                <thead><tr><th>Désignation</th><th style="text-align:center">Qté</th><th style="text-align:center">Unité</th><th>P.U HT</th><th style="text-align:right">Total HT</th></tr></thead>
+                <thead><tr><th>Désignation</th><th style="text-align:center">Qté</th><th style="text-align:center">Unité</th><th style="text-align:right">Poids unit.</th><th style="text-align:right">Poids total</th></tr></thead>
                 <tbody>${rows}</tbody>
             </table>
             <div class="inv-totals">
-                <div class="inv-total-line"><span>Total HT</span><span>${eur(ht)}</span></div>
-                <div class="inv-total-final"><span>TOTAL TTC</span><span>${eur(ttc)}</span></div>
+                <div class="inv-total-final"><span>POIDS TOTAL</span><span>${poidsTotal.toFixed(2)} kg</span></div>
             </div>
             <div class="payment-box" style="margin-top:40px">
                 <div style="font-size:13px; color:#555">Bon de livraison — à conserver</div>
