@@ -11,6 +11,59 @@ const G = {
     val: (k) => localStorage.getItem(k) || '0'
 };
 
+// Synchronisation GitHub
+const Sync = {
+    cfg: () => JSON.parse(localStorage.getItem('v90_gh_config') || 'null'),
+    setCfg: (c) => localStorage.setItem('v90_gh_config', JSON.stringify(c)),
+
+    async pull() {
+        const c = Sync.cfg();
+        if (!c?.token) return alert("Configure d'abord GitHub dans Paramètres");
+        const url = `https://api.github.com/repos/${c.owner}/${c.repo}/contents/${c.path}`;
+        let res;
+        try { res = await fetch(url, { headers: { Authorization: `token ${c.token}` } }); }
+        catch (e) { return alert("Erreur réseau : " + e.message); }
+        if (!res.ok) return alert("Erreur lecture GitHub : " + res.status + " — vérifie le token et le dépôt");
+        const file = await res.json();
+        localStorage.setItem('v90_gh_sha', file.sha);
+        let data;
+        try { data = JSON.parse(atob(file.content.replace(/\n/g, ''))); }
+        catch (e) { return alert("Fichier JSON invalide sur GitHub"); }
+        ['clis','prods','ents','hist','bls','drafts'].forEach(k => {
+            db[k] = data[k] || [];
+            G.set('v90_' + k, db[k]);
+        });
+        localStorage.setItem('v90_inv_count', data.inv_count || '0');
+        renderAll();
+        alert("✅ Données chargées depuis GitHub !");
+    },
+
+    async push() {
+        const c = Sync.cfg();
+        if (!c?.token) return alert("Configure d'abord GitHub dans Paramètres");
+        const data = {
+            version: "9.0",
+            lastSync: new Date().toISOString(),
+            clis: db.clis, prods: db.prods, ents: db.ents,
+            hist: db.hist, bls: db.bls, drafts: db.drafts,
+            inv_count: G.val('v90_inv_count')
+        };
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+        const sha = localStorage.getItem('v90_gh_sha');
+        const body = { message: "sync " + new Date().toISOString(), content };
+        if (sha) body.sha = sha;
+        const url = `https://api.github.com/repos/${c.owner}/${c.repo}/contents/${c.path}`;
+        let res;
+        try { res = await fetch(url, { method: 'PUT', headers: { Authorization: `token ${c.token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); }
+        catch (e) { return alert("Erreur réseau : " + e.message); }
+        if (res.status === 409) return alert("Conflit : fais d'abord un ⬇️ Pull pour récupérer la version distante");
+        if (!res.ok) return alert("Erreur écriture GitHub : " + res.status);
+        const result = await res.json();
+        localStorage.setItem('v90_gh_sha', result.content.sha);
+        alert("✅ Données sauvegardées sur GitHub !");
+    }
+};
+
 // Formatage devise
 const eur = (n) => new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(n);
 
@@ -21,7 +74,8 @@ let db = {
     ents: G.get('v90_ents'),
     hist: G.get('v90_hist'),
     bls: G.get('v90_bls'),
-    drafts: G.get('v90_drafts')
+    drafts: G.get('v90_drafts'),
+    prixCli: JSON.parse(localStorage.getItem('v90_prix_cli') || '{}')
 };
 
 let curLines = [], blSel = [], curDraftId = null;
@@ -35,7 +89,16 @@ function showPage(id) {
     $('global-back').style.display = (id === 'home') ? 'none' : 'flex';
     
     if (id === 'facture') $('f-num').value = genNum();
-    
+
+    if (id === 'parametres') {
+        const ghCfg = Sync.cfg();
+        if (ghCfg) {
+            $('gh-token').value = ghCfg.token || '';
+            $('gh-repo').value = (ghCfg.owner && ghCfg.repo) ? `${ghCfg.owner}/${ghCfg.repo}` : '';
+            $('gh-path').value = ghCfg.path || 'data.json';
+        }
+    }
+
     window.scrollTo(0, 0);
     renderAll();
 }
@@ -81,6 +144,33 @@ function openCliModal(id = null) {
         $('mc-adr').value = ''; $('mc-ville').value = ''; $('mc-email').value = ''; $('mc-siret').value = '';
     }
     openModal('mod-cli');
+}
+
+function openCliPrixModal(cliId) {
+    let cli = db.clis.find(c => c.id == cliId);
+    if (!cli) return;
+    let prices = db.prixCli[cliId] || {};
+    $('mcp-cli-id').value = cliId;
+    $('mcp-title').innerText = `💰 Prix pour ${cli.nom}`;
+    $('mcp-list').innerHTML = db.prods.map(p => `
+        <div class="field">
+            <label>${p.icon} ${p.nom} <small style="opacity:.5; font-weight:400">(base : ${eur(p.prix)} / ${p.unite})</small></label>
+            <input type="number" id="cprix-${p.id}" step="0.01" value="${prices[p.id] !== undefined ? prices[p.id] : p.prix}">
+        </div>`).join('');
+    openModal('mod-cli-prix');
+}
+
+function saveCliPrix() {
+    let cliId = $('mcp-cli-id').value;
+    if (!db.prixCli[cliId]) db.prixCli[cliId] = {};
+    db.prods.forEach(p => {
+        let v = parseFloat($('cprix-' + p.id).value);
+        if (!isNaN(v)) db.prixCli[cliId][p.id] = v;
+    });
+    localStorage.setItem('v90_prix_cli', JSON.stringify(db.prixCli));
+    closeModals();
+    renderBLGrid();
+    alert('✅ Prix spécifiques sauvegardés !');
 }
 
 function openEntModal(id = null) {
@@ -130,15 +220,18 @@ function changeQty(id, d) {
 }
 
 function saveBL() {
+    let cliId = $('bl-cli-select').value;
+    let prixCli = (cliId && db.prixCli[cliId]) ? db.prixCli[cliId] : {};
     let items = [];
     db.prods.forEach(p => {
         let q = parseInt($('qty-' + p.id).value);
-        if (q > 0) items.push({ pid: p.id, icon: p.icon, nom: p.nom, prix: p.prix, qte: q, unite: p.unite, tva: p.tva });
+        let prix = prixCli[p.id] !== undefined ? prixCli[p.id] : p.prix;
+        if (q > 0) items.push({ pid: p.id, icon: p.icon, nom: p.nom, prix: prix, qte: q, unite: p.unite, tva: p.tva });
     });
     if (!items.length) return;
     const [y, m, d] = $('bl-date').value.split('-');
     const dateStr = `${d}/${m}/${y}`;
-    db.bls.push({ id: Date.now(), date: dateStr, cid: $('bl-cli-select').value, cliNom: db.clis.find(c => c.id == $('bl-cli-select').value).nom, items, status: 'en-cours' });
+    db.bls.push({ id: Date.now(), date: dateStr, cid: cliId, cliNom: db.clis.find(c => c.id == cliId).nom, items, status: 'en-cours' });
     G.set('v90_bls', db.bls);
     alert("Livraison enregistrée !");
     showPage('home');
@@ -176,6 +269,7 @@ function renderSuiviBL() {
                         <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Total TTC</div>
                         <b style="font-size: 18px; color: var(--gold);">${eur(total)}</b>
                     </div>
+                    <button class="btn" style="width: 40px; height: 40px; padding: 0; font-size: 18px; border-radius: 8px; background:rgba(255,255,255,0.1)" onclick="printBL(${b.id})" title="Imprimer ce bon">🖨️</button>
                     <button class="btn btn-red" style="width: 40px; height: 40px; padding: 0; font-size: 16px; border-radius: 8px;" onclick="deleteItem('bls',${b.id})" title="Supprimer ce bon">✕</button>
                 </div>
             </div>
@@ -305,27 +399,46 @@ function adjustStock() {
     }
 }
 
-// --- RENDU GLOBAL DES LISTES ---
-function renderAll() {
-    // 1. Sélecteur client pour le BL
-    $('bl-date').value = new Date().toISOString().split('T')[0];
-    $('bl-cli-select').innerHTML = db.clis.map(c => `<option value="${c.id}">${c.nom}</option>`).join('');
-    
-    // 2. Grille des produits pour le BL (AVEC LES GROS BOUTONS CARRÉS)
-    $('bl-prod-grid').innerHTML = db.prods.map(p => `
+// --- RENDU GRILLE BL ---
+function renderBLGrid() {
+    let cliId = $('bl-cli-select').value;
+    let prices = (cliId && db.prixCli[cliId]) ? db.prixCli[cliId] : {};
+    $('bl-prod-grid').innerHTML = db.prods.map(p => {
+        let prix = prices[p.id] !== undefined ? prices[p.id] : p.prix;
+        let hasCustom = prices[p.id] !== undefined && prices[p.id] !== p.prix;
+        let prixLabel = hasCustom
+            ? `<span style="color:var(--gold);font-weight:700">${eur(prix)}</span> <small style="opacity:.4;text-decoration:line-through">${eur(p.prix)}</small>`
+            : `<span style="opacity:.6;font-size:13px">${eur(prix)}</span>`;
+        return `
         <div class="card" style="flex-direction:column; padding: 20px; align-items: center;">
-            <div style="font-size: 18px; margin-bottom: 15px;">${p.icon} <b>${p.nom}</b></div>
+            <div style="font-size: 18px; margin-bottom: 6px;">${p.icon} <b>${p.nom}</b></div>
+            <div style="margin-bottom: 12px; font-size:13px">${prixLabel} / ${p.unite}</div>
             <div style="display:flex; gap:12px; align-items:center; justify-content: center;">
                 <button class="btn btn-gold" style="width: 60px; height: 60px; padding: 0; font-size: 35px; border-radius: 12px; display: flex; align-items: center; justify-content: center; line-height: 1;" onclick="changeQty('${p.id}',-1)">−</button>
                 <input type="number" id="qty-${p.id}" value="0" style="width: 100px; height: 60px; text-align:center; font-size: 26px; font-weight: 700; border-radius: 12px; margin: 0; padding: 0; background: #fff; border: 2px solid var(--border); color: var(--header);">
                 <button class="btn btn-gold" style="width: 60px; height: 60px; padding: 0; font-size: 35px; border-radius: 12px; display: flex; align-items: center; justify-content: center; line-height: 1;" onclick="changeQty('${p.id}',1)">+</button>
             </div>
-        </div>`).join('');
-    
+        </div>`; }).join('');
+}
+
+// --- RENDU GLOBAL DES LISTES ---
+function renderAll() {
+    // 1. Sélecteur client pour le BL
+    $('bl-date').value = new Date().toISOString().split('T')[0];
+    $('bl-cli-select').innerHTML = db.clis.map(c => `<option value="${c.id}">${c.nom}</option>`).join('');
+
+    // 2. Grille des produits pour le BL
+    renderBLGrid();
+
     // 3. Listes dans les paramètres
     $('list-prods-settings').innerHTML = db.prods.map(p => `<div class="card card-link" onclick="openProdModal(${p.id})"><div><b>${p.icon} ${p.nom}</b></div><span>✏️</span></div>`).join('');
-    $('list-clis-settings').innerHTML = db.clis.map(c => `<div class="card card-link" onclick="openCliModal(${c.id})"><b>👤 ${c.nom}</b></div><span>✏️</span></div>`).join('');
-    $('list-ents-settings').innerHTML = db.ents.map(e => `<div class="card card-link" onclick="openEntModal(${e.id})"><b>🏢 ${e.nom}</b></div><span>✏️</span></div>`).join('');
+    $('list-clis-settings').innerHTML = db.clis.map(c => `
+        <div class="card" style="gap:8px; align-items:center">
+            <b style="flex:1; cursor:pointer" onclick="openCliModal(${c.id})">👤 ${c.nom}</b>
+            <button class="btn" style="width:auto;padding:6px 12px;font-size:12px;background:rgba(255,255,255,0.1)" onclick="openCliPrixModal(${c.id})">💰 Prix</button>
+            <span style="cursor:pointer" onclick="openCliModal(${c.id})">✏️</span>
+        </div>`).join('');
+    $('list-ents-settings').innerHTML = db.ents.map(e => `<div class="card card-link" onclick="openEntModal(${e.id})"><b>🏢 ${e.nom}</b><span>✏️</span></div>`).join('');
     
     // 4. Sélecteurs pour la facturation libre
     $('f-ent').innerHTML = db.ents.map(e => `<option value="${e.id}">${e.nom}</option>`).join('');
@@ -438,7 +551,49 @@ function deleteHist(id, num) {
     G.set('v90_hist', db.hist);
     renderAll();
 }
-function closePreview() { $('preview-wrap').style.display = 'none'; }
+function closePreview() {
+    $('preview-wrap').style.display = 'none';
+    $('btn-finalize-inv').style.display = 'flex';
+    $('btn-print-bl').style.display = 'none';
+}
+
+function printBL(id) {
+    let b = db.bls.find(x => x.id == id);
+    if (!b) return;
+    let ent = db.ents[0] || null;
+    let cli = db.clis.find(c => c.id == b.cid);
+    let rows = '', ht = 0, ttc = 0;
+    b.items.forEach(i => {
+        let lht = i.prix * i.qte;
+        let lttc = lht * (1 + (i.tva || 20) / 100);
+        ht += lht; ttc += lttc;
+        rows += `<tr><td>${i.icon || ''} ${i.nom}</td><td style="text-align:center">${i.qte}</td><td style="text-align:center">${i.unite}</td><td>${eur(i.prix)}</td><td style="text-align:right">${eur(lht)}</td></tr>`;
+    });
+    $('sheet-holder').innerHTML = `
+        <div class="inv-wrap">
+            <h1>Bon de Livraison</h1>
+            <div class="inv-header-grid">
+                <div>${ent ? `<b>Émetteur</b>${ent.nom}<br>${ent.adr}<br>${ent.ville}${ent.siret ? '<br>SIRET : ' + ent.siret : ''}` : ''}</div>
+                <div style="text-align:right"><b>Destinataire</b>${cli ? cli.nom + '<br>' + (cli.adr || '') + '<br>' + (cli.ville || '') : b.cliNom}</div>
+            </div>
+            <div style="margin-bottom:20px"><b>DATE :</b> ${b.date}</div>
+            <table class="inv-table">
+                <thead><tr><th>Désignation</th><th style="text-align:center">Qté</th><th style="text-align:center">Unité</th><th>P.U HT</th><th style="text-align:right">Total HT</th></tr></thead>
+                <tbody>${rows}</tbody>
+            </table>
+            <div class="inv-totals">
+                <div class="inv-total-line"><span>Total HT</span><span>${eur(ht)}</span></div>
+                <div class="inv-total-final"><span>TOTAL TTC</span><span>${eur(ttc)}</span></div>
+            </div>
+            <div class="payment-box" style="margin-top:40px">
+                <div style="font-size:13px; color:#555">Bon de livraison — à conserver</div>
+                ${ent?.mentions ? `<div class="payment-mentions">${ent.mentions.replace(/\n/g, '<br>')}</div>` : ''}
+            </div>
+        </div>`;
+    $('btn-finalize-inv').style.display = 'none';
+    $('btn-print-bl').style.display = 'flex';
+    $('preview-wrap').style.display = 'block';
+}
 
 // --- TVA ASSISTANT ---
 const tvaState = {
@@ -826,6 +981,15 @@ function calcCompta() {
         ${db.hist.slice().reverse().map(h => `
             <div class="card"><b>${h.num}</b> — ${h.cli}<b style="float:right">${h.total}</b></div>
         `).join('') || '<div style="color:var(--text-muted); text-align:center">Aucune facture</div>'}`;
+}
+
+function saveGhConfig() {
+    const repoVal = $('gh-repo').value.trim();
+    const parts = repoVal.split('/');
+    if (parts.length !== 2 || !parts[0] || !parts[1]) return alert("Format dépôt invalide — ex: mon-pseudo/mon-depot");
+    if (!$('gh-token').value.trim()) return alert("Le token est requis");
+    Sync.setCfg({ token: $('gh-token').value.trim(), owner: parts[0], repo: parts[1], path: $('gh-path').value.trim() || 'data.json' });
+    alert("✅ Config GitHub sauvegardée !");
 }
 
 // Initialisation
