@@ -249,11 +249,11 @@ function renderSuiviBL() {
             <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border); font-size: 14px; color: #4A4A4A; padding-left: 45px;">
                 <span style="flex: 2;"><b>${i.icon} ${i.nom}</b></span>
                 <span style="flex: 1; text-align: center; color: var(--sage); font-weight: 700;">${i.qte} ${i.unite}</span>
-                <span style="flex: 1; text-align: right; opacity:.6">${(() => { let pu = i.poids || db.prods.find(p => p.id == i.pid)?.poids || 0; return pu ? (i.qte * pu).toFixed(2) + ' kg' : '—'; })()}</span>
+                <span style="flex: 1; text-align: right; opacity:.6">${(i.qte * getPoids(i)).toFixed(2)} kg</span>
             </div>
         `).join('');
 
-        let poidsTotal = b.items.reduce((s, i) => { let pu = i.poids || db.prods.find(p => p.id == i.pid)?.poids || 0; return s + i.qte * pu; }, 0);
+        let poidsTotal = b.items.reduce((s, i) => s + i.qte * getPoids(i), 0);
 
         return `
         <div class="card" style="flex-direction: column; align-items: stretch; padding: 20px;">
@@ -398,6 +398,12 @@ function adjustStock() {
         $('adj-qty').value = '';
         renderAll();
     }
+}
+
+// Helper : poids unitaire d'un item BL
+// Si poids non renseigné : 1 kg par défaut quand l'unité est "kg" (logique physique)
+function getPoids(i) {
+    return i.poids || db.prods.find(p => p.id == i.pid)?.poids || (i.unite === 'kg' ? 1 : 0);
 }
 
 // --- RENDU GRILLE BL ---
@@ -560,7 +566,7 @@ function printBL(id) {
     let cli = db.clis.find(c => c.id == b.cid);
     let rows = '', poidsTotal = 0;
     b.items.forEach(i => {
-        let pu = i.poids || db.prods.find(p => p.id == i.pid)?.poids || 0;
+        let pu = getPoids(i);
         let lpoids = i.qte * pu;
         poidsTotal += lpoids;
         rows += `<tr><td>${i.icon || ''} ${i.nom}</td><td style="text-align:center">${i.qte}</td><td style="text-align:center">${i.unite}</td><td style="text-align:right">${pu ? pu + ' kg' : '—'}</td><td style="text-align:right">${lpoids ? lpoids.toFixed(2) + ' kg' : '—'}</td></tr>`;
