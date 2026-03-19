@@ -493,10 +493,10 @@ select {
 ════════════════════════════════════════ */
 #preview-wrap {
     display: none; position: fixed; inset: 0;
-    background: #111; z-index: 9999; padding: 10px; overflow-y: auto;
+    background: #f0f0f0; z-index: 9999; padding: 10px; overflow-y: auto;
 }
 
-.inv-wrap { background: #EAE4D9; width: 210mm; min-height: 297mm; margin: 0 auto; color: #4A4A4A; padding: 20mm; display: flex; flex-direction: column; position: relative; box-sizing: border-box; font-family: 'DM Sans', sans-serif; }
+.inv-wrap { background: #ffffff; width: 210mm; min-height: 297mm; margin: 0 auto; color: #4A4A4A; padding: 20mm; display: flex; flex-direction: column; position: relative; box-sizing: border-box; font-family: 'DM Sans', sans-serif; }
 .inv-wrap h1 { font-family: 'DM Serif Display', serif; font-size: 60px; color: #1A1008; text-transform: uppercase; margin-bottom: 30px; letter-spacing: -2px; line-height: 1; }
 .inv-header-grid { display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 30px; font-size: 14px; }
 .inv-header-grid b { color: #1A1008; text-transform: uppercase; font-size: 12px; display: block; margin-bottom: 5px; }
