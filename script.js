@@ -11,6 +11,59 @@ const G = {
     val: (k) => localStorage.getItem(k) || '0'
 };
 
+// Synchronisation GitHub
+const Sync = {
+    cfg: () => JSON.parse(localStorage.getItem('v90_gh_config') || 'null'),
+    setCfg: (c) => localStorage.setItem('v90_gh_config', JSON.stringify(c)),
+
+    async pull() {
+        const c = Sync.cfg();
+        if (!c?.token) return alert("Configure d'abord GitHub dans Paramètres");
+        const url = `https://api.github.com/repos/${c.owner}/${c.repo}/contents/${c.path}`;
+        let res;
+        try { res = await fetch(url, { headers: { Authorization: `token ${c.token}` } }); }
+        catch (e) { return alert("Erreur réseau : " + e.message); }
+        if (!res.ok) return alert("Erreur lecture GitHub : " + res.status + " — vérifie le token et le dépôt");
+        const file = await res.json();
+        localStorage.setItem('v90_gh_sha', file.sha);
+        let data;
+        try { data = JSON.parse(atob(file.content.replace(/\n/g, ''))); }
+        catch (e) { return alert("Fichier JSON invalide sur GitHub"); }
+        ['clis','prods','ents','hist','bls','drafts'].forEach(k => {
+            db[k] = data[k] || [];
+            G.set('v90_' + k, db[k]);
+        });
+        localStorage.setItem('v90_inv_count', data.inv_count || '0');
+        renderAll();
+        alert("✅ Données chargées depuis GitHub !");
+    },
+
+    async push() {
+        const c = Sync.cfg();
+        if (!c?.token) return alert("Configure d'abord GitHub dans Paramètres");
+        const data = {
+            version: "9.0",
+            lastSync: new Date().toISOString(),
+            clis: db.clis, prods: db.prods, ents: db.ents,
+            hist: db.hist, bls: db.bls, drafts: db.drafts,
+            inv_count: G.val('v90_inv_count')
+        };
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+        const sha = localStorage.getItem('v90_gh_sha');
+        const body = { message: "sync " + new Date().toISOString(), content };
+        if (sha) body.sha = sha;
+        const url = `https://api.github.com/repos/${c.owner}/${c.repo}/contents/${c.path}`;
+        let res;
+        try { res = await fetch(url, { method: 'PUT', headers: { Authorization: `token ${c.token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); }
+        catch (e) { return alert("Erreur réseau : " + e.message); }
+        if (res.status === 409) return alert("Conflit : fais d'abord un ⬇️ Pull pour récupérer la version distante");
+        if (!res.ok) return alert("Erreur écriture GitHub : " + res.status);
+        const result = await res.json();
+        localStorage.setItem('v90_gh_sha', result.content.sha);
+        alert("✅ Données sauvegardées sur GitHub !");
+    }
+};
+
 // Formatage devise
 const eur = (n) => new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(n);
 
@@ -35,7 +88,16 @@ function showPage(id) {
     $('global-back').style.display = (id === 'home') ? 'none' : 'flex';
     
     if (id === 'facture') $('f-num').value = genNum();
-    
+
+    if (id === 'parametres') {
+        const ghCfg = Sync.cfg();
+        if (ghCfg) {
+            $('gh-token').value = ghCfg.token || '';
+            $('gh-repo').value = (ghCfg.owner && ghCfg.repo) ? `${ghCfg.owner}/${ghCfg.repo}` : '';
+            $('gh-path').value = ghCfg.path || 'data.json';
+        }
+    }
+
     window.scrollTo(0, 0);
     renderAll();
 }
@@ -826,6 +888,15 @@ function calcCompta() {
         ${db.hist.slice().reverse().map(h => `
             <div class="card"><b>${h.num}</b> — ${h.cli}<b style="float:right">${h.total}</b></div>
         `).join('') || '<div style="color:var(--text-muted); text-align:center">Aucune facture</div>'}`;
+}
+
+function saveGhConfig() {
+    const repoVal = $('gh-repo').value.trim();
+    const parts = repoVal.split('/');
+    if (parts.length !== 2 || !parts[0] || !parts[1]) return alert("Format dépôt invalide — ex: mon-pseudo/mon-depot");
+    if (!$('gh-token').value.trim()) return alert("Le token est requis");
+    Sync.setCfg({ token: $('gh-token').value.trim(), owner: parts[0], repo: parts[1], path: $('gh-path').value.trim() || 'data.json' });
+    alert("✅ Config GitHub sauvegardée !");
 }
 
 // Initialisation

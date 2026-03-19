@@ -165,6 +165,28 @@
     <div class="section-title" style="margin-top: 25px">Mes Entreprises</div>
     <div id="list-ents-settings"></div>
     <button class="btn btn-gold" onclick="openEntModal()">＋ AJOUTER ÉMETTEUR</button>
+
+    <div class="section-title" style="margin-top: 25px">☁️ Synchronisation GitHub</div>
+    <div class="card" style="flex-direction:column; gap:12px">
+        <p style="font-size:12px; color:var(--text-muted); margin:0">Stocke tes données dans un fichier JSON sur GitHub pour les partager entre appareils. <br>Nécessite un dépôt GitHub + un Personal Access Token (scope <b>repo</b>).</p>
+        <div class="field">
+            <label>Token GitHub (PAT)</label>
+            <input type="password" id="gh-token" placeholder="ghp_...">
+        </div>
+        <div class="field">
+            <label>Dépôt (owner/repo)</label>
+            <input type="text" id="gh-repo" placeholder="mon-pseudo/mon-depot">
+        </div>
+        <div class="field">
+            <label>Fichier JSON</label>
+            <input type="text" id="gh-path" placeholder="data.json">
+        </div>
+        <button class="btn btn-gold" onclick="saveGhConfig()">💾 SAUVEGARDER CONFIG</button>
+        <div style="display:flex; gap:10px; margin-top:4px">
+            <button class="btn" style="flex:1; background:var(--card)" onclick="Sync.pull()">⬇️ CHARGER depuis GitHub</button>
+            <button class="btn" style="flex:1; background:var(--card)" onclick="Sync.push()">⬆️ SAUVEGARDER sur GitHub</button>
+        </div>
+    </div>
 </div>
 
 <div id="page-historique" class="page">
