@@ -7,60 +7,45 @@ const $ = (id) => document.getElementById(id);
 // Gestion du LocalStorage
 const G = {
     get: (k) => JSON.parse(localStorage.getItem(k) || '[]'),
-    set: (k, v) => localStorage.setItem(k, JSON.stringify(v)),
+    set: (k, v) => { localStorage.setItem(k, JSON.stringify(v)); Supa.push(k, v); },
     val: (k) => localStorage.getItem(k) || '0'
 };
 
-// Synchronisation GitHub
-const Sync = {
-    cfg: () => JSON.parse(localStorage.getItem('v90_gh_config') || 'null'),
-    setCfg: (c) => localStorage.setItem('v90_gh_config', JSON.stringify(c)),
+// Synchronisation Supabase
+const SUPA_URL = 'https://eusukwnfoixjsjqoptfr.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1c3Vrd25mb2l4anNqcW9wdGZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5OTQ3NjMsImV4cCI6MjA4OTU3MDc2M30.ZkmqvszuljAPmvAqrmWT87fFOlJEm7WyrqC6E_f_FbI';
 
-    async pull() {
-        const c = Sync.cfg();
-        if (!c?.token) return alert("Configure d'abord GitHub dans Paramètres");
-        const url = `https://api.github.com/repos/${c.owner}/${c.repo}/contents/${c.path}`;
-        let res;
-        try { res = await fetch(url, { headers: { Authorization: `token ${c.token}` } }); }
-        catch (e) { return alert("Erreur réseau : " + e.message); }
-        if (!res.ok) return alert("Erreur lecture GitHub : " + res.status + " — vérifie le token et le dépôt");
-        const file = await res.json();
-        localStorage.setItem('v90_gh_sha', file.sha);
-        let data;
-        try { data = JSON.parse(atob(file.content.replace(/\n/g, ''))); }
-        catch (e) { return alert("Fichier JSON invalide sur GitHub"); }
-        ['clis','prods','ents','hist','bls','drafts'].forEach(k => {
-            db[k] = data[k] || [];
-            G.set('v90_' + k, db[k]);
-        });
-        localStorage.setItem('v90_inv_count', data.inv_count || '0');
-        renderAll();
-        alert("✅ Données chargées depuis GitHub !");
+const Supa = {
+    _h: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' },
+
+    push(key, value) {
+        fetch(`${SUPA_URL}/rest/v1/app_data`, {
+            method: 'POST', headers: Supa._h,
+            body: JSON.stringify({ key, value })
+        }).catch(() => {});
     },
 
-    async push() {
-        const c = Sync.cfg();
-        if (!c?.token) return alert("Configure d'abord GitHub dans Paramètres");
-        const data = {
-            version: "9.0",
-            lastSync: new Date().toISOString(),
-            clis: db.clis, prods: db.prods, ents: db.ents,
-            hist: db.hist, bls: db.bls, drafts: db.drafts,
-            inv_count: G.val('v90_inv_count')
-        };
-        const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
-        const sha = localStorage.getItem('v90_gh_sha');
-        const body = { message: "sync " + new Date().toISOString(), content };
-        if (sha) body.sha = sha;
-        const url = `https://api.github.com/repos/${c.owner}/${c.repo}/contents/${c.path}`;
-        let res;
-        try { res = await fetch(url, { method: 'PUT', headers: { Authorization: `token ${c.token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); }
-        catch (e) { return alert("Erreur réseau : " + e.message); }
-        if (res.status === 409) return alert("Conflit : fais d'abord un ⬇️ Pull pour récupérer la version distante");
-        if (!res.ok) return alert("Erreur écriture GitHub : " + res.status);
-        const result = await res.json();
-        localStorage.setItem('v90_gh_sha', result.content.sha);
-        alert("✅ Données sauvegardées sur GitHub !");
+    async pullAll() {
+        try {
+            const res = await fetch(`${SUPA_URL}/rest/v1/app_data?select=key,value`, {
+                headers: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}` }
+            });
+            if (!res.ok) return;
+            const rows = await res.json();
+            if (!rows.length) return;
+            rows.forEach(r => {
+                const v = r.value;
+                localStorage.setItem(r.key, (v !== null && typeof v === 'object') ? JSON.stringify(v) : String(v ?? ''));
+            });
+            db.clis   = G.get('v90_clis');
+            db.prods  = G.get('v90_prods');
+            db.ents   = G.get('v90_ents');
+            db.hist   = G.get('v90_hist');
+            db.bls    = G.get('v90_bls');
+            db.drafts = G.get('v90_drafts');
+            db.prixCli = JSON.parse(localStorage.getItem('v90_prix_cli') || '{}');
+            renderAll();
+        } catch(e) {}
     }
 };
 
@@ -89,15 +74,6 @@ function showPage(id) {
     $('global-back').style.display = (id === 'home') ? 'none' : 'flex';
     
     if (id === 'facture') $('f-num').value = genNum();
-
-    if (id === 'parametres') {
-        const ghCfg = Sync.cfg();
-        if (ghCfg) {
-            $('gh-token').value = ghCfg.token || '';
-            $('gh-repo').value = (ghCfg.owner && ghCfg.repo) ? `${ghCfg.owner}/${ghCfg.repo}` : '';
-            $('gh-path').value = ghCfg.path || 'data.json';
-        }
-    }
 
     window.scrollTo(0, 0);
     renderAll();
@@ -169,6 +145,7 @@ function saveCliPrix() {
         if (!isNaN(v)) db.prixCli[cliId][p.id] = v;
     });
     localStorage.setItem('v90_prix_cli', JSON.stringify(db.prixCli));
+    Supa.push('v90_prix_cli', db.prixCli);
     closeModals();
     renderBLGrid();
     alert('✅ Prix spécifiques sauvegardés !');
@@ -542,7 +519,9 @@ function finalizeInvoice() {
     G.set('v90_hist', db.hist);
     if (curDraftId) db.drafts = db.drafts.filter(d => d.id != curDraftId);
     G.set('v90_drafts', db.drafts);
-    localStorage.setItem('v90_inv_count', parseInt(G.val('v90_inv_count')) + 1);
+    const newCount = parseInt(G.val('v90_inv_count')) + 1;
+    localStorage.setItem('v90_inv_count', newCount);
+    Supa.push('v90_inv_count', newCount);
     window.print();
     closePreview();
     showPage('home');
@@ -986,15 +965,7 @@ function calcCompta() {
         `).join('') || '<div style="color:var(--text-muted); text-align:center">Aucune facture</div>'}`;
 }
 
-function saveGhConfig() {
-    const repoVal = $('gh-repo').value.trim();
-    const parts = repoVal.split('/');
-    if (parts.length !== 2 || !parts[0] || !parts[1]) return alert("Format dépôt invalide — ex: mon-pseudo/mon-depot");
-    if (!$('gh-token').value.trim()) return alert("Le token est requis");
-    Sync.setCfg({ token: $('gh-token').value.trim(), owner: parts[0], repo: parts[1], path: $('gh-path').value.trim() || 'data.json' });
-    alert("✅ Config GitHub sauvegardée !");
-}
-
 // Initialisation
 $('f-date').value = new Date().toLocaleDateString('fr-FR');
 showPage('home');
+Supa.pullAll();
