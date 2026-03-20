@@ -227,7 +227,7 @@ function renderSuiviBL() {
                 <span style="flex: 2;"><b>${i.icon} ${i.nom}</b></span>
                 <span style="flex: 1; text-align: center; color: var(--sage); font-weight: 700;">${i.qte} ${i.unite}</span>
                 <span style="flex: 1; text-align: right; opacity:.7">${eur(i.prix)} / ${i.unite}</span>
-                <span style="flex: 1; text-align: right; opacity:.5; font-size:12px">${(i.qte * getPoids(i)).toFixed(2)} kg</span>
+                <span style="flex: 1; text-align: right; font-weight: 600; color: var(--gold)">${eur(i.qte * i.prix)} HT</span>
             </div>
         `).join('');
 
