@@ -245,7 +245,9 @@ function renderSuiviBL() {
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <div style="text-align: right;">
-                        <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Total TTC</div>
+                        <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Total HT</div>
+                        <b style="font-size: 14px; color: var(--text-muted);">${eur(b.items.reduce((s,i) => s + i.qte * i.prix, 0))}</b>
+                        <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-top:4px">Total TTC</div>
                         <b style="font-size: 16px; color: var(--gold);">${eur(b.items.reduce((s,i) => s + i.qte * i.prix * (1 + (i.tva||20)/100), 0))}</b>
                         <div style="font-size: 11px; color: var(--text-muted); margin-top:2px">${poidsTotal.toFixed(2)} kg</div>
                     </div>
@@ -319,7 +321,9 @@ function renderDrafts() {
                     ${blRefs}
                 </div>
                 <div style="text-align: right;">
-                    <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--gold-dark);">Total TTC Prévu</span><br>
+                    <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Total HT</span><br>
+                    <b style="font-size: 16px; color: var(--text-muted);">${eur(d.items.reduce((s,i) => s + i.qte * i.prix, 0))}</b><br>
+                    <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--gold-dark);">Total TTC</span><br>
                     <b style="font-size: 22px; color: var(--sage);">${eur(tot)}</b>
                 </div>
             </div>
