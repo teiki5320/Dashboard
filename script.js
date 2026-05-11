@@ -203,7 +203,9 @@ function saveBL() {
     let items = [];
     db.prods.forEach(p => {
         let q = parseInt($('qty-' + p.id).value);
-        let prix = prixCli[p.id] !== undefined ? prixCli[p.id] : p.prix;
+        let prixInput = parseFloat($('prix-' + p.id).value);
+        let prixDefaut = prixCli[p.id] !== undefined ? prixCli[p.id] : p.prix;
+        let prix = isNaN(prixInput) ? prixDefaut : prixInput;
         if (q > 0) items.push({ pid: p.id, icon: p.icon, nom: p.nom, prix: prix, qte: q, unite: p.unite, tva: p.tva, poids: p.poids || 0 });
     });
     if (!items.length) return;
@@ -391,8 +393,11 @@ function getPoids(i) {
 
 // --- RENDU GRILLE BL ---
 function renderBLGrid() {
+    let cliId = $('bl-cli-select').value;
+    let prixCli = (cliId && db.prixCli[cliId]) ? db.prixCli[cliId] : {};
     $('bl-prod-grid').innerHTML = db.prods.map(p => {
         let poidsLabel = p.poids ? `<span style="opacity:.6;font-size:13px">${p.poids} kg / ${p.unite}</span>` : '';
+        let prix = prixCli[p.id] !== undefined ? prixCli[p.id] : p.prix;
         return `
         <div class="card" style="flex-direction:column; padding: 20px; align-items: center;">
             <div style="font-size: 18px; margin-bottom: 6px;">${p.icon} <b>${p.nom}</b></div>
@@ -401,6 +406,11 @@ function renderBLGrid() {
                 <button class="btn btn-gold" style="width: 60px; height: 60px; padding: 0; font-size: 35px; border-radius: 12px; display: flex; align-items: center; justify-content: center; line-height: 1;" onclick="changeQty('${p.id}',-1)">−</button>
                 <input type="number" id="qty-${p.id}" value="0" style="width: 100px; height: 60px; text-align:center; font-size: 26px; font-weight: 700; border-radius: 12px; margin: 0; padding: 0; background: #fff; border: 2px solid var(--border); color: var(--header);">
                 <button class="btn btn-gold" style="width: 60px; height: 60px; padding: 0; font-size: 35px; border-radius: 12px; display: flex; align-items: center; justify-content: center; line-height: 1;" onclick="changeQty('${p.id}',1)">+</button>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center; justify-content: center; margin-top: 12px;">
+                <label style="font-size: 13px; color: var(--text-muted); font-weight: 600;">Prix :</label>
+                <input type="number" id="prix-${p.id}" step="0.01" value="${prix}" style="width: 100px; height: 40px; text-align:center; font-size: 16px; font-weight: 600; border-radius: 8px; margin: 0; padding: 0 8px; background: #fff; border: 2px solid var(--border); color: var(--header);">
+                <span style="font-size: 13px; color: var(--text-muted);">€ / ${p.unite}</span>
             </div>
         </div>`; }).join('');
 }
