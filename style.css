@@ -26,6 +26,11 @@ body {
     color: var(--text-main);
     font-family: 'DM Sans', sans-serif;
     min-height: 100vh;
+    zoom: 1.6;
+}
+
+@media print {
+    body { zoom: 1 !important; }
 }
 
 /* ════════════════════════════════════════
