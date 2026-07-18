@@ -225,11 +225,11 @@ function renderSuiviBL() {
         
         // Création de la liste détaillée des articles de la commande
         let itemsDetail = b.items.map(i => `
-            <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--border); font-size: 20px; color: #4A4A4A; padding-left: 45px;">
+            <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--border); font-size: 20px; color: var(--text-main); padding-left: 45px;">
                 <span style="flex: 2;"><b>${i.icon} ${i.nom}</b></span>
                 <span style="flex: 1; text-align: center; color: var(--sage); font-weight: 700;">${i.qte} ${i.unite}</span>
                 <span style="flex: 1; text-align: right; opacity:.7">${eur(i.prix)} / ${i.unite}</span>
-                <span style="flex: 1; text-align: right; font-weight: 600; color: var(--gold)">${eur(i.qte * i.prix)} HT</span>
+                <span style="flex: 1; text-align: right; font-weight: 600; color: var(--accent)">${eur(i.qte * i.prix)} HT</span>
             </div>
         `).join('');
 
@@ -304,11 +304,11 @@ function renderDrafts() {
         
         // Création d'une vraie liste détaillée au lieu des mini-tags
         let itemsDetail = d.items.map(i => `
-            <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--border); font-size: 20px; color: #4A4A4A;">
+            <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--border); font-size: 20px; color: var(--text-main);">
                 <span style="flex: 2;"><b>${i.icon} ${i.nom}</b></span>
                 <span style="flex: 1; text-align: center;">${i.qte} ${i.unite}</span>
                 <span style="flex: 1; text-align: right;">${eur(i.prix)} / ${i.unite}</span>
-                <span style="flex: 1; text-align: right; font-weight: 700; color: var(--text);">${eur(i.qte * i.prix)} HT</span>
+                <span style="flex: 1; text-align: right; font-weight: 700; color: var(--text-main);">${eur(i.qte * i.prix)} HT</span>
             </div>
         `).join('');
 
@@ -325,7 +325,7 @@ function renderDrafts() {
                 <div style="text-align: right;">
                     <span style="font-size: 14px; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Total HT</span><br>
                     <b style="font-size: 22px; color: var(--text-muted);">${eur(d.items.reduce((s,i) => s + i.qte * i.prix, 0))}</b><br>
-                    <span style="font-size: 14px; text-transform: uppercase; font-weight: 700; color: var(--gold-dark);">Total TTC</span><br>
+                    <span style="font-size: 14px; text-transform: uppercase; font-weight: 700; color: var(--accent);">Total TTC</span><br>
                     <b style="font-size: 30px; color: var(--sage);">${eur(tot)}</b>
                 </div>
             </div>
@@ -404,12 +404,12 @@ function renderBLGrid() {
             ${poidsLabel ? `<div style="margin-bottom: 12px;">${poidsLabel}</div>` : ''}
             <div style="display:flex; gap:12px; align-items:center; justify-content: center;">
                 <button class="btn btn-gold" style="width: 60px; height: 60px; padding: 0; font-size: 35px; border-radius: 12px; display: flex; align-items: center; justify-content: center; line-height: 1;" onclick="changeQty('${p.id}',-1)">−</button>
-                <input type="number" id="qty-${p.id}" value="0" style="width: 100px; height: 60px; text-align:center; font-size: 26px; font-weight: 700; border-radius: 12px; margin: 0; padding: 0; background: #fff; border: 2px solid var(--border); color: var(--header);">
+                <input type="number" id="qty-${p.id}" value="0" style="width: 100px; height: 60px; text-align:center; font-size: 26px; font-weight: 700; border-radius: 12px; margin: 0; padding: 0;">
                 <button class="btn btn-gold" style="width: 60px; height: 60px; padding: 0; font-size: 35px; border-radius: 12px; display: flex; align-items: center; justify-content: center; line-height: 1;" onclick="changeQty('${p.id}',1)">+</button>
             </div>
             <div style="display:flex; gap:8px; align-items:center; justify-content: center; margin-top: 12px;">
                 <label style="font-size: 13px; color: var(--text-muted); font-weight: 600;">Prix :</label>
-                <input type="number" id="prix-${p.id}" step="0.01" value="${prix}" style="width: 100px; height: 40px; text-align:center; font-size: 16px; font-weight: 600; border-radius: 8px; margin: 0; padding: 0 8px; background: #fff; border: 2px solid var(--border); color: var(--header);">
+                <input type="number" id="prix-${p.id}" step="0.01" value="${prix}" style="width: 100px; height: 40px; text-align:center; font-size: 16px; font-weight: 600; border-radius: 8px; margin: 0; padding: 0 8px;">
                 <span style="font-size: 13px; color: var(--text-muted);">€ / ${p.unite}</span>
             </div>
         </div>`; }).join('');
