@@ -225,11 +225,11 @@ function renderSuiviBL() {
         
         // Création de la liste détaillée des articles de la commande
         let itemsDetail = b.items.map(i => `
-            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border); font-size: 14px; color: #4A4A4A; padding-left: 45px;">
+            <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--border); font-size: 20px; color: var(--text-main); padding-left: 45px;">
                 <span style="flex: 2;"><b>${i.icon} ${i.nom}</b></span>
                 <span style="flex: 1; text-align: center; color: var(--sage); font-weight: 700;">${i.qte} ${i.unite}</span>
                 <span style="flex: 1; text-align: right; opacity:.7">${eur(i.prix)} / ${i.unite}</span>
-                <span style="flex: 1; text-align: right; font-weight: 600; color: var(--gold)">${eur(i.qte * i.prix)} HT</span>
+                <span style="flex: 1; text-align: right; font-weight: 600; color: var(--accent)">${eur(i.qte * i.prix)} HT</span>
             </div>
         `).join('');
 
@@ -241,17 +241,17 @@ function renderSuiviBL() {
                 <div style="display: flex; align-items: center; gap: 15px;">
                     <input type="checkbox" style="width: 28px; height: 28px; cursor: pointer; accent-color: var(--gold);" ${isChecked} onchange="toggleBLSel(${b.id}, this.checked)">
                     <div>
-                        <b style="font-size: 18px; color: var(--gold);">${b.cliNom}</b><br>
-                        <small style="color: var(--sage); font-weight: 600;">📅 Date : ${b.date}</small>
+                        <b style="font-size: 26px; color: var(--gold);">${b.cliNom}</b><br>
+                        <small style="font-size: 16px; color: var(--sage); font-weight: 600;">📅 Date : ${b.date}</small>
                     </div>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <div style="text-align: right;">
-                        <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Total HT</div>
-                        <b style="font-size: 14px; color: var(--text-muted);">${eur(b.items.reduce((s,i) => s + i.qte * i.prix, 0))}</b>
-                        <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-top:4px">Total TTC</div>
-                        <b style="font-size: 16px; color: var(--gold);">${eur(b.items.reduce((s,i) => s + i.qte * i.prix * (1 + (i.tva||20)/100), 0))}</b>
-                        <div style="font-size: 11px; color: var(--text-muted); margin-top:2px">${poidsTotal.toFixed(2)} kg</div>
+                        <div style="font-size: 14px; color: var(--text-muted); text-transform: uppercase;">Total HT</div>
+                        <b style="font-size: 20px; color: var(--text-muted);">${eur(b.items.reduce((s,i) => s + i.qte * i.prix, 0))}</b>
+                        <div style="font-size: 14px; color: var(--text-muted); text-transform: uppercase; margin-top:4px">Total TTC</div>
+                        <b style="font-size: 24px; color: var(--gold);">${eur(b.items.reduce((s,i) => s + i.qte * i.prix * (1 + (i.tva||20)/100), 0))}</b>
+                        <div style="font-size: 14px; color: var(--text-muted); margin-top:2px">${poidsTotal.toFixed(2)} kg</div>
                     </div>
                     <button class="btn" style="width: 40px; height: 40px; padding: 0; font-size: 18px; border-radius: 8px; background:rgba(255,255,255,0.1)" onclick="printBL(${b.id})" title="Imprimer ce bon">🖨️</button>
                     <button class="btn btn-red" style="width: 40px; height: 40px; padding: 0; font-size: 16px; border-radius: 8px;" onclick="deleteItem('bls',${b.id})" title="Supprimer ce bon">✕</button>
@@ -304,29 +304,29 @@ function renderDrafts() {
         
         // Création d'une vraie liste détaillée au lieu des mini-tags
         let itemsDetail = d.items.map(i => `
-            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border); font-size: 14px; color: #4A4A4A;">
+            <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--border); font-size: 20px; color: var(--text-main);">
                 <span style="flex: 2;"><b>${i.icon} ${i.nom}</b></span>
                 <span style="flex: 1; text-align: center;">${i.qte} ${i.unite}</span>
                 <span style="flex: 1; text-align: right;">${eur(i.prix)} / ${i.unite}</span>
-                <span style="flex: 1; text-align: right; font-weight: 700; color: var(--text);">${eur(i.qte * i.prix)} HT</span>
+                <span style="flex: 1; text-align: right; font-weight: 700; color: var(--text-main);">${eur(i.qte * i.prix)} HT</span>
             </div>
         `).join('');
 
         // Affichage des dates des BL d'origine (si dispo)
-        let blRefs = d.dates ? `<div style="font-size: 12px; color: var(--sage); margin-top: 4px;">📍 Commandes du : <b>${d.dates}</b></div>` : '';
+        let blRefs = d.dates ? `<div style="font-size: 16px; color: var(--sage); margin-top: 4px;">📍 Commandes du : <b>${d.dates}</b></div>` : '';
 
         return `
         <div class="card draft-card" style="padding: 20px;">
             <div style="display: flex; justify-content: space-between; border-bottom: 2px solid var(--border); padding-bottom: 15px; margin-bottom: 15px;">
                 <div>
-                    <b style="font-size: 18px;">${d.cliNom}</b>
+                    <b style="font-size: 26px;">${d.cliNom}</b>
                     ${blRefs}
                 </div>
                 <div style="text-align: right;">
-                    <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Total HT</span><br>
-                    <b style="font-size: 16px; color: var(--text-muted);">${eur(d.items.reduce((s,i) => s + i.qte * i.prix, 0))}</b><br>
-                    <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--gold-dark);">Total TTC</span><br>
-                    <b style="font-size: 22px; color: var(--sage);">${eur(tot)}</b>
+                    <span style="font-size: 14px; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Total HT</span><br>
+                    <b style="font-size: 22px; color: var(--text-muted);">${eur(d.items.reduce((s,i) => s + i.qte * i.prix, 0))}</b><br>
+                    <span style="font-size: 14px; text-transform: uppercase; font-weight: 700; color: var(--accent);">Total TTC</span><br>
+                    <b style="font-size: 30px; color: var(--sage);">${eur(tot)}</b>
                 </div>
             </div>
             
@@ -404,12 +404,12 @@ function renderBLGrid() {
             ${poidsLabel ? `<div style="margin-bottom: 12px;">${poidsLabel}</div>` : ''}
             <div style="display:flex; gap:12px; align-items:center; justify-content: center;">
                 <button class="btn btn-gold" style="width: 60px; height: 60px; padding: 0; font-size: 35px; border-radius: 12px; display: flex; align-items: center; justify-content: center; line-height: 1;" onclick="changeQty('${p.id}',-1)">−</button>
-                <input type="number" id="qty-${p.id}" value="0" style="width: 100px; height: 60px; text-align:center; font-size: 26px; font-weight: 700; border-radius: 12px; margin: 0; padding: 0; background: #fff; border: 2px solid var(--border); color: var(--header);">
+                <input type="number" id="qty-${p.id}" value="0" style="width: 100px; height: 60px; text-align:center; font-size: 26px; font-weight: 700; border-radius: 12px; margin: 0; padding: 0;">
                 <button class="btn btn-gold" style="width: 60px; height: 60px; padding: 0; font-size: 35px; border-radius: 12px; display: flex; align-items: center; justify-content: center; line-height: 1;" onclick="changeQty('${p.id}',1)">+</button>
             </div>
             <div style="display:flex; gap:8px; align-items:center; justify-content: center; margin-top: 12px;">
                 <label style="font-size: 13px; color: var(--text-muted); font-weight: 600;">Prix :</label>
-                <input type="number" id="prix-${p.id}" step="0.01" value="${prix}" style="width: 100px; height: 40px; text-align:center; font-size: 16px; font-weight: 600; border-radius: 8px; margin: 0; padding: 0 8px; background: #fff; border: 2px solid var(--border); color: var(--header);">
+                <input type="number" id="prix-${p.id}" step="0.01" value="${prix}" style="width: 100px; height: 40px; text-align:center; font-size: 16px; font-weight: 600; border-radius: 8px; margin: 0; padding: 0 8px;">
                 <span style="font-size: 13px; color: var(--text-muted);">€ / ${p.unite}</span>
             </div>
         </div>`; }).join('');
