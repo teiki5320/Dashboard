@@ -7,7 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
     <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 
@@ -84,6 +85,13 @@
                 <line x1="24" y1="35" x2="24" y2="38"/>
             </svg>
             <span>Compta</span>
+        </div>
+        <div class="home-btn" onclick="showPage('mail')">
+            <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="10" width="40" height="28" rx="4"/>
+                <path d="M6 13l18 14 18-14"/>
+            </svg>
+            <span>Mail</span>
         </div>
         <div class="home-btn large" onclick="showPage('parametres')">
             <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -212,6 +220,67 @@
     <div id="compta-result" style="margin-top:20px"></div>
 </div>
 
+<div id="page-mail" class="page">
+    <div class="sub-tabs">
+        <div class="sub-tab active" id="tab-mail-connexion" onclick="toggleMailTab('connexion')">Connexion</div>
+        <div class="sub-tab" id="tab-mail-resume" onclick="toggleMailTab('resume')">Résumé</div>
+        <div class="sub-tab" id="tab-mail-tri" onclick="toggleMailTab('tri')">Tri</div>
+        <div class="sub-tab" id="tab-mail-brouillons" onclick="toggleMailTab('brouillons')">Brouillons</div>
+        <div class="sub-tab" id="tab-mail-extraction" onclick="toggleMailTab('extraction')">Extraction</div>
+    </div>
+
+    <div id="view-mail-connexion">
+        <div class="card" style="flex-direction:column; align-items:stretch; gap:14px">
+            <div class="section-title" style="margin:0">Compte Gmail</div>
+            <div id="mail-gmail-status"></div>
+            <div id="mail-gmail-actions"></div>
+        </div>
+        <div class="card" style="flex-direction:column; align-items:stretch; gap:14px; margin-top:14px">
+            <div class="section-title" style="margin:0">Clé API Claude</div>
+            <div class="field" style="margin-bottom:0">
+                <label>Clé API (sk-ant-...)</label>
+                <input type="password" id="mail-claude-key" placeholder="sk-ant-api03-...">
+            </div>
+            <button class="btn btn-gold" onclick="saveMailClaudeKey()">SAUVER LA CLÉ</button>
+            <div id="mail-claude-status" style="font-size:12px"></div>
+        </div>
+        <div class="section-title" style="margin-top:28px">Catégories de tri</div>
+        <div id="mail-cat-list"></div>
+        <button class="btn btn-gold" onclick="openMailCatModal()">＋ AJOUTER CATÉGORIE</button>
+    </div>
+
+    <div id="view-mail-resume" style="display:none">
+        <button class="btn btn-gold" onclick="mailGenerateSummary()">🔄 GÉNÉRER LE RÉSUMÉ DU JOUR</button>
+        <div id="mail-resume-status" style="font-size:13px; margin-top:10px"></div>
+        <div id="mail-resume-list" style="margin-top:16px"></div>
+    </div>
+
+    <div id="view-mail-tri" style="display:none">
+        <button class="btn btn-gold" onclick="mailScanInbox()">🔎 SCANNER L'INBOX</button>
+        <div id="mail-tri-status" style="font-size:13px; margin-top:10px"></div>
+        <div id="mail-tri-list" style="margin-top:16px"></div>
+    </div>
+
+    <div id="view-mail-brouillons" style="display:none">
+        <button class="btn btn-gold" onclick="mailGenerateDrafts()">✍️ GÉNÉRER LES BROUILLONS</button>
+        <div id="mail-drafts-status" style="font-size:13px; margin-top:10px"></div>
+        <div id="mail-drafts-list" style="margin-top:16px"></div>
+    </div>
+
+    <div id="view-mail-extraction" style="display:none">
+        <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <button class="btn btn-gold" style="flex:1; min-width:200px" onclick="mailScanInvoices()">📄 SCANNER LES FACTURES</button>
+            <button class="btn" style="width:auto; padding:12px 20px; background:rgba(255,255,255,0.06)" onclick="mailExportInvoices()">📊 EXPORT EXCEL</button>
+        </div>
+        <div id="mail-extraction-status" style="font-size:13px; margin-top:10px"></div>
+        <div style="display:flex; gap:8px; align-items:center; margin-top:14px; flex-wrap:wrap">
+            <label style="margin:0; font-size:11px">Filtrer par entité</label>
+            <select id="mail-inv-entity-filter" onchange="renderMailInvoicesTable()" style="width:auto; min-width:180px"></select>
+        </div>
+        <div id="mail-invoices-table-wrap" style="margin-top:14px; overflow-x:auto"></div>
+    </div>
+</div>
+
 <div id="mod-prod" class="modal-overlay"><div class="modal">
     <div class="section-title" id="mp-title">Produit</div>
     <input type="hidden" id="mp-id">
@@ -263,6 +332,26 @@
     <div class="field"><label>RIB / IBAN</label><input type="text" id="me-iban"></div>
     <div class="field"><label>Mentions Pied de Facture</label><textarea id="me-mentions"></textarea></div>
     <button class="btn btn-gold" onclick="saveEnt()">SAUVER</button>
+    <button class="btn btn-red" onclick="closeModals()" style="margin-top:10px">ANNULER</button>
+</div></div>
+
+<div id="mod-mail-cat" class="modal-overlay"><div class="modal">
+    <div class="section-title" id="mcat-title">Catégorie</div>
+    <input type="hidden" id="mcat-id">
+    <div class="field"><label>Nom *</label><input type="text" id="mcat-nom"></div>
+    <div class="field"><label>Label Gmail (optionnel, sinon = nom)</label><input type="text" id="mcat-label"></div>
+    <div class="field">
+        <label>Génère un brouillon de réponse ?</label>
+        <select id="mcat-draft" onchange="mailToggleCatPromptField()">
+            <option value="0">Non</option>
+            <option value="1">Oui</option>
+        </select>
+    </div>
+    <div class="field" id="mcat-prompt-field" style="display:none">
+        <label>Instructions pour le brouillon (ton, style)</label>
+        <textarea id="mcat-prompt" placeholder="Réponds de façon courtoise et professionnelle..."></textarea>
+    </div>
+    <button class="btn btn-gold" onclick="saveMailCat()">SAUVER</button>
     <button class="btn btn-red" onclick="closeModals()" style="margin-top:10px">ANNULER</button>
 </div></div>
 
