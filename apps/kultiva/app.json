@@ -1,0 +1,25 @@
+{
+  "name": "Kultiva",
+  "emoji": "🌱",
+  "visible": true,
+  "order": 1,
+  "repo": "teiki5320/Kultiva",
+  "platforms": ["iOS", "Android"],
+  "tagline": "Le potager kawaii dans ta poche.",
+  "services": [
+    "github",
+    "supabase",
+    "auth",
+    "api-tierce",
+    "apple-developer",
+    "app-store-connect",
+    "xcode-cloud",
+    "play-console",
+    "android-keystore",
+    "hebergement-web",
+    "sentry",
+    "in-app-review",
+    "geolocalisation",
+    "affiliation"
+  ]
+}

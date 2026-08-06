@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gestion Pro v9.0</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -32,6 +31,17 @@
 
 <div id="page-home" class="page active">
     <div class="home-grid">
+        <div class="home-btn" onclick="showPage('dash')">
+            <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="24" cy="24" r="20"/>
+                <circle cx="24" cy="24" r="12"/>
+                <circle cx="24" cy="24" r="4"/>
+                <line x1="24" y1="4" x2="24" y2="20"/>
+                <line x1="41" y1="34" x2="27" y2="26"/>
+                <line x1="7" y1="34" x2="21" y2="26"/>
+            </svg>
+            <span>Mes Apps</span>
+        </div>
         <div class="home-btn" onclick="showPage('bl')">
             <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="2" y="14" width="28" height="22" rx="3"/>
@@ -369,6 +379,13 @@
     <div id="sheet-holder"></div>
 </div>
 
+<div id="page-dash" class="page">
+    <div id="dash-titre"></div>
+    <div id="dash-contenu"></div>
+</div>
+
 <script src="script.js"></script>
+<script src="assets/dash-data.js"></script>
+<script src="dash-module.js"></script>
 </body>
 </html>

@@ -1,0 +1,17 @@
+{
+  "name": "Erea",
+  "emoji": "⏳",
+  "visible": true,
+  "order": 2,
+  "repo": "teiki5320/erea",
+  "platforms": ["iOS", "Web"],
+  "tagline": "Jeu de culture historique : placez les événements sur la frise du temps.",
+  "services": [
+    "github",
+    "apple-developer",
+    "app-store-connect",
+    "xcode-cloud",
+    "game-services",
+    "hebergement-web"
+  ]
+}
