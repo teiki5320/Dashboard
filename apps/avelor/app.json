@@ -1,0 +1,17 @@
+{
+  "name": "Avelor",
+  "emoji": "🧭",
+  "visible": true,
+  "order": 4,
+  "repo": "teiki5320/avelor",
+  "platforms": ["Web"],
+  "tagline": "Aide aux chefs d'entreprise français en difficulté.",
+  "services": [
+    "github",
+    "hebergement-web",
+    "nom-de-domaine",
+    "supabase",
+    "api-tierce",
+    "email-transactionnel"
+  ]
+}

@@ -1,0 +1,51 @@
+# Le module « Mes apps » va chercher LUI-MÊME les fiches docs/INFRA.md et docs/MARKETING.md
+# dans le dépôt GitHub de chaque app (champ "repo" des apps/<id>/app.json),
+# puis régénère assets/dash-data.js et commite le tout.
+#
+# Prérequis pour les dépôts privés : secret APPS_READ_TOKEN dans CE dépôt
+# (fine-grained PAT, permission Contents : Read-only sur les dépôts d'apps).
+name: Sync des fiches
+
+on:
+  schedule:
+    - cron: "0 6 * * *" # tous les jours à 6h UTC
+  workflow_dispatch: # + bouton « Run workflow » pour forcer une synchro
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Récupérer les fiches depuis les dépôts d'apps
+        env:
+          APPS_READ_TOKEN: ${{ secrets.APPS_READ_TOKEN }}
+          # Repli automatique : suffit pour les dépôts publics (et évite les
+          # limites de débit des appels anonymes). APPS_READ_TOKEN n'est
+          # nécessaire que pour des dépôts d'apps privés.
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node tool/sync.js
+
+      - name: Détecter les changements de fiches
+        id: diff
+        run: echo "changed=$(git status --porcelain apps | wc -l)" >> "$GITHUB_OUTPUT"
+
+      - name: Régénérer les données
+        if: steps.diff.outputs.changed != '0'
+        run: node tool/build.js
+
+      - name: Commiter
+        if: steps.diff.outputs.changed != '0'
+        run: |
+          git config user.name "sync-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add apps assets
+          git diff --cached --quiet || git commit -m "sync: mise à jour des fiches depuis les dépôts d'apps + rebuild"
+          git push
