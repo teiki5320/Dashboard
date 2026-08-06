@@ -44,6 +44,7 @@ const Supa = {
             db.bls    = G.get('v90_bls');
             db.drafts = G.get('v90_drafts');
             db.prixCli = JSON.parse(localStorage.getItem('v90_prix_cli') || '{}');
+            db.mailCategories = G.get('v90_mail_categories');
             renderAll();
         } catch(e) {}
     }
@@ -74,6 +75,7 @@ function showPage(id) {
     $('global-back').style.display = (id === 'home') ? 'none' : 'flex';
     
     if (id === 'facture') $('f-num').value = genNum();
+    if (id === 'mail') renderMailConnexion();
 
     window.scrollTo(0, 0);
     renderAll();
@@ -983,3 +985,719 @@ function calcCompta() {
 $('f-date').value = new Date().toLocaleDateString('fr-FR');
 showPage('home');
 Supa.pullAll();
+
+// --- MAIL INTEGRATION ---
+//
+// SETUP GOOGLE CLOUD (à faire une seule fois, manuellement, avant utilisation) :
+//   1. Créer un projet sur https://console.cloud.google.com
+//   2. Activer l'API Gmail (API et services > Bibliothèque > "Gmail API")
+//   3. Créer des identifiants OAuth : "Créer des identifiants" > "ID client OAuth" > type "Application Web"
+//      Origine JavaScript autorisée : https://teiki5320.github.io
+//   4. Scopes nécessaires : gmail.readonly, gmail.modify, gmail.compose
+//   5. Laisser l'app en mode "Test" (comptes personnels autorisés) — aucune validation Google requise
+//   6. Copier le Client ID obtenu et le coller ci-dessous à la place de GMAIL_CLIENT_ID
+//
+// SETUP SUPABASE (à exécuter une seule fois, manuellement, dans l'éditeur SQL Supabase) :
+//
+//   create table mail_invoices (
+//     id uuid primary key default gen_random_uuid(),
+//     created_at timestamptz default now(),
+//     gmail_message_id text unique,
+//     entity text,
+//     vendor text,
+//     amount numeric,
+//     currency text default 'EUR',
+//     invoice_date date,
+//     category text,
+//     status text default 'a_verifier',
+//     raw_extract jsonb
+//   );
+//
+//   create table mail_state (
+//     gmail_message_id text primary key,
+//     category text,
+//     processed_at timestamptz default now(),
+//     draft_created boolean default false
+//   );
+//
+// Aucune clé n'est en dur dans ce fichier : le Client ID Gmail ci-dessous est un identifiant
+// public (pas un secret), le jeton OAuth reste en mémoire (+ sessionStorage pour survivre à un
+// rafraîchissement de page), et la clé API Claude est saisie par l'utilisateur dans l'onglet
+// Connexion puis stockée en localStorage, exactement comme le reste de la configuration de l'app.
+//
+// Limite connue : l'extraction de factures lit le corps texte des mails mais ne fait pas d'OCR/
+// parsing des pièces jointes PDF (aucune lib PDF n'est chargée) — les noms de pièces jointes sont
+// transmis à Claude comme contexte, mais leur contenu doit être vérifié manuellement.
+
+const GMAIL_CLIENT_ID = 'GMAIL_CLIENT_ID'; // <-- remplacer par le Client ID OAuth Google Cloud
+const GMAIL_SCOPES = 'https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/gmail.compose';
+const GMAIL_API = 'https://gmail.googleapis.com/gmail/v1/users/me';
+const MAIL_CLAUDE_MODEL = 'claude-sonnet-5'; // Modèle Claude utilisé pour le tri / résumé / extraction
+
+const DEFAULT_MAIL_CATEGORIES = [
+    { id: 'cat-scea',    nom: 'SCEA Terres et Vie', label: 'SCEA Terres et Vie', draft: false, prompt: '' },
+    { id: 'cat-matevie', nom: 'SARL Matevie',       label: 'SARL Matevie',       draft: false, prompt: '' },
+    { id: 'cat-aloha',   nom: 'ALOHASH',            label: 'ALOHASH',            draft: false, prompt: '' },
+    { id: 'cat-perso',   nom: 'Personnel',          label: 'Personnel',          draft: false, prompt: '' },
+    { id: 'cat-fact',    nom: 'Factures / Compta',  label: 'Factures-Compta',    draft: false, prompt: '' },
+    { id: 'cat-urgent',  nom: 'Urgent',             label: 'Urgent',             draft: true,  prompt: "Réponds brièvement pour accuser réception et indiquer qu'un retour complet suivra rapidement." },
+    { id: 'cat-spam',    nom: 'Spam / Promo',       label: 'Spam-Promo',         draft: false, prompt: '' },
+    { id: 'cat-autre',   nom: 'Autre',              label: 'Autre',              draft: false, prompt: '' }
+];
+
+const mailState = {
+    token: null, tokenExpiry: 0, email: null, tokenClient: null,
+    resume: [], triage: [], draftsGenerated: [], invoices: [],
+    busy: { resume: false, tri: false, drafts: false, extraction: false }
+};
+
+// --- Init / persistance des catégories ---
+function initMailCategories() {
+    let stored = G.get('v90_mail_categories');
+    db.mailCategories = stored.length ? stored : DEFAULT_MAIL_CATEGORIES.slice();
+    if (!stored.length) G.set('v90_mail_categories', db.mailCategories);
+    renderMailConnexion();
+}
+
+// --- Helpers génériques ---
+function mailEsc(s) {
+    return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function mailSetStatus(elId, msg, kind = 'info') {
+    const el = $(elId); if (!el) return;
+    const colors = { info: 'var(--text-muted)', error: 'var(--danger)', success: '#4ADE80', loading: 'var(--accent)' };
+    el.style.color = colors[kind] || colors.info;
+    el.innerText = msg;
+}
+
+function mailIsReady() { return !!mailState.token && !!getMailClaudeKey(); }
+
+function mailGuard(tabName) {
+    if (mailIsReady()) return true;
+    mailSetStatus(`mail-${tabName}-status`, "⚠️ Connecte Gmail et renseigne ta clé API Claude dans l'onglet Connexion avant d'utiliser cette fonction.", 'error');
+    return false;
+}
+
+function mailParseJson(text) {
+    try {
+        const match = text.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
+        return JSON.parse(match ? match[0] : text);
+    } catch (e) { return null; }
+}
+
+// --- Clé API Claude (stockée localement, jamais commitée) ---
+function getMailClaudeKey() { return localStorage.getItem('v90_claude_key') || ''; }
+
+function saveMailClaudeKey() {
+    let v = $('mail-claude-key').value.trim();
+    if (!v) return alert('Merci de renseigner une clé.');
+    localStorage.setItem('v90_claude_key', v);
+    $('mail-claude-key').value = '';
+    renderMailConnexion();
+    alert('✅ Clé API Claude sauvegardée.');
+}
+
+function clearMailClaudeKey() {
+    if (!confirm('Supprimer la clé API Claude ?')) return;
+    localStorage.removeItem('v90_claude_key');
+    renderMailConnexion();
+}
+
+// --- OAuth Gmail (Google Identity Services) ---
+function mailInitTokenClient() {
+    if (!window.google || !google.accounts || !google.accounts.oauth2) return null;
+    if (mailState.tokenClient) return mailState.tokenClient;
+    mailState.tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: GMAIL_CLIENT_ID,
+        scope: GMAIL_SCOPES,
+        callback: (resp) => {
+            if (resp.error) { mailSetStatus('mail-gmail-status', "Connexion Gmail refusée : " + resp.error, 'error'); return; }
+            mailState.token = resp.access_token;
+            mailState.tokenExpiry = Date.now() + (resp.expires_in * 1000);
+            sessionStorage.setItem('v90_gmail_token', JSON.stringify({ token: mailState.token, expiry: mailState.tokenExpiry }));
+            mailFetchProfile();
+        }
+    });
+    return mailState.tokenClient;
+}
+
+function mailConnectGmail() {
+    if (GMAIL_CLIENT_ID === 'GMAIL_CLIENT_ID') {
+        alert("⚠️ Configuration requise : remplace GMAIL_CLIENT_ID dans script.js par ton Client ID Google Cloud (voir le commentaire en tête de la section Mail).");
+        return;
+    }
+    const client = mailInitTokenClient();
+    if (!client) { alert("Google Identity Services n'est pas encore chargé. Vérifie ta connexion internet et recharge la page."); return; }
+    client.requestAccessToken({ prompt: mailState.token ? '' : 'consent' });
+}
+
+function mailDisconnectGmail() {
+    if (mailState.token && window.google?.accounts?.oauth2) {
+        google.accounts.oauth2.revoke(mailState.token, () => {});
+    }
+    mailState.token = null; mailState.email = null;
+    sessionStorage.removeItem('v90_gmail_token');
+    renderMailConnexion();
+}
+
+function mailRestoreSession() {
+    try {
+        const raw = sessionStorage.getItem('v90_gmail_token');
+        if (!raw) return;
+        const { token, expiry } = JSON.parse(raw);
+        if (token && expiry > Date.now()) {
+            mailState.token = token; mailState.tokenExpiry = expiry;
+            mailFetchProfile();
+        } else {
+            sessionStorage.removeItem('v90_gmail_token');
+        }
+    } catch (e) {}
+}
+
+async function mailFetchProfile() {
+    try {
+        const res = await mailGmailFetch(`${GMAIL_API}/profile`);
+        mailState.email = res.emailAddress;
+    } catch (e) {
+        mailState.email = null;
+        console.error('Mail: impossible de récupérer le profil Gmail', e);
+    }
+    renderMailConnexion();
+}
+
+async function mailGmailFetch(url, opts = {}) {
+    if (!mailState.token) throw new Error("Gmail non connecté");
+    const res = await fetch(url, { ...opts, headers: { ...(opts.headers || {}), 'Authorization': `Bearer ${mailState.token}` } });
+    if (res.status === 401) {
+        mailState.token = null;
+        sessionStorage.removeItem('v90_gmail_token');
+        throw new Error("Session Gmail expirée, merci de te reconnecter.");
+    }
+    if (!res.ok) {
+        const txt = await res.text().catch(() => '');
+        throw new Error(`Erreur Gmail API (${res.status}) : ${txt.slice(0, 200)}`);
+    }
+    return res.status === 204 ? null : res.json();
+}
+
+// --- Appel Claude API (direct navigateur) ---
+async function mailClaudeCall(system, userContent, maxTokens = 2000) {
+    const key = getMailClaudeKey();
+    if (!key) throw new Error("Clé API Claude manquante (onglet Connexion).");
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': key,
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({ model: MAIL_CLAUDE_MODEL, max_tokens: maxTokens, system, messages: [{ role: 'user', content: userContent }] })
+    });
+    if (!res.ok) {
+        const txt = await res.text().catch(() => '');
+        throw new Error(`Erreur Claude API (${res.status}) : ${txt.slice(0, 300)}`);
+    }
+    const data = await res.json();
+    return (data.content || []).map(b => b.text || '').join('');
+}
+
+// --- Décodage MIME / extraction du corps des mails ---
+function mailB64UrlDecode(str) {
+    try {
+        let s = str.replace(/-/g, '+').replace(/_/g, '/');
+        while (s.length % 4) s += '=';
+        return decodeURIComponent(escape(atob(s)));
+    } catch (e) { return ''; }
+}
+
+function mailExtractBody(payload) {
+    if (!payload) return { text: '', attachments: [] };
+    let text = '', attachments = [];
+    function walk(part) {
+        if (!part) return;
+        if (part.filename) attachments.push(part.filename);
+        if (part.body && part.body.data && part.mimeType === 'text/plain' && !text) {
+            text += mailB64UrlDecode(part.body.data);
+        } else if (part.body && part.body.data && part.mimeType === 'text/html' && !text) {
+            text += mailB64UrlDecode(part.body.data).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+        }
+        (part.parts || []).forEach(walk);
+    }
+    walk(payload);
+    return { text: text.slice(0, 4000), attachments };
+}
+
+function mailHeader(headers, name) {
+    const h = (headers || []).find(x => x.name.toLowerCase() === name.toLowerCase());
+    return h ? h.value : '';
+}
+
+function mailBuildMime(to, subject, body) {
+    const mime = `To: ${to}\r\nSubject: ${mailMimeEncodeSubject(subject)}\r\nContent-Type: text/plain; charset="UTF-8"\r\n\r\n${body}`;
+    return btoa(unescape(encodeURIComponent(mime))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+function mailMimeEncodeSubject(s) { return '=?UTF-8?B?' + btoa(unescape(encodeURIComponent(s))) + '?='; }
+
+async function mailFetchMessagesMeta(ids) {
+    const out = [];
+    for (const id of ids) {
+        try {
+            const m = await mailGmailFetch(`${GMAIL_API}/messages/${id}?format=metadata&metadataHeaders=From&metadataHeaders=Subject&metadataHeaders=Date`);
+            out.push({
+                id: m.id, threadId: m.threadId,
+                from: mailHeader(m.payload?.headers, 'From'),
+                subject: mailHeader(m.payload?.headers, 'Subject'),
+                date: mailHeader(m.payload?.headers, 'Date'),
+                snippet: m.snippet || '', labelIds: m.labelIds || []
+            });
+        } catch (e) { /* mail inaccessible, on l'ignore et on continue le lot */ }
+    }
+    return out;
+}
+
+async function mailEnsureLabels() {
+    const existing = await mailGmailFetch(`${GMAIL_API}/labels`);
+    const map = {};
+    (existing?.labels || []).forEach(l => { map[l.name] = l.id; });
+    for (const cat of db.mailCategories) {
+        const name = cat.label || cat.nom;
+        if (!map[name]) {
+            try {
+                const created = await mailGmailFetch(`${GMAIL_API}/labels`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, labelListVisibility: 'labelShow', messageListVisibility: 'show' })
+                });
+                if (created?.id) map[name] = created.id;
+            } catch (e) { /* création du label impossible, cette catégorie ne sera pas labellisée */ }
+        }
+    }
+    return map;
+}
+
+// --- Rendu onglet Connexion ---
+function renderMailConnexion() {
+    const statusEl = $('mail-gmail-status'), actionsEl = $('mail-gmail-actions');
+    if (statusEl) {
+        statusEl.innerHTML = mailState.token
+            ? `<div style="display:flex;align-items:center;gap:10px"><span style="font-size:20px">✅</span><div><b>${mailEsc(mailState.email || 'Connecté')}</b><br><small style="color:var(--text-muted)">Compte Gmail actif</small></div></div>`
+            : `<div style="display:flex;align-items:center;gap:10px"><span style="font-size:20px">⚪</span><div><b>Non connecté</b><br><small style="color:var(--text-muted)">Connecte ton compte Gmail pour activer le tri, le résumé et l'extraction</small></div></div>`;
+    }
+    if (actionsEl) {
+        actionsEl.innerHTML = mailState.token
+            ? `<button class="btn btn-red" onclick="mailDisconnectGmail()">DÉCONNECTER</button>`
+            : `<button class="btn btn-gold" onclick="mailConnectGmail()">CONNECTER GMAIL</button>`;
+    }
+    const keyEl = $('mail-claude-status');
+    if (keyEl) {
+        keyEl.innerHTML = getMailClaudeKey()
+            ? `<span style="color:#4ADE80">✅ Clé API enregistrée</span> — <a href="#" onclick="clearMailClaudeKey();return false" style="color:var(--danger)">supprimer</a>`
+            : `<span style="color:var(--text-muted)">Aucune clé enregistrée</span>`;
+    }
+    renderMailCatList();
+    mailApplyLockState();
+}
+
+function mailApplyLockState() {
+    const ready = mailIsReady();
+    ['resume', 'tri', 'brouillons', 'extraction'].forEach(k => {
+        const tab = $('tab-mail-' + k);
+        if (tab) { tab.style.opacity = ready ? '1' : '0.4'; tab.style.pointerEvents = ready ? 'auto' : 'none'; }
+    });
+}
+
+function renderMailCatList() {
+    const el = $('mail-cat-list'); if (!el || !db.mailCategories) return;
+    el.innerHTML = db.mailCategories.map(c => `
+        <div class="card" style="gap:8px; align-items:center">
+            <div style="flex:1">
+                <b>${mailEsc(c.nom)}</b>
+                ${c.draft ? '<span class="mini-tag" style="margin-left:8px">✍️ Brouillon auto</span>' : ''}
+            </div>
+            <span style="cursor:pointer" onclick="openMailCatModal('${c.id}')">✏️</span>
+            <span style="cursor:pointer; color:var(--danger)" onclick="deleteMailCat('${c.id}')">🗑️</span>
+        </div>`).join('');
+}
+
+function openMailCatModal(id = null) {
+    if (id) {
+        let c = db.mailCategories.find(x => x.id === id);
+        $('mcat-title').innerText = "Modifier Catégorie"; $('mcat-id').value = c.id;
+        $('mcat-nom').value = c.nom; $('mcat-label').value = c.label || '';
+        $('mcat-draft').value = c.draft ? '1' : '0'; $('mcat-prompt').value = c.prompt || '';
+    } else {
+        $('mcat-title').innerText = "Nouvelle Catégorie"; $('mcat-id').value = '';
+        $('mcat-nom').value = ''; $('mcat-label').value = ''; $('mcat-draft').value = '0'; $('mcat-prompt').value = '';
+    }
+    mailToggleCatPromptField();
+    openModal('mod-mail-cat');
+}
+
+function mailToggleCatPromptField() {
+    $('mcat-prompt-field').style.display = $('mcat-draft').value === '1' ? 'block' : 'none';
+}
+
+function saveMailCat() {
+    let nom = $('mcat-nom').value.trim();
+    if (!nom) return alert("Le nom est obligatoire.");
+    let id = $('mcat-id').value || ('cat-' + Date.now());
+    let o = {
+        id, nom,
+        label: ($('mcat-label').value.trim() || nom).replace(/\//g, '-'),
+        draft: $('mcat-draft').value === '1',
+        prompt: $('mcat-prompt').value
+    };
+    db.mailCategories = db.mailCategories.filter(c => c.id !== id);
+    db.mailCategories.push(o);
+    G.set('v90_mail_categories', db.mailCategories);
+    closeModals();
+    renderMailCatList();
+}
+
+function deleteMailCat(id) {
+    if (!confirm("Supprimer cette catégorie ?")) return;
+    db.mailCategories = db.mailCategories.filter(c => c.id !== id);
+    G.set('v90_mail_categories', db.mailCategories);
+    renderMailCatList();
+}
+
+// --- Navigation sous-onglets Mail ---
+function toggleMailTab(t) {
+    ['connexion', 'resume', 'tri', 'brouillons', 'extraction'].forEach(k => {
+        $('tab-mail-' + k).classList.toggle('active', k === t);
+        $('view-mail-' + k).style.display = k === t ? 'block' : 'none';
+    });
+    if (t === 'connexion') renderMailConnexion();
+    if (t === 'resume') renderMailResumeList();
+    if (t === 'tri') renderMailTriList();
+    if (t === 'brouillons') renderMailDraftsList();
+    if (t === 'extraction') renderMailInvoicesTable();
+}
+
+// --- Persistance Supabase dédiée (tables mail_state / mail_invoices) ---
+const MailSupa = {
+    async listStates() {
+        try {
+            const res = await fetch(`${SUPA_URL}/rest/v1/mail_state?select=*`, { headers: Supa._h });
+            if (!res.ok) return [];
+            return await res.json();
+        } catch (e) { return []; }
+    },
+    async upsertState(row) {
+        try {
+            await fetch(`${SUPA_URL}/rest/v1/mail_state?on_conflict=gmail_message_id`, { method: 'POST', headers: Supa._h, body: JSON.stringify(row) });
+        } catch (e) {}
+    },
+    async listInvoices() {
+        try {
+            const res = await fetch(`${SUPA_URL}/rest/v1/mail_invoices?select=*&order=invoice_date.desc`, { headers: Supa._h });
+            if (!res.ok) return [];
+            return await res.json();
+        } catch (e) { return []; }
+    },
+    async upsertInvoice(row) {
+        try {
+            await fetch(`${SUPA_URL}/rest/v1/mail_invoices?on_conflict=gmail_message_id`, { method: 'POST', headers: Supa._h, body: JSON.stringify(row) });
+        } catch (e) {}
+    }
+};
+
+// --- Onglet Résumé ---
+async function mailGenerateSummary() {
+    if (!mailGuard('resume')) return;
+    mailState.busy.resume = true;
+    mailSetStatus('mail-resume-status', "⏳ Récupération des mails des dernières 24h...", 'loading');
+    try {
+        const listRes = await mailGmailFetch(`${GMAIL_API}/messages?q=${encodeURIComponent('newer_than:1d')}&maxResults=30`);
+        const ids = (listRes?.messages || []).map(m => m.id);
+        if (!ids.length) { mailSetStatus('mail-resume-status', "Aucun mail reçu dans les dernières 24h.", 'info'); return; }
+        mailSetStatus('mail-resume-status', `⏳ Analyse de ${ids.length} mail(s)...`, 'loading');
+        const meta = await mailFetchMessagesMeta(ids);
+        const catNames = db.mailCategories.map(c => c.nom).join(', ');
+        const prompt = `Voici une liste de mails reçus dans les dernières 24h, au format JSON. Pour CHAQUE mail (même index), retourne un objet avec : "resume" (une phrase courte en français résumant le contenu), "categorie" (choisie strictement parmi : ${catNames}). Réponds UNIQUEMENT avec un tableau JSON de même longueur et même ordre que la liste fournie, sans texte autour.\n\nMails :\n${JSON.stringify(meta.map(m => ({ from: m.from, subject: m.subject, snippet: m.snippet })))}`;
+        const raw = await mailClaudeCall("Tu es un assistant de tri de boîte mail professionnelle. Réponds uniquement en JSON valide, sans markdown.", prompt, 3000);
+        const parsed = mailParseJson(raw) || [];
+        mailState.resume = meta.map((m, i) => ({ ...m, resume: parsed[i]?.resume || m.snippet, categorie: parsed[i]?.categorie || 'Autre' }));
+        renderMailResumeList();
+        mailSetStatus('mail-resume-status', `✅ ${meta.length} mail(s) analysé(s)${meta.length < ids.length ? ` (${ids.length - meta.length} inaccessible(s))` : ''}.`, 'success');
+    } catch (e) {
+        mailSetStatus('mail-resume-status', "❌ " + e.message, 'error');
+    } finally {
+        mailState.busy.resume = false;
+    }
+}
+
+function renderMailResumeList() {
+    const el = $('mail-resume-list'); if (!el) return;
+    el.innerHTML = mailState.resume.map(m => `
+        <div class="card" style="flex-direction:column; align-items:stretch; gap:6px">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px">
+                <div>
+                    <b>${mailEsc(m.subject || '(sans objet)')}</b><br>
+                    <small style="color:var(--text-muted)">${mailEsc(m.from)}</small>
+                </div>
+                <span class="mini-tag">${mailEsc(m.categorie)}</span>
+            </div>
+            <div style="font-size:14px; color:var(--text-main); opacity:.85">${mailEsc(m.resume)}</div>
+            <a href="https://mail.google.com/mail/u/0/#inbox/${m.threadId}" target="_blank" rel="noopener" style="font-size:12px; color:var(--accent)">Ouvrir dans Gmail →</a>
+        </div>`).join('') || '<div style="text-align:center; padding:30px; opacity:.5">Aucun résumé pour cette session. Clique sur "Générer le résumé du jour".</div>';
+}
+
+// --- Onglet Tri ---
+async function mailScanInbox() {
+    if (!mailGuard('tri')) return;
+    mailState.busy.tri = true;
+    mailSetStatus('mail-tri-status', "⏳ Recherche des mails non traités...", 'loading');
+    try {
+        const states = await MailSupa.listStates();
+        const processedIds = new Set(states.map(s => s.gmail_message_id));
+        const listRes = await mailGmailFetch(`${GMAIL_API}/messages?q=${encodeURIComponent('in:inbox newer_than:14d')}&maxResults=40`);
+        const allIds = (listRes?.messages || []).map(m => m.id);
+        const newIds = allIds.filter(id => !processedIds.has(id));
+        if (!newIds.length) { mailSetStatus('mail-tri-status', "Aucun nouveau mail à trier.", 'info'); return; }
+        mailSetStatus('mail-tri-status', `⏳ Classement de ${newIds.length} mail(s)...`, 'loading');
+        const meta = await mailFetchMessagesMeta(newIds);
+        const labelMap = await mailEnsureLabels();
+        const catNames = db.mailCategories.map(c => c.nom).join(', ');
+        const prompt = `Classe chacun des mails suivants dans UNE seule catégorie parmi : ${catNames}. Réponds UNIQUEMENT avec un tableau JSON (même ordre que la liste) d'objets {"categorie": "..."}, sans texte autour.\n\nMails :\n${JSON.stringify(meta.map(m => ({ from: m.from, subject: m.subject, snippet: m.snippet })))}`;
+        const raw = await mailClaudeCall("Tu es un assistant de classement d'emails professionnels. Réponds uniquement en JSON valide.", prompt, 3000);
+        const parsed = mailParseJson(raw) || [];
+        let warnings = 0;
+        for (let i = 0; i < meta.length; i++) {
+            const m = meta[i];
+            const catNom = parsed[i]?.categorie || 'Autre';
+            const cat = db.mailCategories.find(c => c.nom === catNom) || db.mailCategories.find(c => c.nom === 'Autre');
+            try {
+                const labelId = labelMap[cat?.label || catNom];
+                if (labelId) {
+                    await mailGmailFetch(`${GMAIL_API}/messages/${m.id}/modify`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ addLabelIds: [labelId] })
+                    });
+                }
+            } catch (e) { warnings++; }
+            await MailSupa.upsertState({ gmail_message_id: m.id, category: cat?.nom || catNom, draft_created: false });
+            mailState.triage.unshift({ ...m, categorie: cat?.nom || catNom });
+        }
+        renderMailTriList();
+        mailSetStatus('mail-tri-status', `✅ ${meta.length} mail(s) classé(s)${warnings ? ` (${warnings} label(s) non appliqué(s))` : ''}.`, 'success');
+    } catch (e) {
+        mailSetStatus('mail-tri-status', "❌ " + e.message, 'error');
+    } finally {
+        mailState.busy.tri = false;
+    }
+}
+
+function renderMailTriList() {
+    const el = $('mail-tri-list'); if (!el) return;
+    if (!mailState.triage.length) {
+        el.innerHTML = '<div style="text-align:center; padding:30px; opacity:.5">Aucun mail trié dans cette session. Clique sur "Scanner l\'inbox".</div>';
+        return;
+    }
+    el.innerHTML = mailState.triage.map((m, i) => `
+        <div class="card" style="gap:10px; align-items:center">
+            <div style="flex:1; min-width:0">
+                <b style="display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">${mailEsc(m.subject || '(sans objet)')}</b>
+                <small style="color:var(--text-muted)">${mailEsc(m.from)}</small>
+            </div>
+            <select onchange="mailOverrideCategory(${i}, this.value)">
+                ${db.mailCategories.map(c => `<option value="${mailEsc(c.nom)}"${c.nom === m.categorie ? ' selected' : ''}>${mailEsc(c.nom)}</option>`).join('')}
+            </select>
+            <a href="https://mail.google.com/mail/u/0/#inbox/${m.threadId}" target="_blank" rel="noopener" style="font-size:12px; color:var(--accent); white-space:nowrap">Ouvrir →</a>
+        </div>`).join('');
+}
+
+async function mailOverrideCategory(i, catNom) {
+    const m = mailState.triage[i]; if (!m) return;
+    const oldCat = m.categorie;
+    m.categorie = catNom;
+    const cat = db.mailCategories.find(c => c.nom === catNom);
+    try {
+        const labelMap = await mailEnsureLabels();
+        const oldCatObj = db.mailCategories.find(c => c.nom === oldCat);
+        if (oldCatObj && labelMap[oldCatObj.label || oldCatObj.nom]) {
+            await mailGmailFetch(`${GMAIL_API}/messages/${m.id}/modify`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ removeLabelIds: [labelMap[oldCatObj.label || oldCatObj.nom]] })
+            });
+        }
+        if (cat && labelMap[cat.label || cat.nom]) {
+            await mailGmailFetch(`${GMAIL_API}/messages/${m.id}/modify`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ addLabelIds: [labelMap[cat.label || cat.nom]] })
+            });
+        }
+        await MailSupa.upsertState({ gmail_message_id: m.id, category: catNom, draft_created: false });
+    } catch (e) {
+        mailSetStatus('mail-tri-status', "❌ Erreur lors de la correction : " + e.message, 'error');
+    }
+}
+
+// --- Onglet Brouillons ---
+async function mailGenerateDrafts() {
+    if (!mailGuard('brouillons')) return;
+    const draftCats = db.mailCategories.filter(c => c.draft);
+    if (!draftCats.length) {
+        mailSetStatus('mail-drafts-status', "Aucune catégorie n'est configurée pour générer des brouillons (onglet Connexion → catégorie → 'Génère un brouillon ?').", 'info');
+        return;
+    }
+    mailState.busy.drafts = true;
+    mailSetStatus('mail-drafts-status', "⏳ Recherche des mails concernés...", 'loading');
+    try {
+        const states = await MailSupa.listStates();
+        const draftCatNames = new Set(draftCats.map(c => c.nom));
+        const candidates = states.filter(s => draftCatNames.has(s.category) && !s.draft_created);
+        if (!candidates.length) {
+            mailSetStatus('mail-drafts-status', "Aucun nouveau mail éligible à un brouillon (trie d'abord ta boîte dans l'onglet Tri).", 'info');
+            return;
+        }
+        mailSetStatus('mail-drafts-status', `⏳ Génération de ${candidates.length} brouillon(s)...`, 'loading');
+        let created = 0, failed = 0;
+        for (const s of candidates) {
+            try {
+                const full = await mailGmailFetch(`${GMAIL_API}/messages/${s.gmail_message_id}?format=full`);
+                const from = mailHeader(full.payload?.headers, 'From');
+                const subject = mailHeader(full.payload?.headers, 'Subject');
+                const { text } = mailExtractBody(full.payload);
+                const cat = draftCats.find(c => c.nom === s.category);
+                const prompt = `Voici un mail reçu :\nDe : ${from}\nObjet : ${subject}\nContenu : ${text || full.snippet}\n\nRédige une réponse en français à ce mail. Instructions de ton/style : ${cat.prompt || 'Réponds de façon courtoise et professionnelle.'}\n\nRéponds UNIQUEMENT avec le corps du mail de réponse, sans objet ni signature d'en-tête.`;
+                const replyBody = await mailClaudeCall("Tu rédiges des brouillons de réponse email professionnels en français. Ne signe jamais à la place de l'utilisateur, laisse la validation finale à l'humain.", prompt, 1000);
+                const toAddr = (from.match(/<(.+)>/) || [, from])[1];
+                const rawMime = mailBuildMime(toAddr, 'Re: ' + subject.replace(/^Re:\s*/i, ''), replyBody);
+                const draftRes = await mailGmailFetch(`${GMAIL_API}/drafts`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: { raw: rawMime, threadId: full.threadId } })
+                });
+                mailState.draftsGenerated.unshift({ id: draftRes.id, to: toAddr, subject, snippet: replyBody.slice(0, 140), threadId: full.threadId });
+                await MailSupa.upsertState({ gmail_message_id: s.gmail_message_id, category: s.category, draft_created: true });
+                created++;
+            } catch (e) { failed++; }
+        }
+        renderMailDraftsList();
+        mailSetStatus('mail-drafts-status', `✅ ${created} brouillon(s) créé(s)${failed ? `, ${failed} échec(s)` : ''}.`, failed ? 'error' : 'success');
+    } catch (e) {
+        mailSetStatus('mail-drafts-status', "❌ " + e.message, 'error');
+    } finally {
+        mailState.busy.drafts = false;
+    }
+}
+
+function renderMailDraftsList() {
+    const el = $('mail-drafts-list'); if (!el) return;
+    el.innerHTML = mailState.draftsGenerated.map(d => `
+        <div class="card" style="flex-direction:column; align-items:stretch; gap:6px">
+            <b>${mailEsc(d.subject || '(sans objet)')}</b>
+            <small style="color:var(--text-muted)">À : ${mailEsc(d.to)}</small>
+            <div style="font-size:13px; opacity:.8">${mailEsc(d.snippet)}…</div>
+            <a href="https://mail.google.com/mail/u/0/#inbox/${d.threadId}" target="_blank" rel="noopener" style="font-size:12px; color:var(--accent)">Valider dans Gmail →</a>
+        </div>`).join('') || '<div style="text-align:center; padding:30px; opacity:.5">Aucun brouillon généré dans cette session</div>';
+}
+
+// --- Onglet Extraction (factures) ---
+async function mailScanInvoices() {
+    if (!mailGuard('extraction')) return;
+    const factCat = db.mailCategories.find(c => c.nom.toLowerCase().includes('facture'));
+    if (!factCat) { mailSetStatus('mail-extraction-status', "Aucune catégorie 'Factures / Compta' configurée.", 'error'); return; }
+    mailState.busy.extraction = true;
+    mailSetStatus('mail-extraction-status', "⏳ Recherche des mails de facturation...", 'loading');
+    try {
+        const states = await MailSupa.listStates();
+        const existingInvoices = await MailSupa.listInvoices();
+        mailState.invoices = existingInvoices;
+        const alreadyExtracted = new Set(existingInvoices.map(i => i.gmail_message_id));
+        const candidates = states.filter(s => s.category === factCat.nom && !alreadyExtracted.has(s.gmail_message_id));
+        if (!candidates.length) {
+            mailSetStatus('mail-extraction-status', "Aucun nouveau mail de facturation à extraire (trie d'abord ta boîte dans l'onglet Tri).", 'info');
+            renderMailInvoicesTable();
+            return;
+        }
+        mailSetStatus('mail-extraction-status', `⏳ Extraction de ${candidates.length} facture(s)...`, 'loading');
+        let ok = 0, failed = 0;
+        for (const s of candidates) {
+            try {
+                const full = await mailGmailFetch(`${GMAIL_API}/messages/${s.gmail_message_id}?format=full`);
+                const from = mailHeader(full.payload?.headers, 'From');
+                const subject = mailHeader(full.payload?.headers, 'Subject');
+                const date = mailHeader(full.payload?.headers, 'Date');
+                const { text, attachments } = mailExtractBody(full.payload);
+                const entities = db.ents.map(e => e.nom).concat(['SCEA Terres et Vie', 'SARL Matevie', 'ALOHASH', 'Personnel']);
+                const prompt = `Voici un mail de facturation :\nDe : ${from}\nObjet : ${subject}\nDate : ${date}\nPièces jointes : ${attachments.join(', ') || 'aucune'}\nContenu :\n${text || full.snippet}\n\nExtrait les informations de facturation et réponds UNIQUEMENT avec un objet JSON strict de cette forme (utilise null si une info est introuvable) :\n{"entite": "l'une de [${entities.join(', ')}] ou null", "fournisseur": "...", "montant": nombre ou null, "devise": "EUR", "date_facture": "YYYY-MM-DD ou null", "categorie": "..."}\nSi le contenu du mail ne permet pas de déterminer le montant avec certitude (ex : facture en pièce jointe PDF non lisible), mets "montant": null plutôt que d'inventer un chiffre.`;
+                const raw = await mailClaudeCall("Tu extrais des données de facturation depuis des emails pour la comptabilité. Ne jamais inventer un montant : utilise null si l'info n'est pas explicitement présente dans le texte fourni. Réponds uniquement en JSON valide.", prompt, 800);
+                const parsed = mailParseJson(raw) || {};
+                const invoice = {
+                    gmail_message_id: s.gmail_message_id,
+                    entity: parsed.entite || null,
+                    vendor: parsed.fournisseur || from,
+                    amount: typeof parsed.montant === 'number' ? parsed.montant : null,
+                    currency: parsed.devise || 'EUR',
+                    invoice_date: parsed.date_facture || null,
+                    category: factCat.nom,
+                    status: 'a_verifier',
+                    raw_extract: parsed
+                };
+                await MailSupa.upsertInvoice(invoice);
+                mailState.invoices.unshift(invoice);
+                ok++;
+            } catch (e) { failed++; }
+        }
+        renderMailInvoicesTable();
+        mailSetStatus('mail-extraction-status', `✅ ${ok} facture(s) extraite(s)${failed ? `, ${failed} échec(s)` : ''}.`, failed ? 'error' : 'success');
+    } catch (e) {
+        mailSetStatus('mail-extraction-status', "❌ " + e.message, 'error');
+    } finally {
+        mailState.busy.extraction = false;
+    }
+}
+
+async function renderMailInvoicesTable() {
+    const wrap = $('mail-invoices-table-wrap'); if (!wrap) return;
+    if (!mailState.invoices.length) mailState.invoices = await MailSupa.listInvoices();
+
+    const filterEl = $('mail-inv-entity-filter');
+    if (filterEl) {
+        const entities = [...new Set(mailState.invoices.map(i => i.entity).filter(Boolean))];
+        const cur = filterEl.value || 'Toutes';
+        filterEl.innerHTML = ['Toutes', ...entities].map(e => `<option${e === cur ? ' selected' : ''}>${mailEsc(e)}</option>`).join('');
+    }
+    const filterVal = filterEl ? filterEl.value : 'Toutes';
+    const list = (filterVal && filterVal !== 'Toutes') ? mailState.invoices.filter(i => i.entity === filterVal) : mailState.invoices;
+
+    if (!list.length) {
+        wrap.innerHTML = '<div style="text-align:center; padding:30px; opacity:.5">Aucune facture extraite pour le moment</div>';
+        return;
+    }
+    wrap.innerHTML = `
+        <table class="tva-table">
+            <thead><tr>
+                ${['Date', 'Entité', 'Fournisseur', 'Montant', 'Catégorie', 'Statut'].map(h => `<th style="padding:10px 12px; text-align:left; font-size:11px; opacity:.5; text-transform:uppercase">${h}</th>`).join('')}
+            </tr></thead>
+            <tbody>${list.map(i => `
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05)">
+                    <td style="padding:9px 12px; font-size:12px">${mailEsc(i.invoice_date || '—')}</td>
+                    <td style="padding:9px 12px; font-size:12px">${mailEsc(i.entity || '—')}</td>
+                    <td style="padding:9px 12px; font-size:13px">${mailEsc(i.vendor || '—')}</td>
+                    <td style="padding:9px 12px; text-align:right; font-weight:600">${i.amount != null ? eur(i.amount) : '—'}</td>
+                    <td style="padding:9px 12px; font-size:12px">${mailEsc(i.category || '—')}</td>
+                    <td style="padding:9px 12px; font-size:12px">${mailEsc(i.status || '—')}</td>
+                </tr>`).join('')}
+            </tbody>
+        </table>`;
+}
+
+function mailExportInvoices() {
+    if (!window.XLSX) return alert('SheetJS non chargé');
+    if (!mailState.invoices.length) return alert('Aucune facture à exporter.');
+    const headers = ['Date facture', 'Entité', 'Fournisseur', 'Montant', 'Devise', 'Catégorie', 'Statut'];
+    const rows = mailState.invoices.map(i => [i.invoice_date || '', i.entity || '', i.vendor || '', i.amount ?? '', i.currency || 'EUR', i.category || '', i.status || '']);
+    const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+    ws['!cols'] = [{ wch: 14 }, { wch: 22 }, { wch: 28 }, { wch: 12 }, { wch: 8 }, { wch: 20 }, { wch: 14 }];
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Factures Mail');
+    XLSX.writeFile(wb, 'Factures_Mail_' + new Date().toLocaleDateString('fr-FR').replace(/\//g, '-') + '.xlsx');
+}
+
+// Initialisation Mail (toujours après le reste : mailState et db.mailCategories doivent
+// être prêts avant qu'un rendu ne les lise, ce qui est garanti par l'ordre du fichier).
+initMailCategories();
+mailRestoreSession();
