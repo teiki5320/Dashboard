@@ -1,0 +1,37 @@
+# Régénère assets/dash-data.js (module « Mes apps ») quand ses sources changent.
+# Les fiches des apps sont récupérées par le workflow « Sync des fiches ».
+name: Build des données Mes apps
+
+on:
+  push:
+    # Branche par défaut de Dashboard.
+    branches: [main]
+    paths:
+      - "apps/**"
+      - "catalog/**"
+      - "tool/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Générer les données
+        run: node tool/build.js
+
+      - name: Commiter assets/ si les données ont changé
+        run: |
+          git config user.name "build-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add assets
+          git diff --cached --quiet || git commit -m "build: régénération des données Mes apps"
+          git push

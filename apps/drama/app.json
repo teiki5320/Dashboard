@@ -1,0 +1,15 @@
+{
+  "name": "Drama",
+  "emoji": "🎭",
+  "visible": true,
+  "order": 3,
+  "repo": "teiki5320/drama",
+  "platforms": ["iOS"],
+  "tagline": "Jeu narratif qui se joue entièrement dans une messagerie.",
+  "services": [
+    "github",
+    "apple-developer",
+    "app-store-connect",
+    "xcode-cloud"
+  ]
+}
