@@ -373,6 +373,7 @@ header {
     align-items: center;
     color: var(--text-main);
     position: relative;
+    min-width: 0;
     transition: border-color 0.15s, background 0.15s;
 }
 
@@ -620,6 +621,41 @@ select {
     color: var(--text-muted);
     display: inline-block;
 }
+
+/* Pastille d'alerte sur une tuile d'accueil (ex: stock bas) */
+.alert-badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 10px;
+    background: var(--danger);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+}
+
+/* Statut de paiement d'une facture */
+.badge-statut {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    display: inline-block;
+}
+.badge-payee    { background: rgba(34,197,94,0.12); color: #4ADE80; border: 1px solid rgba(34,197,94,0.30); }
+.badge-attente  { background: rgba(251,191,36,0.12); color: #FBBF24; border: 1px solid rgba(251,191,36,0.30); }
+.badge-retard   { background: rgba(248,113,113,0.12); color: var(--danger); border: 1px solid rgba(248,113,113,0.35); }
+
+.stock-low { border-color: rgba(248,113,113,0.35) !important; }
 
 .draft-card {
     flex-direction: column !important;
@@ -1245,7 +1281,7 @@ body::after {
 .app-card:hover { transform: translateY(-4px); border-color: var(--bord-fort); }
 .app-card h3 { margin: 0 0 4px; font-size: 19px; letter-spacing: .02em; color: var(--texte); }
 .app-card p { margin: 0 0 12px; font-size: 13px; color: var(--texte-2); text-wrap: pretty; }
-.app-card .meta { display: flex; gap: 14px; font-family: var(--mono); font-size: 11px; letter-spacing: .04em; color: var(--texte-3); }
+.app-card .meta { display: flex; flex-wrap: wrap; gap: 8px 14px; font-family: var(--mono); font-size: 11px; letter-spacing: .04em; color: var(--texte-3); }
 
 /* ── Globe (l'objet bleu — la Terre garde sa couleur naturelle) ───────────── */
 .globe-wrap { position: relative; width: 100%; max-width: 470px; aspect-ratio: 1; margin: 0 auto; }
