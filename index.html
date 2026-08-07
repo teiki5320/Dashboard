@@ -12,9 +12,6 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
 </head>
 <body>
 
@@ -24,10 +21,15 @@
         <div class="hd-title" id="hd-page-name">Tableau de Bord</div>
     </div>
     <div class="hd-clock">
-        <div id="hd-date">...</div>
-        <div id="hd-time" style="font-size: 16px; color: var(--gold)">00:00</div>
+        <button id="hd-anim-toggle" class="hd-anim-btn" onclick="toggleGlobalAnim()" title="Activer / couper les animations">⚡</button>
+        <div class="hd-clock-text">
+            <div id="hd-date">...</div>
+            <div id="hd-time" style="font-size: 16px; color: var(--gold)">00:00</div>
+        </div>
     </div>
 </header>
+
+<div id="toast-holder"></div>
 
 <div id="page-home" class="page active">
     <div class="home-grid">

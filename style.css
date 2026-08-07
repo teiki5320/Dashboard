@@ -63,15 +63,13 @@
 }
 
 body {
+    background-color: var(--bg-base);
     background-image:
+        radial-gradient(ellipse 60% 40% at 15% 0%, rgba(var(--accent-rgb), 0.08) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 85% 100%, rgba(var(--accent-rgb), 0.05) 0%, transparent 55%),
         linear-gradient(var(--grille) 1px, transparent 1px),
         linear-gradient(90deg, var(--grille) 1px, transparent 1px);
-    background-size: 44px 44px;
-    background-attachment: fixed;
-    background: var(--bg-base);
-    background-image:
-        radial-gradient(ellipse 60% 40% at 15% 0%, rgba(229, 72, 77, 0.10) 0%, transparent 55%),
-        radial-gradient(ellipse 50% 40% at 85% 100%, rgba(229, 72, 77, 0.06) 0%, transparent 55%);
+    background-size: auto, auto, 44px 44px, 44px 44px;
     background-attachment: fixed;
     color: var(--text-main);
     font-family: 'Inter', var(--titre);
@@ -101,7 +99,7 @@ header {
     position: sticky; top: 0; z-index: 9000;
 }
 
-.hd-left { display: flex; align-items: center; gap: 14px; }
+.hd-left { display: flex; align-items: center; gap: 14px; min-width: 0; flex-shrink: 1; }
 
 .hd-title {
     font-family: 'Inter', sans-serif;
@@ -110,16 +108,33 @@ header {
     color: var(--text-main);
     letter-spacing: 0.02em;
     text-transform: uppercase;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
 }
 
 .hd-clock {
-    text-align: right;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
     font-size: 11px;
     color: var(--text-dim);
-    line-height: 1.4;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     font-weight: 500;
+}
+.hd-clock-text {
+    text-align: right;
+    line-height: 1.4;
+    min-width: 0;
+}
+
+@media (max-width: 480px) {
+    /* Header trop étroit pour tout afficher (surtout avec le zoom 1.6 de l'app) :
+       la date passe en second plan, l'heure et le bouton restent. */
+    #hd-date { display: none; }
 }
 #hd-time {
     font-size: 15px !important;
@@ -128,6 +143,67 @@ header {
     letter-spacing: 0 !important;
     text-transform: none !important;
     font-variant-numeric: tabular-nums;
+}
+
+.hd-anim-btn {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.hd-anim-btn:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: var(--border-strong);
+    color: var(--text-main);
+}
+
+/* ════════════════════════════════════════
+   TOASTS (remplace alert() pour les messages non bloquants)
+════════════════════════════════════════ */
+#toast-holder {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    pointer-events: none;
+    width: min(420px, calc(100% - 32px));
+}
+.toast {
+    pointer-events: auto;
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    background: var(--bg-elev-2);
+    border: 1px solid var(--border-strong);
+    color: var(--text-main);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.4;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.40);
+    animation: toast-in 0.2s cubic-bezier(0.2,0.8,0.2,1) both;
+}
+.toast-success { border-color: rgba(34,197,94,0.35); }
+.toast-error   { border-color: rgba(248,113,113,0.40); }
+.toast-warn    { border-color: rgba(251,191,36,0.40); }
+.toast.toast-out { animation: toast-out 0.18s ease both; }
+@keyframes toast-in { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+@keyframes toast-out { to { opacity: 0; transform: translateY(-8px); } }
+@media (prefers-reduced-motion: reduce) {
+    .toast { animation: none !important; }
 }
 
 .global-back-btn {
@@ -253,6 +329,10 @@ header {
 
 .sub-tab {
     flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     padding: 10px 14px;
     text-align: center;
     font-size: 12px;
@@ -395,6 +475,7 @@ select {
 }
 
 .r2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.r2 > * { min-width: 0; }
 
 /* ════════════════════════════════════════
    BOUTONS
@@ -613,18 +694,7 @@ select {
     margin: 20px 0;
 }
 
-/* ════════════════════════════════════════
-   SCROLLBAR
-════════════════════════════════════════ */
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.15);
-}
+/* Scrollbar : voir bloc unique plus bas (thème Cockpit/HUD, ~L.1011) */
 
 /* ════════════════════════════════════════
    PREVIEW FACTURE
@@ -945,7 +1015,8 @@ a { color: var(--accent-clair); text-decoration: none; }
 a:hover { color: #d3f7f0; }
 
 ::-webkit-scrollbar { width: 9px; height: 9px; }
-::-webkit-scrollbar-thumb { background: rgba(var(--accent-rgb), .25); }
+::-webkit-scrollbar-thumb { background: rgba(var(--accent-rgb), .25); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(var(--accent-rgb), .40); }
 ::-webkit-scrollbar-track { background: transparent; }
 
 /* ── Animations ───────────────────────────────────────────────────────────── */
