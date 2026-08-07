@@ -15,40 +15,129 @@ const G = {
 const SUPA_URL = 'https://eusukwnfoixjsjqoptfr.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1c3Vrd25mb2l4anNqcW9wdGZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5OTQ3NjMsImV4cCI6MjA4OTU3MDc2M30.ZkmqvszuljAPmvAqrmWT87fFOlJEm7WyrqC6E_f_FbI';
 
+// Réparation recommandée côté Supabase (SQL à exécuter une fois dans l'éditeur
+// SQL) — l'ancien push accumulait des lignes en double dans app_data, ce qui
+// faisait revenir d'anciennes données au hasard à chaque ouverture de l'app :
+//
+//   -- 1. Supprimer les doublons en gardant la ligne la plus récente par clé
+//   delete from app_data a using app_data b
+//     where a.key = b.key and a.ctid < b.ctid;
+//   -- 2. Empêcher leur retour
+//   alter table app_data add constraint app_data_key_unique unique (key);
+//
+// Le nouveau push ci-dessous fonctionne même sans cette réparation : il purge
+// lui-même les doublons de chaque clé au fil des sauvegardes.
 const Supa = {
     _h: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' },
+    state: { lastPushOk: null, lastPushErr: null, pushFails: 0, lastPullOk: null },
+    _q: Promise.resolve(), // file d'attente : les écritures partent une par une, jamais entrelacées
 
     push(key, value) {
-        fetch(`${SUPA_URL}/rest/v1/app_data`, {
-            method: 'POST', headers: Supa._h,
-            body: JSON.stringify({ key, value })
-        }).catch(() => {});
+        Supa._q = Supa._q.then(async () => {
+            try {
+                // DELETE puis INSERT : convergent quel que soit le schéma de la table
+                // (pas besoin de contrainte unique), et purge les doublons existants.
+                const del = await fetch(`${SUPA_URL}/rest/v1/app_data?key=eq.${encodeURIComponent(key)}`, {
+                    method: 'DELETE', headers: Supa._h
+                });
+                const ins = await fetch(`${SUPA_URL}/rest/v1/app_data`, {
+                    method: 'POST', headers: Supa._h,
+                    body: JSON.stringify({ key, value })
+                });
+                if (!del.ok || !ins.ok) throw new Error(`HTTP ${del.ok ? ins.status : del.status}`);
+                Supa.state.lastPushOk = Date.now();
+                Supa.state.pushFails = 0;
+                Supa.state.lastPushErr = null;
+            } catch (e) {
+                Supa.state.pushFails++;
+                Supa.state.lastPushErr = e.message;
+                // Une seule alerte (au 3e échec consécutif), pas une par sauvegarde
+                if (Supa.state.pushFails === 3) {
+                    toast('⚠️ Synchronisation cloud en échec — tes données restent enregistrées sur cet appareil. Vois Paramètres → Synchronisation.', 'warn');
+                }
+            }
+            renderSyncStatus();
+        });
+        return Supa._q;
     },
 
-    async pullAll() {
+    async pullAll(manual = false) {
         try {
-            const res = await fetch(`${SUPA_URL}/rest/v1/app_data?select=key,value`, {
-                headers: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}` }
-            });
-            if (!res.ok) return;
+            const base = `${SUPA_URL}/rest/v1/app_data?select=key,value`;
+            const h = { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}` };
+            // Tri par id croissant : la ligne insérée en dernier (la plus récente)
+            // gagne la déduplication. Repli sans tri si la colonne id n'existe pas.
+            let res = await fetch(base + '&order=id.asc', { headers: h });
+            if (!res.ok) res = await fetch(base, { headers: h });
+            if (!res.ok) {
+                if (manual) toast(`❌ Lecture cloud impossible (HTTP ${res.status})`, 'error');
+                return;
+            }
             const rows = await res.json();
-            if (!rows.length) return;
-            rows.forEach(r => {
-                const v = r.value;
-                localStorage.setItem(r.key, (v !== null && typeof v === 'object') ? JSON.stringify(v) : String(v ?? ''));
-            });
-            db.clis   = G.get('v90_clis');
-            db.prods  = G.get('v90_prods');
-            db.ents   = G.get('v90_ents');
-            db.hist   = G.get('v90_hist');
-            db.bls    = G.get('v90_bls');
-            db.drafts = G.get('v90_drafts');
-            db.prixCli = JSON.parse(localStorage.getItem('v90_prix_cli') || '{}');
-            db.mailCategories = G.get('v90_mail_categories');
-            renderAll();
-        } catch(e) {}
+            Supa.state.lastPullOk = Date.now();
+            if (rows.length) {
+                const latest = {};
+                rows.forEach(r => { latest[r.key] = r.value; }); // dédup : dernière occurrence gagne
+                Object.entries(latest).forEach(([k, v]) => {
+                    localStorage.setItem(k, (v !== null && typeof v === 'object') ? JSON.stringify(v) : String(v ?? ''));
+                });
+                db.clis   = G.get('v90_clis');
+                db.prods  = G.get('v90_prods');
+                db.ents   = G.get('v90_ents');
+                db.hist   = G.get('v90_hist');
+                db.bls    = G.get('v90_bls');
+                db.drafts = G.get('v90_drafts');
+                db.prixCli = JSON.parse(localStorage.getItem('v90_prix_cli') || '{}');
+                db.mailCategories = G.get('v90_mail_categories');
+                // Ne pas écraser une saisie en cours : si des quantités sont déjà
+                // tapées dans la grille BL, on garde l'affichage tel quel (les
+                // données db sont à jour, le rendu suivra à la prochaine navigation).
+                const saisieEnCours = Array.from(document.querySelectorAll('[id^="qty-"]'))
+                    .some(i => parseFloat(i.value) > 0);
+                if (!saisieEnCours) renderAll();
+            }
+            renderSyncStatus();
+            if (manual) toast('✅ Données récupérées du cloud.', 'success');
+        } catch (e) {
+            if (manual) toast('❌ Synchronisation impossible : ' + e.message, 'error');
+        }
+    },
+
+    // Renvoie toutes les données locales vers le cloud (outil de récupération :
+    // à utiliser si le statut indique des échecs d'envoi passés).
+    async forcePushAll() {
+        const keys = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (k && k.startsWith('v90_') && k !== 'v90_claude_key') keys.push(k);
+        }
+        for (const k of keys) {
+            const raw = localStorage.getItem(k);
+            let v; try { v = JSON.parse(raw); } catch (e) { v = raw; }
+            Supa.push(k, v);
+        }
+        await Supa._q;
+        toast(Supa.state.lastPushErr
+            ? '❌ Échec de l\'envoi : ' + Supa.state.lastPushErr
+            : `✅ ${keys.length} collection(s) envoyée(s) vers le cloud.`,
+            Supa.state.lastPushErr ? 'error' : 'success');
     }
 };
+
+// Statut de synchronisation affiché dans Paramètres (honnête : basé sur les
+// vrais succès/échecs, pas un "✅ actif" décoratif).
+function renderSyncStatus() {
+    const el = $('sync-status');
+    if (!el) return;
+    const fmt = (t) => t ? new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : '—';
+    if (Supa.state.lastPushErr) {
+        el.innerHTML = `<span style="color:var(--danger)">⚠️ Dernier envoi échoué (${mailEsc(Supa.state.lastPushErr)})</span> — les données restent sur cet appareil. Réessaie avec « Forcer l'envoi ».`;
+    } else if (Supa.state.lastPushOk || Supa.state.lastPullOk) {
+        el.innerHTML = `<span style="color:#4ADE80">✅ Synchronisé</span> <span style="opacity:.6">· reçu ${fmt(Supa.state.lastPullOk)} · envoyé ${fmt(Supa.state.lastPushOk)}</span>`;
+    } else {
+        el.innerHTML = `<span style="opacity:.6">Aucune synchronisation effectuée pour l'instant.</span>`;
+    }
+}
 
 // Formatage devise
 const eur = (n) => new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(n);
@@ -84,7 +173,7 @@ function showPage(id) {
 // Aperçu non engageant du prochain numéro (peut être dépassé si un autre appareil
 // facture entre-temps) — le numéro réellement attribué vient de reserveInvoiceNumber().
 function genNum() {
-    let c = parseInt(G.val('v90_inv_count')) + 1;
+    let c = (parseInt(G.val('v90_inv_count')) || 0) + 1;
     return new Date().getFullYear() + "-" + String(c).padStart(3, '0');
 }
 
@@ -102,10 +191,16 @@ async function reserveInvoiceNumber() {
         localStorage.setItem('v90_inv_count', n);
         return new Date().getFullYear() + "-" + String(n).padStart(3, '0');
     } catch (e) {
-        let c = parseInt(G.val('v90_inv_count')) + 1;
+        let c = (parseInt(G.val('v90_inv_count')) || 0) + 1;
         localStorage.setItem('v90_inv_count', c);
         Supa.push('v90_inv_count', c);
-        toast("⚠️ Numéro de facture généré hors-ligne : à vérifier si tu factures aussi depuis un autre appareil.", 'warn');
+        // Avertir UNE fois par session, pas à chaque facture : tant que la
+        // fonction SQL next_invoice_number n'est pas installée dans Supabase,
+        // ce repli est le fonctionnement normal, pas une anomalie.
+        if (!reserveInvoiceNumber._warned) {
+            reserveInvoiceNumber._warned = true;
+            toast("ℹ️ Numérotation locale (compteur de cet appareil). Si tu factures depuis plusieurs appareils, installe la fonction SQL next_invoice_number (voir Paramètres).", 'info');
+        }
         return new Date().getFullYear() + "-" + String(c).padStart(3, '0');
     }
 }
