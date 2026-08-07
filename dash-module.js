@@ -70,6 +70,9 @@
     document.documentElement.setAttribute('data-anim', on ? 'on' : 'off');
     var btn = $('#anim-toggle');
     if (btn) btn.textContent = on ? '⚡ ANIMATIONS' : '⏸ ANIMATIONS';
+    // Bouton global du header de Gestion Pro (même bascule, clé localStorage partagée).
+    var hdBtn = document.getElementById('hd-anim-toggle');
+    if (hdBtn) hdBtn.textContent = on ? '⚡' : '⏸';
     if (globe) globe.setActive(on);
   }
   function initAnim() {
