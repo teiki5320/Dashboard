@@ -189,8 +189,12 @@
     <button class="btn btn-gold" onclick="openEntModal()">＋ AJOUTER ÉMETTEUR</button>
 
     <div class="section-title" style="margin-top: 25px">☁️ Synchronisation</div>
-    <div class="card" style="flex-direction:column; gap:8px">
-        <p style="font-size:13px; color:var(--text-muted); margin:0">✅ Supabase actif — les données se synchronisent automatiquement entre tous tes appareils.</p>
+    <div class="card" style="flex-direction:column; gap:12px; align-items:stretch">
+        <p id="sync-status" style="font-size:13px; color:var(--text-muted); margin:0">Aucune synchronisation effectuée pour l'instant.</p>
+        <div class="r2">
+            <button class="btn" style="background:rgba(255,255,255,0.06); font-size:12px" onclick="Supa.forcePushAll()">⬆️ Forcer l'envoi</button>
+            <button class="btn" style="background:rgba(255,255,255,0.06); font-size:12px" onclick="Supa.pullAll(true)">⬇️ Récupérer du cloud</button>
+        </div>
     </div>
 </div>
 
