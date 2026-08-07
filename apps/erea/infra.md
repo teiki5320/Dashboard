@@ -1,13 +1,17 @@
 # Erea — fiche technique des services externes
 
-> Générée le 3 août 2026 en scannant le dépôt (dépendances, configs,
+> Générée le 3 août 2026, mise à jour le 5 août 2026 en scannant le dépôt (dépendances, configs,
 > scripts CI, manifestes). Pour la mettre à jour : relancer le même
 > prompt dans Claude Code, le fichier sera régénéré à partir de l'état
 > réel du dépôt.
 
 **Résumé en une phrase : Erea est une app 100 % locale.** Pas de backend,
 pas de base de données, pas d'analytics, pas de crash reporting, pas de
-publicité, pas de paiement, pas d'emailing, pas de domaine acheté. Tout
+publicité, pas de paiement, pas de domaine acheté.
+
+Une seule adresse e-mail est publique : **erea.toa@gmail.com**, affichée
+sur les pages d'aide et de confidentialité, et déclarée comme contact de
+support dans App Store Connect. Tout
 l'état du joueur vit sur l'appareil (`shared_preferences`), la seule
 fonction en ligne est le classement mondial délégué à Game Center.
 Conséquence utile : la fiche « Confidentialité » App Store peut déclarer
@@ -24,8 +28,10 @@ Conséquence utile : la fiche « Confidentialité » App Store peut déclarer
 | Compte propriétaire | `teiki5320` |
 
 **Identifiants publics :**
-- URL publique du jeu web : `https://teiki5320.github.io/erea/` — référencée dans `index.html` (balises `og:`, `canonical`) et `README.md`.
-- Le site est servi depuis la **racine du dépôt** (fichier `.nojekyll` présent) : `index.html` est la copie déployée de `index-v8.html`.
+- URL publique : `https://teiki5320.github.io/erea/` — la **vitrine** de l'app.
+- Le jeu web jouable est sur `/erea/jeu.html`, copie déployée de `index-v8.html`.
+- `/erea/support.html` et `/erea/confidentialite.html` : les deux URL exigées par l'App Store, saisies dans la fiche.
+- Le site est servi depuis la **racine du dépôt** (fichier `.nojekyll` présent).
 
 **Secrets :** aucun. Pas de workflow GitHub Actions, donc pas de secrets CI
 côté GitHub. L'accès en écriture au dépôt passe par le compte GitHub
@@ -69,7 +75,8 @@ l'App ID depuis le 4 août 2026.
 
 **Identifiants publics :**
 - App : « Erea », bundle `com.teiki.erea`.
-- Version / build : pilotés par `version:` dans `erea_flutter/pubspec.yaml` (`0.1.0+1` → `CFBundleShortVersionString` / `CFBundleVersion`).
+- Version : `1.0.0`, dans `erea_flutter/pubspec.yaml`. Elle doit être identique au numéro saisi dans App Store Connect, sinon le build reste non sélectionnable.
+- iOS minimum : 15.0.
 - Chiffrement : `ITSAppUsesNonExemptEncryption = false` (`erea_flutter/ios/Runner/Info.plist`) — pas de formulaire export à remplir à chaque build.
 
 **Secrets :** aucun côté dépôt. L'authentification est celle du compte
@@ -97,15 +104,18 @@ builds Xcode Cloud.
   régénère `Generated.xcconfig` si l'étape d'archive ne partage pas le
   `$HOME` du post-clone.
 - Le reste (workflow, déclencheurs, environnement) vit **dans la console**,
-  pas dans le dépôt.
+  pas dans le dépôt. Réglage critique : dans l'action *Archiver*, la
+  préparation de la distribution doit être sur **« App Store Connect »**
+  et non « TestFlight (tests internes uniquement) », faute de quoi aucun
+  build ne peut être attaché à une version.
 
 **Secrets :** aucun dans le dépôt. La signature est gérée par Apple
 (« cloud signing »), l'accès GitHub par l'intégration officielle.
 
 **Reprise :** accès App Store Connect + autorisation de l'app GitHub
-Xcode Cloud sur le dépôt. ⚠️ Problème connu : les pushes sur `main` ne
-déclenchent pas de build automatiquement — les builds sont lancés à la
-main ; les déclencheurs du workflow sont à vérifier dans la console.
+Xcode Cloud sur le dépôt. Le déclenchement automatique sur `main`
+fonctionne (vérifié le 4 août 2026), sans filtre de fichiers : toute
+poussée, même sur un document, lance un build.
 
 ---
 
@@ -133,9 +143,9 @@ L'ordre des opérations (capacité → classements → entitlement) reste
 documenté dans `erea_flutter/ios/GAME_CENTER.md` : le rattacher trop tôt
 casse la signature, ce qui compte si l'App ID est un jour recréé.
 
-Reste à faire avant la soumission : **attacher les classements à la
-version** dans App Store Connect (ils sont en « Finaliser avant
-soumission »).
+Les six classements sont attachés à la version 1.0.0 (case « Game
+Center » cochée sur la page de version). Ils passeront de « Finaliser
+avant soumission » à actif au moment de la publication.
 
 **Secrets :** aucun. Game Center n'utilise ni clé d'API ni jeton.
 

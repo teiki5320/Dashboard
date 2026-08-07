@@ -1,6 +1,6 @@
 # Erea — plan marketing & rémunération
 
-> Généré le 3 août 2026 après scan du dépôt (mécaniques de partage,
+> Généré le 3 août 2026, mis à jour le 5 août 2026 après scan du dépôt (mécaniques de partage,
 > fiche web, notifications, classements, monétisation). Pour le mettre à
 > jour : relancer le même prompt dans Claude Code. Aucun secret ici.
 >
@@ -63,14 +63,14 @@ ou d'abonnement dans `pubspec.yaml`.
 
 | Élément | Contenu proposé | Statut |
 |---|---|---|
-| Nom | `Erea — Devine l'année !` | ⬜ (à saisir dans App Store Connect) |
-| Sous-titre | `Le jeu d'histoire en famille` | ⬜ |
-| Mots-clés (100 car.) | `histoire,quiz,frise,chronologie,date,année,culture,générale,brevet,famille,éducatif,afrique` | ⬜ |
-| Description | Reprendre le pitch du `README.md` (modes, frise non linéaire, défi du jour, 1 738 faits vérifiés) en ouvrant sur l'angle famille | ⬜ |
-| Captures | 6 par taille (6,9″ et iPad obligatoires) : ① frise en pleine partie, ② révélation « PERFECT 🎯 », ③ défi du jour + série, ④ grille de partage, ⑤ Chrono, ⑥ collection. Textes courts par capture (« Fais défiler le temps ») | ⬜ |
+| Nom | saisi : `Erea` (la variante `Erea — Devine l'année !` remonterait mieux en recherche) | ✅ |
+| Sous-titre | `Le jeu d'histoire en famille` | ✅ |
+| Mots-clés (100 **octets**, accents comptés double) | `quizz,frise,chronologie,date,culture,générale,brevet,éducatif,afrique,collège,révision,enfant` | ✅ |
+| Description | rédigée et saisie — texte intégral dans `docs/FICHE_APP_STORE.md` | ✅ |
+| Captures | 6 par taille (iPhone 6,5″ et iPad obligatoires — se fier au cadre de dépôt) : ① frise en pleine partie, ② révélation « PERFECT 🎯 », ③ défi du jour + série, ④ grille de partage, ⑤ Chrono, ⑥ collection. Textes courts par capture (« Fais défiler le temps ») | ⬜ |
 | Vidéo de preview | 15-20 s : le geste de défilement, une révélation, la grille copiée | ⬜ (optionnel mais le geste est notre meilleur argument) |
-| Notes & avis | Demande de note in-app (plugin `in_app_review`) déclenchée au bon moment : après une série de 3 défis du jour ou un PERFECT — jamais au premier lancement | ⬜ |
-| Fiche confidentialité | « Aucune donnée collectée » (voir `docs/INFRA.md`) — un badge rare qui rassure les parents | ⬜ (à déclarer, l'app le permet déjà) |
+| Notes & avis | Demande de note in-app (`lib/core/avis.dart`) : après un PERFECT, un record ou 3 défis d'affilée, une seule fois, jamais au lancement | ✅ fait le 5 août 2026 |
+| Fiche confidentialité | « Aucune donnée collectée » — déclarée et publiée | ✅ |
 | Localisation fiche | Français d'abord ; anglais plus tard seulement si le contenu du jeu est traduit | ⬜ |
 
 ---
@@ -79,10 +79,10 @@ ou d'abonnement dans `pubspec.yaml`.
 
 | Canal | Détail | Statut |
 |---|---|---|
-| Partage de grille (bouche-à-oreille) | Grille emoji sans spoiler + série 🔥, bouton « 📋 Copier ma grille » (`lib/ui/game_screen.dart`) | ✅ copie presse-papiers · ⬜ feuille de partage native (`share_plus`) avec lien App Store dans le texte |
+| Partage de grille (bouche-à-oreille) | Grille emoji sans spoiler + série 🔥, feuille de partage iOS native, lien App Store dans le texte (`lib/ui/game_screen.dart`) | ✅ fait le 5 août 2026 |
 | Défi du jour + rappel | Mêmes questions pour tous, une tentative/jour, rappel local 18 h 30 (`lib/core/rappels.dart`) — le moteur de rétention qui alimente le partage | ✅ |
-| Classements mondiaux | Game Center : défi, série, Classique ×3, Chrono (`lib/core/classement.dart`) | ✅ actif depuis le 4 août 2026, vérifié sur appareil réel · ⬜ attacher les classements à la version avant soumission |
-| Prototype web comme vitrine | `teiki5320.github.io/erea` : jouable sans installer, balises OpenGraph/Twitter + schema.org déjà en place (`index.html`) | ✅ vitrine · ⬜ bandeau « Disponible sur l'App Store » + Smart App Banner une fois l'app publiée |
+| Classements mondiaux | Game Center : défi, série, Classique ×3, Chrono (`lib/core/classement.dart`) | ✅ actif et attaché à la version 1.0.0 |
+| Vitrine web | `teiki5320.github.io/erea` : page de présentation dédiée, le jeu jouable sur `/jeu.html` | ✅ · ⬜ bandeau « Disponible sur l'App Store » + Smart App Banner une fois l'app publiée |
 | Enseignants & parents | Dossier d'une page « Erea en classe » (repères du brevet couverts, mode Facile, zéro pub/collecte) à envoyer aux profs d'histoire-géo, groupes Facebook de profs, La Salle des Maîtres | ⬜ |
 | Afrique de l'Ouest | Mise en avant du pack Afrique auprès des communautés éducatives francophones (Sénégal, Côte d'Ivoire…) ; presse tech locale ; créateurs de contenu éducation | ⬜ |
 | Réseaux sociaux | Compte unique (TikTok ou Instagram) : clips « saurez-vous dater cet événement ? » — le geste de frise est fait pour le format court. Marronniers : anniversaires d'événements du jeu | ⬜ |
@@ -133,13 +133,10 @@ ferait perdre le « aucune donnée collectée » de la fiche.
    mondial, moteur de tout le plan, est en service.
 2. ⬜ **Préparer la fiche App Store** : nom, sous-titre, mots-clés,
    description, captures (§3) + déclaration « aucune donnée collectée ».
-3. ⬜ **Passer le partage en feuille native** (`share_plus`) en gardant la
-   copie, et ajouter le lien App Store au texte partagé — chaque grille
-   devient une pub.
-4. ⬜ **Ajouter la demande de note in-app** (`in_app_review`) après une
-   série de 3 ou un PERFECT.
+3. ✅ **Partage en feuille native** avec le lien App Store — fait.
+4. ✅ **Demande de note in-app** — faite.
 5. ⬜ **Sortir en App Store** (phase 1, gratuit) et soumettre le dossier de
-   featuring Apple.
+   featuring Apple. Il ne manque que les captures d'écran.
 6. ⬜ **Relier la vitrine web à l'app** : Smart App Banner + bouton sur
    `teiki5320.github.io/erea`.
 7. ⬜ **Dossier enseignants** une page + envois ciblés (timing : rentrée ou
