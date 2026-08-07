@@ -74,17 +74,71 @@ function showPage(id) {
     $('hd-page-name').innerText = id === 'home' ? 'TABLEAU DE BORD' : id.toUpperCase();
     $('global-back').style.display = (id === 'home') ? 'none' : 'flex';
     
-    if (id === 'facture') $('f-num').value = genNum();
+    if (id === 'facture') $('f-num').value = genNum(); // aperçu ; le numéro définitif est réservé à l'aperçu facture
     if (id === 'mail') renderMailConnexion();
 
     window.scrollTo(0, 0);
     renderAll();
 }
 
+// Aperçu non engageant du prochain numéro (peut être dépassé si un autre appareil
+// facture entre-temps) — le numéro réellement attribué vient de reserveInvoiceNumber().
 function genNum() {
     let c = parseInt(G.val('v90_inv_count')) + 1;
     return new Date().getFullYear() + "-" + String(c).padStart(3, '0');
 }
+
+// Réservation atomique du numéro de facture via une fonction Postgres
+// (voir le SQL en commentaire au-dessus de finalizeInvoice) : évite que deux
+// appareils facturant au même moment obtiennent le même numéro. Repli sur le
+// compteur local si Supabase est injoignable (mode hors-ligne).
+async function reserveInvoiceNumber() {
+    try {
+        const res = await fetch(`${SUPA_URL}/rest/v1/rpc/next_invoice_number`, {
+            method: 'POST', headers: Supa._h, body: '{}'
+        });
+        if (!res.ok) throw new Error('rpc indisponible');
+        const n = await res.json();
+        localStorage.setItem('v90_inv_count', n);
+        return new Date().getFullYear() + "-" + String(n).padStart(3, '0');
+    } catch (e) {
+        let c = parseInt(G.val('v90_inv_count')) + 1;
+        localStorage.setItem('v90_inv_count', c);
+        Supa.push('v90_inv_count', c);
+        toast("⚠️ Numéro de facture généré hors-ligne : à vérifier si tu factures aussi depuis un autre appareil.", 'warn');
+        return new Date().getFullYear() + "-" + String(c).padStart(3, '0');
+    }
+}
+
+// --- NOTIFICATIONS (remplace alert() par un message non bloquant) ---
+function toast(msg, kind = 'info') {
+    const holder = $('toast-holder');
+    if (!holder) { console.log(msg); return; }
+    const el = document.createElement('div');
+    el.className = 'toast' + (kind !== 'info' ? ' toast-' + kind : '');
+    el.textContent = msg;
+    holder.appendChild(el);
+    setTimeout(() => {
+        el.classList.add('toast-out');
+        setTimeout(() => el.remove(), 200);
+    }, 3600);
+}
+
+// --- ANIMATIONS (bouton global, header — partagé avec le module Mes Apps) ---
+const ANIM_KEY = 'dash-anim'; // même clé que dash-module.js : un seul état partagé
+function animOn() {
+    try { return localStorage.getItem(ANIM_KEY) !== 'off'; } catch (e) { return true; }
+}
+function applyGlobalAnim(on) {
+    document.documentElement.setAttribute('data-anim', on ? 'on' : 'off');
+    let btn = $('hd-anim-toggle');
+    if (btn) { btn.textContent = on ? '⚡' : '⏸'; btn.style.color = on ? '' : 'var(--accent)'; }
+    let dashBtn = document.getElementById('anim-toggle');
+    if (dashBtn) dashBtn.textContent = on ? '⚡ ANIMATIONS' : '⏸ ANIMATIONS';
+    try { localStorage.setItem(ANIM_KEY, on ? 'on' : 'off'); } catch (e) {}
+}
+function toggleGlobalAnim() { applyGlobalAnim(!animOn()); }
+applyGlobalAnim(animOn());
 
 // Horloge Header
 function tick() {
@@ -150,7 +204,7 @@ function saveCliPrix() {
     Supa.push('v90_prix_cli', db.prixCli);
     closeModals();
     renderBLGrid();
-    alert('✅ Prix spécifiques sauvegardés !');
+    toast('✅ Prix spécifiques sauvegardés !', 'success');
 }
 
 function openEntModal(id = null) {
@@ -215,7 +269,7 @@ function saveBL() {
     const dateStr = `${d}/${m}/${y}`;
     db.bls.push({ id: Date.now(), date: dateStr, cid: cliId, cliNom: db.clis.find(c => c.id == cliId).nom, entId: $('bl-ent-select').value, items, status: 'en-cours' });
     G.set('v90_bls', db.bls);
-    alert("Livraison enregistrée !");
+    toast("✅ Livraison enregistrée !", 'success');
     showPage('home');
 }
 
@@ -480,10 +534,33 @@ function renderAll() {
 }
 
 // --- IMPRESSION & FINALISATION ---
-function previewInvoice() {
+//
+// Numérotation séquentielle des factures (SQL à exécuter une seule fois,
+// manuellement, dans l'éditeur SQL Supabase) :
+//
+//   create table if not exists invoice_counter (
+//     id int primary key default 1,
+//     count int not null default 0,
+//     constraint invoice_counter_single_row check (id = 1)
+//   );
+//   insert into invoice_counter (id, count) values (1, 0) on conflict (id) do nothing;
+//
+//   create or replace function next_invoice_number()
+//   returns int language sql as $$
+//     update invoice_counter set count = count + 1 where id = 1 returning count;
+//   $$;
+//
+// L'UPDATE ... RETURNING est atomique côté Postgres : deux appels concurrents
+// (deux appareils qui facturent au même moment) ne peuvent jamais recevoir le
+// même numéro. Sans cette table, l'app repli sur un compteur local (voir
+// reserveInvoiceNumber) qui peut se dupliquer entre appareils.
+async function previewInvoice() {
     let ent = db.ents.find(e => e.id == $('f-ent').value), cli = db.clis.find(c => c.id == $('f-cli').value);
-    if (!ent || !cli) return alert("Émetteur ou Client manquant");
-    
+    if (!ent || !cli) return toast("Émetteur ou Client manquant", 'error');
+
+    $('f-num').value = '…';
+    $('f-num').value = await reserveInvoiceNumber();
+
     let rows = '', ht = 0, ttc = 0;
     curLines.forEach(l => {
         let lht = l.prix * l.qte;
@@ -535,9 +612,7 @@ function finalizeInvoice() {
     G.set('v90_hist', db.hist);
     if (curDraftId) db.drafts = db.drafts.filter(d => d.id != curDraftId);
     G.set('v90_drafts', db.drafts);
-    const newCount = parseInt(G.val('v90_inv_count')) + 1;
-    localStorage.setItem('v90_inv_count', newCount);
-    Supa.push('v90_inv_count', newCount);
+    // Le numéro a déjà été réservé (atomiquement) dans previewInvoice() — ne pas réincrémenter ici.
     window.print();
     closePreview();
     showPage('home');
@@ -925,7 +1000,7 @@ function tvaDrop(e) {
 function tvaFileChange(e) { if (e.target.files[0]) tvaLoadFile(e.target.files[0]); }
 
 function tvaExport() {
-    if (!window.XLSX) return alert('SheetJS non chargé');
+    if (!window.XLSX) return toast('SheetJS non chargé', 'error');
     const wb = XLSX.utils.book_new();
     const headers = ['Date','Libellé','Banque','Type','Montant TTC','Taux TVA','HT','TVA'];
     const dataRows = tvaState.rows.map(r => {
@@ -1091,11 +1166,11 @@ function getMailClaudeKey() { return localStorage.getItem('v90_claude_key') || '
 
 function saveMailClaudeKey() {
     let v = $('mail-claude-key').value.trim();
-    if (!v) return alert('Merci de renseigner une clé.');
+    if (!v) return toast('Merci de renseigner une clé.', 'error');
     localStorage.setItem('v90_claude_key', v);
     $('mail-claude-key').value = '';
     renderMailConnexion();
-    alert('✅ Clé API Claude sauvegardée.');
+    toast('✅ Clé API Claude sauvegardée.', 'success');
 }
 
 function clearMailClaudeKey() {
@@ -1124,11 +1199,11 @@ function mailInitTokenClient() {
 
 function mailConnectGmail() {
     if (GMAIL_CLIENT_ID === 'GMAIL_CLIENT_ID') {
-        alert("⚠️ Configuration requise : remplace GMAIL_CLIENT_ID dans script.js par ton Client ID Google Cloud (voir le commentaire en tête de la section Mail).");
+        toast("⚠️ Configuration requise : remplace GMAIL_CLIENT_ID dans script.js par ton Client ID Google Cloud (voir le commentaire en tête de la section Mail).", 'warn');
         return;
     }
     const client = mailInitTokenClient();
-    if (!client) { alert("Google Identity Services n'est pas encore chargé. Vérifie ta connexion internet et recharge la page."); return; }
+    if (!client) { toast("Google Identity Services n'est pas encore chargé. Vérifie ta connexion internet et recharge la page.", 'error'); return; }
     client.requestAccessToken({ prompt: mailState.token ? '' : 'consent' });
 }
 
@@ -1340,7 +1415,7 @@ function mailToggleCatPromptField() {
 
 function saveMailCat() {
     let nom = $('mcat-nom').value.trim();
-    if (!nom) return alert("Le nom est obligatoire.");
+    if (!nom) return toast("Le nom est obligatoire.", 'error');
     let id = $('mcat-id').value || ('cat-' + Date.now());
     let o = {
         id, nom,
@@ -1686,8 +1761,8 @@ async function renderMailInvoicesTable() {
 }
 
 function mailExportInvoices() {
-    if (!window.XLSX) return alert('SheetJS non chargé');
-    if (!mailState.invoices.length) return alert('Aucune facture à exporter.');
+    if (!window.XLSX) return toast('SheetJS non chargé', 'error');
+    if (!mailState.invoices.length) return toast('Aucune facture à exporter.', 'error');
     const headers = ['Date facture', 'Entité', 'Fournisseur', 'Montant', 'Devise', 'Catégorie', 'Statut'];
     const rows = mailState.invoices.map(i => [i.invoice_date || '', i.entity || '', i.vendor || '', i.amount ?? '', i.currency || 'EUR', i.category || '', i.status || '']);
     const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
