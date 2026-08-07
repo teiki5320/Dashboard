@@ -243,6 +243,33 @@
 
   // ── Ossature ───────────────────────────────────────────────────────────────
   // ── Page : vue d'ensemble ──────────────────────────────────────────────────
+  // ── Indicateurs vivants (release + CI) — voir tool/sync.js / apps/<id>/status.json ──
+  function ciDotColor(ci) {
+    if (!ci) return null;
+    if (ci.status !== 'completed') return 'var(--ambre)';
+    if (ci.conclusion === 'success') return 'var(--vert)';
+    if (ci.conclusion === 'failure') return '#ff6b6b';
+    return 'var(--texte-3)';
+  }
+  function ciLabel(ci) {
+    if (ci.status !== 'completed') return 'CI en cours';
+    if (ci.conclusion === 'success') return 'CI OK';
+    if (ci.conclusion === 'failure') return 'CI échec';
+    return 'CI ' + esc(ci.conclusion || ci.status);
+  }
+  function statusTagsHtml(app) {
+    if (!app.status) return '';
+    var out = '', rel = app.status.release, ci = app.status.ci;
+    if (rel) {
+      out += '<a class="tag" href="' + esc(rel.url || ('https://github.com/' + app.repo + '/releases')) + '" title="Dernière release">🏷️ ' + esc(rel.tag) + '</a>';
+    }
+    if (ci) {
+      var color = ciDotColor(ci);
+      out += '<a class="tag" href="' + esc(ci.url || ('https://github.com/' + app.repo + '/actions')) + '" title="Dernier run CI" style="border-color:' + color + '55;color:' + color + '">● ' + ciLabel(ci) + '</a>';
+    }
+    return out;
+  }
+
   function renderAccueil() {
     var tousServices = {};
     var done = 0, todo = 0, actions = [];
@@ -298,6 +325,8 @@
         '<div class="progress"><i style="width:' + pp + '%"></i></div>' +
         '<div class="meta" style="margin-top:10px"><span>' + a.services.length + ' services</span>' +
         '<span>' + pp + ' % canaux</span>' +
+        (a.status && a.status.release ? '<span>🏷️ ' + esc(a.status.release.tag) + '</span>' : '') +
+        (a.status && a.status.ci ? '<span style="color:' + ciDotColor(a.status.ci) + '">● ' + ciLabel(a.status.ci) + '</span>' : '') +
         '<span>' + esc((a.platforms || []).join(' · ')) + '</span></div></a>';
     });
     h += '</div>';
@@ -407,6 +436,7 @@
       }
       h += '<div class="tags" style="margin-top:14px">' +
         (app.repo ? '<a class="tag" href="https://github.com/' + esc(app.repo) + '">📦 ' + esc(app.repo) + '</a>' : '') +
+        statusTagsHtml(app) +
         (app.platforms || []).map(function (p) { return '<span class="tag">' + esc(p) + '</span>'; }).join('') +
         '</div></div></div>';
 
