@@ -352,6 +352,16 @@ function loadApps() {
     const infra = mdToHtml(infraMd, { anchorPrefix: 'i-' + slugify(id) });
     const marketing = mdToHtml(marketingMd, { anchorPrefix: 'm-' + slugify(id) });
 
+    // Indicateurs vivants (release + statut CI) : optionnels, produits par
+    // tool/sync.js à partir de l'API GitHub de app.repo. Absent tant que la
+    // synchro n'a pas encore tourné, ou si l'app n'a pas de repo déclaré.
+    let status = null;
+    const statusPath = path.join(dir, 'status.json');
+    if (fs.existsSync(statusPath)) {
+      try { status = JSON.parse(fs.readFileSync(statusPath, 'utf8')); }
+      catch (e) { console.warn(`⚠️  apps/${id}/status.json invalide (${e.message}) — ignoré`); }
+    }
+
     apps.push({
       id,
       order: typeof manifest.order === 'number' ? manifest.order : 999,
@@ -368,6 +378,7 @@ function loadApps() {
       marketingToc: marketing.toc,
       marketingSummary: extractMarketingSummary(marketingMd),
       serviceAnchors: findServiceAnchors(services, infra.toc),
+      status,
     });
   }
   // Tri : champ "order" du manifeste (plus petit = premier), puis alphabétique.
