@@ -9,6 +9,12 @@
 // le script télécharge depuis ce dépôt GitHub (branche par défaut) :
 //   docs/INFRA.md     → apps/<id>/infra.md
 //   docs/MARKETING.md → apps/<id>/marketing.md
+// … et interroge l'API GitHub pour deux indicateurs vivants, écrits dans
+// apps/<id>/status.json (lu par tool/build.js, affiché par dash-module.js) :
+//   - dernière release (tag, date, lien)
+//   - dernier run CI/Actions (statut, conclusion, lien)
+// "Nombre d'utilisateurs" n'est PAS remonté ici : aucune source de données
+// commune aux 4 apps (dépendrait de l'analytics propre à chacune).
 //
 // Authentification : variable d'environnement APPS_READ_TOKEN (ou GITHUB_TOKEN)
 // — un fine-grained PAT en LECTURE SEULE (Contents: Read) sur les dépôts d'apps.
@@ -47,6 +53,42 @@ async function fetchFile(repo, filePath) {
   }
   if (!res.ok) return { status: res.status };
   return { status: 200, contenu: await res.text() };
+}
+
+async function fetchJson(url) {
+  const headers = {
+    Accept: 'application/vnd.github+json',
+    'User-Agent': 'dash-sync',
+    'X-GitHub-Api-Version': '2022-11-28',
+  };
+  if (TOKEN) headers.Authorization = `Bearer ${TOKEN}`;
+  const res = await fetch(url, { headers });
+  if (!res.ok) return null; // 404 (pas de release/run), rate-limit, dépôt privé sans jeton… : silencieux
+  return res.json();
+}
+
+// Indicateurs vivants : aucune erreur ici ne fait échouer la synchro (contrairement
+// aux fiches infra/marketing) — une release ou un run CI absent est un état normal,
+// pas une erreur de configuration.
+async function fetchStatus(repo) {
+  const [release, runs] = await Promise.all([
+    fetchJson(`https://api.github.com/repos/${repo}/releases/latest`),
+    fetchJson(`https://api.github.com/repos/${repo}/actions/runs?per_page=1`),
+  ]);
+  const run = runs && Array.isArray(runs.workflow_runs) ? runs.workflow_runs[0] : null;
+  return {
+    release: release ? { tag: release.tag_name, name: release.name || release.tag_name, publishedAt: release.published_at, url: release.html_url } : null,
+    ci: run ? { status: run.status, conclusion: run.conclusion, updatedAt: run.updated_at, url: run.html_url } : null,
+    fetchedAt: new Date().toISOString(),
+  };
+}
+
+// Compare deux statuts en ignorant fetchedAt : évite un commit quotidien pour
+// un simple horodatage quand rien n'a réellement changé côté release/CI.
+function statusEqual(a, b) {
+  if (!a || !b) return a === b;
+  const strip = (s) => JSON.stringify({ release: s.release, ci: s.ci });
+  return strip(a) === strip(b);
 }
 
 async function main() {
@@ -106,6 +148,21 @@ async function main() {
         console.log(`   ✅ ${f.local} : mis à jour (${(r.contenu.length / 1024).toFixed(1)} Ko)`);
         modifies++;
       }
+    }
+
+    try {
+      const status = await fetchStatus(manifest.repo);
+      const statusPath = path.join(APPS_DIR, id, 'status.json');
+      const avantStatus = fs.existsSync(statusPath) ? JSON.parse(fs.readFileSync(statusPath, 'utf8')) : null;
+      if (statusEqual(avantStatus, status)) {
+        console.log(`   ✔️  status.json : déjà à jour`);
+      } else {
+        fs.writeFileSync(statusPath, JSON.stringify(status, null, 2) + '\n');
+        console.log(`   ✅ status.json : mis à jour (release ${status.release ? status.release.tag : '—'}, CI ${status.ci ? status.ci.conclusion || status.ci.status : '—'})`);
+        modifies++;
+      }
+    } catch (e) {
+      console.warn(`   ⚠️  status.json : indicateurs vivants indisponibles (${e.message})`);
     }
   }
 

@@ -160,9 +160,11 @@ function openProdModal(id = null) {
         $('mp-nom').value = p.nom; $('mp-desc').value = p.desc || ''; $('mp-prix').value = p.prix;
         $('mp-unite').value = p.unite; $('mp-tva').value = p.tva || 20;
         $('mp-poids').value = p.poids || '';
+        $('mp-seuil').value = p.seuil || '';
     } else {
         $('mp-title').innerText = "Nouveau Produit"; $('mp-id').value = ''; $('mp-icon').value = '';
         $('mp-nom').value = ''; $('mp-desc').value = ''; $('mp-prix').value = ''; $('mp-poids').value = '';
+        $('mp-seuil').value = '';
     }
     openModal('mod-prod');
 }
@@ -222,7 +224,7 @@ function openEntModal(id = null) {
 // --- SAUVEGARDES ---
 function saveProd() {
     let id = $('mp-id').value || Date.now();
-    let o = { id, icon: $('mp-icon').value || '📦', nom: $('mp-nom').value, desc: $('mp-desc').value, prix: parseFloat($('mp-prix').value) || 0, unite: $('mp-unite').value, tva: parseFloat($('mp-tva').value), poids: parseFloat($('mp-poids').value) || 0, stock: 0 };
+    let o = { id, icon: $('mp-icon').value || '📦', nom: $('mp-nom').value, desc: $('mp-desc').value, prix: parseFloat($('mp-prix').value) || 0, unite: $('mp-unite').value, tva: parseFloat($('mp-tva').value), poids: parseFloat($('mp-poids').value) || 0, seuil: parseFloat($('mp-seuil').value) || 0, stock: 0 };
     let ex = db.prods.find(p => p.id == id); if (ex) o.stock = ex.stock;
     db.prods = db.prods.filter(p => p.id != id); db.prods.push(o); G.set('v90_prods', db.prods); closeModals(); renderAll();
 }
@@ -496,38 +498,105 @@ function renderAll() {
     $('f-cli').innerHTML = db.clis.map(c => `<option value="${c.id}">${c.nom}</option>`).join('');
     $('f-prod-picker').innerHTML = db.prods.map(p => `<option value="${p.id}">${p.nom}</option>`).join('');
     
-    // 5. Affichage du stock actuel et ajustement
-    $('list-stock').innerHTML = db.prods.map(p => `<div class="card" style="flex-direction:column"><b>${p.icon} ${p.nom}</b><div style="font-size:20px;color:var(--sage);font-weight:700">${p.stock} ${p.unite}</div></div>`).join('');
+    // 5. Affichage du stock actuel et ajustement (avec alerte seuil bas)
+    const lowStock = db.prods.filter(p => p.seuil > 0 && p.stock <= p.seuil);
+    $('list-stock').innerHTML = db.prods.map(p => {
+        const bas = p.seuil > 0 && p.stock <= p.seuil;
+        return `<div class="card${bas ? ' stock-low' : ''}" style="flex-direction:column">
+            <b>${p.icon} ${p.nom}</b>
+            <div style="font-size:20px;color:${bas ? 'var(--danger)' : 'var(--sage)'};font-weight:700">${p.stock} ${p.unite}</div>
+            ${bas ? `<span class="badge-statut badge-retard" style="margin-top:6px">⚠️ Stock bas (seuil : ${p.seuil})</span>` : ''}
+        </div>`;
+    }).join('');
     $('adj-prod').innerHTML = db.prods.map(p => `<option value="${p.id}">${p.nom}</option>`).join('');
+    const stockBadge = $('stock-alert-badge');
+    if (stockBadge) {
+        stockBadge.style.display = lowStock.length ? 'flex' : 'none';
+        stockBadge.textContent = lowStock.length;
+    }
     
     // 6. Historique des factures
-    $('list-hist').innerHTML = db.hist.length === 0
-        ? `<div style="text-align:center; padding:40px 20px; opacity:.4; font-size:14px">Aucune facture archivée</div>`
-        : db.hist.slice().reverse().map(h => {
+    renderHistorique();
+}
+
+// Statut de paiement : "payée" est le seul état réellement stocké (bascule
+// manuelle) ; "en retard" est calculé à l'affichage (>30 jours sans paiement),
+// c'est un simple libellé, jamais une action déclenchée automatiquement.
+function computeHistStatus(h) {
+    if (h.statut === 'payee') return 'payee';
+    const p = (h.date || '').split('/');
+    if (p.length === 3) {
+        const d = new Date(+p[2], +p[1] - 1, +p[0]);
+        if ((Date.now() - d.getTime()) / 86400000 > 30) return 'en_retard';
+    }
+    return 'en_attente';
+}
+
+function toggleInvoicePaid(id) {
+    const h = db.hist.find(x => x.id == id);
+    if (!h) return;
+    h.statut = h.statut === 'payee' ? 'en_attente' : 'payee';
+    G.set('v90_hist', db.hist);
+    renderHistorique();
+}
+
+// Relance manuelle uniquement : ouvre le client mail de l'utilisateur avec un
+// brouillon pré-rempli — rien n'est jamais envoyé automatiquement, l'envoi
+// reste un geste volontaire de l'utilisateur dans son propre client mail.
+function relanceHist(id) {
+    const h = db.hist.find(x => x.id == id);
+    if (!h) return;
+    if (!h.cliEmail) return toast("Pas d'email enregistré pour ce client — ajoute-le dans sa fiche (Paramètres).", 'error');
+    const sujet = encodeURIComponent(`Relance — Facture ${h.num}`);
+    const corps = encodeURIComponent(`Bonjour,\n\nSauf erreur de notre part, la facture ${h.num} du ${h.date} d'un montant de ${h.total} TTC ne semble pas encore réglée.\n\nMerci de nous confirmer son état ou de procéder au règlement dès que possible.\n\nCordialement.`);
+    window.open(`mailto:${h.cliEmail}?subject=${sujet}&body=${corps}`, '_blank');
+}
+
+let histFilter = 'toutes';
+function toggleHistFilter(f) {
+    histFilter = f;
+    $('tab-hist-toutes').classList.toggle('active', f === 'toutes');
+    $('tab-hist-impayees').classList.toggle('active', f === 'impayees');
+    renderHistorique();
+}
+
+function renderHistorique() {
+    const list = histFilter === 'impayees' ? db.hist.filter(h => computeHistStatus(h) !== 'payee') : db.hist;
+    $('list-hist').innerHTML = list.length === 0
+        ? `<div style="text-align:center; padding:40px 20px; opacity:.4; font-size:14px">${histFilter === 'impayees' ? 'Aucune facture impayée 🎉' : 'Aucune facture archivée'}</div>`
+        : list.slice().reverse().map(h => {
             const itemsHtml = (h.items || []).map(i =>
                 `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.06); font-size:13px">
-                    <span>${i.icon || ''} ${i.nom}</span>
-                    <span style="opacity:.6">${i.qte} ${i.unite} × ${eur(i.prix)}</span>
+                    <span>${i.icon || ''} ${mailEsc(i.nom)}</span>
+                    <span style="opacity:.6">${i.qte} ${mailEsc(i.unite)} × ${eur(i.prix)}</span>
                     <span style="font-weight:600">${eur(i.qte * i.prix * (1 + (i.tva || 20) / 100))}</span>
                 </div>`
             ).join('');
+            const statut = computeHistStatus(h);
+            const badgeCls = statut === 'payee' ? 'badge-payee' : statut === 'en_retard' ? 'badge-retard' : 'badge-attente';
+            const badgeLbl = statut === 'payee' ? '✅ Payée' : statut === 'en_retard' ? '⏰ En retard' : '⏳ En attente';
             return `
             <div class="card" style="flex-direction:column; align-items:stretch; gap:0; padding:0; overflow:hidden">
                 <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border-bottom:1px solid rgba(255,255,255,0.08)">
                     <div>
-                        <b style="font-size:16px; color:var(--gold)">🧾 ${h.num}</b>
-                        ${h.date ? `<span style="font-size:12px; opacity:.5; margin-left:10px">📅 ${h.date}</span>` : ''}
+                        <b style="font-size:16px; color:var(--gold)">🧾 ${mailEsc(h.num)}</b>
+                        ${h.date ? `<span style="font-size:12px; opacity:.5; margin-left:10px">📅 ${mailEsc(h.date)}</span>` : ''}
                     </div>
-                    <button class="btn btn-red" style="width:34px; height:34px; padding:0; font-size:14px; border-radius:8px; flex-shrink:0" onclick="deleteHist(${h.id || 0}, '${h.num}')">✕</button>
+                    <button class="btn btn-red" style="width:34px; height:34px; padding:0; font-size:14px; border-radius:8px; flex-shrink:0" onclick="deleteHist(${h.id || 0}, '${(h.num || '').replace(/'/g, "\\'")}')">✕</button>
                 </div>
-                <div style="padding:12px 16px; display:flex; gap:10px; flex-wrap:wrap; border-bottom:1px solid rgba(255,255,255,0.08)">
-                    ${h.ent ? `<span style="font-size:12px; opacity:.6">🏢 <b>${h.ent}</b></span><span style="opacity:.3">→</span>` : ''}
-                    <span style="font-size:13px; font-weight:600">👤 ${h.cli}</span>
+                <div style="padding:12px 16px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08)">
+                    ${h.ent ? `<span style="font-size:12px; opacity:.6">🏢 <b>${mailEsc(h.ent)}</b></span><span style="opacity:.3">→</span>` : ''}
+                    <span style="font-size:13px; font-weight:600">👤 ${mailEsc(h.cli)}</span>
+                    <span class="badge-statut ${badgeCls}" style="margin-left:auto">${badgeLbl}</span>
                 </div>
                 ${itemsHtml ? `<div style="padding:8px 16px">${itemsHtml}</div>` : ''}
                 <div style="display:flex; justify-content:space-between; padding:12px 16px; background:rgba(255,255,255,0.04)">
-                    ${h.ht ? `<span style="font-size:12px; opacity:.5">HT : ${h.ht}</span>` : '<span></span>'}
-                    <b style="font-size:18px; color:var(--gold)">TTC : ${h.total}</b>
+                    ${h.ht ? `<span style="font-size:12px; opacity:.5">HT : ${mailEsc(h.ht)}</span>` : '<span></span>'}
+                    <b style="font-size:18px; color:var(--gold)">TTC : ${mailEsc(h.total)}</b>
+                </div>
+                <div style="display:flex; gap:8px; padding:0 16px 14px">
+                    <button class="btn" style="flex:1; font-size:11px; padding:8px; background:rgba(255,255,255,0.06)" onclick="toggleInvoicePaid(${h.id})">${statut === 'payee' ? '↩️ Marquer non payée' : '✅ Marquer payée'}</button>
+                    ${statut !== 'payee' ? `<button class="btn" style="flex:1; font-size:11px; padding:8px; background:rgba(255,255,255,0.06)" onclick="relanceHist(${h.id})">✉️ Relancer</button>` : ''}
                 </div>
             </div>`;
         }).join('');
@@ -599,15 +668,18 @@ function finalizeInvoice() {
     let ht = curLines.reduce((s, l) => s + (l.qte * l.prix), 0);
     let ttc = curLines.reduce((s, l) => s + (l.qte * l.prix * (1 + (l.tva || 20) / 100)), 0);
     let entObj = db.ents.find(e => e.id == $('f-ent').value);
+    let cliObj = db.clis.find(c => c.id == $('f-cli').value);
     db.hist.push({
         id: Date.now(),
         num: $('f-num').value,
         date: $('f-date').value,
-        cli: db.clis.find(c => c.id == $('f-cli').value).nom,
+        cli: cliObj.nom,
+        cliEmail: cliObj.email || '',
         ent: entObj ? entObj.nom : '',
         items: curLines.map(l => ({ icon: l.icon, nom: l.nom, qte: l.qte, prix: l.prix, unite: l.unite, tva: l.tva })),
         ht: eur(ht),
-        total: eur(ttc)
+        total: eur(ttc),
+        statut: 'en_attente'
     });
     G.set('v90_hist', db.hist);
     if (curDraftId) db.drafts = db.drafts.filter(d => d.id != curDraftId);
@@ -1033,13 +1105,64 @@ function tvaExport() {
 }
 
 // --- COMPTA ---
-function calcCompta() {
+function histMonthKey(dateStr) {
+    const p = (dateStr || '').split('/');
+    return p.length === 3 ? `${p[2]}-${p[1]}` : null;
+}
+
+const comptaState = { filtered: [], mailInvoices: [] };
+
+// Comptabilité : filtre par période (les champs "Période" existaient déjà côté
+// UI mais n'étaient jusqu'ici jamais utilisés dans le calcul) + fait remonter
+// les dépenses détectées par le module Mail (passerelle Mail → Compta).
+async function calcCompta() {
+    const debut = $('compta-debut').value, fin = $('compta-fin').value;
+
+    const filtered = db.hist.filter(h => {
+        const mk = histMonthKey(h.date);
+        if (!mk) return true;
+        if (debut && mk < debut) return false;
+        if (fin && mk > fin) return false;
+        return true;
+    });
+    comptaState.filtered = filtered;
+
     let ca = 0, tvaCol = 0;
-    db.hist.forEach(h => {
+    filtered.forEach(h => {
         let ttc = parseFloat(h.total.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
         ca += ttc / 1.2;
         tvaCol += ttc - (ttc / 1.2);
     });
+
+    let depensesHtml = '';
+    comptaState.mailInvoices = [];
+    try {
+        const invoices = await MailSupa.listInvoices();
+        const filteredMail = invoices.filter(i => {
+            if (!i.invoice_date) return !debut && !fin;
+            const mk = i.invoice_date.slice(0, 7);
+            if (debut && mk < debut) return false;
+            if (fin && mk > fin) return false;
+            return true;
+        });
+        comptaState.mailInvoices = filteredMail;
+        if (filteredMail.length) {
+            const totalDepenses = filteredMail.reduce((s, i) => s + (i.amount || 0), 0);
+            depensesHtml = `
+                <div class="section-title" style="margin-top:24px">📥 Dépenses détectées par mail (${filteredMail.length})</div>
+                ${filteredMail.map(i => `
+                    <div class="card" style="gap:10px; align-items:center">
+                        <div style="flex:1; min-width:0">
+                            <b>${mailEsc(i.vendor || 'Fournisseur inconnu')}</b>
+                            <div style="font-size:12px; opacity:.6">${mailEsc(i.invoice_date || '—')} · ${mailEsc(i.entity || '—')} · ${i.status === 'valide' ? '✅ vérifiée' : '⏳ à vérifier'}</div>
+                        </div>
+                        <b>${i.amount != null ? eur(i.amount) : '—'}</b>
+                        ${i.status !== 'valide' ? `<button class="btn" style="width:auto; padding:6px 12px; font-size:11px; background:rgba(255,255,255,0.08)" onclick="comptaValiderDepense('${(i.gmail_message_id||'').replace(/'/g,"\\'")}')">✅ Vérifier</button>` : ''}
+                    </div>`).join('')}
+                <div class="card" style="background:var(--bg-elev-2)"><span style="font-weight:700">Total dépenses (période)</span><b style="color:var(--danger)">${eur(totalDepenses)}</b></div>`;
+        }
+    } catch (e) { /* passerelle mail indisponible (pas encore configurée) : on ignore silencieusement */ }
+
     $('compta-stats').innerHTML = `
         <div class="card" style="flex-direction:column; align-items:center; gap:6px">
             <span style="font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px">Chiffre d'Affaires HT</span>
@@ -1050,10 +1173,69 @@ function calcCompta() {
             <b style="font-size:22px; color:var(--gold)">${eur(tvaCol)}</b>
         </div>`;
     $('compta-result').innerHTML = `
-        <div class="section-title" style="margin-top:10px">Dernières factures</div>
-        ${db.hist.slice().reverse().map(h => `
-            <div class="card"><b>${h.num}</b> — ${h.cli}<b style="float:right">${h.total}</b></div>
-        `).join('') || '<div style="color:var(--text-muted); text-align:center">Aucune facture</div>'}`;
+        <div class="section-title" style="margin-top:10px">Factures (${filtered.length})</div>
+        ${filtered.slice().reverse().map(h => `
+            <div class="card"><b>${mailEsc(h.num)}</b> — ${mailEsc(h.cli)}<b style="float:right">${mailEsc(h.total)}</b></div>
+        `).join('') || '<div style="color:var(--text-muted); text-align:center">Aucune facture sur cette période</div>'}
+        ${depensesHtml}`;
+}
+
+async function comptaValiderDepense(gmailMessageId) {
+    try {
+        const res = await fetch(`${SUPA_URL}/rest/v1/mail_invoices?gmail_message_id=eq.${encodeURIComponent(gmailMessageId)}`, {
+            method: 'PATCH', headers: Supa._h, body: JSON.stringify({ status: 'valide' })
+        });
+        if (!res.ok) throw new Error('échec de la mise à jour');
+        toast('✅ Dépense marquée comme vérifiée.', 'success');
+        calcCompta();
+    } catch (e) {
+        toast('❌ Impossible de mettre à jour cette dépense.', 'error');
+    }
+}
+
+function comptaExport() {
+    if (!window.XLSX) return toast('SheetJS non chargé', 'error');
+    if (!comptaState.filtered.length && !comptaState.mailInvoices.length) return toast('Aucune donnée à exporter pour cette période (clique d\'abord sur "Voir le bilan").', 'error');
+
+    const wb = XLSX.utils.book_new();
+
+    const headers1 = ['N° Facture', 'Date', 'Client', 'Entreprise', 'HT', 'TTC', 'Statut'];
+    const rows1 = comptaState.filtered.map(h => [h.num, h.date, h.cli, h.ent || '', h.ht || '', h.total, comptaStatutLabel(h)]);
+    const ws1 = XLSX.utils.aoa_to_sheet([headers1, ...rows1]);
+    ws1['!cols'] = [{ wch: 12 }, { wch: 12 }, { wch: 22 }, { wch: 20 }, { wch: 12 }, { wch: 12 }, { wch: 12 }];
+    XLSX.utils.book_append_sheet(wb, ws1, 'Factures');
+
+    let ca = 0, tvaCol = 0;
+    comptaState.filtered.forEach(h => {
+        let ttc = parseFloat(h.total.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
+        ca += ttc / 1.2; tvaCol += ttc - (ttc / 1.2);
+    });
+    const totalDepenses = comptaState.mailInvoices.reduce((s, i) => s + (i.amount || 0), 0);
+    const ws2 = XLSX.utils.aoa_to_sheet([
+        ['RÉCAPITULATIF', ''], ['', ''],
+        ["Chiffre d'affaires HT", parseFloat(ca.toFixed(2))],
+        ['TVA collectée', parseFloat(tvaCol.toFixed(2))],
+        ['Dépenses détectées (mail)', parseFloat(totalDepenses.toFixed(2))],
+        ['', ''],
+        ['Solde net (CA HT − dépenses)', parseFloat((ca - totalDepenses).toFixed(2))],
+    ]);
+    ws2['!cols'] = [{ wch: 32 }, { wch: 16 }];
+    XLSX.utils.book_append_sheet(wb, ws2, 'Récapitulatif');
+
+    if (comptaState.mailInvoices.length) {
+        const headers3 = ['Date', 'Entité', 'Fournisseur', 'Montant', 'Catégorie', 'Statut'];
+        const rows3 = comptaState.mailInvoices.map(i => [i.invoice_date || '', i.entity || '', i.vendor || '', i.amount ?? '', i.category || '', i.status || '']);
+        const ws3 = XLSX.utils.aoa_to_sheet([headers3, ...rows3]);
+        ws3['!cols'] = [{ wch: 12 }, { wch: 20 }, { wch: 26 }, { wch: 12 }, { wch: 18 }, { wch: 12 }];
+        XLSX.utils.book_append_sheet(wb, ws3, 'Dépenses (Mail)');
+    }
+
+    XLSX.writeFile(wb, 'Compta_' + new Date().toLocaleDateString('fr-FR').replace(/\//g, '-') + '.xlsx');
+}
+
+function comptaStatutLabel(h) {
+    const s = computeHistStatus(h);
+    return s === 'payee' ? 'Payée' : s === 'en_retard' ? 'En retard' : 'En attente';
 }
 
 // Initialisation
