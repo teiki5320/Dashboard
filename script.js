@@ -205,6 +205,55 @@ async function reserveInvoiceNumber() {
     }
 }
 
+// --- SAUVEGARDE DE SECOURS (export/import fichier, indépendant du cloud) ---
+// La clé API Claude (v90_claude_key) est volontairement exclue : c'est un
+// secret, pas une donnée — un fichier de sauvegarde peut circuler (mail,
+// clé USB), il ne doit jamais contenir de credential.
+function exportBackup() {
+    const data = {};
+    for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith('v90_') && k !== 'v90_claude_key') data[k] = localStorage.getItem(k);
+    }
+    const payload = { app: 'gestion-pro', version: 1, exportedAt: new Date().toISOString(), data };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'Sauvegarde_GestionPro_' + new Date().toISOString().split('T')[0] + '.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    toast(`✅ Sauvegarde téléchargée (${Object.keys(data).length} collection(s)).`, 'success');
+}
+
+function importBackup(ev) {
+    const file = ev.target.files && ev.target.files[0];
+    ev.target.value = '';
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+        let payload;
+        try { payload = JSON.parse(reader.result); } catch (e) { return toast('❌ Fichier illisible (pas un JSON valide).', 'error'); }
+        if (!payload || payload.app !== 'gestion-pro' || !payload.data) {
+            return toast('❌ Ce fichier n\'est pas une sauvegarde Gestion Pro.', 'error');
+        }
+        const n = Object.keys(payload.data).length;
+        if (!confirm(`Restaurer cette sauvegarde du ${new Date(payload.exportedAt).toLocaleDateString('fr-FR')} ?\n${n} collection(s) — les données actuelles de cet appareil seront remplacées.`)) return;
+        Object.entries(payload.data).forEach(([k, v]) => localStorage.setItem(k, v));
+        db.clis   = G.get('v90_clis');
+        db.prods  = G.get('v90_prods');
+        db.ents   = G.get('v90_ents');
+        db.hist   = G.get('v90_hist');
+        db.bls    = G.get('v90_bls');
+        db.drafts = G.get('v90_drafts');
+        db.prixCli = JSON.parse(localStorage.getItem('v90_prix_cli') || '{}');
+        db.mailCategories = G.get('v90_mail_categories');
+        renderAll();
+        toast(`✅ Sauvegarde restaurée (${n} collection(s)). Envoi vers le cloud…`, 'success');
+        Supa.forcePushAll();
+    };
+    reader.readAsText(file);
+}
+
 // --- NOTIFICATIONS (remplace alert() par un message non bloquant) ---
 function toast(msg, kind = 'info') {
     const holder = $('toast-holder');
@@ -338,11 +387,103 @@ function saveEnt() {
 
 // --- GESTION DES BONS DE LIVRAISON (BL) ---
 function toggleBLTab(t) {
-    $('tab-bl-prise').classList.toggle('active', t === 'prise');
-    $('tab-bl-suivi').classList.toggle('active', t === 'suivi');
-    $('view-bl-prise').style.display = t === 'prise' ? 'block' : 'none';
-    $('view-bl-suivi').style.display = t === 'suivi' ? 'block' : 'none';
+    ['prise', 'suivi', 'charge'].forEach(k => {
+        $('tab-bl-' + k).classList.toggle('active', k === t);
+        $('view-bl-' + k).style.display = k === t ? 'block' : 'none';
+    });
     if (t === 'suivi') renderSuiviBL();
+    if (t === 'charge') {
+        if (!$('charge-date').value) $('charge-date').value = new Date().toISOString().split('T')[0];
+        renderChargement();
+    }
+}
+
+// --- FEUILLE DE CHARGEMENT (tournée du jour) ---
+// Agrège les BL "en cours" (pas encore facturés = pas encore livrés) d'une
+// date donnée : totaux à charger par produit + détail par client.
+function chargementData(dateIso) {
+    const [y, m, d] = dateIso.split('-');
+    const dateFr = `${d}/${m}/${y}`;
+    const bls = db.bls.filter(b => b.status === 'en-cours' && b.date === dateFr);
+    const totaux = {};
+    bls.forEach(b => b.items.forEach(i => {
+        if (!totaux[i.pid]) totaux[i.pid] = { icon: i.icon, nom: i.nom, unite: i.unite, qte: 0, poids: 0 };
+        totaux[i.pid].qte += i.qte;
+        totaux[i.pid].poids += i.qte * getPoids(i);
+    }));
+    const poidsTotal = Object.values(totaux).reduce((s, t) => s + t.poids, 0);
+    return { dateFr, bls, totaux: Object.values(totaux), poidsTotal };
+}
+
+function renderChargement() {
+    const el = $('charge-content'); if (!el) return;
+    const dateIso = $('charge-date').value;
+    if (!dateIso) { el.innerHTML = ''; return; }
+    const { bls, totaux, poidsTotal } = chargementData(dateIso);
+    $('btn-print-charge').style.display = bls.length ? 'flex' : 'none';
+    if (!bls.length) {
+        el.innerHTML = `<div style="text-align:center; padding:40px 20px; opacity:.4; font-size:14px">Aucun bon de livraison en cours à cette date</div>`;
+        return;
+    }
+    el.innerHTML = `
+        <div class="section-title">À charger (${bls.length} livraison${bls.length > 1 ? 's' : ''})</div>
+        ${totaux.map(t => `
+            <div class="card" style="gap:10px; align-items:center">
+                <b style="flex:2">${t.icon} ${mailEsc(t.nom)}</b>
+                <span style="flex:1; text-align:center; font-size:20px; font-weight:700; color:var(--sage)">${t.qte} ${mailEsc(t.unite)}</span>
+                <span style="flex:1; text-align:right; color:var(--text-muted)">${t.poids ? t.poids.toFixed(1) + ' kg' : '—'}</span>
+            </div>`).join('')}
+        <div class="card" style="background:var(--bg-elev-2)">
+            <b>POIDS TOTAL À CHARGER</b>
+            <b style="font-size:20px; color:var(--gold)">${poidsTotal.toFixed(1)} kg</b>
+        </div>
+        <div class="section-title" style="margin-top:24px">Détail par client</div>
+        ${bls.map(b => `
+            <div class="card" style="flex-direction:column; align-items:stretch; gap:6px">
+                <b style="font-size:16px; color:var(--gold)">👤 ${mailEsc(b.cliNom)}</b>
+                ${b.items.map(i => `
+                    <div style="display:flex; justify-content:space-between; font-size:14px; padding:4px 0; border-bottom:1px dashed var(--border)">
+                        <span>${i.icon} ${mailEsc(i.nom)}</span>
+                        <span style="font-weight:600">${i.qte} ${mailEsc(i.unite)}</span>
+                    </div>`).join('')}
+            </div>`).join('')}`;
+}
+
+function printChargement() {
+    const dateIso = $('charge-date').value;
+    if (!dateIso) return;
+    const { dateFr, bls, totaux, poidsTotal } = chargementData(dateIso);
+    if (!bls.length) return toast('Aucun bon à imprimer pour cette date.', 'info');
+    $('sheet-holder').innerHTML = `
+        <div class="inv-wrap">
+            <h1 style="font-size:42px">Feuille de chargement</h1>
+            <div style="margin-bottom:24px; font-size:16px"><b>TOURNÉE DU :</b> ${dateFr} — ${bls.length} livraison(s)</div>
+            <table class="inv-table">
+                <thead><tr><th>Produit</th><th style="text-align:center">Quantité totale</th><th style="text-align:right">Poids</th></tr></thead>
+                <tbody>
+                    ${totaux.map(t => `<tr><td>${t.icon} ${mailEsc(t.nom)}</td><td style="text-align:center"><b>${t.qte} ${mailEsc(t.unite)}</b></td><td style="text-align:right">${t.poids ? t.poids.toFixed(1) + ' kg' : '—'}</td></tr>`).join('')}
+                </tbody>
+            </table>
+            <div class="inv-totals">
+                <div class="inv-total-final"><span>POIDS TOTAL</span><span>${poidsTotal.toFixed(1)} kg</span></div>
+            </div>
+            <table class="inv-table" style="margin-top:30px">
+                <thead><tr><th>Client</th><th>Détail</th><th style="text-align:center">Livré ☐</th></tr></thead>
+                <tbody>
+                    ${bls.map(b => `<tr>
+                        <td style="font-weight:700">${mailEsc(b.cliNom)}</td>
+                        <td>${b.items.map(i => `${i.qte} ${mailEsc(i.unite)} ${mailEsc(i.nom)}`).join(' · ')}</td>
+                        <td style="text-align:center; font-size:20px">☐</td>
+                    </tr>`).join('')}
+                </tbody>
+            </table>
+            <div class="payment-box" style="margin-top:auto">
+                <div style="font-size:13px; color:#555">Feuille de chargement — usage interne</div>
+            </div>
+        </div>`;
+    $('btn-finalize-inv').style.display = 'none';
+    $('btn-print-bl').style.display = 'flex';
+    $('preview-wrap').style.display = 'block';
 }
 
 function changeQty(id, d) {
@@ -588,7 +729,16 @@ function renderAll() {
         </div>`).join('');
     $('list-ents-settings').innerHTML = db.ents.map(e => `<div class="card card-link" onclick="openEntModal(${e.id})"><b>🏢 ${e.nom}</b><span>✏️</span></div>`).join('');
     
-    // 4. Sélecteurs pour la facturation libre
+    // 4. Sélecteurs pour la facturation libre + filtres par entreprise
+    // (les filtres utilisent le NOM car l'historique stocke h.ent en nom ;
+    // on ajoute aussi les noms orphelins présents dans l'historique, pour ne
+    // jamais rendre d'anciennes factures infiltrables après renommage.)
+    const entNames = [...new Set([...db.ents.map(e => e.nom), ...db.hist.map(h => h.ent).filter(Boolean)])];
+    ['hist-ent-filter', 'compta-ent'].forEach(selId => {
+        const sel = $(selId); if (!sel) return;
+        const cur = sel.value || 'Toutes';
+        sel.innerHTML = ['Toutes', ...entNames].map(n => `<option${n === cur ? ' selected' : ''}>${mailEsc(n)}</option>`).join('');
+    });
     $('f-ent').innerHTML = db.ents.map(e => `<option value="${e.id}">${e.nom}</option>`).join('');
     $('f-cli').innerHTML = db.clis.map(c => `<option value="${c.id}">${c.nom}</option>`).join('');
     $('f-prod-picker').innerHTML = db.prods.map(p => `<option value="${p.id}">${p.nom}</option>`).join('');
@@ -656,7 +806,9 @@ function toggleHistFilter(f) {
 }
 
 function renderHistorique() {
-    const list = histFilter === 'impayees' ? db.hist.filter(h => computeHistStatus(h) !== 'payee') : db.hist;
+    let list = histFilter === 'impayees' ? db.hist.filter(h => computeHistStatus(h) !== 'payee') : db.hist;
+    const entFilter = $('hist-ent-filter') ? $('hist-ent-filter').value : '';
+    if (entFilter && entFilter !== 'Toutes') list = list.filter(h => (h.ent || '') === entFilter);
     $('list-hist').innerHTML = list.length === 0
         ? `<div style="text-align:center; padding:40px 20px; opacity:.4; font-size:14px">${histFilter === 'impayees' ? 'Aucune facture impayée 🎉' : 'Aucune facture archivée'}</div>`
         : list.slice().reverse().map(h => {
@@ -1212,8 +1364,10 @@ const comptaState = { filtered: [], mailInvoices: [] };
 // les dépenses détectées par le module Mail (passerelle Mail → Compta).
 async function calcCompta() {
     const debut = $('compta-debut').value, fin = $('compta-fin').value;
+    const entFilter = $('compta-ent') ? $('compta-ent').value : '';
 
     const filtered = db.hist.filter(h => {
+        if (entFilter && entFilter !== 'Toutes' && (h.ent || '') !== entFilter) return false;
         const mk = histMonthKey(h.date);
         if (!mk) return true;
         if (debut && mk < debut) return false;
@@ -1234,6 +1388,7 @@ async function calcCompta() {
     try {
         const invoices = await MailSupa.listInvoices();
         const filteredMail = invoices.filter(i => {
+            if (entFilter && entFilter !== 'Toutes' && (i.entity || '') !== entFilter) return false;
             if (!i.invoice_date) return !debut && !fin;
             const mk = i.invoice_date.slice(0, 7);
             if (debut && mk < debut) return false;
@@ -1272,7 +1427,56 @@ async function calcCompta() {
         ${filtered.slice().reverse().map(h => `
             <div class="card"><b>${mailEsc(h.num)}</b> — ${mailEsc(h.cli)}<b style="float:right">${mailEsc(h.total)}</b></div>
         `).join('') || '<div style="color:var(--text-muted); text-align:center">Aucune facture sur cette période</div>'}
-        ${depensesHtml}`;
+        ${depensesHtml}
+        ${comptaStatsHtml(filtered)}`;
+}
+
+// --- STATISTIQUES DE VENTES (CA mensuel, top produits, top clients) ---
+// Calculées sur les factures filtrées (entreprise + période) — barres en CSS
+// pur, aucune dépendance. Le HT vient des lignes quand elles existent, sinon
+// du total TTC / 1,2 (anciennes factures sans détail).
+function comptaHistHt(h) {
+    if (h.items && h.items.length) return h.items.reduce((s, i) => s + i.qte * i.prix, 0);
+    const ttc = parseFloat((h.total || '').replace(/[^\d,]/g, '').replace(',', '.')) || 0;
+    return ttc / 1.2;
+}
+
+function comptaBarList(entries, color) {
+    const max = Math.max(...entries.map(e => e[1]), 1);
+    return entries.map(([label, val]) => `
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px">
+            <span style="flex:0 0 110px; font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap" title="${mailEsc(label)}">${mailEsc(label)}</span>
+            <div style="flex:1; height:18px; background:rgba(255,255,255,0.05); border-radius:4px; overflow:hidden">
+                <div style="width:${(val / max * 100).toFixed(1)}%; height:100%; background:${color}; border-radius:4px"></div>
+            </div>
+            <b style="flex:0 0 90px; text-align:right; font-size:12px">${eur(val)}</b>
+        </div>`).join('');
+}
+
+function comptaStatsHtml(filtered) {
+    if (!filtered.length) return '';
+    const parMois = {}, parProduit = {}, parClient = {};
+    filtered.forEach(h => {
+        const ht = comptaHistHt(h);
+        const mk = histMonthKey(h.date);
+        if (mk) parMois[mk] = (parMois[mk] || 0) + ht;
+        parClient[h.cli || '?'] = (parClient[h.cli || '?'] || 0) + ht;
+        (h.items || []).forEach(i => {
+            parProduit[i.nom] = (parProduit[i.nom] || 0) + i.qte * i.prix;
+        });
+    });
+    const mois = Object.entries(parMois).sort((a, b) => a[0].localeCompare(b[0]))
+        .map(([mk, v]) => { const [y, m] = mk.split('-'); return [`${m}/${y}`, v]; });
+    const topProduits = Object.entries(parProduit).sort((a, b) => b[1] - a[1]).slice(0, 5);
+    const topClients = Object.entries(parClient).sort((a, b) => b[1] - a[1]).slice(0, 5);
+    return `
+        <div class="section-title" style="margin-top:28px">📈 CA HT par mois</div>
+        <div class="card" style="flex-direction:column; align-items:stretch">${comptaBarList(mois, 'var(--accent)')}</div>
+        ${topProduits.length ? `
+            <div class="section-title" style="margin-top:20px">🏆 Top produits (HT)</div>
+            <div class="card" style="flex-direction:column; align-items:stretch">${comptaBarList(topProduits, 'var(--sage)')}</div>` : ''}
+        <div class="section-title" style="margin-top:20px">👥 Top clients (HT)</div>
+        <div class="card" style="flex-direction:column; align-items:stretch">${comptaBarList(topClients, 'var(--ambre)')}</div>`;
 }
 
 async function comptaValiderDepense(gmailMessageId) {
