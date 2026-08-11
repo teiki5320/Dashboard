@@ -169,16 +169,18 @@ cette dépendance disparaît avec lui.
 
 - **Google Play Games (Android)** — le plugin `games_services` couvre
   aussi Play Games, mais rien n'est configuré côté Android : pas de projet
-  dans la Google Play Console, pas de méta-donnée `APP_ID` dans
-  `AndroidManifest.xml`. Sans cela, le classement sera muet sur Android
+  dans la Google Play Console, et la méta-donnée `APP_ID` reste commentée
+  dans `AndroidManifest.xml` — la décommenter sans identifiant valide
+  ferait planter l'app. Sans cela, le classement est muet sur Android
   (le jeu reste jouable — les échecs sont silencieux par conception).
-- **Signature release Android** — `build.gradle` signe encore la release
-  avec les clés de debug (TODO explicite dans le fichier). Une keystore
-  sera à créer avant toute sortie Play Store ; `key.properties`, `*.jks`
-  et `*.keystore` sont déjà dans `.gitignore`, prêts à accueillir la
-  config sans la committer.
+- **Signature release Android** — le câblage est fait : `build.gradle.kts`
+  lit `android/key.properties` et retombe sur les clés de debug si le
+  fichier est absent. **La keystore, elle, reste à créer**, et à garder
+  hors dépôt (`key.properties`, `*.jks` et `*.keystore` sont dans
+  `.gitignore`). La perdre interdit toute mise à jour de l'app.
 - **Google Play Console** — aucune trace d'un compte ou d'une fiche :
-  la distribution Android n'existe pas encore.
+  la distribution Android n'existe pas encore. La marche à suivre
+  complète est dans `docs/FICHE_PLAY_STORE.md`.
 
 ---
 
@@ -200,7 +202,7 @@ Le dépôt peut être public sans risque : il ne contient aucun secret.
 - `K597U7X3FZ` — Team ID Apple (visible dans toute app signée)
 - `erea.daily`, `erea.streak`, `erea.classic.*`, `erea.chrono` — ID de classements Game Center
 - `https://teiki5320.github.io/erea/` — URL publique du prototype web
-- Version `0.1.0+1` dans `pubspec.yaml`
+- Version `1.0.0+1` dans `pubspec.yaml`
 
 ## Checklist « reprise du projet sur une machine neuve »
 

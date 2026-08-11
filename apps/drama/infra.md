@@ -55,8 +55,8 @@ paquets publics, et les outils de génération de contenu (hors runtime).
   - version marketing : `version:` dans `pubspec.yaml` (ex. `0.19.1+1`) —
     doit rester au-dessus de l'ancien train `0.15.x` pour l'ordre
     TestFlight ;
-  - nom affiché : `Drama` (`ios/Runner/Info.plist`,
-    `CFBundleDisplayName`).
+  - nom affiché : `D-Sign` (`ios/Runner/Info.plist`,
+    `CFBundleDisplayName`) — le nom du jeu depuis le 3 août 2026.
 - **Secrets** : aucun dans le dépôt — tout passe par la session du compte
   Apple. Aucune clé d'API App Store Connect n'est utilisée.
 - **Reprise** : rôle Admin sur l'app dans App Store Connect ; les
@@ -151,6 +151,13 @@ Android).
 
 ## À vérifier
 
+- **Renommage du dépôt GitHub** (`drama` → `d-sign`) : à faire par le
+  propriétaire dans *GitHub → Settings → Rename*. GitHub redirige
+  automatiquement l'ancienne URL ; vérifier ensuite que le workflow Xcode
+  Cloud suit (il est lié à l'identifiant du dépôt, pas à son nom). Le
+  bundle ID `com.teiki5320.drama` et le nom de paquet Dart `drama`
+  restent volontairement inchangés (invisibles, et en changer casserait
+  l'app App Store Connect existante).
 - **`applicationId` Android = `com.teiki5320.contre_jour`** : reliquat
   d'un ancien nom de projet, incohérent avec l'iOS
   (`com.teiki5320.drama`). Sans conséquence tant qu'Android n'est pas
