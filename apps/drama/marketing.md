@@ -45,7 +45,8 @@ argument), épisodes courts sur un rythme de série.
 
 ## ASO (App Store)
 
-- **Nom** : `Drama — l'histoire dans tes textos` ⬜
+- **Nom** : `D-Sign — l'histoire dans tes textos` ⬜ (nom du jeu acté le
+  3 août 2026 : **D-Sign**)
 - **Sous-titre** : `Romance. Argent. Mensonges.` ⬜
 - **Mots-clés FR** ⬜ : histoire interactive, jeu narratif, chat story,
   roman interactif, romance, drama, textos, thriller romantique, histoire
@@ -117,9 +118,9 @@ gratuit (« l'histoire commence aujourd'hui »). Autres fenêtres :
 
 ## À vérifier
 
-- Le nom « Drama » est générique : vérifier sa disponibilité exacte sur
-  l'App Store FR (risque de collision/SEO faible) — un sous-titre fort le
-  compense, ou envisager « Drama : Shen » / « Drama — Quatorze pages ».
+- Vérifier la disponibilité de « D-Sign » sur l'App Store FR (et que la
+  proximité avec « design » ne parasite pas la recherche — le sous-titre
+  et les mots-clés doivent porter le champ lexical de l'histoire).
 - Droits musique/images : les assets générés (OpenArt, Suno) doivent être
   couverts par les CGU commerciales de ces services avant toute
   monétisation — à confirmer sur les comptes de l'auteur.

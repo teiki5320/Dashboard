@@ -67,7 +67,7 @@ ou d'abonnement dans `pubspec.yaml`.
 | Sous-titre | `Le jeu d'histoire en famille` | ✅ |
 | Mots-clés (100 **octets**, accents comptés double) | `quizz,frise,chronologie,date,culture,générale,brevet,éducatif,afrique,collège,révision,enfant` | ✅ |
 | Description | rédigée et saisie — texte intégral dans `docs/FICHE_APP_STORE.md` | ✅ |
-| Captures | 6 par taille (iPhone 6,5″ et iPad obligatoires — se fier au cadre de dépôt) : ① frise en pleine partie, ② révélation « PERFECT 🎯 », ③ défi du jour + série, ④ grille de partage, ⑤ Chrono, ⑥ collection. Textes courts par capture (« Fais défiler le temps ») | ⬜ |
+| Captures | 6 par taille (iPhone 6,5″ et iPad obligatoires — se fier au cadre de dépôt) : ① frise en pleine partie, ② révélation « PERFECT 🎯 », ③ défi du jour + série, ④ grille de partage, ⑤ Chrono, ⑥ Roulette des drapeaux. Textes courts par capture (« Fais défiler le temps ») | ⬜ |
 | Vidéo de preview | 15-20 s : le geste de défilement, une révélation, la grille copiée | ⬜ (optionnel mais le geste est notre meilleur argument) |
 | Notes & avis | Demande de note in-app (`lib/core/avis.dart`) : après un PERFECT, un record ou 3 défis d'affilée, une seule fois, jamais au lancement | ✅ fait le 5 août 2026 |
 | Fiche confidentialité | « Aucune donnée collectée » — déclarée et publiée | ✅ |
