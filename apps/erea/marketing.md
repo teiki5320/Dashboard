@@ -47,15 +47,49 @@ ou d'abonnement dans `pubspec.yaml`.
 | 1 — Lancement | Gratuit intégral | Sortie App Store sans monétisation : viser les notes, les partages et un éventuel featuring Apple (une app famille sans pub ni tracking coche leurs cases) | ⬜ |
 | 2 — Premium doux | Achat unique « Erea + » (in-app) | Les modes du quotidien restent gratuits (Classique, Défi du jour). L'achat débloque en une fois : packs thématiques supplémentaires, thèmes de frise cosmétiques, statistiques détaillées. Prix indicatif : 4,99 € | ⬜ |
 | 3 — Contenu | Packs à l'unité (in-app) | Nouveaux packs (mythologie, sports, musique…) vendus 1,99 € pièce ou inclus dans Erea + | ⬜ |
-| 4 — Institutionnel | Licence éducation | Offre écoles/médiathèques (achat en volume Apple School Manager) si la traction enseignants se confirme | ⬜ |
 
-**Modèles écartés, et pourquoi :**
-- **Publicité** — incompatible avec le positionnement famille/enfants
-  (règles App Store strictes pour les moins de 13 ans) et avec l'argument
-  « sans pub ni tracking » qui est notre meilleur différenciant.
+## 2 bis. La publicité : option ouverte, décision à prendre
+
+⚠️ Ce document a longtemps classé la publicité en « modèle écarté ». Ce
+n'était pas une décision du développeur mais une conclusion écrite à sa
+place. Elle est rouverte : **le choix lui revient, à la lumière des
+chiffres de la phase 1.**
+
+Le modèle envisagé est le plus courant du jeu casual, et le plus
+efficace : **publicité pour tous, achat unique pour la retirer.** Il
+convertit mieux qu'un déblocage de contenu — l'acheteur sait exactement
+ce qu'il achète, et la publicité fait elle-même la promotion de l'achat.
+
+**Ce qu'il en coûte, à mettre en balance :**
+
+| Ce qu'on gagne | Ce qu'on perd |
+|---|---|
+| Un revenu proportionnel au nombre de parties, pas au nombre d'acheteurs | Le badge **« Aucune donnée collectée »** : les régies collectent, la fiche de confidentialité change |
+| Une proposition d'achat limpide (« enlever la pub ») | L'argument « sans pub ni tracking » de la description, et du dossier featuring Apple |
+| Un modèle qui monte avec l'audience | Un bandeau de consentement RGPD au premier lancement, plus App Tracking Transparency sur iOS — friction et chantier technique |
+
+**Le point décisif : sans volume, la publicité ne rapporte rien.** Elle
+se compte en milliers d'impressions. La brancher avant d'avoir des
+joueurs, c'est payer le badge et le chantier pour zéro euro.
+
+**Ordre recommandé** : sortir la 1.0 sans publicité (c'est fait),
+mesurer trois mois, puis décider en 1.1 avec des chiffres plutôt qu'avec
+des principes. Si le volume n'est pas au rendez-vous, le problème
+n'était pas le modèle mais l'audience — et la publicité n'y aurait rien
+changé.
+
+**Modèle écarté, et pourquoi :**
 - **Abonnement** — le rythme de production de contenu (1 738 faits, mais
   pas de flux hebdomadaire) ne justifie pas un récurrent ; un abonnement
   mal nourri détruit les notes.
+
+**Piste redimensionnée :**
+- **Licence éducation** — l'Éducation nationale n'achète pas d'apps sur
+  l'App Store : les budgets passent par les marchés publics, les ENT et
+  les manuels numériques. L'achat en volume Apple School Manager reste
+  possible dans le privé, l'international et quelques établissements
+  bien dotés, mais ce n'est pas un canal à structurer tant qu'un
+  établissement n'est pas venu de lui-même.
 
 ---
 
