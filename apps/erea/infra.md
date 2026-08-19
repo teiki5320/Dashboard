@@ -1,21 +1,23 @@
 # Erea — fiche technique des services externes
 
-> Générée le 3 août 2026, mise à jour le 5 août 2026 en scannant le dépôt (dépendances, configs,
-> scripts CI, manifestes). Pour la mettre à jour : relancer le même
-> prompt dans Claude Code, le fichier sera régénéré à partir de l'état
-> réel du dépôt.
+> Générée le 3 août 2026, mise à jour le 18 août 2026 (monétisation).
+> Pour la mettre à jour : relancer le même prompt dans Claude Code, le
+> fichier sera régénéré à partir de l'état réel du dépôt.
 
-**Résumé en une phrase : Erea est une app 100 % locale.** Pas de backend,
+**Résumé en une phrase : Erea est une app locale, financée par une
+interstitielle AdMob qu'un achat unique retire.** Pas de backend à nous,
 pas de base de données, pas d'analytics, pas de crash reporting, pas de
-publicité, pas de paiement, pas de domaine acheté.
+domaine acheté. Les deux seuls tiers embarqués sont Google (publicité)
+et les boutiques (achat).
 
 Une seule adresse e-mail est publique : **erea.toa@gmail.com**, affichée
-sur les pages d'aide et de confidentialité, et déclarée comme contact de
-support dans App Store Connect. Tout
-l'état du joueur vit sur l'appareil (`shared_preferences`), la seule
-fonction en ligne est le classement mondial délégué à Game Center.
-Conséquence utile : la fiche « Confidentialité » App Store peut déclarer
-**aucune collecte de données** (hors Game Center, géré par Apple).
+sur les pages d'aide et de confidentialité, déclarée comme contact de
+support et comme contact public **DSA** (statut trader). Tout l'état du
+joueur vit sur l'appareil (`shared_preferences`) ; en ligne : le
+classement Game Center, et la régie AdMob. Conséquence : la fiche
+« Confidentialité » App Store déclare depuis la 1.1 **les collectes du
+SDK de Google** (voir `docs/FICHE_APP_STORE.md`, page 4) — le badge
+« Aucune donnée collectée » appartient à la 1.0.
 
 ---
 
@@ -151,7 +153,60 @@ avant soumission » à actif au moment de la publication.
 
 ---
 
-## 6. Google Fonts — prototype web uniquement
+## 6. Google AdMob — la publicité
+
+| | |
+|---|---|
+| Rôle | Sert l'interstitielle de fin de partie ; c'est elle qui paie l'app gratuite |
+| Console | <https://apps.admob.com> |
+| Compte propriétaire | Compte Google du propriétaire, éditeur `pub-2680784147246798` |
+
+**Identifiants publics par design** (visibles dans toute app publiée) :
+
+| Quoi | Valeur | Où dans le dépôt |
+|---|---|---|
+| App AdMob iOS | `ca-app-pub-2680784147246798~7462344540` | `ios/Runner/Info.plist` |
+| App AdMob Android | `ca-app-pub-2680784147246798~5183715892` | `android/app/src/main/AndroidManifest.xml` |
+| Bloc interstitiel iOS | `ca-app-pub-2680784147246798/6744159246` | `lib/core/pub.dart` |
+| Bloc interstitiel Android | `ca-app-pub-2680784147246798/7670278436` | `lib/core/pub.dart` |
+
+**Paiements (état au 18 août 2026)** : seuil de versement **70 €**,
+mensuel vers le 21. **L'IBAN ne peut pas encore être saisi** : Google ne
+montre « Gérer les modes de paiement » qu'après un premier seuil de
+recettes (~10 €) — y retourner après la sortie de la 1.1. À ce moment-là
+arriveront aussi le **courrier postal avec code PIN** (à saisir sous
+4 mois, sinon versements gelés) et la vérification d'identité.
+⚠️ Vérifier alors que le **nom du profil de paiement** est bien « Jean
+Perraudeau » (comme sur le RIB) et non le pseudo « Toa ».
+
+**Secrets :** aucun dans le dépôt — les identifiants ci-dessus sont
+publics, l'accès à la console passe par le compte Google (+ 2FA).
+
+**Reprise :** accès au compte Google propriétaire de l'éditeur
+`pub-2680784147246798`. Les quatre identifiants doivent rester du même
+compte, sinon la régie refuse de servir.
+
+---
+
+## 7. L'achat « Erea sans pub » — App Store
+
+| | |
+|---|---|
+| Rôle | Achat unique non consommable qui coupe la publicité, 3,99 € |
+| Console | App Store Connect → Erea → Monétisation → Achats intégrés |
+| Créé | 18 août 2026, identifiant Apple `6802621891` |
+
+- ID produit : `com.teiki.erea.sanspub` — écrit en dur dans
+  `lib/core/achat.dart`, vérifié par un test.
+- L'accord **« Applications payantes »** est actif depuis le 18 août
+  2026 (banque : compte personnel Jean Perraudeau ; fiscal : W-8BEN,
+  convention France–USA art. 12 à 0 %).
+- Le pendant Play Console reste à créer quand Android sortira, avec le
+  **même ID produit**.
+
+---
+
+## 8. Google Fonts — prototype web uniquement
 
 | | |
 |---|---|
@@ -175,9 +230,10 @@ cette dépendance disparaît avec lui.
   (le jeu reste jouable — les échecs sont silencieux par conception).
 - **Signature release Android** — le câblage est fait : `build.gradle.kts`
   lit `android/key.properties` et retombe sur les clés de debug si le
-  fichier est absent. **La keystore, elle, reste à créer**, et à garder
-  hors dépôt (`key.properties`, `*.jks` et `*.keystore` sont dans
-  `.gitignore`). La perdre interdit toute mise à jour de l'app.
+  fichier est absent. La keystore existe depuis le 15 août 2026
+  (`~/erea-upload.jks` sur le Mac, hors dépôt — `key.properties`,
+  `*.jks` et `*.keystore` sont dans `.gitignore`). **La perdre interdit
+  toute mise à jour de l'app : la sauvegarder ailleurs que sur le Mac.**
 - **Google Play Console** — aucune trace d'un compte ou d'une fiche :
   la distribution Android n'existe pas encore. La marche à suivre
   complète est dans `docs/FICHE_PLAY_STORE.md`.
@@ -191,8 +247,9 @@ cette dépendance disparaît avec lui.
 | Certificats / profils de signature iOS | Gérés automatiquement par Apple (cloud signing Xcode Cloud) | Non |
 | Mot de passe compte Apple Developer / App Store Connect | Compte Apple du propriétaire (+ 2FA) | Non |
 | Accès en écriture au dépôt GitHub | Compte GitHub `teiki5320` | Non |
-| Keystore de signature Android | **N'existe pas encore** — à créer, à garder hors dépôt (`.gitignore` prêt) et à sauvegarder précieusement (perte = impossibilité de mettre à jour l'app) | Non |
-| Clés d'API tierces | **Il n'y en a aucune** | — |
+| Keystore de signature Android | `~/erea-upload.jks` sur le Mac + `android/key.properties` (hors dépôt, `.gitignore` prêt) — **à sauvegarder ailleurs que sur le Mac** (perte = impossibilité de mettre à jour l'app) | Non |
+| Coordonnées bancaires (RIB) | Saisies chez Apple (accord Applications payantes) ; chez Google AdMob après les premières recettes | Non |
+| Clés d'API tierces | **Il n'y en a aucune** — les identifiants AdMob sont publics par design | — |
 
 Le dépôt peut être public sans risque : il ne contient aucun secret.
 
@@ -201,6 +258,8 @@ Le dépôt peut être public sans risque : il ne contient aucun secret.
 - `com.teiki.erea` — bundle/application ID (visible dans toute app publiée)
 - `K597U7X3FZ` — Team ID Apple (visible dans toute app signée)
 - `erea.daily`, `erea.streak`, `erea.classic.*`, `erea.chrono` — ID de classements Game Center
+- `ca-app-pub-2680784147246798…` — les quatre identifiants AdMob (§6)
+- `com.teiki.erea.sanspub` — ID du produit « Erea sans pub »
 - `https://teiki5320.github.io/erea/` — URL publique du prototype web
 - Version `1.0.0+1` dans `pubspec.yaml`
 
