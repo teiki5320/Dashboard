@@ -1,8 +1,9 @@
 # Erea — plan marketing & rémunération
 
-> Généré le 3 août 2026, mis à jour le 5 août 2026 après scan du dépôt (mécaniques de partage,
-> fiche web, notifications, classements, monétisation). Pour le mettre à
-> jour : relancer le même prompt dans Claude Code. Aucun secret ici.
+> Généré le 3 août 2026, mis à jour le 18 août 2026 : **le modèle de
+> rémunération est choisi et câblé** (publicité + achat unique qui la
+> retire). Pour le mettre à jour : relancer le même prompt dans Claude
+> Code. Aucun secret ici.
 >
 > Légende : ✅ câblé dans le code · ⬜ à faire (proposition).
 
@@ -21,8 +22,11 @@ classiques :
 - **Le défi du jour** : les 10 mêmes questions pour tout le monde, une
   tentative, une série 🔥 et une grille emoji à partager — la boucle
   virale de Wordle appliquée à l'histoire.
-- **Sans friction ni tracking** : hors ligne, sans compte, sans pub, sans
-  collecte — argument fort auprès des parents et des enseignants.
+- **Sans friction** : hors ligne, sans compte, complet dès
+  l'installation. La publicité est cantonnée à la sortie de l'écran de
+  fin (jamais dans le Défi du jour), et un achat unique la retire —
+  l'argument auprès des parents devient « 3,99 € une fois, et plus
+  jamais rien », face aux jeux à abonnement.
 
 **Les publics, par ordre de priorité :**
 
@@ -35,53 +39,34 @@ classiques :
 
 ---
 
-## 2. Rémunération, en phases
+## 2. Rémunération : le modèle choisi
 
-Aujourd'hui : **rien n'est câblé, et c'est volontaire** — d'abord une base
-de joueurs, ensuite la monétisation. Aucune dépendance de paiement, de pub
-ou d'abonnement dans `pubspec.yaml`.
+**Décidé et câblé en août 2026** (décision du développeur, le 16 août :
+« monétiser aussitôt ») : **publicité pour tous, achat unique pour la
+retirer.** Le modèle le plus courant du jeu casual, et le plus
+efficace — l'acheteur sait exactement ce qu'il achète, et la publicité
+fait elle-même la promotion de l'achat.
 
-| Phase | Modèle | Détail | Statut |
-|---|---|---|---|
-| 0 — Bêta | Gratuit intégral | TestFlight, tout ouvert, zéro pub | ✅ (état actuel) |
-| 1 — Lancement | Gratuit intégral | Sortie App Store sans monétisation : viser les notes, les partages et un éventuel featuring Apple (une app famille sans pub ni tracking coche leurs cases) | ⬜ |
-| 2 — Premium doux | Achat unique « Erea + » (in-app) | Les modes du quotidien restent gratuits (Classique, Défi du jour). L'achat débloque en une fois : packs thématiques supplémentaires, thèmes de frise cosmétiques, statistiques détaillées. Prix indicatif : 4,99 € | ⬜ |
-| 3 — Contenu | Packs à l'unité (in-app) | Nouveaux packs (mythologie, sports, musique…) vendus 1,99 € pièce ou inclus dans Erea + | ⬜ |
+| Pièce | Détail | Statut |
+|---|---|---|
+| Interstitielle AdMob | À la sortie de l'écran de fin, une partie sur deux, jamais dans le Défi du jour (`lib/core/pub.dart`) | ✅ câblée, identifiants réels, part avec la 1.1 |
+| « Erea sans publicité » | Achat unique non consommable `com.teiki.erea.sanspub`, **3,99 €** — il ne débloque rien, le jeu est déjà complet | ✅ câblé, produit créé le 18 août |
+| Consentement | Formulaire UMP de Google + ATT sur iOS, révocable depuis les réglages | ✅ câblé |
+| Version 1.0 | Sortie **sans** publicité (build 90, antérieur au câblage) : la monétisation arrive avec la **1.1** | soumise |
 
-## 2 bis. La publicité : option ouverte, décision à prendre
+**Ce que ça a coûté, en connaissance de cause :** le badge « Aucune
+donnée collectée » (les fiches de confidentialité des deux boutiques
+changent avec la 1.1), l'argument « sans pub » de la description, et le
+statut **trader** du DSA — coordonnées publiques sur la fiche UE.
 
-⚠️ Ce document a longtemps classé la publicité en « modèle écarté ». Ce
-n'était pas une décision du développeur mais une conclusion écrite à sa
-place. Elle est rouverte : **le choix lui revient, à la lumière des
-chiffres de la phase 1.**
-
-Le modèle envisagé est le plus courant du jeu casual, et le plus
-efficace : **publicité pour tous, achat unique pour la retirer.** Il
-convertit mieux qu'un déblocage de contenu — l'acheteur sait exactement
-ce qu'il achète, et la publicité fait elle-même la promotion de l'achat.
-
-**Ce qu'il en coûte, à mettre en balance :**
-
-| Ce qu'on gagne | Ce qu'on perd |
-|---|---|
-| Un revenu proportionnel au nombre de parties, pas au nombre d'acheteurs | Le badge **« Aucune donnée collectée »** : les régies collectent, la fiche de confidentialité change |
-| Une proposition d'achat limpide (« enlever la pub ») | L'argument « sans pub ni tracking » de la description, et du dossier featuring Apple |
-| Un modèle qui monte avec l'audience | Un bandeau de consentement RGPD au premier lancement, plus App Tracking Transparency sur iOS — friction et chantier technique |
-
-**Le point décisif : sans volume, la publicité ne rapporte rien.** Elle
-se compte en milliers d'impressions. La brancher avant d'avoir des
-joueurs, c'est payer le badge et le chantier pour zéro euro.
-
-**Ordre recommandé** : sortir la 1.0 sans publicité (c'est fait),
-mesurer trois mois, puis décider en 1.1 avec des chiffres plutôt qu'avec
-des principes. Si le volume n'est pas au rendez-vous, le problème
-n'était pas le modèle mais l'audience — et la publicité n'y aurait rien
-changé.
-
-**Modèle écarté, et pourquoi :**
+**Modèles écartés, et pourquoi :**
 - **Abonnement** — le rythme de production de contenu (1 738 faits, mais
   pas de flux hebdomadaire) ne justifie pas un récurrent ; un abonnement
   mal nourri détruit les notes.
+- **Packs payants / « Erea + » à 4,99 €** (l'ancien plan en phases) —
+  contredirait la promesse de l'achat : « rien ne se débloque, il n'y a
+  rien à débloquer ». Le jeu entier gratuit est aussi ce qui nourrit le
+  bouche-à-oreille du Défi du jour.
 
 **Piste redimensionnée :**
 - **Licence éducation** — l'Éducation nationale n'achète pas d'apps sur
@@ -99,12 +84,12 @@ changé.
 |---|---|---|
 | Nom | saisi : `Erea` (la variante `Erea — Devine l'année !` remonterait mieux en recherche) | ✅ |
 | Sous-titre | `Le jeu d'histoire en famille` | ✅ |
-| Mots-clés (100 **octets**, accents comptés double) | `quizz,frise,chronologie,date,culture,générale,brevet,éducatif,afrique,collège,révision,enfant` | ✅ |
-| Description | rédigée et saisie — texte intégral dans `docs/FICHE_APP_STORE.md` | ✅ |
-| Captures | 6 par taille (iPhone 6,5″ et iPad obligatoires — se fier au cadre de dépôt) : ① frise en pleine partie, ② révélation « PERFECT 🎯 », ③ défi du jour + série, ④ grille de partage, ⑤ Chrono, ⑥ Roulette des drapeaux. Textes courts par capture (« Fais défiler le temps ») | ⬜ |
+| Mots-clés (100 **octets**, accents comptés double) | `quiz,frise,chronologie,date,culture,générale,brevet,éducatif,afrique,collège,révision,enfant` — 97 octets, saisis (le texte qui fait foi est dans `docs/FICHE_APP_STORE.md`) | ✅ |
+| Description | rédigée et saisie ; **à remplacer avec la 1.1** (elle promet encore « sans publicité ») — le texte corrigé est prêt dans `docs/FICHE_APP_STORE.md` | ✅ / ⬜ 1.1 |
+| Captures | déposées le 9 août : iPhone 6,9″ (1260 × 2736) et iPad 13″ (2064 × 2752), les deux seules tailles obligatoires en 2026 | ✅ |
 | Vidéo de preview | 15-20 s : le geste de défilement, une révélation, la grille copiée | ⬜ (optionnel mais le geste est notre meilleur argument) |
 | Notes & avis | Demande de note in-app (`lib/core/avis.dart`) : après un PERFECT, un record ou 3 défis d'affilée, une seule fois, jamais au lancement | ✅ fait le 5 août 2026 |
-| Fiche confidentialité | « Aucune donnée collectée » — déclarée et publiée | ✅ |
+| Fiche confidentialité | « Aucune donnée collectée » pour la 1.0 ; **à refaire pour la 1.1** (collectes du SDK AdMob — tableau prêt dans `docs/FICHE_APP_STORE.md`) | ✅ / ⬜ 1.1 |
 | Localisation fiche | Français d'abord ; anglais plus tard seulement si le contenu du jeu est traduit | ⬜ |
 
 ---
@@ -116,12 +101,12 @@ changé.
 | Partage de grille (bouche-à-oreille) | Grille emoji sans spoiler + série 🔥, feuille de partage iOS native, lien App Store dans le texte (`lib/ui/game_screen.dart`) | ✅ fait le 5 août 2026 |
 | Défi du jour + rappel | Mêmes questions pour tous, une tentative/jour, rappel local 18 h 30 (`lib/core/rappels.dart`) — le moteur de rétention qui alimente le partage | ✅ |
 | Classements mondiaux | Game Center : défi, série, Classique ×3, Chrono (`lib/core/classement.dart`) | ✅ actif et attaché à la version 1.0.0 |
-| Vitrine web | `teiki5320.github.io/erea` : page de présentation dédiée, le jeu jouable sur `/jeu.html` | ✅ · ⬜ bandeau « Disponible sur l'App Store » + Smart App Banner une fois l'app publiée |
+| Vitrine web | `teiki5320.github.io/erea` : page de présentation dédiée, le jeu jouable sur `/jeu.html`. Smart App Banner posé sur les quatre pages le 17 août (inerte jusqu'à la publication) | ✅ · ⬜ bandeau visible « Disponible sur l'App Store » à la sortie |
 | Enseignants & parents | Dossier d'une page « Erea en classe » (repères du brevet couverts, mode Facile, zéro pub/collecte) à envoyer aux profs d'histoire-géo, groupes Facebook de profs, La Salle des Maîtres | ⬜ |
 | Afrique de l'Ouest | Mise en avant du pack Afrique auprès des communautés éducatives francophones (Sénégal, Côte d'Ivoire…) ; presse tech locale ; créateurs de contenu éducation | ⬜ |
 | Réseaux sociaux | Compte unique (TikTok ou Instagram) : clips « saurez-vous dater cet événement ? » — le geste de frise est fait pour le format court. Marronniers : anniversaires d'événements du jeu | ⬜ |
 | Presse & sites spécialisés | App du jour (iPhon.fr, iGen, Frandroid), sites parents (Geek Junior, Super Julie — références du jeu éducatif) | ⬜ |
-| Featuring Apple | Formulaire « App Store featuring » après la sortie : app famille, française, sans pub, avec Game Center — bon dossier | ⬜ |
+| Featuring Apple | Formulaire « App Store featuring » après la sortie : app famille, française, hors ligne, avec Game Center — bon dossier, même si l'argument « sans pub » est tombé avec la 1.1 | ⬜ |
 
 ---
 
@@ -151,7 +136,8 @@ argument marketing). On suit donc ce que fournissent les plateformes :
 | Longueur des séries | Scores sur `erea.streak` | médiane ≥ 3 |
 | Note App Store | Fiche | ≥ 4,5 |
 | Taux de conversion fiche | App Store Connect (vues → installs) | > 30 % |
-| Erea + (phase 2) | App Store Connect → ventes | conversion 2-5 % des actifs |
+| Ventes « Erea sans publicité » | App Store Connect → ventes | conversion 2-5 % des actifs |
+| Revenus publicitaires | AdMob → Rapports (eCPM, impressions) | tendance ; versement dès 70 € |
 
 ⬜ Si un besoin plus fin apparaît (entonnoir d'onboarding, usage des
 modes), trancher alors pour un analytics respectueux (TelemetryDeck ou
@@ -165,17 +151,18 @@ ferait perdre le « aucune donnée collectée » de la fiche.
 1. ✅ **Game Center** (capacité App ID + 6 classements + entitlement) —
    fait le 4 août 2026, vérifié sur appareil réel. Le défi du jour
    mondial, moteur de tout le plan, est en service.
-2. ⬜ **Préparer la fiche App Store** : nom, sous-titre, mots-clés,
-   description, captures (§3) + déclaration « aucune donnée collectée ».
+2. ✅ **Fiche App Store** complète — soumise le 14 août 2026 (build 90),
+   complément vidéo envoyé le 18 août.
 3. ✅ **Partage en feuille native** avec le lien App Store — fait.
 4. ✅ **Demande de note in-app** — faite.
-5. ⬜ **Sortir en App Store** (phase 1, gratuit) et soumettre le dossier de
-   featuring Apple. Il ne manque que les captures d'écran.
-6. ⬜ **Relier la vitrine web à l'app** : Smart App Banner + bouton sur
-   `teiki5320.github.io/erea`.
-7. ⬜ **Dossier enseignants** une page + envois ciblés (timing : rentrée ou
-   avant le brevet).
-8. ⬜ **Ouvrir le compte social unique** et publier 2 clips tests du geste
-   de frise.
-9. ⬜ **Décider la phase 2** (Erea +) une fois ~1 000 joueurs actifs : ne
-   rien monétiser avant d'avoir des notes solides.
+5. ✅ **Monétisation choisie et câblée** (publicité + achat 3,99 €, §2) —
+   part avec la 1.1.
+6. ✅ **Smart App Banner** sur les quatre pages de la vitrine — fait le
+   17 août, visible dès la publication.
+7. ⬜ **Publier la 1.0** (clic manuel après validation Apple), puis
+   **sortir la 1.1** dans la foulée — c'est elle qui rapporte.
+8. ⬜ **Dossier de featuring Apple** une fois l'app en ligne.
+9. ⬜ **Dossier enseignants** une page + envois ciblés (timing : rentrée ou
+   avant le brevet — la rentrée 2026 est dans deux semaines).
+10. ⬜ **Ouvrir le compte social unique** et publier 2 clips tests du geste
+    de frise.
