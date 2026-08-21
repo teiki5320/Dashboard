@@ -1,0 +1,10 @@
+{
+  "name": "Tama TV",
+  "emoji": "📺",
+  "visible": true,
+  "order": 4,
+  "repo": "",
+  "platforms": [],
+  "tagline": "Diffusion des épisodes produits par Drama-studio.",
+  "services": []
+}
