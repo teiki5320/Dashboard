@@ -1,11 +1,11 @@
 {
-  "name": "Drama",
-  "emoji": "🎭",
+  "name": "Drama-studio",
+  "emoji": "🎬",
   "visible": true,
   "order": 3,
-  "repo": "teiki5320/drama",
+  "repo": "teiki5320/Drama-studio",
   "platforms": ["iOS"],
-  "tagline": "Jeu narratif qui se joue entièrement dans une messagerie.",
+  "tagline": "Production des épisodes de drama.",
   "services": [
     "github",
     "apple-developer",

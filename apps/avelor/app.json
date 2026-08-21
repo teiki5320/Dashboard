@@ -2,9 +2,11 @@
   "name": "Avelor",
   "emoji": "🧭",
   "visible": true,
-  "order": 4,
+  "order": 6,
   "repo": "teiki5320/avelor",
-  "platforms": ["Web"],
+  "platforms": [
+    "Web"
+  ],
   "tagline": "Aide aux chefs d'entreprise français en difficulté.",
   "services": [
     "github",
