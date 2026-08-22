@@ -1,15 +1,15 @@
 # Erea — plan marketing & rémunération
 
-> Généré le 3 août 2026, mis à jour le 18 août 2026 : **le modèle de
-> rémunération est choisi et câblé** (publicité + achat unique qui la
-> retire). Pour le mettre à jour : relancer le même prompt dans Claude
-> Code. Aucun secret ici.
+> Généré le 3 août 2026, mis à jour le 20 août 2026. Le modèle de
+> rémunération est choisi et câblé (publicité + achat unique qui la
+> retire). Pour le mettre à jour : relancer ce même prompt. Aucun secret
+> ici.
 >
-> Légende : ✅ câblé dans le code · ⬜ à faire (proposition).
+> Légende : ✅ fait · ⬜ à faire.
 
 ---
 
-## 1. Positionnement
+## Positionnement
 
 **L'angle : « le GeoGuessr du temps ».** Un événement apparaît, on fait
 défiler une frise de −3000 à aujourd'hui pour deviner l'année. Une phrase
@@ -39,20 +39,20 @@ classiques :
 
 ---
 
-## 2. Rémunération : le modèle choisi
+## Modèle de rémunération
 
-**Décidé et câblé en août 2026** (décision du développeur, le 16 août :
-« monétiser aussitôt ») : **publicité pour tous, achat unique pour la
-retirer.** Le modèle le plus courant du jeu casual, et le plus
-efficace — l'acheteur sait exactement ce qu'il achète, et la publicité
-fait elle-même la promotion de l'achat.
+**Modèle actuel : publicité pour tous, achat unique pour la retirer.**
+Décidé et câblé en août 2026 (décision du développeur, le 16 août :
+« monétiser aussitôt »). C'est le modèle le plus courant du jeu casual,
+et le plus efficace — l'acheteur sait exactement ce qu'il achète, et la
+publicité fait elle-même la promotion de l'achat.
 
 | Pièce | Détail | Statut |
 |---|---|---|
 | Interstitielle AdMob | À la sortie de l'écran de fin, une partie sur deux, jamais dans le Défi du jour (`lib/core/pub.dart`) | ✅ câblée, identifiants réels, part avec la 1.1 |
 | « Erea sans publicité » | Achat unique non consommable `com.teiki.erea.sanspub`, **3,99 €** — il ne débloque rien, le jeu est déjà complet | ✅ câblé, produit créé le 18 août |
 | Consentement | Formulaire UMP de Google + ATT sur iOS, révocable depuis les réglages | ✅ câblé |
-| Version 1.0 | Sortie **sans** publicité (build 90, antérieur au câblage) : la monétisation arrive avec la **1.1** | soumise |
+| Version 1.0 | Sortie **sans** publicité (build 90, antérieur au câblage) : la monétisation arrive avec la **1.1** | en cours d'examen (re-soumise le 20 août) |
 
 **Ce que ça a coûté, en connaissance de cause :** le badge « Aucune
 donnée collectée » (les fiches de confidentialité des deux boutiques
@@ -78,7 +78,7 @@ statut **trader** du DSA — coordonnées publiques sur la fiche UE.
 
 ---
 
-## 3. ASO (App Store Optimization)
+## ASO (App Store Optimization)
 
 | Élément | Contenu proposé | Statut |
 |---|---|---|
@@ -94,23 +94,25 @@ statut **trader** du DSA — coordonnées publiques sur la fiche UE.
 
 ---
 
-## 4. Canaux d'acquisition
+## Canaux
 
 | Canal | Détail | Statut |
 |---|---|---|
-| Partage de grille (bouche-à-oreille) | Grille emoji sans spoiler + série 🔥, feuille de partage iOS native, lien App Store dans le texte (`lib/ui/game_screen.dart`) | ✅ fait le 5 août 2026 |
+| Partage de grille (bouche-à-oreille) | Grille emoji sans spoiler + série 🔥, feuille de partage iOS native, lien App Store dans le texte (`lib/ui/game_screen.dart`) | ✅ |
 | Défi du jour + rappel | Mêmes questions pour tous, une tentative/jour, rappel local 18 h 30 (`lib/core/rappels.dart`) — le moteur de rétention qui alimente le partage | ✅ |
-| Classements mondiaux | Game Center : défi, série, Classique ×3, Chrono (`lib/core/classement.dart`) | ✅ actif et attaché à la version 1.0.0 |
-| Vitrine web | `teiki5320.github.io/erea` : page de présentation dédiée, le jeu jouable sur `/jeu.html`. Smart App Banner posé sur les quatre pages le 17 août (inerte jusqu'à la publication) | ✅ · ⬜ bandeau visible « Disponible sur l'App Store » à la sortie |
-| Enseignants & parents | Dossier d'une page « Erea en classe » (repères du brevet couverts, mode Facile, zéro pub/collecte) à envoyer aux profs d'histoire-géo, groupes Facebook de profs, La Salle des Maîtres | ⬜ |
+| Classements mondiaux | Game Center : défi, série, Classique ×3, Chrono (`lib/core/classement.dart`) — actifs et attachés à la version 1.0.0 | ✅ |
+| Vitrine web | `teiki5320.github.io/erea` : page de présentation dédiée, le jeu jouable sur `/jeu.html`. Smart App Banner posé sur les quatre pages le 17 août | ✅ |
+| Bandeau « Disponible sur l'App Store » | À rendre visible sur la vitrine le jour de la publication (le Smart App Banner est déjà posé, inerte jusque-là) | ⬜ |
+| Enseignants & parents | Dossier d'une page « Erea en classe » (repères du brevet couverts, mode Facile, zéro collecte) à envoyer aux profs d'histoire-géo, groupes Facebook de profs, La Salle des Maîtres | ⬜ |
 | Afrique de l'Ouest | Mise en avant du pack Afrique auprès des communautés éducatives francophones (Sénégal, Côte d'Ivoire…) ; presse tech locale ; créateurs de contenu éducation | ⬜ |
 | Réseaux sociaux | Compte unique (TikTok ou Instagram) : clips « saurez-vous dater cet événement ? » — le geste de frise est fait pour le format court. Marronniers : anniversaires d'événements du jeu | ⬜ |
 | Presse & sites spécialisés | App du jour (iPhon.fr, iGen, Frandroid), sites parents (Geek Junior, Super Julie — références du jeu éducatif) | ⬜ |
 | Featuring Apple | Formulaire « App Store featuring » après la sortie : app famille, française, hors ligne, avec Game Center — bon dossier, même si l'argument « sans pub » est tombé avec la 1.1 | ⬜ |
+| Play Store | Second magasin, donc second public : rien n'est publié tant que les douze testeurs n'ont pas tenu quatorze jours (`docs/FICHE_PLAY_STORE.md`) | ⬜ |
 
 ---
 
-## 5. Calendrier saisonnier
+## Calendrier
 
 | Période | Opportunité | Action |
 |---|---|---|
@@ -123,21 +125,23 @@ statut **trader** du DSA — coordonnées publiques sur la fiche UE.
 
 ---
 
-## 6. KPIs à suivre
+## KPIs
 
 Contrainte assumée : **pas d'analytics tiers dans l'app** (c'est un
-argument marketing). On suit donc ce que fournissent les plateformes :
+argument marketing). On suit donc ce que fournissent les plateformes.
+Aucune valeur n'est encore mesurable : l'app n'est pas publiée.
 
-| KPI | Source | Cible de départ |
+| Métrique | Valeur | Objectif |
 |---|---|---|
-| Téléchargements / pays | App Store Connect → Analytics | tendance, pas de seuil |
-| Rétention J1 / J7 | App Store Connect (opt-in) | J1 > 30 %, J7 > 15 % |
-| Participants au défi du jour | Nombre de scores sur `erea.daily` (Game Center) — c'est notre proxy de joueurs actifs quotidiens | croissance hebdo |
-| Longueur des séries | Scores sur `erea.streak` | médiane ≥ 3 |
-| Note App Store | Fiche | ≥ 4,5 |
-| Taux de conversion fiche | App Store Connect (vues → installs) | > 30 % |
-| Ventes « Erea sans publicité » | App Store Connect → ventes | conversion 2-5 % des actifs |
-| Revenus publicitaires | AdMob → Rapports (eCPM, impressions) | tendance ; versement dès 70 € |
+| Téléchargements (App Store Connect) | — non publiée | tendance, pas de seuil |
+| Rétention J1 (App Store Connect) | — | > 30 % |
+| Rétention J7 (App Store Connect) | — | > 15 % |
+| Participants au défi du jour (scores sur `erea.daily`) | — | croissance hebdomadaire |
+| Longueur des séries (scores sur `erea.streak`) | — | médiane ≥ 3 |
+| Note App Store | — | ≥ 4,5 |
+| Taux de conversion de la fiche (vues → installs) | — | > 30 % |
+| Ventes « Erea sans publicité » | — | 2 à 5 % des actifs |
+| Revenus publicitaires (AdMob) | 0 € | premier versement au seuil de 70 € |
 
 ⬜ Si un besoin plus fin apparaît (entonnoir d'onboarding, usage des
 modes), trancher alors pour un analytics respectueux (TelemetryDeck ou
@@ -146,23 +150,19 @@ ferait perdre le « aucune donnée collectée » de la fiche.
 
 ---
 
-## 7. Prochaines actions, dans l'ordre
+## Prochaines actions
 
-1. ✅ **Game Center** (capacité App ID + 6 classements + entitlement) —
-   fait le 4 août 2026, vérifié sur appareil réel. Le défi du jour
-   mondial, moteur de tout le plan, est en service.
-2. ✅ **Fiche App Store** complète — soumise le 14 août 2026 (build 90),
-   complément vidéo envoyé le 18 août.
-3. ✅ **Partage en feuille native** avec le lien App Store — fait.
-4. ✅ **Demande de note in-app** — faite.
-5. ✅ **Monétisation choisie et câblée** (publicité + achat 3,99 €, §2) —
-   part avec la 1.1.
-6. ✅ **Smart App Banner** sur les quatre pages de la vitrine — fait le
-   17 août, visible dès la publication.
-7. ⬜ **Publier la 1.0** (clic manuel après validation Apple), puis
-   **sortir la 1.1** dans la foulée — c'est elle qui rapporte.
-8. ⬜ **Dossier de featuring Apple** une fois l'app en ligne.
-9. ⬜ **Dossier enseignants** une page + envois ciblés (timing : rentrée ou
-   avant le brevet — la rentrée 2026 est dans deux semaines).
-10. ⬜ **Ouvrir le compte social unique** et publier 2 clips tests du geste
-    de frise.
+- ⬜ **Publier la 1.0** d'un clic dès la validation d'Apple, puis **sortir la 1.1** dans la foulée — c'est elle qui rapporte.
+- ⬜ **Lancer les douze testeurs du Play Store** : quatorze jours consécutifs, le seul délai que rien n'accélère.
+- ⬜ **Déposer le dossier de featuring Apple** une fois l'app en ligne.
+- ⬜ **Écrire le dossier enseignants** (une page) et l'envoyer — timing : la rentrée, ou juste avant le brevet.
+- ⬜ **Ouvrir le compte social unique** et publier deux clips tests du geste de frise.
+
+### Déjà fait
+
+- ✅ **Game Center** — capacité App ID, six classements, entitlement : fait le 4 août 2026, vérifié sur appareil réel. Le défi du jour mondial, moteur de tout le plan, est en service.
+- ✅ **Fiche App Store** complète — soumise le 14 août 2026 (build 90) ; réponse aux sept points d'Apple et re-soumission le 20 août.
+- ✅ **Partage en feuille native** avec le lien App Store.
+- ✅ **Demande de note in-app.**
+- ✅ **Monétisation choisie et câblée** — publicité + achat 3,99 €, part avec la 1.1.
+- ✅ **Smart App Banner** sur les quatre pages de la vitrine — 17 août, visible dès la publication.

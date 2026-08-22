@@ -1,167 +1,180 @@
-# Erea — fiche technique des services externes
+# INFRA — fiche technique
 
-> Générée le 3 août 2026, mise à jour le 18 août 2026 (monétisation).
-> Pour la mettre à jour : relancer le même prompt dans Claude Code, le
-> fichier sera régénéré à partir de l'état réel du dépôt.
+> Généré le 20 août 2026 par un scan du dépôt. Pour mettre à jour :
+> relancer ce même prompt.
 
-**Résumé en une phrase : Erea est une app locale, financée par une
-interstitielle AdMob qu'un achat unique retire.** Pas de backend à nous,
-pas de base de données, pas d'analytics, pas de crash reporting, pas de
-domaine acheté. Les deux seuls tiers embarqués sont Google (publicité)
-et les boutiques (achat).
+## Vue d'ensemble
 
-Une seule adresse e-mail est publique : **erea.toa@gmail.com**, affichée
-sur les pages d'aide et de confidentialité, déclarée comme contact de
-support et comme contact public **DSA** (statut trader). Tout l'état du
-joueur vit sur l'appareil (`shared_preferences`) ; en ligne : le
-classement Game Center, et la régie AdMob. Conséquence : la fiche
-« Confidentialité » App Store déclare depuis la 1.1 **les collectes du
-SDK de Google** (voir `docs/FICHE_APP_STORE.md`, page 4) — le badge
-« Aucune donnée collectée » appartient à la 1.0.
+- **Plateforme** : iOS 15+ (1.0 en cours d'examen App Store) · Android préparé, pas encore publié
+- **Stack** : Flutter (Dart ≥ 3.6), 154 tests, aucun serveur applicatif
+- **Backend** : aucun — tout l'état du joueur vit sur l'appareil (`shared_preferences`)
+- **Distribution** : App Store via Xcode Cloud · Play Store via App Bundle signé localement
+- **Monétisation** : interstitielle AdMob + achat unique 3,99 €, à partir de la 1.1
+- **Particularités** : jeu entièrement hors ligne, aucune clé d'API dans le dépôt, un seul e-mail public (`erea.toa@gmail.com`)
+
+Les deux seuls tiers embarqués sont Google (publicité) et les boutiques
+(achat, classements). Pas de base de données, pas d'analytics, pas de
+crash reporting, pas de domaine acheté. Conséquence directe : la fiche
+« Confidentialité » de l'App Store déclare, **à partir de la 1.1**, les
+collectes du SDK de Google — le badge « Aucune donnée collectée »
+appartient à la 1.0.
 
 ---
 
-## 1. GitHub — code source et prototype web
+### 1. GitHub
 
 | | |
 |---|---|
 | Rôle | Hébergement du dépôt `teiki5320/erea` **et** du prototype web jouable via GitHub Pages |
 | Console | <https://github.com/teiki5320/erea> (réglages : Settings → Pages) |
 | Compte propriétaire | `teiki5320` |
+| Coût | gratuit |
 
 **Identifiants publics :**
-- URL publique : `https://teiki5320.github.io/erea/` — la **vitrine** de l'app.
+- URL publique : `https://teiki5320.github.io/erea/` — la vitrine de l'app.
 - Le jeu web jouable est sur `/erea/jeu.html`, copie déployée de `index-v8.html`.
 - `/erea/support.html` et `/erea/confidentialite.html` : les deux URL exigées par l'App Store, saisies dans la fiche.
-- Le site est servi depuis la **racine du dépôt** (fichier `.nojekyll` présent).
+- Site servi depuis la racine du dépôt (fichier `.nojekyll` présent).
 
-**Secrets :** aucun. Pas de workflow GitHub Actions, donc pas de secrets CI
-côté GitHub. L'accès en écriture au dépôt passe par le compte GitHub
-lui-même.
+**Où vivent les secrets :** nulle part. Aucun workflow GitHub Actions,
+donc aucun secret de CI côté GitHub. L'accès en écriture passe par le
+compte GitHub lui-même.
 
-**Reprise :** être collaborateur du dépôt (ou propriétaire du compte
-`teiki5320`). GitHub Pages se redéploie tout seul à chaque push sur `main`.
+**Reprise :** être collaborateur du dépôt, ou propriétaire du compte
+`teiki5320`. GitHub Pages se redéploie seul à chaque poussée sur `main`.
 
 ---
 
-## 2. Apple Developer Program — identité et signature
+### 2. Apple Developer Program
 
 | | |
 |---|---|
-| Rôle | Signature de l'app iOS, App ID, capacités (Game Center) |
+| Rôle | Identité, signature de l'app iOS, App ID et capacités |
 | Console | <https://developer.apple.com/account> (Certificates, Identifiers & Profiles) |
-| Compte propriétaire | Compte Apple Developer de la team `K597U7X3FZ` |
+| Compte propriétaire | Team `K597U7X3FZ` |
+| Coût | 99 $ / an |
 
 **Identifiants publics :**
-- Team ID : `K597U7X3FZ` — dans `erea_flutter/ios/Runner.xcodeproj/project.pbxproj` (`DEVELOPMENT_TEAM`) et `erea_flutter/README.md`.
-- Bundle ID : `com.teiki.erea` — dans le même `project.pbxproj` (`PRODUCT_BUNDLE_IDENTIFIER`).
-- Signature : **automatique** (`CODE_SIGN_STYLE = Automatic`) — aucun certificat ni profil dans le dépôt.
+- Team ID : `K597U7X3FZ` — dans `erea_flutter/ios/Runner.xcodeproj/project.pbxproj` (`DEVELOPMENT_TEAM`).
+- Bundle ID : `com.teiki.erea` — même fichier (`PRODUCT_BUNDLE_IDENTIFIER`).
+- Signature **automatique** (`CODE_SIGN_STYLE = Automatic`) : aucun certificat ni profil dans le dépôt.
+- Seule capacité déclarée dans `ios/Runner/Runner.entitlements` : `com.apple.developer.game-center`.
 
-**Secrets :** les certificats de distribution et profils de provisioning
-sont gérés automatiquement par Apple (Xcode / Xcode Cloud). Rien à
-sauvegarder dans le dépôt, rien à copier sur une machine neuve.
+**Où vivent les secrets :** certificats de distribution et profils de
+provisioning sont gérés par Apple (signature dans le cloud). Rien à
+sauvegarder, rien à recopier sur une machine neuve.
 
-**Reprise :** accès au compte Apple Developer (rôle Admin ou App Manager
-de la team `K597U7X3FZ`). La capacité **Game Center** est activée sur
-l'App ID depuis le 4 août 2026.
+**Reprise :** rôle Admin ou App Manager sur la team `K597U7X3FZ`.
 
 ---
 
-## 3. App Store Connect — publication et TestFlight
+### 3. App Store Connect
 
 | | |
 |---|---|
-| Rôle | Fiche App Store, distribution TestFlight, configuration Game Center et Xcode Cloud |
+| Rôle | Fiche App Store, envoi des versions, TestFlight, achats intégrés, configuration Game Center et Xcode Cloud |
 | Console | <https://appstoreconnect.apple.com> |
 | Compte propriétaire | Même compte que le §2 |
+| Coût | inclus dans l'adhésion |
 
 **Identifiants publics :**
-- App : « Erea », bundle `com.teiki.erea`.
-- Version : `1.0.0`, dans `erea_flutter/pubspec.yaml`. Elle doit être identique au numéro saisi dans App Store Connect, sinon le build reste non sélectionnable.
-- iOS minimum : 15.0.
-- Chiffrement : `ITSAppUsesNonExemptEncryption = false` (`erea_flutter/ios/Runner/Info.plist`) — pas de formulaire export à remplir à chaque build.
+- App « Erea », bundle `com.teiki.erea`.
+- Version `1.0.0+1` dans `erea_flutter/pubspec.yaml` — **doit être identique** au numéro saisi dans la console, sinon le build reste non sélectionnable.
+- iOS minimum : 15.0 (`IPHONEOS_DEPLOYMENT_TARGET`, `Podfile`).
+- Chiffrement : `ITSAppUsesNonExemptEncryption = false` dans `ios/Runner/Info.plist` — pas de formulaire d'export à chaque build.
 
-**Secrets :** aucun côté dépôt. L'authentification est celle du compte
-App Store Connect.
+**Achat intégré :** `com.teiki.erea.sanspub`, achat unique non
+consommable à 3,99 €, identifiant Apple `6802621891`, créé le 18 août
+2026. L'ID produit est écrit dans `lib/core/achat.dart` et verrouillé par
+un test. L'accord « Applications payantes » est actif depuis le 18 août
+2026 (banque : compte personnel ; fiscal : W-8BEN, convention
+France–USA art. 12 à 0 %). Le pendant Play Console reste à créer, avec le
+**même ID produit**.
 
-**Reprise :** rôle App Manager sur l'app dans App Store Connect. C'est ici
-que se créent les classements Game Center et que se lancent/configurent les
-builds Xcode Cloud.
+**État de la version 1.0 :** soumise le 14 août 2026 avec le build 90,
+refusée le 15 août au titre de *Guideline 2.1 — Information Needed*
+(demande d'informations, aucun bug reproché), puis **re-soumise le
+20 août 2026 avec le même build 90** — état « En attente de
+vérification ». Le détail et les textes de réponse sont dans
+`docs/APP_REVIEW.md`.
+
+**Où vivent les secrets :** aucun côté dépôt. L'authentification est
+celle du compte Apple (+ double facteur).
 
 ---
 
-## 4. Xcode Cloud — CI/CD iOS
+### 4. Xcode Cloud
 
 | | |
 |---|---|
-| Rôle | Compile, signe et livre l'app sur TestFlight à partir du dépôt GitHub |
-| Console | App Store Connect → Erea → Xcode Cloud (ou l'onglet Cloud dans Xcode) |
-| Compte propriétaire | Même compte que le §3 ; l'accès au dépôt GitHub est accordé via l'app GitHub « Xcode Cloud » |
+| Rôle | Compile, signe et livre l'app iOS à partir du dépôt GitHub |
+| Console | App Store Connect → Erea → Xcode Cloud |
+| Compte propriétaire | Même compte que le §3 ; l'accès au dépôt passe par l'app GitHub « Xcode Cloud » |
+| Coût | quota inclus, puis facturation à l'heure de calcul |
 
-**Configuration dans le dépôt :**
+**Configuration présente dans le dépôt :**
 - `erea_flutter/ios/ci_scripts/ci_post_clone.sh` — installe Flutter sur le
-  runner, `flutter pub get`, `flutter build ios --config-only`, `pod install`
-  (avec 3 tentatives sur les étapes réseau).
+  runner, `flutter pub get`, `flutter build ios --config-only`,
+  `pod install`, avec trois tentatives sur les étapes réseau.
 - `erea_flutter/ios/ci_scripts/ci_pre_xcodebuild.sh` — garde-fou qui
   régénère `Generated.xcconfig` si l'étape d'archive ne partage pas le
   `$HOME` du post-clone.
-- Le reste (workflow, déclencheurs, environnement) vit **dans la console**,
-  pas dans le dépôt. Réglage critique : dans l'action *Archiver*, la
-  préparation de la distribution doit être sur **« App Store Connect »**
-  et non « TestFlight (tests internes uniquement) », faute de quoi aucun
-  build ne peut être attaché à une version.
 
-**Secrets :** aucun dans le dépôt. La signature est gérée par Apple
-(« cloud signing »), l'accès GitHub par l'intégration officielle.
+Le reste — workflow, déclencheurs, environnement — vit **dans la
+console**, pas dans le dépôt.
 
-**Reprise :** accès App Store Connect + autorisation de l'app GitHub
-Xcode Cloud sur le dépôt. Le déclenchement automatique sur `main`
-fonctionne (vérifié le 4 août 2026), sans filtre de fichiers : toute
-poussée, même sur un document, lance un build.
+⚠️ Deux réglages qui ont déjà coûté des builds : dans l'action
+*Archiver*, la préparation de la distribution doit rester sur
+**« App Store Connect »** et non « TestFlight (tests internes
+uniquement) », faute de quoi aucun build ne peut être attaché à une
+version ; et le déclenchement sur `main` n'a **aucun filtre de fichiers**,
+si bien qu'une poussée documentaire lance un build complet.
+
+**Où vivent les secrets :** aucun dans le dépôt. Signature gérée par
+Apple, accès GitHub par l'intégration officielle.
 
 ---
 
-## 5. Game Center — classements mondiaux
+### 5. Game Center
 
 | | |
 |---|---|
-| Rôle | Classements mondiaux (défi du jour, série, Classique ×3, Chrono) sans serveur à opérer : identité, consentement parental et interface gérés par Apple |
+| Rôle | Six classements mondiaux sans serveur à opérer : identité, consentement parental et interface fournis par Apple |
 | Console | App Store Connect → Erea → Game Center (+ portail développeur pour la capacité sur l'App ID) |
-| Code | Plugin Flutter `games_services`, logique dans `erea_flutter/lib/core/classement.dart` |
+| Code | Plugin `games_services`, logique dans `erea_flutter/lib/core/classement.dart` |
+| Coût | gratuit |
 
-**Identifiants publics (les ID de classement ne sont pas des secrets) :**
+**Identifiants publics** (un ID de classement n'est pas un secret) :
 
-| ID | Type | Plage | Défini dans |
-|---|---|---|---|
-| `erea.daily` | Récurrent 24 h | 0–11000 | `lib/core/classement.dart` |
-| `erea.streak` | Classique | 0–3650 | idem |
-| `erea.classic.facile` / `.normal` / `.difficile` | Classique | 0–11000 | idem |
-| `erea.chrono` | Classique | 0–10000 | idem |
+| ID | Type | Plage |
+|---|---|---|
+| `erea.daily` | Récurrent 24 h | 0–11000 |
+| `erea.streak` | Classique | 0–3650 |
+| `erea.classic.facile` / `.normal` / `.difficile` | Classique | 0–11000 |
+| `erea.chrono` | Classique | 0–10000 |
 
-**État actuel : actif depuis le 4 août 2026.** Capacité cochée sur l'App
-ID, six classements créés, entitlement déclaré dans les trois
-configurations du target Runner, build vérifié sur appareil réel.
-L'ordre des opérations (capacité → classements → entitlement) reste
-documenté dans `erea_flutter/ios/GAME_CENTER.md` : le rattacher trop tôt
-casse la signature, ce qui compte si l'App ID est un jour recréé.
+Actif depuis le 4 août 2026 : capacité cochée sur l'App ID, six
+classements créés, entitlement déclaré dans les trois configurations du
+target Runner, vérifié sur appareil réel. Les six sont attachés à la
+version 1.0.0. L'ordre des opérations — capacité, puis classements, puis
+entitlement — est documenté dans `erea_flutter/ios/GAME_CENTER.md` : le
+rattacher trop tôt casse la signature.
 
-Les six classements sont attachés à la version 1.0.0 (case « Game
-Center » cochée sur la page de version). Ils passeront de « Finaliser
-avant soumission » à actif au moment de la publication.
-
-**Secrets :** aucun. Game Center n'utilise ni clé d'API ni jeton.
+**Où vivent les secrets :** nulle part. Game Center n'utilise ni clé
+d'API ni jeton.
 
 ---
 
-## 6. Google AdMob — la publicité
+### 6. Google AdMob
 
 | | |
 |---|---|
-| Rôle | Sert l'interstitielle de fin de partie ; c'est elle qui paie l'app gratuite |
+| Rôle | Sert l'interstitielle de fin de partie, à partir de la 1.1 |
 | Console | <https://apps.admob.com> |
 | Compte propriétaire | Compte Google du propriétaire, éditeur `pub-2680784147246798` |
+| Coût | gratuit (Google prélève sa part sur les recettes) |
 
-**Identifiants publics par design** (visibles dans toute app publiée) :
+**Identifiants publics par design** — visibles dans toute app publiée :
 
 | Quoi | Valeur | Où dans le dépôt |
 |---|---|---|
@@ -170,73 +183,60 @@ avant soumission » à actif au moment de la publication.
 | Bloc interstitiel iOS | `ca-app-pub-2680784147246798/6744159246` | `lib/core/pub.dart` |
 | Bloc interstitiel Android | `ca-app-pub-2680784147246798/7670278436` | `lib/core/pub.dart` |
 
-**Paiements (état au 18 août 2026)** : seuil de versement **70 €**,
-mensuel vers le 21. **L'IBAN ne peut pas encore être saisi** : Google ne
-montre « Gérer les modes de paiement » qu'après un premier seuil de
-recettes (~10 €) — y retourner après la sortie de la 1.1. À ce moment-là
-arriveront aussi le **courrier postal avec code PIN** (à saisir sous
-4 mois, sinon versements gelés) et la vérification d'identité.
-⚠️ Vérifier alors que le **nom du profil de paiement** est bien « Jean
-Perraudeau » (comme sur le RIB) et non le pseudo « Toa ».
+Les quatre valeurs doivent appartenir au même compte, sinon la régie
+refuse de servir.
 
-**Secrets :** aucun dans le dépôt — les identifiants ci-dessus sont
-publics, l'accès à la console passe par le compte Google (+ 2FA).
+**Paiements (état au 18 août 2026)** : seuil de versement 70 €, mensuel
+vers le 21. L'IBAN ne peut pas encore être saisi — Google n'ouvre
+« Gérer les modes de paiement » qu'après un premier seuil de recettes
+(environ 10 €). Suivront le courrier postal avec code PIN, à saisir sous
+quatre mois sous peine de gel des versements, et la vérification
+d'identité. ⚠️ Vérifier alors que le nom du profil de paiement est bien
+l'identité civile du titulaire du compte bancaire, et non le pseudonyme.
 
-**Reprise :** accès au compte Google propriétaire de l'éditeur
-`pub-2680784147246798`. Les quatre identifiants doivent rester du même
-compte, sinon la régie refuse de servir.
+**Où vivent les secrets :** aucun dans le dépôt. L'accès à la console
+passe par le compte Google (+ double facteur).
 
 ---
 
-## 7. L'achat « Erea sans pub » — App Store
+### 7. Google Play Console
 
 | | |
 |---|---|
-| Rôle | Achat unique non consommable qui coupe la publicité, 3,99 € |
-| Console | App Store Connect → Erea → Monétisation → Achats intégrés |
-| Créé | 18 août 2026, identifiant Apple `6802621891` |
+| Rôle | Distribution Android — préparée, rien n'est encore publié |
+| Console | <https://play.google.com/console> |
+| Compte propriétaire | Compte **personnel**, créé le 20 août 2026 |
+| Coût | 25 $ une seule fois |
 
-- ID produit : `com.teiki.erea.sanspub` — écrit en dur dans
-  `lib/core/achat.dart`, vérifié par un test.
-- L'accord **« Applications payantes »** est actif depuis le 18 août
-  2026 (banque : compte personnel Jean Perraudeau ; fiscal : W-8BEN,
-  convention France–USA art. 12 à 0 %).
-- Le pendant Play Console reste à créer quand Android sortira, avec le
-  **même ID produit**.
+**État réel :**
+- Application ID `com.teiki.erea`, identique à iOS (`android/app/build.gradle.kts`).
+- App Bundle de release reconstruit le 20 août 2026 : 58,5 Mo, signé avec la vraie clé (certificat `CN=Toa`, valide jusqu'en 2053).
+- Le type de compte personnel impose **douze testeurs distincts pendant quatorze jours consécutifs** avant toute mise en production. C'est le chemin critique du côté Android.
+- Vérification par appareil physique : un Pixel 8a a été commandé le 20 août 2026 ; un appareil simulé n'est pas accepté.
+- **Play Games** — pas configuré. La table de correspondance `_playGames` de `lib/core/classement.dart` est vide et la méta-donnée `com.google.android.gms.games.APP_ID` reste commentée dans `AndroidManifest.xml`. La décommenter sans identifiant valide ferait planter l'app. Sans cela, les classements sont simplement masqués sur Android, le jeu restant jouable.
+
+La marche à suivre complète est dans `docs/FICHE_PLAY_STORE.md`.
+
+**Où vivent les secrets :** la clé de signature `~/erea-upload.jks` et
+`erea_flutter/android/key.properties`, tous deux **hors dépôt**
+(`.gitignore` couvre `android/key.properties`, `*.jks`, `*.keystore`).
+Créée le 14 août 2026. ⚠️ La perdre interdit toute mise à jour de
+l'app : la sauvegarder ailleurs que sur le Mac.
 
 ---
 
-## 8. Google Fonts — prototype web uniquement
+### 8. Google Fonts
 
 | | |
 |---|---|
-| Rôle | Sert les polices Baloo 2 et Nunito au prototype web (`index.html` racine) via CDN |
-| Console | aucune (service public sans compte) |
+| Rôle | Sert les polices Baloo 2 et Nunito au prototype web de la racine, via CDN |
+| Console | aucune — service public sans compte |
+| Coût | gratuit |
 
-L'**app Flutter n'en dépend pas** : les mêmes polices sont embarquées dans
-`erea_flutter/assets/fonts/` (licence SIL OFL incluse), justement pour que
-l'app fonctionne hors ligne. Si le prototype web est un jour abandonné,
+L'app Flutter n'en dépend pas : les mêmes polices sont embarquées dans
+`erea_flutter/assets/fonts/`, licence SIL OFL incluse, justement pour que
+l'app fonctionne hors ligne. Si le prototype web est abandonné un jour,
 cette dépendance disparaît avec lui.
-
----
-
-## À vérifier (présent mais pas clairement branché)
-
-- **Google Play Games (Android)** — le plugin `games_services` couvre
-  aussi Play Games, mais rien n'est configuré côté Android : pas de projet
-  dans la Google Play Console, et la méta-donnée `APP_ID` reste commentée
-  dans `AndroidManifest.xml` — la décommenter sans identifiant valide
-  ferait planter l'app. Sans cela, le classement est muet sur Android
-  (le jeu reste jouable — les échecs sont silencieux par conception).
-- **Signature release Android** — le câblage est fait : `build.gradle.kts`
-  lit `android/key.properties` et retombe sur les clés de debug si le
-  fichier est absent. La keystore existe depuis le 15 août 2026
-  (`~/erea-upload.jks` sur le Mac, hors dépôt — `key.properties`,
-  `*.jks` et `*.keystore` sont dans `.gitignore`). **La perdre interdit
-  toute mise à jour de l'app : la sauvegarder ailleurs que sur le Mac.**
-- **Google Play Console** — aucune trace d'un compte ou d'une fiche :
-  la distribution Android n'existe pas encore. La marche à suivre
-  complète est dans `docs/FICHE_PLAY_STORE.md`.
 
 ---
 
@@ -244,43 +244,52 @@ cette dépendance disparaît avec lui.
 
 | Secret | Où il vit | Dans le dépôt ? |
 |---|---|---|
-| Certificats / profils de signature iOS | Gérés automatiquement par Apple (cloud signing Xcode Cloud) | Non |
-| Mot de passe compte Apple Developer / App Store Connect | Compte Apple du propriétaire (+ 2FA) | Non |
-| Accès en écriture au dépôt GitHub | Compte GitHub `teiki5320` | Non |
-| Keystore de signature Android | `~/erea-upload.jks` sur le Mac + `android/key.properties` (hors dépôt, `.gitignore` prêt) — **à sauvegarder ailleurs que sur le Mac** (perte = impossibilité de mettre à jour l'app) | Non |
-| Coordonnées bancaires (RIB) | Saisies chez Apple (accord Applications payantes) ; chez Google AdMob après les premières recettes | Non |
+| Certificats et profils de signature iOS | Gérés automatiquement par Apple (signature dans le cloud) | Non |
+| Mot de passe Apple Developer / App Store Connect | Compte Apple du propriétaire (+ 2FA) | Non |
+| Accès en écriture au dépôt | Compte GitHub `teiki5320` | Non |
+| Keystore de signature Android | `~/erea-upload.jks` + `android/key.properties`, hors dépôt — **à sauvegarder ailleurs que sur le Mac** | Non |
+| Mot de passe du keystore | `android/key.properties`, hors dépôt | Non |
+| Accès Google Play Console / AdMob | Compte Google du propriétaire (+ 2FA) | Non |
+| Coordonnées bancaires | Saisies chez Apple ; chez Google après les premières recettes | Non |
 | Clés d'API tierces | **Il n'y en a aucune** — les identifiants AdMob sont publics par design | — |
 
 Le dépôt peut être public sans risque : il ne contient aucun secret.
 
-## Valeurs publiques par design (aucun doute à avoir)
+## Valeurs publiques par design
 
-- `com.teiki.erea` — bundle/application ID (visible dans toute app publiée)
-- `K597U7X3FZ` — Team ID Apple (visible dans toute app signée)
-- `erea.daily`, `erea.streak`, `erea.classic.*`, `erea.chrono` — ID de classements Game Center
-- `ca-app-pub-2680784147246798…` — les quatre identifiants AdMob (§6)
-- `com.teiki.erea.sanspub` — ID du produit « Erea sans pub »
+- `com.teiki.erea` — identifiant de l'app, visible dans toute app publiée
+- `K597U7X3FZ` — Team ID Apple, visible dans toute app signée
+- `erea.daily`, `erea.streak`, `erea.classic.*`, `erea.chrono` — ID de classements
+- `ca-app-pub-2680784147246798…` — les quatre identifiants AdMob
+- `com.teiki.erea.sanspub` — ID du produit « Erea sans publicité »
 - `https://teiki5320.github.io/erea/` — URL publique du prototype web
-- Version `1.0.0+1` dans `pubspec.yaml`
+- `erea.toa@gmail.com` — contact de support et contact public DSA
 
 ## Checklist « reprise du projet sur une machine neuve »
 
-**Jouer / développer (n'importe quel OS) :**
+**Jouer et développer, sur n'importe quel système :**
 1. `git clone https://github.com/teiki5320/erea.git`
 2. Installer Flutter stable (≥ 3.6) — <https://docs.flutter.dev/get-started>
 3. `cd erea/erea_flutter && flutter pub get`
-4. `flutter analyze && flutter test` (la suite doit être verte)
-5. `flutter run` (simulateur, appareil ou Chrome)
+4. `flutter analyze && flutter test` — 154 tests, la suite doit être verte
+5. `flutter run`
 
-**Builder pour iOS (Mac uniquement) :**
+**Construire pour iOS, sur Mac uniquement :**
 6. Xcode installé, session ouverte avec un compte de la team `K597U7X3FZ`
-7. `flutter build ipa --release` → `build/ios/ipa/erea.ipa`, upload via
-   Transporter — **ou** laisser Xcode Cloud builder depuis `main`
+7. `flutter build ipa --release`, ou laisser Xcode Cloud construire depuis `main`
+
+**Construire pour Android :**
+8. Restaurer `~/erea-upload.jks` depuis la sauvegarde, puis recréer
+   `erea_flutter/android/key.properties` avec les chemins et mots de passe
+9. `flutter build appbundle --release`, puis vérifier le certificat (voir
+   `docs/FICHE_PLAY_STORE.md` §1)
 
 **Administrer :**
-8. Accès au compte Apple Developer (team `K597U7X3FZ`) : signature, App ID
-9. Accès App Store Connect : TestFlight, Game Center, Xcode Cloud
-10. Accès (ou propriété) du dépôt GitHub `teiki5320/erea` : code + site web
+10. Compte Apple Developer (team `K597U7X3FZ`) : signature et App ID
+11. App Store Connect : fiche, TestFlight, Game Center, Xcode Cloud
+12. Google Play Console et AdMob : compte Google du propriétaire
+13. Dépôt GitHub `teiki5320/erea` : code et site web
 
-**Rien d'autre.** Pas de `.env` à recréer, pas de base à restaurer, pas de
-clé à demander à qui que ce soit.
+**Rien d'autre.** Pas de fichier d'environnement à recréer, pas de base à
+restaurer, pas de clé à demander à qui que ce soit — à la seule exception
+du keystore Android, qui n'existe qu'en sauvegarde.
