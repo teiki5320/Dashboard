@@ -1,15 +1,30 @@
 // Service worker « Gestion Pro » — mode hors-ligne.
 //
-// Stratégie : stale-while-revalidate sur les ressources de l'app et le CDN
-// SheetJS. On répond depuis le cache (instantané, marche sans réseau) tout en
-// re-téléchargeant en arrière-plan — la version fraîche sera servie au
-// prochain chargement, donc les déploiements se propagent tout seuls.
+// Deux stratégies, selon ce que le fichier contient.
+//
+// « Réseau d'abord » pour la coquille de l'app et ses données (index.html,
+// script.js, style.css, dash-module.js, assets/dash-data.js) : une
+// publication se voit au premier rechargement. Le cache reste le filet —
+// hors ligne, ou réseau capricieux, il répond comme avant. Auparavant tout
+// passait en stale-while-revalidate, ce qui donnait un tour de retard
+// systématique : on voyait la version précédente, et il fallait recharger
+// deux fois.
+//
+// « Cache d'abord, rafraîchi en fond » (stale-while-revalidate) pour le
+// reste : icônes, images, CDN SheetJS — des fichiers qui ne changent
+// pratiquement jamais et qu'on veut instantanés.
 //
 // JAMAIS mis en cache : Supabase (données vivantes), l'API Claude et Google
 // Identity (auth) — toute requête hors liste part directement sur le réseau.
 'use strict';
 
-const CACHE = 'gestion-pro-v1';
+// ⚠️ Incrémenter à chaque changement de stratégie : « activate » supprime
+// alors tous les anciens caches, ce qui force un rechargement complet chez
+// les visiteurs qui avaient encore l'ancienne version en réserve.
+const CACHE = 'gestion-pro-v2';
+
+// Fichiers dont une version périmée se remarque tout de suite.
+const VIVANTS = /(?:^|\/)(?:index\.html|script\.js|style\.css|dash-module\.js|dash-data\.js)$|\/$/;
 const SHELL = [
   './',
   './index.html',
@@ -47,6 +62,21 @@ self.addEventListener('fetch', (e) => {
   const url = new URL(req.url);
   const cacheable = url.origin === self.location.origin || url.hostname === 'cdn.jsdelivr.net';
   if (!cacheable) return;
+
+  if (url.origin === self.location.origin && VIVANTS.test(url.pathname)) {
+    e.respondWith(
+      fetch(req)
+        .then((res) => {
+          if (res && res.ok) {
+            const copy = res.clone();
+            caches.open(CACHE).then((c) => c.put(req, copy));
+          }
+          return res;
+        })
+        .catch(() => caches.match(req))
+    );
+    return;
+  }
 
   e.respondWith(
     caches.match(req).then((cached) => {
