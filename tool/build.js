@@ -119,6 +119,9 @@ function cleanLine(l) {
   return stripInline(
     l.replace(/^\s*([-*+]|\d+[.)])\s+/, '')     // puce
      .replace(/^\[[ xX]\]\s*/, '')              // case à cocher
+     // Marqueurs d'état en tête : l'interface les dessine elle-même (case à
+     // cocher, pastille). Les laisser dans le texte les affichait en double.
+     .replace(/^\s*(?:✅|✔️|☑️|⬜|🔲|☐|❌|🚧)\s*/, '')
      .replace(/^\s*\|/, '').replace(/\|\s*$/, '').replace(/\s*\|\s*/g, ' — ') // ligne de tableau
   ).trim();
 }
@@ -172,6 +175,9 @@ function extractMarketingSummary(md) {
   if (naLines) {
     nextActions = naLines
       .filter((l) => /^\s*([-*+]|\d+[.)])\s+/.test(l))
+      // Une ligne déjà cochée n'est plus une action à venir : la garder
+      // remplissait la liste de travail terminé, avec une case vide par-dessus.
+      .filter((l) => !/^\s*(?:[-*+]|\d+[.)])\s*(?:✅|✔️|☑️|\[[xX]\])/.test(l))
       .map(cleanLine)
       .filter(Boolean)
       .slice(0, 6);
