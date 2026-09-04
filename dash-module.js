@@ -1,14 +1,16 @@
 // =============================================================================
 // Module « Mes apps » — moteur Dash porté dans Gestion Pro.
 // Chargé par index.html après assets/dash-data.js.
-// Aucune dépendance, aucun fetch : données dans window.DASH, carte du monde
-// embarquée en masque binaire ci-dessous. Fonctionne en file://.
+// Aucune dépendance, aucun fetch : données dans window.DASH_DATA. Fonctionne en file://.
+// Thème « Clay » : barre latérale + tuiles en relief, clair / sombre (bouton 🌙 / ☀️).
 // =============================================================================
 'use strict';
 
 (function () {
   var DATA = window.DASH_DATA;
   var $ = function (sel, root) { return (root || document).querySelector(sel); };
+  var PRENOM = 'Teiki'; // prénom affiché dans la barre latérale et le bandeau d'accueil
+  var LOGO = 'assets/dash-logo.png'; // remplaçable ; repli sur l'icône PWA si absent
 
   // ── Utilitaires ────────────────────────────────────────────────────────────
   function esc(s) {
@@ -20,38 +22,36 @@
   function badgeHtml(b) { return '<span class="badge badge-' + b + '">' + (BADGES[b] || b) + '</span>'; }
   function serviceById(id) { return DATA.services.filter(function (s) { return s.id === id; })[0] || null; }
   function appsUsingService(id) { return DATA.apps.filter(function (a) { return a.services.indexOf(id) !== -1; }); }
-
-  // Palette 1A « Cockpit » : menthe (dépôt & CI), vert (backend), violet (API),
-  // ambre (distribution), puis déclinaisons.
-  var CAT_COLORS = ['#7fe3d4', '#8ef0b4', '#a89bff', '#ffc48a', '#a9f0e5', '#9ad46a',
-                    '#c58aff', '#ffb066', '#5ee0d0', '#e08ad4', '#66c8ff', '#ff8fb1'];
-  function catColor(cat) {
-    var i = DATA.categories.indexOf(cat);
-    return CAT_COLORS[(i >= 0 ? i : 0) % CAT_COLORS.length];
-  }
   function pct(done, todo) { var t = done + todo; return t ? Math.round((done / t) * 100) : 0; }
-  function slug(s) {
-    return String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  function norm(s) { return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); }
+  function slug(s) { return norm(s).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''); }
+  function lienSiUrl(v) {
+    return /^https?:\/\/\S+$/.test(v)
+      ? '<a href="' + esc(v) + '" target="_blank" rel="noopener">' + esc(v.replace(/^https?:\/\//, '')) + '</a>'
+      : esc(v);
   }
-  function norm(s) {
-    return String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  var TINTS = ['mint', 'peach', 'sun', 'sky', 'lilac'];
+  function famTint(cat) { var i = DATA.categories.indexOf(cat); return TINTS[(i >= 0 ? i : 0) % TINTS.length]; }
+  function appTint(app) { return TINTS[DATA.apps.indexOf(app) % TINTS.length]; }
+  function fmtDate(iso, withTime) {
+    if (!iso) return '';
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return '';
+    var s = d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+    if (withTime) s += ' · ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    return s;
+  }
+  function logoImg(cls) {
+    return '<img class="' + cls + '" src="' + LOGO + '" alt="" onerror="this.onerror=null;this.src=\'assets/icon-192.png\'">';
   }
 
   // ── Prochaines actions : cases cochées persistées ──────────────────────────
   var TODO_KEY = 'v90_dash_todos';
   var todos = {};
   try {
-    // Persistance via G (localStorage + push Supabase de Gestion Pro) ;
-    // repli localStorage si G n'est pas encore chargé.
     var brut = (typeof G !== 'undefined' && G.get) ? G.get(TODO_KEY) : localStorage.getItem(TODO_KEY);
     todos = (typeof brut === 'string' ? JSON.parse(brut || '{}') : brut) || {};
-    // G.get() de Gestion Pro renvoie [] par défaut (convention pour ses propres
-    // collections) quand la clé n'existe pas encore : sans ce garde-fou, todos
-    // resterait un tableau et JSON.stringify() perdrait silencieusement toute
-    // case cochée à la sauvegarde (les clés nommées d'un tableau ne sont pas
-    // sérialisées).
-    if (Array.isArray(todos)) todos = {};
+    if (Array.isArray(todos)) todos = {}; // G.get() renvoie [] par défaut
   } catch (e) { todos = {}; }
   function saveTodos() {
     try {
@@ -59,182 +59,59 @@
       else localStorage.setItem(TODO_KEY, JSON.stringify(todos));
     } catch (e) {}
   }
-  function todoBox(key) {
-    return '<input type="checkbox" data-todo="' + esc(key) + '"' + (todos[key] ? ' checked' : '') + '>';
+  function todoHtml(key, texte, sous) {
+    var on = !!todos[key];
+    return '<label class="todo' + (on ? ' done' : '') + '"><input type="checkbox" data-todo="' + esc(key) + '"' + (on ? ' checked' : '') + '>' +
+      '<span class="todo-txt"><span>' + texte + '</span>' + (sous ? '<small>' + sous + '</small>' : '') + '</span></label>';
   }
 
-  // ── Animations : bascule + mémoire ─────────────────────────────────────────
-  var ANIM_KEY = 'dash-anim';
-  function animOn() { return document.documentElement.getAttribute('data-anim') !== 'off'; }
-  function applyAnim(on) {
-    document.documentElement.setAttribute('data-anim', on ? 'on' : 'off');
-    var btn = $('#anim-toggle');
-    if (btn) btn.textContent = on ? '⚡ ANIMATIONS' : '⏸ ANIMATIONS';
-    // Bouton global du header de Gestion Pro (même bascule, clé localStorage partagée).
-    var hdBtn = document.getElementById('hd-anim-toggle');
-    if (hdBtn) hdBtn.textContent = on ? '⚡' : '⏸';
-    if (globe) globe.setActive(on);
+  // ── Thème clair / sombre (mémorisé) ────────────────────────────────────────
+  var THEME_KEY = 'dash-theme';
+  function theme() {
+    try { var t = localStorage.getItem(THEME_KEY); if (t === 'clair' || t === 'sombre') return t; } catch (e) {}
+    return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'sombre' : 'clair';
   }
-  function initAnim() {
-    var v = null;
-    try { v = localStorage.getItem(ANIM_KEY); } catch (e) {}
-    applyAnim(v !== 'off');
+  function applyTheme() {
+    var t = theme();
+    var z = $('#page-dash'); if (z) z.setAttribute('data-theme', t);
+    if (overlayEl) overlayEl.setAttribute('data-theme', t);
+    var b = $('#dash-theme'); if (b) b.textContent = t === 'sombre' ? '☀️' : '🌙';
   }
-  function toggleAnim() {
-    var on = !animOn();
-    try { localStorage.setItem(ANIM_KEY, on ? 'on' : 'off'); } catch (e) {}
-    applyAnim(on);
+  function toggleTheme() {
+    try { localStorage.setItem(THEME_KEY, theme() === 'sombre' ? 'clair' : 'sombre'); } catch (e) {}
+    applyTheme();
   }
 
-  // ── Globe de nuit ──────────────────────────────────────────────────────────
-  // Masque de continents 288×144 (équirectangulaire), bits empaquetés en base64.
-  var LAND_W = 288, LAND_H = 144;
-  var LAND_B64 = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAG+AAAf/+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB///z/////BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAf//+//////+AAAAAAAAIAAAAAPgAAAAAAAAAAAAAAAAAAAAAP//Af/////4AAAH+AAAAAAAAAHwAAAAAAAAAAAAAAAAAAAwEgP+P//////wAAAD5gAAAAAAAAANAAAAAAAAAAAAAAAAAB4AAYf4D//////wAAAAgAAAAAAAAAAHgAAAAAAAAAAAAAAAAAPuPDjgAAf////wAAAAAAAAAD4AAA///gAAPgAAAAAAAAAAACAAAIAAAAP////wAAAAAAAAAOAAAH//+AAAAAAAAAAAAAAAAP8DHeb8AAD////AAAAAAAAAAYAAD/////PgDAAAAAAAAAAAAPf/Do//AAD////AAAAAAAAAAwAdf//////gH/AAAAAAD8AAAAP/gcf/8AB///9AAAAAAfAAAAA9///////////gAAAAf//4//H/xuDh/ABf//8AAAAAH/4AAAY9////////////7+wB//////+HBvnhfgA//+AAAAAA///xh//+//////////////9AP//////////Af8B//4AAAAAB///5v//9//////////////fj//////////4A/MA/+AB/gAAD/P8P//////////////////BAH/////////3jfwA/4AA/AAAP+f9//////////////////+AAf////////+AAHwAfwAAAAAA/5////////////////////+AB/////////4ADwAAPwAAAAAD/x//////////////////9/wAA//3//////4AD8AABgAAAAAD/x/////////////////8D+AAAP4AP/////wAD+YAAAAAAAAD/4f///////////////+cOAAAAA4AA/////8AD/8AAAAAAAIAHgf//////////////+AAcAAAABAAAP/////gB/+AAAAAAAcATh///////////////4AB8AAAAIAAAH/////4D//AAAAAAAMAWB///////////////gAD8AAAAAAAAD//////H//wAAAAABnAQf///////////////gAB4AAAAAAAAB//////H//4AAAAABvD//////////////////ABwAAAAAAAAA//////n//4AAAAABPn//////////////////gBAAAAAAAAAA/////////IAAAAAAOf/////////////////8gAAAAAAAAAAAf///////AeAAAAAAB//////////////////8gAAAAAAAAAAAL///////wfAAAAAAH//////////////////8AAAAAAAAAAAAH///////wAAAAAAAD//////+///////////4gAAAAAAAAAAAH////////AAAAAAAB////M/w///////////wAAAAAAAAAAAAH///////YAAAAAAAB/8/+Afx///////////hgAAAAAAAAAAAP//////8AAAAAAAB/4OP8APx//////////+DwAAAAAAAAAAAH//////4AAAAAAAB/wHH8MH4//////////wCAAAAAAAAAAAAH//////gAAAAAAAB/AQzn//8f/////////gCAAAAAAAAAAAAH//////AAAAAAAAB/AQDH//4f///////+TACAAAAAAAAAAAAD//////AAAAAAAAB/AABn//4f///////+DgGAAAAAAAAAAAAD/////+AAAAAAAAAcBwBD//+f////////xweAAAAAAAAAAAAB/////+AAAAAAAAAR/4AAB///////////Bh8AAAAAAAAAAAAA/////8AAAAAAAAAf/wAAB///////////AHwAAAAAAAAAAAAAP////wAAAAAAAAB//4AAD///////////gKAAAAAAAAAAAAAAH////gAAAAAAAAD///DwD///////////gIAAAAAAAAAAAAAAE////gAAAAAAAAD///7/////////////gAAAAAAAAAAAAAAAC//xBgAAAAAAAAD///////7/////////wAAAAAAAAAAAAAAADf/gAwAAAAAAAAP///////5/////////gAAAAAAAAAAAAAAABP/AAwAAAAAAAAf/////5/8X////////AAAAAAAAAAAAAAAAAn/AAQAAAAAAAA//////9/+J////////AAAAAAAAAAAAAAAAAT/AAAAAAAAAAA//////8/+YA//////+AAAAAAAAAAAAAAAAAB/AAAAAAAAAAB//////+f/+Af/////4gAAAAAAAAAAAAAAAAA/AAMAAAAAAAB//////+f//AP/+P//AAAAAAAAAAAAAAAAAAA/AwDAAAAAAAB///////P/+AD/4P/gAAAAAAAAAAAAQAAAAAA/hwAMAAAAAAB///////H/8AD/wH/mAAAAAAAAAAAAAAAAAAAP/wAIAAAAAAB///////n/4AD/gH/gAQAAAAAAAAAAAAAAAAAD/gAAAAAAAAB///////j/gAB/AD/wAwAAAAAAAAAAAAAAAAAAH+AAAAAAAAB///////z/AAB8AA/4AgAAAAAAAAAAAAAAAAAAD+AAAAAAAAD///////74AAA8AA/4AwAAAAAAAAAAAAAAAAAAAOAAAAAAAAB///////9AAAA8AAX4AAAAAAAAAAAAAAAAAAAAAGAIAAAAAAB///////+AAAA8AAT4AAAAAAAAAAAAAAAAAAAAAGA/EAAAAAA///////++AAAcAARwAIAAAAAAAAAAAAAAAAAAABB/+AAAAAAf///////8AAAYAAQgAAAAAAAAAAAAAAAAAAAAAA3//AAAAAAP///////8AAACAAQAAOAAAAAAAAAAAAAAAAAAAAD//gAAAAAH///////8AAACAAIAAGAAAAAAAAAAAAAAAAAAAAD//+AAAAAD/D/////4AAAAAAMAOAAAAAAAAAAAAAAAAAAAAAD///gAAAAAABf////wAAAAABuAeAAAAAAAAAAAAAAAAAAAAAD///gAAAAAAAP////gAAAAAA2A8AAAAAAAAAAAAAAAAAAAAAH///wAAAAAAAP////AAAAAAAeB8AAAAAAAAAAAAAAAAAAAAAP///wAAAAAAAf///+AAAAAAAeH8ggAAAAAAAAAAAAAAAAAAAP///4AAAAAAAf///8AAAAAAAOH8ACAAAAAAAAAAAAAAAAAAAf////AAAAAAAf///4AAAAAAAHD5wCIAAAAAAAAAAAAAAAAAAP////8AAAAAAP///wAAAAAAAHh5wD/AAAAAAAAAAAAAAAAAAf/////AAAAAAH///wAAAAAAADgAQA/wAAAAAAAAAAAAAAAAAf/////wAAAAAD///gAAAAAAAAgAAAP5gAAAAAAAAAAAAAAAAP/////wAAAAAD///gAAAAAAAAfAAAH8AAAAAAAAAAAAAAAAAH/////wAAAAAD///gAAAAAAAABwAAPkAAAAAAAAAAAAAAAAAH/////wAAAAAD///wAAAAAAAAAAEAACAAAAAAAAAAAAAAAAAD/////gAAAAAB///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////AAAAAAB///wAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAB////+AAAAAAD///wEAAAAAAAAAAPhgAAAAAAAAAAAAAAAAAB////+AAAAAAD///4MAAAAAAAAABPhgAAAAAAAAAAAAAAAAAA////+AAAAAAH///wcAAAAAAAAAD/hwAAAAAAAAAAAAAAAAAAP///+AAAAAAH///h8AAAAAAAAAP/54AAAAAAAAAAAAAAAAAAH///8AAAAAAD//+B4AAAAAAAAAP//4AAACAAAAAAAAAAAAAAD///8AAAAAAD//8B4AAAAAAAAAf//8AAAAAAAAAAAAAAAAAAD///8AAAAAAB//8B4AAAAAAAAD///+AAAAAAAAAAAAAAAAAAD///4AAAAAAB//8BwAAAAAAAAP////AAAAAAAAAAAAAAAAAAD///gAAAAAAA//8BwAAAAAAAAf////gAAAAAAAAAAAAAAAAAD//8AAAAAAAA//8BwAAAAAAAAf////wAAAAAAAAAAAAAAAAAH//4AAAAAAAA//wAAAAAAAAAAf////wAAAAAAAAAAAAAAAAAH//4AAAAAAAA//wAAAAAAAAAAf////4AAAAAAAAAAAAAAAAAH//4AAAAAAAAf/wAAAAAAAAAAf////4AAAAAAAAAAAAAAAAAH//wAAAAAAAAf/gAAAAAAAAAAP////4AAAAAAAAAAAAAAAAAH//wAAAAAAAAP/AAAAAAAAAAAP////wAAAAAAAAAAAAAAAAAH//gAAAAAAAAH+AAAAAAAAAAAH/j//wAAAAAAAAAAAAAAAAAH//AAAAAAAAAH8AAAAAAAAAAAP4A//gAAAAAAAAAAAAAAAAAP/+AAAAAAAAAGAAAAAAAAAAAAOAAv/gAAAAAAAAAAAAAAAAAP/wAAAAAAAAAAAAAAAAAAAAAAAAAH/AAAAAAAAAAAAAAAAAAf/wAAAAAAAAAAAAAAAAAAAAAAAAAD/AAAAAAAAAAAAAAAAAAf/wAAAAAAAAAAAAAAAAAAAAAAAAAB8AAAOAAAAAAAAAAAAAAf8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAf8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAfwAAAAAAAAAAAAAAAAAAAAAAAAAAAOAABgAAAAAAAAAAAAAAPwAAAAAAAAAAAAAAAAAAAAAAAAAAAEAADAAAAAAAAAAAAAAAfwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOAAAAAAAAAAAAAAA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAA/gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/AAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAD8AAACAPn8f/zwAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAA///gD////////8AAAAAAAAAAAAAAAAAAF4AAAAAAAAAAAAPP///wP//////////AAAAAAAAAAAAAAAAAH8AAAAAAAAD3///////j///////////8AAAAAAAAAAAAEAAA++AAAAAAH//////////n////////////+AAAAAAAAAAAeAwAD+AAAAAA////////////////////////8AAAAAAAJD/AH////8AAAAAB////////////////////////gAAAAAH//////////gAAAAAP///////////////////////+AAAAAAf/////////AAAAAAf////////////////////////+AAAAA///////////AAAHAP//////////////////////////AAAAMA/////////8AAAfgM/////////////////////////4AAAAAAP/////////wBB+AA/////////////////////////wAAAAAH///////////8AfP//////////////////////////8AAAAAH//////////////////////////////////////////wAd8AAf//////////////////////////////////////////8////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////';
-  var landBits = null;
-  function landAt(lon, lat) {
-    if (!landBits) {
-      var bin = atob(LAND_B64);
-      landBits = new Uint8Array(bin.length);
-      for (var i = 0; i < bin.length; i++) landBits[i] = bin.charCodeAt(i);
-    }
-    var x = Math.round((lon + 180) / 360 * LAND_W);
-    var y = Math.round((90 - lat) / 180 * LAND_H);
-    if (x < 0) x = 0; if (x >= LAND_W) x = LAND_W - 1;
-    if (y < 0 || y >= LAND_H) return false;
-    var idx = y * LAND_W + x;
-    return (landBits[idx >> 3] >> (7 - (idx & 7))) & 1;
+  // ── Indicateurs vivants (release + CI) — voir tool/sync.js / apps/<id>/status.json ──
+  function ciInfo(app) {
+    var ci = app.status && app.status.ci;
+    if (!app.repo) return { k: 'none', label: 'Sans dépôt', date: '' };
+    if (!ci) return { k: 'none', label: 'Pas de run', date: '' };
+    var base = { url: ci.url || ('https://github.com/' + app.repo + '/actions'), date: fmtDate(ci.updatedAt), dateLong: fmtDate(ci.updatedAt, true) };
+    if (ci.status !== 'completed') return Object.assign(base, { k: 'run', label: 'CI en cours' });
+    if (ci.conclusion === 'success') return Object.assign(base, { k: 'ok', label: 'CI OK' });
+    if (ci.conclusion === 'failure') return Object.assign(base, { k: 'ko', label: 'CI échec' });
+    return Object.assign(base, { k: 'none', label: 'CI ' + (ci.conclusion || ci.status) });
+  }
+  function ciPill(app, big) {
+    var c = ciInfo(app);
+    var inner = '<i class="dot"></i><span class="ci-lbl">' + esc(c.label) + (big ? '<small>' + esc(c.dateLong || (app.repo ? 'aucun run' : 'à créer')) + '</small>' : '') + '</span>';
+    var cls = 'ci ci-' + c.k + (big ? ' ci-big' : '');
+    return (big && c.url)
+      ? '<a class="' + cls + '" href="' + esc(c.url) + '" target="_blank" rel="noopener">' + inner + '</a>'
+      : '<span class="' + cls + '">' + inner + '</span>';
+  }
+  function releaseTile(app) {
+    var rel = app.status && app.status.release;
+    var h = '<div class="mini">';
+    if (rel) h += '<a href="' + esc(rel.url || ('https://github.com/' + app.repo + '/releases')) + '" target="_blank" rel="noopener"><b>🏷️ ' + esc(rel.tag) + '</b><small>dernière release</small></a>';
+    else if (app.repo) h += '<b>Aucune release</b><small>' + esc(app.repo) + '</small>';
+    else h += '<b>Pas de dépôt</b><small>à créer</small>';
+    return h + '</div>';
   }
 
-  var DEG = Math.PI / 180;
-  var globe = null;
-
-  function makeGlobe(canvas) {
-    var ctx = canvas.getContext('2d');
-    var size = 0, R = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var lambda = 20, tilt = 14, active = true, raf = 0, last = 0;
-
-    // Points de terre, précalculés une seule fois (vecteurs unitaires).
-    var dots = [];
-    var seed = 7;
-    function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
-    for (var lat = -82; lat <= 82; lat += 2.1) {
-      var step = 2.1 / Math.max(0.2, Math.cos(lat * DEG));
-      for (var lon = -180; lon < 180; lon += step) {
-        var la = lat + (rnd() - 0.5) * 0.7, lo = lon + (rnd() - 0.5) * 0.7;
-        if (!landAt(lo, la)) continue;
-        dots.push({ clat: Math.cos(la * DEG), slat: Math.sin(la * DEG), lon: lo,
-                    b: 0.32 + rnd() * 0.68, tw: rnd() * 6.28 });
-      }
-    }
-
-    function resize() {
-      var w = canvas.clientWidth || 320;
-      size = w; R = w / 2 - 2;
-      canvas.width = Math.round(w * dpr);
-      canvas.height = Math.round(w * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-
-    // Projection orthographique : renvoie [x, y, z] (z > 0 = face visible).
-    var st = Math.sin(tilt * DEG), ct = Math.cos(tilt * DEG);
-    function project(clat, slat, lon) {
-      var a = (lon + lambda) * DEG;
-      var ca = Math.cos(a), sa = Math.sin(a);
-      var x = clat * sa;
-      var y = ct * slat - st * clat * ca;
-      var z = st * slat + ct * clat * ca;
-      return [size / 2 + R * x, size / 2 - R * y, z];
-    }
-
-    function drawArc(pts) {
-      ctx.beginPath();
-      var started = false;
-      for (var i = 0; i < pts.length; i++) {
-        var p = project(pts[i][0], pts[i][1], pts[i][2]);
-        if (p[2] <= 0) { started = false; continue; }
-        if (!started) { ctx.moveTo(p[0], p[1]); started = true; } else ctx.lineTo(p[0], p[1]);
-      }
-      ctx.stroke();
-    }
-
-    // Graticule précalculé (méridiens + parallèles tous les 15°).
-    var grat = [];
-    for (var m = -180; m < 180; m += 15) {
-      var line = [];
-      for (var t = -88; t <= 88; t += 4) line.push([Math.cos(t * DEG), Math.sin(t * DEG), m]);
-      grat.push(line);
-    }
-    for (var p2 = -75; p2 <= 75; p2 += 15) {
-      var line2 = [];
-      for (var t2 = -180; t2 <= 180; t2 += 4) line2.push([Math.cos(p2 * DEG), Math.sin(p2 * DEG), t2]);
-      grat.push(line2);
-    }
-
-    function frame(now) {
-      var dt = last ? Math.min(60, now - last) : 16;
-      last = now;
-      if (active) lambda = (lambda + dt * 0.0055) % 360;
-      draw(now);
-      raf = requestAnimationFrame(frame);
-    }
-
-    function draw(now) {
-      if (!size) resize();
-      var cx = size / 2, cy = size / 2;
-      ctx.clearRect(0, 0, size, size);
-
-      var og = ctx.createRadialGradient(size * 0.36, size * 0.3, R * 0.1, cx, cy, R);
-      og.addColorStop(0, '#0d2947');
-      og.addColorStop(0.55, '#071b33');
-      og.addColorStop(1, '#03101f');
-      ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.2832); ctx.fillStyle = og; ctx.fill();
-
-      ctx.strokeStyle = 'rgba(62,168,255,0.16)';
-      ctx.lineWidth = 0.6;
-      for (var i = 0; i < grat.length; i++) drawArc(grat[i]);
-
-      var tw = now / 700;
-      for (var j = 0; j < dots.length; j++) {
-        var d = dots[j];
-        var pt = project(d.clat, d.slat, d.lon);
-        if (pt[2] <= 0.02) continue;
-        var a = d.b * (0.62 + 0.38 * Math.sin(tw + d.tw)) * (0.35 + 0.65 * pt[2]);
-        ctx.fillStyle = 'rgba(150,231,255,' + a.toFixed(2) + ')';
-        ctx.fillRect(pt[0] - 0.7, pt[1] - 0.7, 1.6, 1.6);
-      }
-
-      var sg = ctx.createRadialGradient(size * 0.33, size * 0.28, R * 0.12, cx, cy, R * 1.08);
-      sg.addColorStop(0, 'rgba(120,200,255,0.10)');
-      sg.addColorStop(0.45, 'rgba(0,0,0,0)');
-      sg.addColorStop(1, 'rgba(1,6,14,0.85)');
-      ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.2832); ctx.fillStyle = sg; ctx.fill();
-
-      ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.2832);
-      ctx.strokeStyle = 'rgba(138,212,255,0.55)'; ctx.lineWidth = 1;
-      ctx.shadowColor = 'rgba(90,190,255,0.9)'; ctx.shadowBlur = 14;
-      ctx.stroke(); ctx.shadowBlur = 0;
-    }
-
-    resize();
-    raf = requestAnimationFrame(frame);
-    window.addEventListener('resize', resize);
-
-    return {
-      setActive: function (v) { active = v; },
-      destroy: function () { cancelAnimationFrame(raf); window.removeEventListener('resize', resize); }
-    };
-  }
-
-  function mountGlobe() {
-    if (globe) { globe.destroy(); globe = null; }
-    var cv = $('#globe');
-    if (cv) { globe = makeGlobe(cv); globe.setActive(animOn()); }
-  }
-
-  // ── Routage ────────────────────────────────────────────────────────────────
   // ── État de vue (pas de hash : Gestion Pro pilote sa propre navigation) ────
   var vue = { page: 'accueil', id: null, volet: 'technique' };
-  function currentRoute() { return vue; }
   function dashGo(page, id, volet) {
     var v = (volet === 'marketing' || volet === 'publication') ? volet : 'technique';
     vue = { page: page || 'accueil', id: id || null, volet: v };
@@ -242,386 +119,295 @@
   }
   window.dashGo = dashGo;
 
-  // ── Ossature ───────────────────────────────────────────────────────────────
+  // ── Barre latérale ─────────────────────────────────────────────────────────
+  function renderSidebar(route) {
+    var h = '<button class="clay-btn back" type="button" data-dash-home title="Retour au tableau de bord">←</button>';
+    h += '<div class="side-id">' + logoImg('avatar') + '<div class="hi">Salut, ' + esc(PRENOM) + ' 👋</div></div>';
+    h += '<nav class="side-nav">';
+    h += '<button type="button" class="nav-item' + (route.page === 'accueil' ? ' active' : '') + '" data-dash-go="accueil"><span class="ico tint-mint">⌂</span><span class="lbl">Vue d’ensemble</span></button>';
+    h += '<div class="side-label">Applications</div>';
+    DATA.apps.forEach(function (a) {
+      h += '<button type="button" class="nav-item' + (route.page === 'app' && route.id === a.id ? ' active' : '') + '" data-dash-go="app/' + esc(a.id) + '">' +
+        '<span class="ico">' + esc(a.emoji) + '</span><span class="lbl">' + esc(a.name) + '</span><i class="dot ci-' + ciInfo(a).k + '"></i></button>';
+    });
+    h += '<div class="side-label">Ressources</div>';
+    h += '<button type="button" class="nav-item' + (route.page === 'catalogue' ? ' active' : '') + '" data-dash-go="catalogue"><span class="ico tint-sun">▤</span><span class="lbl">Catalogue</span></button>';
+    h += '</nav>';
+    var sync = fmtDate(DATA.generatedAt, true);
+    h += '<div class="side-card tint-sky"><b>Synchronisation</b><span>' + (sync ? 'Données du ' + esc(sync) : 'Données locales') + '</span>' +
+      '<a class="side-cta" href="https://github.com/teiki5320/Dashboard/actions" target="_blank" rel="noopener">Voir la synchro</a></div>';
+    return h;
+  }
+
+  // ── Barre haute ────────────────────────────────────────────────────────────
+  function renderTopbar(route, app) {
+    var titre = 'Mes apps', sous = DATA.apps.length + ' applications';
+    if (route.page === 'app' && app) { titre = app.name; sous = (app.platforms || []).join(' · ') || 'Aucune plateforme'; }
+    if (route.page === 'catalogue') { titre = 'Catalogue'; sous = DATA.services.length + ' services · ' + DATA.categories.length + ' familles'; }
+    var kos = DATA.apps.filter(function (a) { return ciInfo(a).k === 'ko'; });
+    var h = '<div class="topbar"><div class="tb-title"><h2>' + esc(titre) + '</h2><span class="tb-sub">' + esc(sous) + '</span></div>';
+    if (route.page !== 'app') {
+      h += '<label class="tb-search"><span>⌕</span><input id="dash-search" type="search" autocomplete="off" placeholder="' +
+        (route.page === 'catalogue' ? 'Rechercher un service…' : 'Rechercher une app…') + '"></label>';
+    }
+    h += '<button type="button" class="clay-btn" id="dash-theme" title="Clair / sombre">' + (theme() === 'sombre' ? '☀️' : '🌙') + '</button>';
+    h += '<button type="button" class="clay-btn bell"' + (kos.length ? ' data-dash-go="app/' + esc(kos[0].id) + '" title="' + esc(kos.map(function (a) { return a.name; }).join(', ')) + ' : CI en échec"' : ' title="Aucune alerte"') + '>🔔' +
+      (kos.length ? '<span class="badge-n">' + kos.length + '</span>' : '') + '</button>';
+    return h + '</div>';
+  }
+
   // ── Page : vue d'ensemble ──────────────────────────────────────────────────
-  // ── Indicateurs vivants (release + CI) — voir tool/sync.js / apps/<id>/status.json ──
-  function ciDotColor(ci) {
-    if (!ci) return null;
-    if (ci.status !== 'completed') return 'var(--ambre)';
-    if (ci.conclusion === 'success') return 'var(--vert)';
-    if (ci.conclusion === 'failure') return '#ff6b6b';
-    return 'var(--texte-3)';
-  }
-  function ciLabel(ci) {
-    if (ci.status !== 'completed') return 'CI en cours';
-    if (ci.conclusion === 'success') return 'CI OK';
-    if (ci.conclusion === 'failure') return 'CI échec';
-    return 'CI ' + esc(ci.conclusion || ci.status);
-  }
-  function statusTagsHtml(app) {
-    if (!app.status) return '';
-    var out = '', rel = app.status.release, ci = app.status.ci;
-    if (rel) {
-      out += '<a class="tag" href="' + esc(rel.url || ('https://github.com/' + app.repo + '/releases')) + '" title="Dernière release">🏷️ ' + esc(rel.tag) + '</a>';
-    }
-    if (ci) {
-      var color = ciDotColor(ci);
-      out += '<a class="tag" href="' + esc(ci.url || ('https://github.com/' + app.repo + '/actions')) + '" title="Dernier run CI" style="border-color:' + color + '55;color:' + color + '">● ' + ciLabel(ci) + '</a>';
-    }
-    return out;
+  function donutHtml(p, done, todo, note) {
+    return '<div class="donut-row"><div class="donut" style="--p:' + p + '"><div><b>' + p + ' %</b></div></div>' +
+      '<div class="donut-legend"><span><i class="sw sw-accent"></i>' + done + ' ouverts</span><span><i class="sw sw-sun"></i>' + todo + ' à ouvrir</span>' +
+      (note ? '<small>' + note + '</small>' : '') + '</div></div>';
   }
 
   function renderAccueil() {
-    var tousServices = {};
-    var done = 0, todo = 0, actions = [];
+    var done = 0, todo = 0, actions = [], nbOk = 0, nbKo = 0, nbNone = 0, ko = null, lastRun = null;
     DATA.apps.forEach(function (a) {
-      a.services.forEach(function (s) { tousServices[s] = 1; });
       var s = a.marketingSummary || {};
       done += s.done || 0; todo += s.todo || 0;
-      (s.nextActions || []).slice(0, 2).forEach(function (t, j) {
-        actions.push({ app: a, texte: t, key: a.id + ':' + j });
-      });
+      (s.nextActions || []).slice(0, 2).forEach(function (t, j) { actions.push({ app: a, texte: t, key: a.id + ':' + j }); });
+      var c = ciInfo(a);
+      if (c.k === 'ok') nbOk++; else if (c.k === 'ko') { nbKo++; ko = ko || a; } else nbNone++;
+      var ts = a.status && a.status.ci && a.status.ci.updatedAt;
+      if (ts && (!lastRun || ts > lastRun.ts)) lastRun = { ts: ts, app: a };
     });
-    var nbServices = Object.keys(tousServices).length;
+    var total = 0, faites = 0;
+    DATA.apps.forEach(function (a) {
+      ((a.marketingSummary || {}).nextActions || []).forEach(function (t, i) { total++; if (todos[a.id + ':' + i]) faites++; });
+    });
     var p = pct(done, todo);
+    var koC = ko ? ciInfo(ko) : null;
 
-    var h = '<div class="stage">';
-
-    h += '<div style="display:flex;flex-direction:column;gap:16px">' +
-      '<div class="panel"><div class="panel-h">Parc applicatif</div><div class="kpis">' +
-      '<div class="kpi"><b>' + DATA.apps.length + '</b><span>APPLICATIONS</span></div>' +
-      '<div class="kpi"><b>' + nbServices + '</b><span>SERVICES UTILISÉS</span></div>' +
-      '<div class="kpi"><b>' + DATA.services.length + '</b><span>AU CATALOGUE</span></div>' +
-      '</div></div>';
-    h += '<div class="panel"><div class="panel-h">Canaux marketing cumulés</div><div class="panel-body" style="display:flex;align-items:center;gap:18px">' +
-      '<div class="donut" style="background:conic-gradient(var(--accent) 0 ' + p + '%, rgba(var(--accent-rgb),.13) ' + p + '% 100%)">' +
-      '<div><b>' + p + '%</b><span>' + done + ' / ' + (done + todo) + '</span></div></div>' +
-      '<div class="hint">' + done + ' canaux ouverts, ' + todo + ' à ouvrir, toutes applications confondues.</div>' +
-      '</div></div>';
+    var h = '<div class="hero-row">';
+    h += '<div class="tile tint-peach hero rise">' + logoImg('hero-img') + '<div class="hero-txt"><h3>Bonjour, ' + esc(PRENOM) + ' ☀️</h3>' +
+      '<p>' + (ko
+        ? nbOk + ' app' + (nbOk > 1 ? 's' : '') + ' au vert, mais le dernier run CI de <b>' + esc(ko.name) + '</b> a échoué' + (koC.date ? ' le ' + esc(koC.date) : '') + '.'
+        : 'Toutes tes apps sont au vert. ' + total + ' action' + (total > 1 ? 's' : '') + ' marketing en attente.') + '</p>' +
+      '<button type="button" class="cta" data-dash-go="' + (ko ? 'app/' + esc(ko.id) : 'catalogue') + '">' + (ko ? 'Voir ' + esc(ko.name) + ' →' : 'Ouvrir le catalogue →') + '</button></div></div>';
+    h += '<div class="tile rise" style="animation-delay:.05s"><div class="tile-h"><b>Canaux marketing</b><span>toutes apps</span></div>' +
+      donutHtml(p, done, todo, '✅ / ⬜ des tableaux de marketing.md') + '</div>';
     h += '</div>';
 
-    h += '<div><div class="globe-wrap"><div class="globe-halo"></div><canvas id="globe"></canvas>' +
-      '<div class="globe-ring"></div><div class="globe-ring slow"></div></div>' +
-      '<div class="globe-legend">' + DATA.apps.length + ' applications · ' + nbServices + ' services · synchronisation quotidienne</div></div>';
+    h += '<div class="kpi-row">';
+    h += '<div class="tile kpi tint-mint rise" style="animation-delay:.08s"><span class="kpi-ico">📱</span><span class="kpi-lab">Applications</span><b>' + DATA.apps.length + '</b><small>' + DATA.apps.filter(function (a) { return a.repo; }).length + ' dépôts suivis</small></div>';
+    h += '<div class="tile kpi tint-ok rise" style="animation-delay:.12s"><span class="kpi-ico">✅</span><span class="kpi-lab">CI au vert</span><b>' + nbOk + '</b><small class="c-ok">' + (lastRun ? 'dernier run ' + esc(fmtDate(lastRun.ts)) : 'aucun run') + '</small></div>';
+    h += '<div class="tile kpi ' + (nbKo ? 'tint-ko' : 'tint-none') + ' rise" style="animation-delay:.16s"><span class="kpi-ico">' + (nbKo ? '⚠️' : '🧘') + '</span><span class="kpi-lab">CI en échec</span><b>' + nbKo + '</b><small class="' + (nbKo ? 'c-ko' : '') + '">' + (ko ? esc(ko.name) + (koC.date ? ' · ' + esc(koC.date) : '') : 'tout est au vert') + '</small></div>';
+    h += '<div class="tile kpi tint-sky rise" style="animation-delay:.2s"><span class="kpi-ico">🗒️</span><span class="kpi-lab">Actions à faire</span><b>' + (total - faites) + '</b><small>' + faites + ' cochée' + (faites > 1 ? 's' : '') + '</small></div>';
+    h += '</div>';
 
-    h += '<div class="panel"><div class="panel-h">Prochaines actions</div><div class="panel-body actions">';
+    h += '<div class="two-col">';
+    h += '<div class="tile rise" style="animation-delay:.22s"><div class="tile-h"><b>Mes applications</b><span>état du dernier run CI</span></div><div class="rows" id="app-rows">';
+    DATA.apps.forEach(function (a, i) {
+      var c = ciInfo(a), meta = [];
+      meta.push((a.platforms || []).join(' · ') || 'Aucune plateforme');
+      if (a.services.length) meta.push(a.services.length + ' services');
+      if (c.date) meta.push('run ' + c.date);
+      h += '<a class="row" data-dash-go="app/' + esc(a.id) + '" data-search="' + esc(norm(a.name + ' ' + a.tagline)) + '" style="animation-delay:' + (0.24 + i * 0.04).toFixed(2) + 's">' +
+        '<span class="row-ico tint-' + appTint(a) + '">' + esc(a.emoji) + '</span>' +
+        '<span class="row-txt"><b>' + esc(a.name) + '</b><small>' + esc(meta.join(' · ')) + '</small></span>' + ciPill(a) + '</a>';
+    });
+    h += '</div></div>';
+    h += '<div class="tile rise" style="animation-delay:.26s"><div class="tile-h"><b>Prochaines actions</b><span>' + (total - faites) + ' restantes</span></div><div class="todos">';
     if (actions.length) {
       actions.slice(0, 8).forEach(function (a) {
-        h += '<label>' + todoBox(a.key) + '<span>' +
-          '<a data-dash-go="app/' + esc(a.app.id) + '/marketing">' + esc(a.app.name) + '</a> — ' + esc(a.texte) + '</span></label>';
+        h += todoHtml(a.key, esc(a.texte), '<a data-dash-go="app/' + esc(a.app.id) + '/marketing">' + esc(a.app.name) + '</a>');
       });
-    } else {
-      h += '<span class="empty-note">Aucune section « Prochaines actions » dans les fiches marketing.</span>';
-    }
+    } else h += '<span class="empty-note">Aucune section « Prochaines actions » dans les fiches marketing.</span>';
     h += '</div></div></div>';
-
-    h += '<div class="grid grid-3" style="margin-top:16px">';
-    DATA.apps.forEach(function (a, i) {
-      var s = a.marketingSummary || {};
-      var pp = pct(s.done || 0, s.todo || 0);
-      h += '<a class="app-card" data-dash-go="app/' + esc(a.id) + '" style="animation-delay:' + (i * 0.05).toFixed(2) + 's">' +
-        '<h3>' + esc(a.emoji) + ' ' + esc(a.name) + '</h3>' +
-        '<p>' + esc(a.tagline || '') + '</p>' +
-        (s.model ? '<div class="card-model" title="' + esc(s.model) + '">💰 ' + esc(s.model) + '</div>' : '') +
-        '<div class="progress"><i style="width:' + pp + '%"></i></div>' +
-        '<div class="meta" style="margin-top:10px"><span>' + a.services.length + ' services</span>' +
-        '<span>' + pp + ' % canaux</span>' +
-        (a.status && a.status.release ? '<span>🏷️ ' + esc(a.status.release.tag) + '</span>' : '') +
-        (a.status && a.status.ci ? '<span style="color:' + ciDotColor(a.status.ci) + '">● ' + ciLabel(a.status.ci) + '</span>' : '') +
-        '<span>' + esc((a.platforms || []).join(' · ')) + '</span></div></a>';
-    });
-    h += '</div>';
     return h;
   }
 
   // ── Page : application ─────────────────────────────────────────────────────
-  function splitName(name) {
-    if (name.length <= 14) return [name];
-    var words = name.split(' '), l1 = '', l2 = '';
-    for (var i = 0; i < words.length; i++) {
-      var w = words[i];
-      if (l1.length + w.length <= 14 && !l2) l1 = l1 ? l1 + ' ' + w : w;
-      else l2 = l2 ? l2 + ' ' + w : w;
-    }
-    if (l2.length > 18) l2 = l2.slice(0, 17) + '…';
-    return l2 ? [l1, l2] : [l1];
-  }
-
-  function renderDiagram(app) {
-    var services = app.services.map(serviceById).filter(Boolean);
-    if (!services.length) return '<p class="empty-note" style="padding:16px 18px">Aucun service déclaré dans app.json.</p>';
-    var groups = [];
-    DATA.categories.forEach(function (cat) {
-      var list = services.filter(function (s) { return s.categorie === cat; });
-      if (list.length) groups.push({ cat: cat, list: list });
-    });
-    var total = services.length;
-    var W = 1040, H = 660, cx = W / 2, cy = H / 2, rx = 370, ry = 225;
-    var gap = 0.10, avail = 2 * Math.PI - gap * groups.length, angle = -Math.PI / 2;
-    var lines = '', nodes = '';
-    var nodeIdx = 0;
-    groups.forEach(function (g) {
-      var span = (g.list.length / total) * avail;
-      var color = catColor(g.cat);
-      g.list.forEach(function (s, i) {
-        var a = angle + ((i + 0.5) / g.list.length) * span;
-        var x = cx + Math.cos(a) * rx, y = cy + Math.sin(a) * ry;
-        lines += '<line class="link-line" x1="' + cx + '" y1="' + cy + '" x2="' + x.toFixed(1) + '" y2="' + y.toFixed(1) + '"/>';
-        var nameSvg = '';
-        splitName(s.nom.replace(/\s*\(.*\)$/, '')).forEach(function (ln, k) {
-          nameSvg += '<text class="svc-name" x="' + x.toFixed(1) + '" y="' + (y + 46 + k * 14).toFixed(1) +
-            '" text-anchor="middle">' + esc(ln) + '</text>';
-        });
-        nodes += '<g class="svc" data-svc="' + esc(s.id) + '" role="button" tabindex="0" aria-label="' + esc(s.nom) + '">' +
-          '<circle class="ping" cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="27" stroke="' + color +
-          '" style="animation-delay:' + (nodeIdx * 0.4).toFixed(1) + 's"/>' +
-          '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="27" stroke="' + color + '"/>' +
-          '<text x="' + x.toFixed(1) + '" y="' + (y + 8).toFixed(1) + '" text-anchor="middle" font-size="24">' + esc(s.emoji) + '</text>' +
-          nameSvg + '</g>';
-        nodeIdx++;
-      });
-      angle += span + gap;
-    });
-    // Anneaux de radar concentriques derrière les liens
-    var rings = '';
-    [0.5, 0.78, 1.04].forEach(function (k) {
-      rings += '<ellipse class="rings" cx="' + cx + '" cy="' + cy + '" rx="' + Math.round(rx * k) + '" ry="' + Math.round(ry * k) + '"/>';
-    });
-    var center = '<g class="center-node">' +
-      '<rect x="' + (cx - 95) + '" y="' + (cy - 34) + '" width="190" height="68"/>' +
-      '<text x="' + cx + '" y="' + (cy - 4) + '" text-anchor="middle" font-size="26">' + esc(app.emoji) + '</text>' +
-      '<text x="' + cx + '" y="' + (cy + 22) + '" text-anchor="middle" font-size="16" font-weight="700">' + esc(app.name) + '</text></g>';
-    var legend = '<div class="diagram-legend">';
-    groups.forEach(function (g) { legend += '<span><i style="background:' + catColor(g.cat) + '"></i>' + esc(g.cat) + '</span>'; });
-    legend += '</div>';
-    return '<div class="diagram-wrap"><div class="radar-sweep"><div></div></div>' +
-      '<svg viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schéma d’architecture de ' + esc(app.name) + '">' +
-      rings + lines + center + nodes + '</svg></div>' + legend;
-  }
-
   function tocHtml(toc) {
-    var items = toc.filter(function (t) { return t.level >= 2 && t.level <= 3; });
+    var items = (toc || []).filter(function (t) { return t.level >= 2 && t.level <= 3; });
     if (items.length < 3) return '';
     var h = '<div class="toc">';
     items.forEach(function (t) { h += '<a class="lvl-' + t.level + '" href="#' + esc(t.id) + '">' + esc(t.text) + '</a>'; });
     return h + '</div>';
   }
-
-  function fichePanel(titre, toc, mdHtml) {
-    return '<div class="panel fiche" style="margin-top:16px">' +
-      '<button class="panel-h fiche-toggle" type="button">' + titre +
-      '<span class="chev">▾ déplier</span></button>' +
+  function fichePanel(titre, sous, toc, mdHtml) {
+    return '<div class="tile fiche tint-sun rise" style="animation-delay:.14s">' +
+      '<button class="fiche-toggle" type="button"><span class="fiche-t"><b>' + titre + '</b><small>' + sous + '</small></span><span class="chev">Déplier</span></button>' +
       tocHtml(toc) + '<div class="md">' + mdHtml + '</div></div>';
   }
-
-  // « État » ou « Etat », « iOS · App Store » ou « ios · app store » : on
-  // compare sans accents ni casse.
-  function sansAccent(s) {
-    return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  function factsHtml(facts) {
+    var h = '<div class="facts">';
+    facts.forEach(function (f) { h += '<div class="fact"><span>' + esc(f.label) + '</span><span>' + lienSiUrl(f.value) + '</span></div>'; });
+    return h + '</div>';
   }
 
-  function lienSiUrl(v) {
-    return /^https?:\/\/\S+$/.test(v)
-      ? '<a href="' + esc(v) + '" target="_blank" rel="noopener">' + esc(v.replace(/^https?:\/\//, '')) + '</a>'
-      : esc(v);
+  function renderAppHead(app, volet) {
+    var c = ciInfo(app);
+    var h = '<div class="tile app-head tint-' + appTint(app) + ' rise">' +
+      '<span class="app-big">' + esc(app.emoji) + '</span>' +
+      '<div class="app-txt"><h3>' + esc(app.name) + '</h3><p>' + esc(app.tagline || '') + '</p><div class="chips">' +
+      (app.platforms || []).map(function (p) { return '<span class="chip">' + esc(p) + '</span>'; }).join('') +
+      (app.repo ? '<a class="chip" href="https://github.com/' + esc(app.repo) + '" target="_blank" rel="noopener">📦 ' + esc(app.repo) + '</a>' : '<span class="chip">Pas de dépôt</span>') +
+      '<span class="chip">' + app.services.length + ' services</span></div></div>' +
+      '<div class="app-side">' + ciPill(app, true) + releaseTile(app) + '</div></div>';
+
+    var volets = [['technique', 'Technique'], ['marketing', 'Marketing']];
+    if (app.publicationHtml) volets.push(['publication', 'Publication']);
+    var idx = 0;
+    volets.forEach(function (v, i) { if (v[0] === volet) idx = i; });
+    h += '<div class="seg rise" style="--n:' + volets.length + ';animation-delay:.05s"><span class="seg-thumb" style="--i:' + idx + '"></span>';
+    volets.forEach(function (v) {
+      h += '<button type="button" class="' + (v[0] === volet ? 'active' : '') + '" data-dash-go="app/' + esc(app.id) + '/' + v[0] + '">' + v[1] + '</button>';
+    });
+    return h + '</div>';
+  }
+
+  function renderServices(app) {
+    var services = app.services.map(serviceById).filter(Boolean);
+    var h = '<div class="tile rise" style="animation-delay:.08s"><div class="tile-h"><b>Services</b><span>' + services.length + ' rattachés · cliquez pour la fiche</span></div>';
+    if (!services.length) return h + '<span class="empty-note">Aucun service déclaré dans app.json.</span></div>';
+    DATA.categories.forEach(function (cat) {
+      var list = services.filter(function (s) { return s.categorie === cat; });
+      if (!list.length) return;
+      h += '<div class="fam"><div class="fam-h"><i class="sw sw-' + famTint(cat) + '"></i>' + esc(cat) + '</div><div class="chips">';
+      list.forEach(function (s) {
+        h += '<button type="button" class="chip tint-' + famTint(cat) + '" data-svc="' + esc(s.id) + '">' + esc(s.emoji) + ' ' + esc(s.nom.replace(/\s*\(.*\)$/, '')) + '</button>';
+      });
+      h += '</div></div>';
+    });
+    return h + '</div>';
   }
 
   function renderApp(app, volet) {
     var h = '';
     if (volet === 'technique') {
-      var services = app.services.map(serviceById).filter(Boolean);
       var ess = app.infraEssentiel || { facts: [], resume: null };
-
-      h += '<div class="stage-tech">';
-
-      // L'essentiel : les faits clés extraits de la fiche infra
-      h += '<div class="panel st-pile"><div class="panel-h">L’essentiel</div><div class="panel-body">';
-      if (ess.facts.length) {
-        h += '<dl class="facts">';
-        ess.facts.forEach(function (f) {
-          h += '<dt>' + esc(f.label) + '</dt><dd>' + esc(f.value) + '</dd>';
-        });
-        h += '</dl>';
-      } else if (ess.resume) {
-        h += '<p class="resume">' + esc(ess.resume) + '</p>';
-      } else {
-        h += '<span class="empty-note">Pas de section « Vue d’ensemble » dans l’infra.md.</span>';
-      }
-      h += '<div class="tags" style="margin-top:14px">' +
-        (app.repo ? '<a class="tag" href="https://github.com/' + esc(app.repo) + '">📦 ' + esc(app.repo) + '</a>' : '') +
-        statusTagsHtml(app) +
-        (app.platforms || []).map(function (p) { return '<span class="tag">' + esc(p) + '</span>'; }).join('') +
-        '</div></div></div>';
-
-      h += '<div class="panel st-archi" style="animation-delay:.05s"><div class="panel-h">Architecture · cliquez sur un service</div>' + renderDiagram(app) + '</div>';
-
-      h += '<div class="panel st-liste" style="animation-delay:.1s"><div class="panel-h">Services rattachés</div><div class="panel-body liste" style="padding:8px 10px">';
-      services.forEach(function (s, i) {
-        h += '<button data-svc="' + esc(s.id) + '"><span class="num">' + (i < 9 ? '0' : '') + (i + 1) + '</span>' +
-          '<span class="nom">' + esc(s.nom) + '</span><span class="fam">' + esc(s.categorie) + '</span></button>';
-      });
-      h += '</div></div></div>';
-
-      h += fichePanel('Fiche technique — infra.md', app.infraToc, app.infraHtml);
+      h += '<div class="two-col">';
+      h += '<div class="tile rise" style="animation-delay:.04s"><div class="tile-h"><b>L’essentiel</b><span>infra.md · vue d’ensemble</span></div>';
+      if (ess.facts.length) h += factsHtml(ess.facts);
+      else if (ess.resume) h += '<p class="resume">' + esc(ess.resume) + '</p>';
+      else h += '<span class="empty-note">Pas de section « Vue d’ensemble » dans l’infra.md.</span>';
+      h += '</div>';
+      h += renderServices(app);
+      h += '</div>';
+      h += fichePanel('Fiche technique complète', 'infra.md · ' + app.services.length + ' services', app.infraToc, app.infraHtml);
     } else if (volet === 'publication') {
       var essP = app.publicationEssentiel || { facts: [], resume: null };
       var plats = app.publicationPlateformes || [];
-
-      // Les faits par plateforme sont repris en colonne juste en dessous :
-      // le bandeau ne garde que ce qui vaut pour les deux boutiques.
       var communs = (essP.facts || []).filter(function (f) {
-        return !plats.some(function (p) { return sansAccent(p.titre).indexOf(sansAccent(f.label)) === 0; });
+        return !plats.some(function (p) { return norm(p.titre).indexOf(norm(f.label)) === 0; });
       });
-
       if (communs.length) {
-        h += '<div class="panel"><div class="panel-h">Commun aux deux boutiques</div>' +
-          '<div class="panel-body"><dl class="facts">';
-        communs.forEach(function (f) {
-          h += '<dt>' + esc(f.label) + '</dt><dd>' + esc(f.value) + '</dd>';
-        });
-        h += '</dl></div></div>';
+        h += '<div class="tile rise"><div class="tile-h"><b>Commun aux boutiques</b><span>publication.md</span></div>' + factsHtml(communs) + '</div>';
       }
-
       if (plats.length) {
         h += '<div class="pub-grid">';
         plats.forEach(function (p, i) {
           var etat = null, autres = [];
-          p.faits.forEach(function (f) {
-            if (sansAccent(f.label) === 'etat') etat = f.value; else autres.push(f);
-          });
-          h += '<div class="panel" style="animation-delay:' + (i * 0.05).toFixed(2) + 's">' +
-            '<div class="panel-h">' + esc(p.titre) + '</div><div class="panel-body">';
-          if (etat) h += '<div class="pub-etat">' + esc(etat) + '</div>';
-          if (autres.length) {
-            h += '<dl class="facts">';
-            autres.forEach(function (f) {
-              h += '<dt>' + esc(f.label) + '</dt><dd>' + lienSiUrl(f.value) + '</dd>';
-            });
-            h += '</dl>';
-          }
+          p.faits.forEach(function (f) { if (norm(f.label) === 'etat') etat = f.value; else autres.push(f); });
+          var ios = /ios|apple|app store/i.test(p.titre), and = /android|play/i.test(p.titre);
+          h += '<div class="tile rise" style="animation-delay:' + (0.05 + i * 0.05).toFixed(2) + 's">' +
+            '<div class="store-h"><span class="row-ico tint-' + (ios ? 'sky' : and ? 'mint' : 'lilac') + '">' + (ios ? '🍎' : and ? '🤖' : '🌐') + '</span><div><b>' + esc(p.titre) + '</b>' +
+            (etat ? '<small>' + esc(etat) + '</small>' : '') + '</div></div>';
+          if (autres.length) h += factsHtml(autres);
           p.notes.forEach(function (n) {
-            h += '<div class="pub-note">' +
-              (n.titre ? '<b>' + esc(n.titre) + '</b>' : '') +
-              '<p>' + esc(n.texte) + '</p></div>';
+            h += '<div class="note">' + (n.titre ? '<b>' + esc(n.titre) + '</b>' : '') + '<p>' + esc(n.texte) + '</p></div>';
           });
-          h += '</div></div>';
+          h += '</div>';
         });
         h += '</div>';
       } else if (!communs.length) {
-        h += '<div class="panel"><div class="panel-body">' +
-          '<span class="empty-note">Pas de section par plateforme dans publication.md.</span>' +
-          '</div></div>';
+        h += '<div class="tile"><span class="empty-note">Pas de section par plateforme dans publication.md.</span></div>';
       }
-
-      h += fichePanel('Fiche de publication — publication.md', app.publicationToc, app.publicationHtml);
+      h += fichePanel('Fiche de publication complète', 'publication.md', app.publicationToc, app.publicationHtml);
     } else {
       var s2 = app.marketingSummary || {};
       var p = pct(s2.done || 0, s2.todo || 0);
-      h += '<div class="stage">';
-      h += '<div class="panel"><div class="panel-h">Canaux</div><div class="panel-body" style="display:flex;align-items:center;gap:18px">' +
-        '<div class="donut" style="background:conic-gradient(var(--accent) 0 ' + p + '%, rgba(var(--accent-rgb),.13) ' + p + '% 100%)">' +
-        '<div><b>' + p + '%</b><span>' + (s2.done || 0) + ' / ' + ((s2.done || 0) + (s2.todo || 0)) + '</span></div></div>' +
-        '<div class="hint">' + (s2.done || 0) + ' actifs · ' + (s2.todo || 0) + ' à ouvrir<br>(✅ / ⬜ des tableaux de marketing.md)</div></div></div>';
-      // Cap : modèle actuel + jalons du calendrier — plus de panneau vide
-      h += '<div class="panel" style="animation-delay:.05s"><div class="panel-h">Cap</div><div class="panel-body">' +
-        '<div class="cap-label">Modèle de rémunération actuel</div>' +
+      h += '<div class="three-col">';
+      h += '<div class="tile rise"><div class="tile-h"><b>Canaux</b><span>marketing.md</span></div>' + donutHtml(p, s2.done || 0, s2.todo || 0, null) + '</div>';
+      h += '<div class="tile tint-lilac rise" style="animation-delay:.05s"><div class="cap-label">Modèle de rémunération actuel</div>' +
         '<div class="cap-model">' + (s2.model ? esc(s2.model) : '<span class="empty-note">Non renseigné</span>') + '</div>';
       if (s2.jalons && s2.jalons.rows.length) {
         h += '<div class="cap-label" style="margin-top:14px">Calendrier</div><div class="jalons">';
         s2.jalons.rows.forEach(function (r) {
-          h += '<div class="jalon">' + (r[0] ? '<b>' + esc(r[0]) + '</b>' : '') +
-            '<span>' + esc(r[1] || '') + '</span></div>';
+          h += '<div class="jalon">' + (r[0] ? '<b>' + esc(r[0]) + '</b>' : '') + '<span>' + esc(r[1] || '') + '</span></div>';
         });
         h += '</div>';
       }
-      h += '</div></div>';
-
-      h += '<div class="panel" style="animation-delay:.1s"><div class="panel-h">Prochaines actions</div><div class="panel-body actions">';
+      h += '</div>';
+      h += '<div class="tile rise" style="animation-delay:.1s"><div class="tile-h"><b>Prochaines actions</b><span>' + ((s2.nextActions || []).length) + '</span></div><div class="todos">';
       if (s2.nextActions && s2.nextActions.length) {
-        s2.nextActions.forEach(function (a, i) {
-          h += '<label>' + todoBox(app.id + ':' + i) + '<span>' + esc(a) + '</span></label>';
-        });
-      } else {
-        h += '<span class="empty-note">Aucune section « Prochaines actions » trouvée</span>';
-      }
+        s2.nextActions.forEach(function (a, i) { h += todoHtml(app.id + ':' + i, esc(a), null); });
+      } else h += '<span class="empty-note">Aucune section « Prochaines actions » trouvée.</span>';
       h += '</div></div></div>';
-
-      // KPIs remontés depuis le tableau de marketing.md
       if (s2.kpis && s2.kpis.rows.length) {
-        h += '<div class="kpi-tiles">';
-        s2.kpis.rows.forEach(function (r) {
-          h += '<div class="kpi-tile"><span class="lab">' + esc(r[0] || '') + '</span>' +
-            '<b>' + esc(r[1] || '—') + '</b>' +
-            (r[2] ? '<span class="obj">objectif : ' + esc(r[2]) + '</span>' : '') + '</div>';
+        h += '<div class="kpi-row">';
+        s2.kpis.rows.forEach(function (r, i) {
+          h += '<div class="tile kpi tint-' + TINTS[i % TINTS.length] + ' rise" style="animation-delay:' + (0.12 + i * 0.04).toFixed(2) + 's"><span class="kpi-lab">' + esc(r[0] || '') + '</span><b class="kpi-txt">' + esc(r[1] || '—') + '</b>' +
+            (r[2] ? '<small>objectif : ' + esc(r[2]) + '</small>' : '') + '</div>';
         });
         h += '</div>';
       }
-
-      h += fichePanel('Plan marketing — marketing.md', app.marketingToc, app.marketingHtml);
+      h += fichePanel('Plan marketing complet', 'marketing.md', app.marketingToc, app.marketingHtml);
     }
     return h;
   }
 
   // ── Page : catalogue ───────────────────────────────────────────────────────
   function renderCatalogue() {
-    var chips = '';
+    var h = '<div class="cat-nav rise">';
     DATA.categories.forEach(function (cat) {
       if (DATA.services.some(function (s) { return s.categorie === cat; })) {
-        chips += '<a href="#cat-' + slug(cat) + '">' + esc(cat) + '</a>';
+        h += '<a class="chip tint-' + famTint(cat) + '" href="#cat-' + slug(cat) + '">' + esc(cat) + '</a>';
       }
     });
-    var h = '<div class="cat-tools">' +
-      '<input id="cat-search" type="search" placeholder="Rechercher un service (nom, rôle, famille)…" autocomplete="off">' +
-      '<div class="cat-nav">' + chips + '</div></div>';
-    h += '<div class="legend-row"><span>Badges :</span>' + badgeHtml('requis') +
-      '<span>indispensable dans sa famille</span>' + badgeHtml('optionnel') +
-      '<span>selon les besoins</span>' + badgeHtml('gratuit') +
-      '<span>offre gratuite suffisante pour démarrer</span></div>';
-    DATA.categories.forEach(function (cat) {
+    h += '</div>';
+    h += '<div class="legend-row rise">' + badgeHtml('requis') + '<span>indispensable dans sa famille</span>' + badgeHtml('optionnel') +
+      '<span>selon les besoins</span>' + badgeHtml('gratuit') + '<span>offre gratuite suffisante pour démarrer</span></div>';
+    DATA.categories.forEach(function (cat, ci) {
       var list = DATA.services.filter(function (s) { return s.categorie === cat; });
       if (!list.length) return;
-      h += '<div class="cat-section" id="cat-' + slug(cat) + '"><h2>' + esc(cat) + '</h2><div class="svc-grid">';
-      list.forEach(function (s) {
-        h += '<button class="svc-card" data-svc="' + esc(s.id) + '" data-search="' +
+      h += '<div class="cat-section" id="cat-' + slug(cat) + '"><h2><i class="sw sw-' + famTint(cat) + '"></i>' + esc(cat) + '</h2><div class="svc-grid">';
+      list.forEach(function (s, i) {
+        var users = appsUsingService(s.id);
+        h += '<button type="button" class="tile svc-card rise" style="animation-delay:' + Math.min(0.4, (ci * 0.03 + i * 0.03)).toFixed(2) + 's" data-svc="' + esc(s.id) + '" data-search="' +
           esc(norm(s.nom + ' ' + s.resume + ' ' + s.categorie + ' ' + s.role)) + '">' +
-          '<div class="svc-title">' + esc(s.emoji) + ' ' + esc(s.nom) + ' ' + badgeHtml(s.badge) + '</div>' +
-          '<div class="svc-resume">' + esc(s.resume) + '</div></button>';
+          '<span class="row-ico tint-' + famTint(cat) + '">' + esc(s.emoji) + '</span>' +
+          '<span class="svc-txt"><b>' + esc(s.nom) + '</b><small>' + esc(s.resume) + '</small>' +
+          '<span class="svc-meta">' + badgeHtml(s.badge) + (users.length ? '<em>' + users.map(function (a) { return esc(a.emoji); }).join(' ') + '</em>' : '') + '</span></span></button>';
       });
       h += '</div></div>';
     });
     return h;
   }
-
-  function filterCatalogue(q) {
+  function filterCards(q, sectionSel, cardSel) {
     q = norm(q || '').trim();
-    var sections = document.querySelectorAll('.cat-section');
+    var sections = document.querySelectorAll(sectionSel);
     for (var i = 0; i < sections.length; i++) {
-      var cards = sections[i].querySelectorAll('.svc-card');
-      var visibles = 0;
+      var cards = sections[i].querySelectorAll(cardSel), visibles = 0;
       for (var j = 0; j < cards.length; j++) {
         var ok = !q || (cards[j].getAttribute('data-search') || '').indexOf(q) !== -1;
         cards[j].style.display = ok ? '' : 'none';
         if (ok) visibles++;
       }
-      sections[i].style.display = visibles ? '' : 'none';
+      if (sectionSel !== '#app-rows') sections[i].style.display = visibles ? '' : 'none';
     }
+  }
+  function onSearch(q) {
+    if (vue.page === 'catalogue') filterCards(q, '.cat-section', '.svc-card');
+    else filterCards(q, '#app-rows', '.row');
   }
 
   // ── Fiche service ──────────────────────────────────────────────────────────
   function serviceSheetHtml(svc, appCtx) {
-    // Navigation ‹ › entre les fiches de la même famille
     var sibs = DATA.services.filter(function (s) { return s.categorie === svc.categorie; });
     var pos = sibs.indexOf(svc);
     var nav = '';
     if (sibs.length > 1) {
-      nav = '<div class="sheet-nav">' +
-        '<button data-nav="prev" aria-label="Fiche précédente de la famille">‹</button>' +
-        '<span class="pos">' + (pos + 1) + ' / ' + sibs.length + ' · ' + esc(svc.categorie) + '</span>' +
-        '<button data-nav="next" aria-label="Fiche suivante de la famille">›</button></div>';
+      nav = '<div class="sheet-nav"><button type="button" class="clay-btn sm" data-nav="prev" aria-label="Fiche précédente">‹</button>' +
+        '<span class="pos">' + (pos + 1) + ' / ' + sibs.length + '</span>' +
+        '<button type="button" class="clay-btn sm" data-nav="next" aria-label="Fiche suivante">›</button></div>';
     }
-    var h = '<div class="close-row">' + nav + '<span class="grow"></span><button class="close-btn" data-close>✕ FERMER</button></div>';
-    h += '<h2>' + esc(svc.emoji) + ' ' + esc(svc.nom) + ' ' + badgeHtml(svc.badge) + '</h2>';
-    h += '<div class="svc-cat">Famille : ' + esc(svc.categorie) + '</div>';
+    var h = '<div class="close-row">' + nav + '<span class="grow"></span><button type="button" class="clay-btn sm" data-close aria-label="Fermer">✕</button></div>';
+    h += '<div class="sheet-head"><span class="row-ico big tint-' + famTint(svc.categorie) + '">' + esc(svc.emoji) + '</span><div><h2>' + esc(svc.nom) + '</h2><div class="svc-cat">' + esc(svc.categorie) + ' · ' + badgeHtml(svc.badge) + '</div></div></div>';
     h += '<h3>Rôle</h3><p>' + esc(svc.role) + '</p>';
     if (svc.concepts && svc.concepts.length) {
       h += '<h3>Concepts clés</h3><dl>';
@@ -638,21 +424,20 @@
     }
     var users = appsUsingService(svc.id);
     if (users.length) {
-      h += '<h3>Utilisé par</h3><p class="used-by">';
-      users.forEach(function (a) { h += '<a data-dash-go="app/' + esc(a.id) + '">' + esc(a.emoji) + ' ' + esc(a.name) + '</a>'; });
-      h += '</p>';
+      h += '<h3>Utilisé par</h3><div class="chips">';
+      users.forEach(function (a) { h += '<a class="chip tint-' + appTint(a) + '" data-dash-go="app/' + esc(a.id) + '">' + esc(a.emoji) + ' ' + esc(a.name) + '</a>'; });
+      h += '</div>';
     }
     h += '<div class="sheet-actions">';
     if (appCtx) {
       var anchor = appCtx.serviceAnchors[svc.id];
-      if (anchor) h += '<a href="#' + esc(anchor) + '" data-close>VOIR LA SECTION INFRA</a>';
+      if (anchor) h += '<a class="cta ghost" href="#' + esc(anchor) + '" data-close>Voir la section infra</a>';
     }
-    h += '<a data-dash-go="catalogue/' + esc(svc.id) + '">OUVRIR DANS LE CATALOGUE</a></div>';
+    h += '<a class="cta" data-dash-go="catalogue/' + esc(svc.id) + '">Ouvrir dans le catalogue</a></div>';
     return h;
   }
 
-  var overlayEl = null;
-  var sheetSvc = null, sheetCtx = null;
+  var overlayEl = null, sheetSvc = null, sheetCtx = null;
   function closeSheet() {
     if (overlayEl) { overlayEl.remove(); overlayEl = null; }
     sheetSvc = null; sheetCtx = null;
@@ -662,8 +447,7 @@
     if (!sheetSvc) return;
     var sibs = DATA.services.filter(function (s) { return s.categorie === sheetSvc.categorie; });
     if (sibs.length < 2) return;
-    var i = (sibs.indexOf(sheetSvc) + dir + sibs.length) % sibs.length;
-    openSheet(sibs[i], sheetCtx);
+    openSheet(sibs[(sibs.indexOf(sheetSvc) + dir + sibs.length) % sibs.length], sheetCtx);
   }
   function onSheetKey(e) {
     if (e.key === 'Escape') closeSheet();
@@ -674,73 +458,55 @@
     closeSheet();
     sheetSvc = svc; sheetCtx = appCtx;
     overlayEl = document.createElement('div');
-    overlayEl.className = 'overlay';
-    overlayEl.innerHTML = '<div class="sheet" role="dialog" aria-modal="true">' + serviceSheetHtml(svc, appCtx) + '</div>';
+    overlayEl.className = 'dash-overlay';
+    overlayEl.setAttribute('data-theme', theme());
+    overlayEl.innerHTML = '<div class="dash-sheet" role="dialog" aria-modal="true">' + serviceSheetHtml(svc, appCtx) + '</div>';
     overlayEl.addEventListener('click', function (e) {
       var nav = e.target.closest && e.target.closest('[data-nav]');
       if (nav) { sheetStep(nav.getAttribute('data-nav') === 'prev' ? -1 : 1); return; }
-      if (e.target === overlayEl || (e.target.closest && e.target.closest('[data-close]'))) closeSheet();
+      var go = e.target.closest && e.target.closest('[data-dash-go]');
+      if (go) { e.preventDefault(); var p = go.getAttribute('data-dash-go').split('/'); closeSheet(); dashGo(p[0], p[1], p[2]); return; }
+      if (e.target === overlayEl || (e.target.closest && e.target.closest('[data-close]'))) {
+        var lien = e.target.closest && e.target.closest('a[href^="#"]');
+        closeSheet();
+        if (lien) revealAnchor(lien.getAttribute('href'), e);
+      }
     });
     document.addEventListener('keydown', onSheetKey);
     document.body.appendChild(overlayEl);
   }
 
-  // ── Rendu dans la page « Mes apps » de Gestion Pro ────────────────────────
-  function enTete(route) {
-    var titre = 'MES APPS', sous = DATA.apps.length + ' applications suivies', volets = '';
-    if (route.page === 'app') {
-      var a = DATA.apps.filter(function (x) { return x.id === route.id; })[0];
-      if (a) {
-        titre = a.name;
-        sous = (a.platforms || []).join(' \u00b7 ') + (a.repo ? ' \u00b7 ' + a.repo : '');
-        volets = '<div class="volets">' +
-          '<a data-dash-go="app/' + esc(a.id) + '"' + (route.volet === 'technique' ? ' class="active"' : '') + '>TECHNIQUE</a>' +
-          '<a data-dash-go="app/' + esc(a.id) + '/marketing"' + (route.volet === 'marketing' ? ' class="active"' : '') + '>MARKETING</a>' +
-          (a.publicationHtml
-            ? '<a data-dash-go="app/' + esc(a.id) + '/publication"' + (route.volet === 'publication' ? ' class="active"' : '') + '>PUBLICATION</a>'
-            : '') +
-          '</div>';
-      }
-    } else if (route.page === 'catalogue') {
-      titre = 'CATALOGUE';
-      sous = DATA.services.length + ' services \u00b7 ' + DATA.categories.length + ' familles';
-    }
-    var nav = '<div class="dash-nav">' +
-      '<button class="dash-nav-btn' + (route.page === 'accueil' ? ' active' : '') + '" data-dash-go="accueil">\u25c8 Vue d\u2019ensemble</button>';
-    DATA.apps.forEach(function (a) {
-      nav += '<button class="dash-nav-btn' + (route.page === 'app' && route.id === a.id ? ' active' : '') +
-        '" data-dash-go="app/' + esc(a.id) + '">' + esc(a.emoji) + ' ' + esc(a.name) + '</button>';
-    });
-    nav += '<button class="dash-nav-btn' + (route.page === 'catalogue' ? ' active' : '') +
-      '" data-dash-go="catalogue">\ud83d\uddc2 Catalogue</button>' +
-      '<span class="dash-nav-grow"></span>' +
-      '<button class="dash-nav-btn" id="anim-toggle" type="button">\u26a1 ANIMATIONS</button></div>';
-    return nav + '<div class="dash-head"><h2>' + esc(titre) + '</h2><div class="sub">' + esc(sous) + '</div>' + volets + '</div>';
+  // Une ancre interne (#i-…, #m-…) déplie la fiche qui la contient.
+  function revealAnchor(href, e) {
+    if (!href || href.length < 2) return;
+    var cible = document.getElementById(href.slice(1));
+    if (!cible) return;
+    var fiche = cible.closest && cible.closest('.fiche');
+    if (fiche) fiche.classList.add('open');
+    if (e) e.preventDefault();
+    var top = cible.getBoundingClientRect().top + window.pageYOffset - 120;
+    window.scrollTo({ top: top, behavior: 'smooth' });
   }
 
+  // ── Rendu dans la page « Mes apps » de Gestion Pro ────────────────────────
   function dashRender() {
     var route = vue;
     closeSheet();
-    if (globe) { globe.destroy(); globe = null; }
-    var tete = $('#dash-titre'), corps = $('#dash-contenu');
+    var side = $('#dash-titre'), corps = $('#dash-contenu'), zone = $('#page-dash');
     if (!corps) return;
-    if (tete) tete.innerHTML = enTete(route);
-    if (route.page === 'catalogue') {
-      corps.innerHTML = renderCatalogue();
-      if (route.service) {
-        var svc = serviceById(route.service);
-        if (svc) openSheet(svc, null);
-      }
-    } else if (route.page === 'app') {
-      var app = DATA.apps.filter(function (a) { return a.id === route.id; })[0];
-      if (!app) { vue = { page: 'accueil', id: null, volet: 'technique' }; return dashRender(); }
-      corps.innerHTML = renderApp(app, route.volet);
-    } else {
-      corps.innerHTML = renderAccueil();
-      mountGlobe();
+    if (zone) zone.setAttribute('data-theme', theme());
+    var app = route.page === 'app' ? DATA.apps.filter(function (a) { return a.id === route.id; })[0] : null;
+    if (route.page === 'app' && !app) { vue = { page: 'accueil', id: null, volet: 'technique' }; return dashRender(); }
+    if (side) side.innerHTML = renderSidebar(route);
+    var h = renderTopbar(route, app) + '<div class="dash-body">';
+    if (route.page === 'catalogue') h += renderCatalogue();
+    else if (app) h += renderAppHead(app, route.volet) + renderApp(app, route.volet);
+    else h += renderAccueil();
+    corps.innerHTML = h + '</div>';
+    if (route.page === 'catalogue' && route.service) {
+      var svc = serviceById(route.service);
+      if (svc) openSheet(svc, null);
     }
-    var btn = $('#anim-toggle');
-    if (btn) { btn.textContent = animOn() ? '\u26a1 ANIMATIONS' : '\u23f8 ANIMATIONS'; btn.addEventListener('click', toggleAnim); }
     window.scrollTo(0, 0);
   }
 
@@ -750,9 +516,11 @@
     var zone = $('#page-dash');
     if (!zone || !DATA) return;
     initialise = true;
-    initAnim();
 
     zone.addEventListener('click', function (e) {
+      var home = e.target.closest && e.target.closest('[data-dash-home]');
+      if (home) { if (typeof window.showPage === 'function') window.showPage('home'); return; }
+      if (e.target.closest && e.target.closest('#dash-theme')) { toggleTheme(); return; }
       var go = e.target.closest && e.target.closest('[data-dash-go]');
       if (go) {
         e.preventDefault();
@@ -762,20 +530,8 @@
       }
       var tog = e.target.closest && e.target.closest('.fiche-toggle');
       if (tog) { tog.parentElement.classList.toggle('open'); return; }
-      // Une ancre interne (#i-\u2026, #m-\u2026) d\u00e9plie la fiche qui la contient
       var lien = e.target.closest && e.target.closest('a[href^="#"]');
-      if (lien) {
-        var href = lien.getAttribute('href');
-        if (href && href.length > 1) {
-          var cible = document.getElementById(href.slice(1));
-          if (cible) {
-            var fiche = cible.closest && cible.closest('.fiche');
-            if (fiche) fiche.classList.add('open');
-            e.preventDefault();
-            cible.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        }
-      }
+      if (lien) { revealAnchor(lien.getAttribute('href'), e); return; }
       var card = e.target.closest && e.target.closest('[data-svc]');
       if (!card) return;
       var svc = serviceById(card.getAttribute('data-svc'));
@@ -783,23 +539,21 @@
       var appCtx = vue.page === 'app' ? DATA.apps.filter(function (a) { return a.id === vue.id; })[0] : null;
       openSheet(svc, appCtx);
     });
-    zone.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') {
-        var g = e.target.closest && e.target.closest('g[data-svc]');
-        if (g) g.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-      }
-    });
-    // Cases « Prochaines actions » : \u00e9tat persist\u00e9 (G.set si dispo)
     zone.addEventListener('change', function (e) {
       var t = e.target;
       if (!t || !t.hasAttribute || !t.hasAttribute('data-todo')) return;
-      var k2 = t.getAttribute('data-todo');
-      if (t.checked) todos[k2] = 1; else delete todos[k2];
+      var k = t.getAttribute('data-todo');
+      if (t.checked) todos[k] = 1; else delete todos[k];
+      var lab = t.closest && t.closest('.todo');
+      if (lab) lab.classList.toggle('done', t.checked);
       saveTodos();
     });
     zone.addEventListener('input', function (e) {
-      if (e.target && e.target.id === 'cat-search') filterCatalogue(e.target.value);
+      if (e.target && e.target.id === 'dash-search') onSearch(e.target.value);
     });
+    if (window.matchMedia) {
+      try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme); } catch (e) {}
+    }
     dashRender();
   }
   window.dashInit = dashInit;
@@ -817,11 +571,9 @@
   if (!accrocher()) {
     document.addEventListener('DOMContentLoaded', function () {
       if (!accrocher()) {
-        // Dernier repli : initialisation si la page est déjà visible.
         var z = $('#page-dash');
         if (z && z.classList.contains('active')) dashInit();
       }
     });
   }
-
 })();
