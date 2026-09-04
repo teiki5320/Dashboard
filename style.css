@@ -1485,7 +1485,22 @@ svg .ping { fill: none; stroke-width: 1.2; opacity: 0; transform-box: fill-box; 
 .dash-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 16px; margin-bottom: 16px; }
 .dash-head h2 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
 .dash-head .sub { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; color: var(--texte-2); }
-.dash-head .volets { margin-left: auto; }
+/* Volets d'une app (TECHNIQUE · MARKETING · PUBLICATION). Sans mise en forme,
+   les liens se touchaient — « TECHNIQUEMARKETING » — et la classe .active
+   posée par dash-module.js ne se voyait nulle part. */
+.dash-head .volets { display: flex; flex-wrap: wrap; gap: 8px; margin-left: auto; }
+.dash-head .volets a {
+  font-family: var(--mono); font-size: 11px; letter-spacing: .06em;
+  padding: 6px 11px; border-radius: var(--r);
+  border: 1px solid rgba(232, 232, 238, .12);
+  color: var(--texte-2); text-decoration: none; cursor: pointer;
+  white-space: nowrap;
+}
+.dash-head .volets a:hover { border-color: var(--bord-fort); color: var(--accent-clair); }
+.dash-head .volets a.active {
+  border-color: var(--bord-fort); color: var(--accent-clair);
+  background: linear-gradient(180deg, rgba(var(--accent-rgb), .14), rgba(var(--accent-rgb), .03));
+}
 @media (max-width: 720px) {
   .dash-head .volets { margin-left: 0; }
   .dash-nav { gap: 5px; }
