@@ -5,7 +5,8 @@
 //   node tool/build.js
 //
 // 1. Vérifie qu'aucun secret ne traîne dans apps/ et catalog/ (sinon ÉCHEC).
-// 2. Lit catalog/services.js et chaque apps/<id>/ (app.json, infra.md, marketing.md).
+// 2. Lit catalog/services.js et chaque apps/<id>/ (app.json, infra.md, marketing.md,
+//    et publication.md si elle existe).
 // 3. Convertit le Markdown en HTML (ancres par section) via tool/markdown.js.
 // 4. Calcule le résumé marketing (modèle actuel, canaux ✅/⬜, prochaines actions).
 // 5. Génère assets/dash-data.js : window.DASH_DATA, chargé par une balise
@@ -352,6 +353,16 @@ function loadApps() {
     const infra = mdToHtml(infraMd, { anchorPrefix: 'i-' + slugify(id) });
     const marketing = mdToHtml(marketingMd, { anchorPrefix: 'm-' + slugify(id) });
 
+    // Fiche de publication : facultative, et sans avertissement quand elle
+    // manque — une app non distribuée en boutique n'a rien à y écrire.
+    const publicationPath = path.join(dir, 'publication.md');
+    const publicationMd = fs.existsSync(publicationPath)
+      ? fs.readFileSync(publicationPath, 'utf8')
+      : null;
+    const publication = publicationMd
+      ? mdToHtml(publicationMd, { anchorPrefix: 'p-' + slugify(id) })
+      : null;
+
     // Indicateurs vivants (release + statut CI) : optionnels, produits par
     // tool/sync.js à partir de l'API GitHub de app.repo. Absent tant que la
     // synchro n'a pas encore tourné, ou si l'app n'a pas de repo déclaré.
@@ -377,6 +388,10 @@ function loadApps() {
       marketingHtml: marketing.html,
       marketingToc: marketing.toc,
       marketingSummary: extractMarketingSummary(marketingMd),
+      publicationHtml: publication ? publication.html : null,
+      publicationToc: publication ? publication.toc : null,
+      // Même forme que « Vue d'ensemble » de l'infra : mêmes puces, même extracteur.
+      publicationEssentiel: publicationMd ? extractInfraEssentiel(publicationMd) : null,
       serviceAnchors: findServiceAnchors(services, infra.toc),
       status,
     });

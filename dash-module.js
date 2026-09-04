@@ -236,7 +236,8 @@
   var vue = { page: 'accueil', id: null, volet: 'technique' };
   function currentRoute() { return vue; }
   function dashGo(page, id, volet) {
-    vue = { page: page || 'accueil', id: id || null, volet: volet === 'marketing' ? 'marketing' : 'technique' };
+    var v = (volet === 'marketing' || volet === 'publication') ? volet : 'technique';
+    vue = { page: page || 'accueil', id: id || null, volet: v };
     dashRender();
   }
   window.dashGo = dashGo;
@@ -450,6 +451,23 @@
       h += '</div></div></div>';
 
       h += fichePanel('Fiche technique — infra.md', app.infraToc, app.infraHtml);
+    } else if (volet === 'publication') {
+      var essP = app.publicationEssentiel || { facts: [], resume: null };
+      h += '<div class="stage">';
+      h += '<div class="panel"><div class="panel-h">Où en est chaque boutique</div><div class="panel-body">';
+      if (essP.facts.length) {
+        h += '<dl class="facts">';
+        essP.facts.forEach(function (f) {
+          h += '<dt>' + esc(f.label) + '</dt><dd>' + esc(f.value) + '</dd>';
+        });
+        h += '</dl>';
+      } else if (essP.resume) {
+        h += '<p class="resume">' + esc(essP.resume) + '</p>';
+      } else {
+        h += '<span class="empty-note">Pas de section « Vue d’ensemble » dans publication.md.</span>';
+      }
+      h += '</div></div></div>';
+      h += fichePanel('Fiche de publication — publication.md', app.publicationToc, app.publicationHtml);
     } else {
       var s2 = app.marketingSummary || {};
       var p = pct(s2.done || 0, s2.todo || 0);
@@ -631,7 +649,11 @@
         sous = (a.platforms || []).join(' \u00b7 ') + (a.repo ? ' \u00b7 ' + a.repo : '');
         volets = '<div class="volets">' +
           '<a data-dash-go="app/' + esc(a.id) + '"' + (route.volet === 'technique' ? ' class="active"' : '') + '>TECHNIQUE</a>' +
-          '<a data-dash-go="app/' + esc(a.id) + '/marketing"' + (route.volet === 'marketing' ? ' class="active"' : '') + '>MARKETING</a></div>';
+          '<a data-dash-go="app/' + esc(a.id) + '/marketing"' + (route.volet === 'marketing' ? ' class="active"' : '') + '>MARKETING</a>' +
+          (a.publicationHtml
+            ? '<a data-dash-go="app/' + esc(a.id) + '/publication"' + (route.volet === 'publication' ? ' class="active"' : '') + '>PUBLICATION</a>'
+            : '') +
+          '</div>';
       }
     } else if (route.page === 'catalogue') {
       titre = 'CATALOGUE';
