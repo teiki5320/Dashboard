@@ -211,6 +211,61 @@ function extractTable(lines, re, maxRows) {
 
 // L'essentiel technique : les puces « **Label** : valeur » de la section
 // « Vue d'ensemble » ; à défaut, le premier paragraphe du document.
+// Découpe une fiche de publication par plateforme : chaque « ### N. Titre »
+// devient une colonne, avec son tableau clé/valeur et ses paragraphes.
+// Ne retient que les sections qui portent un tableau — « Ce qui reste, dans
+// l'ordre » et les autres listes de fin restent dans la fiche dépliable.
+function extractPublicationPlateformes(md) {
+  const lines = md.replace(/\r\n/g, '\n').split('\n');
+  const out = [];
+  for (let i = 0; i < lines.length; i++) {
+    const m = lines[i].match(/^###\s+(.+?)\s*$/);
+    if (!m) continue;
+    const titre = stripInline(m[1].replace(/^\d+\.\s*/, ''));
+
+    const corps = [];
+    for (let j = i + 1; j < lines.length; j++) {
+      if (/^#{1,3}\s/.test(lines[j])) break;
+      corps.push(lines[j]);
+    }
+
+    const faits = [];
+    for (const l of corps) {
+      if (!l.includes('|')) continue;
+      if (/^\s*\|?\s*:?-{2,}/.test(l)) continue;
+      const cells = l.replace(/^\s*\|/, '').replace(/\|\s*$/, '')
+        .split('|').map((c) => stripInline(c.trim()));
+      // Markdown écrit les URL nues « <https://…> » : les chevrons ne
+      // regardent pas le lecteur.
+      if (cells.length === 2 && cells[0] && cells[1]) {
+        faits.push({ label: cells[0], value: cells[1].replace(/^<(.+)>$/, '$1') });
+      }
+    }
+    if (!faits.length) continue;
+
+    // Paragraphes : « **Ce qui bloque.** … » devient un intertitre + son texte.
+    const notes = [];
+    let para = [];
+    const flush = () => {
+      const texte = para.join(' ').trim();
+      para = [];
+      if (!texte) return;
+      const t = texte.match(/^\*\*(.+?)\*\*\s*(.*)$/);
+      if (t) notes.push({ titre: stripInline(t[1]).replace(/\.$/, ''), texte: stripInline(t[2]) });
+      else notes.push({ titre: null, texte: stripInline(texte) });
+    };
+    for (const l of corps) {
+      if (!l.trim()) { flush(); continue; }
+      if (l.includes('|') || /^\s*-{3,}\s*$/.test(l)) { para = []; continue; }
+      para.push(l.trim());
+    }
+    flush();
+
+    out.push({ titre, faits, notes });
+  }
+  return out;
+}
+
 function extractInfraEssentiel(md) {
   const lines = md.replace(/\r\n/g, '\n').split('\n');
   const sec = sectionLines(lines, /vue d.ensemble|overview|resume|l.application\b/);
@@ -392,6 +447,7 @@ function loadApps() {
       publicationToc: publication ? publication.toc : null,
       // Même forme que « Vue d'ensemble » de l'infra : mêmes puces, même extracteur.
       publicationEssentiel: publicationMd ? extractInfraEssentiel(publicationMd) : null,
+      publicationPlateformes: publicationMd ? extractPublicationPlateformes(publicationMd) : null,
       serviceAnchors: findServiceAnchors(services, infra.toc),
       status,
     });

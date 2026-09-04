@@ -414,6 +414,18 @@
       tocHtml(toc) + '<div class="md">' + mdHtml + '</div></div>';
   }
 
+  // « État » ou « Etat », « iOS · App Store » ou « ios · app store » : on
+  // compare sans accents ni casse.
+  function sansAccent(s) {
+    return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  }
+
+  function lienSiUrl(v) {
+    return /^https?:\/\/\S+$/.test(v)
+      ? '<a href="' + esc(v) + '" target="_blank" rel="noopener">' + esc(v.replace(/^https?:\/\//, '')) + '</a>'
+      : esc(v);
+  }
+
   function renderApp(app, volet) {
     var h = '';
     if (volet === 'technique') {
@@ -453,20 +465,54 @@
       h += fichePanel('Fiche technique — infra.md', app.infraToc, app.infraHtml);
     } else if (volet === 'publication') {
       var essP = app.publicationEssentiel || { facts: [], resume: null };
-      h += '<div class="stage">';
-      h += '<div class="panel"><div class="panel-h">Où en est chaque boutique</div><div class="panel-body">';
-      if (essP.facts.length) {
-        h += '<dl class="facts">';
-        essP.facts.forEach(function (f) {
+      var plats = app.publicationPlateformes || [];
+
+      // Les faits par plateforme sont repris en colonne juste en dessous :
+      // le bandeau ne garde que ce qui vaut pour les deux boutiques.
+      var communs = (essP.facts || []).filter(function (f) {
+        return !plats.some(function (p) { return sansAccent(p.titre).indexOf(sansAccent(f.label)) === 0; });
+      });
+
+      if (communs.length) {
+        h += '<div class="panel"><div class="panel-h">Commun aux deux boutiques</div>' +
+          '<div class="panel-body"><dl class="facts">';
+        communs.forEach(function (f) {
           h += '<dt>' + esc(f.label) + '</dt><dd>' + esc(f.value) + '</dd>';
         });
-        h += '</dl>';
-      } else if (essP.resume) {
-        h += '<p class="resume">' + esc(essP.resume) + '</p>';
-      } else {
-        h += '<span class="empty-note">Pas de section « Vue d’ensemble » dans publication.md.</span>';
+        h += '</dl></div></div>';
       }
-      h += '</div></div></div>';
+
+      if (plats.length) {
+        h += '<div class="pub-grid">';
+        plats.forEach(function (p, i) {
+          var etat = null, autres = [];
+          p.faits.forEach(function (f) {
+            if (sansAccent(f.label) === 'etat') etat = f.value; else autres.push(f);
+          });
+          h += '<div class="panel" style="animation-delay:' + (i * 0.05).toFixed(2) + 's">' +
+            '<div class="panel-h">' + esc(p.titre) + '</div><div class="panel-body">';
+          if (etat) h += '<div class="pub-etat">' + esc(etat) + '</div>';
+          if (autres.length) {
+            h += '<dl class="facts">';
+            autres.forEach(function (f) {
+              h += '<dt>' + esc(f.label) + '</dt><dd>' + lienSiUrl(f.value) + '</dd>';
+            });
+            h += '</dl>';
+          }
+          p.notes.forEach(function (n) {
+            h += '<div class="pub-note">' +
+              (n.titre ? '<b>' + esc(n.titre) + '</b>' : '') +
+              '<p>' + esc(n.texte) + '</p></div>';
+          });
+          h += '</div></div>';
+        });
+        h += '</div>';
+      } else if (!communs.length) {
+        h += '<div class="panel"><div class="panel-body">' +
+          '<span class="empty-note">Pas de section par plateforme dans publication.md.</span>' +
+          '</div></div>';
+      }
+
       h += fichePanel('Fiche de publication — publication.md', app.publicationToc, app.publicationHtml);
     } else {
       var s2 = app.marketingSummary || {};
