@@ -186,6 +186,30 @@ d'API ni jeton.
 Les quatre valeurs doivent appartenir au même compte, sinon la régie
 refuse de servir.
 
+**Consentement RGPD — message publié le 3 septembre 2026.** Jusqu'à
+cette date la console était vide, et le journal Android le disait sans
+détour : `Publisher misconfiguration: no form(s) configured for the
+input app ID`. Aucune annonce n'aurait été servie en Europe. Le message
+« Erea — consentement RGPD » couvre les deux applications, s'affiche en
+français (anglais en secours), offre les trois boutons *Refuser*,
+*Autoriser* et *Gérer les options*, et renvoie à
+`https://teiki5320.github.io/erea/confidentialite.html`. Côté code il
+n'y avait rien à faire : `lib/core/pub.dart` appelait déjà le SDK UMP au
+démarrage et exposait « Options de confidentialité ». Seule la console
+manquait.
+
+⚠️ La carte **IDFA** de la même page reste vide. Le reste est prêt :
+`NSUserTrackingUsageDescription` est dans `ios/Runner/Info.plist`, et le
+même `loadAndShowConsentFormIfRequired` présente le message IDFA puis la
+fenêtre d'Apple — il n'y a pas de second appel à écrire. Créer le
+message dans la console suffit. À faire avant de re-soumettre la version
+iOS, pas avant le test fermé Android.
+
+Reste vraiment ouvert : **aucun identifiant `SKAdNetworkItems`** n'est
+déclaré dans `Info.plist`. Sans eux, les conversions attribuées à un
+utilisateur qui a refusé le suivi ne remontent pas, et les annonceurs
+paient moins cher un inventaire qu'ils ne peuvent pas mesurer.
+
 **Paiements (état au 18 août 2026)** : seuil de versement 70 €, mensuel
 vers le 21. L'IBAN ne peut pas encore être saisi — Google n'ouvre
 « Gérer les modes de paiement » qu'après un premier seuil de recettes
