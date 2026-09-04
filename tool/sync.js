@@ -7,8 +7,9 @@
 //
 // Pour chaque apps/<id>/app.json contenant un champ "repo" (owner/nom),
 // le script télécharge depuis ce dépôt GitHub (branche par défaut) :
-//   docs/INFRA.md     → apps/<id>/infra.md
-//   docs/MARKETING.md → apps/<id>/marketing.md
+//   docs/INFRA.md       → apps/<id>/infra.md
+//   docs/MARKETING.md   → apps/<id>/marketing.md
+//   docs/PUBLICATION.md → apps/<id>/publication.md   (facultative)
 // … et interroge l'API GitHub pour deux indicateurs vivants, écrits dans
 // apps/<id>/status.json (lu par tool/build.js, affiché par dash-module.js) :
 //   - dernière release (tag, date, lien)
@@ -36,6 +37,9 @@ const TOKEN = process.env.APPS_READ_TOKEN || process.env.GITHUB_TOKEN || '';
 const FILES = [
   { distant: 'docs/INFRA.md', local: 'infra.md' },
   { distant: 'docs/MARKETING.md', local: 'marketing.md' },
+  // Facultative : une app sans fiche de publication reste parfaitement valide,
+  // le volet correspondant ne s'affiche simplement pas.
+  { distant: 'docs/PUBLICATION.md', local: 'publication.md', facultatif: true },
 ];
 
 async function fetchFile(repo, filePath) {
@@ -132,7 +136,8 @@ async function main() {
         continue;
       }
       if (r.status === 404) {
-        console.warn(`   ⚠️  ${f.distant} : introuvable dans ${manifest.repo} — fichier local conservé`);
+        if (f.facultatif) console.log(`   ⏭️  ${f.distant} : absent de ${manifest.repo} (facultatif)`);
+        else console.warn(`   ⚠️  ${f.distant} : introuvable dans ${manifest.repo} — fichier local conservé`);
         continue;
       }
       if (r.status !== 200) {
