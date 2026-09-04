@@ -1166,6 +1166,29 @@ body::after {
 .resume { margin: 0; font-size: 13.5px; line-height: 1.55; color: rgba(232, 232, 238, .85); }
 .tags a.tag:hover { border-color: var(--bord-fort); }
 
+/* Publication : les boutiques côte à côte, chacune avec son état, ses
+   repères et ses notes. Une seule colonne dès qu'on manque de largeur —
+   deux colonnes étroites se lisent moins bien qu'une pile. */
+.pub-grid {
+  display: grid; gap: 16px; align-items: start; margin-top: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.pub-grid > * { min-width: 0; }
+@media (max-width: 1000px) { .pub-grid { grid-template-columns: 1fr; } }
+
+.pub-etat {
+  font-size: 15.5px; font-weight: 700; line-height: 1.35;
+  padding-bottom: 12px; margin-bottom: 12px;
+  border-bottom: 1px solid rgba(232, 232, 238, .1);
+}
+.pub-note { margin-top: 13px; }
+.pub-note b {
+  display: block; font-family: var(--mono); font-size: 11px;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: var(--texte-3); margin-bottom: 3px;
+}
+.pub-note p { margin: 0; font-size: 13.5px; line-height: 1.5; }
+
 /* Cap (marketing) : modèle actuel + calendrier */
 .cap-label { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; color: var(--texte-3); text-transform: uppercase; margin-bottom: 5px; }
 .cap-model { font-size: 16.5px; font-weight: 700; line-height: 1.35; }
