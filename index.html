@@ -61,6 +61,7 @@
 <div id="toast-holder"></div>
 
 <div id="page-home" class="page active">
+    <div id="home-resume" class="home-resume"></div>
     <div class="home-grid">
         <div class="home-btn large" onclick="showPage('dash')">
             <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -214,35 +215,54 @@
 </div>
 
 <div id="page-parametres" class="page">
-    <div class="section-title">Produits / Services</div>
-    <div id="list-prods-settings"></div>
-    <button class="btn btn-gold" onclick="openProdModal()">＋ AJOUTER PRODUIT</button>
-
-    <div class="section-title" style="margin-top: 25px">Base Clients</div>
-    <div id="list-clis-settings"></div>
-    <button class="btn btn-gold" onclick="openCliModal()">＋ AJOUTER CLIENT</button>
-
-    <div class="section-title" style="margin-top: 25px">Mes Entreprises</div>
-    <div id="list-ents-settings"></div>
-    <button class="btn btn-gold" onclick="openEntModal()">＋ AJOUTER ÉMETTEUR</button>
-
-    <div class="section-title" style="margin-top: 25px">☁️ Synchronisation</div>
-    <div class="card" style="flex-direction:column; gap:12px; align-items:stretch">
-        <p id="sync-status" style="font-size:13px; color:var(--text-muted); margin:0">Aucune synchronisation effectuée pour l'instant.</p>
-        <div class="r2">
-            <button class="btn" style="background:rgba(255,255,255,0.06); font-size:12px" onclick="Supa.forcePushAll()">⬆️ Forcer l'envoi</button>
-            <button class="btn" style="background:rgba(255,255,255,0.06); font-size:12px" onclick="Supa.pullAll(true)">⬇️ Récupérer du cloud</button>
-        </div>
+    <div class="sub-tabs">
+        <div class="sub-tab active" id="tab-param-produits" onclick="toggleParamTab('produits')">Produits</div>
+        <div class="sub-tab" id="tab-param-clients" onclick="toggleParamTab('clients')">Clients</div>
+        <div class="sub-tab" id="tab-param-entreprises" onclick="toggleParamTab('entreprises')">Entreprises</div>
+        <div class="sub-tab" id="tab-param-donnees" onclick="toggleParamTab('donnees')">Données</div>
     </div>
 
-    <div class="section-title" style="margin-top: 25px">💾 Sauvegarde de secours</div>
-    <div class="card" style="flex-direction:column; gap:12px; align-items:stretch">
-        <p style="font-size:13px; color:var(--text-muted); margin:0">Télécharge une copie complète de tes données (clients, produits, BL, factures…) dans un fichier, indépendante du cloud. Garde-la précieusement : elle permet de tout restaurer.</p>
-        <div class="r2">
-            <button class="btn" style="background:rgba(255,255,255,0.06); font-size:12px" onclick="exportBackup()">📥 Télécharger la sauvegarde</button>
-            <button class="btn" style="background:rgba(255,255,255,0.06); font-size:12px" onclick="document.getElementById('backup-file-input').click()">📤 Restaurer un fichier</button>
+    <div id="view-param-produits">
+        <div class="section-title">Produits / Services</div>
+        <div id="list-prods-settings"></div>
+        <button class="btn btn-gold" onclick="openProdModal()">＋ AJOUTER PRODUIT</button>
+        <div class="section-title" style="margin-top: 25px" id="title-prods-archives">🗂 Archivés</div>
+        <div id="list-prods-archives"></div>
+    </div>
+
+    <div id="view-param-clients" style="display:none">
+        <div class="section-title">Base Clients</div>
+        <div id="list-clis-settings"></div>
+        <button class="btn btn-gold" onclick="openCliModal()">＋ AJOUTER CLIENT</button>
+        <div class="section-title" style="margin-top: 25px" id="title-clis-archives">🗂 Archivés</div>
+        <div id="list-clis-archives"></div>
+    </div>
+
+    <div id="view-param-entreprises" style="display:none">
+        <div class="section-title">Mes Entreprises</div>
+        <div id="list-ents-settings"></div>
+        <button class="btn btn-gold" onclick="openEntModal()">＋ AJOUTER ÉMETTEUR</button>
+    </div>
+
+    <div id="view-param-donnees" style="display:none">
+        <div class="section-title">☁️ Synchronisation</div>
+        <div class="card" style="flex-direction:column; gap:12px; align-items:stretch">
+            <p id="sync-status" style="font-size:13px; color:var(--text-muted); margin:0">Aucune synchronisation effectuée pour l'instant.</p>
+            <div class="r2">
+                <button class="btn" style="background:rgba(255,255,255,0.06); font-size:12px" onclick="Supa.forcePushAll()">⬆️ Forcer l'envoi</button>
+                <button class="btn" style="background:rgba(255,255,255,0.06); font-size:12px" onclick="Supa.pullAll(true)">⬇️ Récupérer du cloud</button>
+            </div>
         </div>
-        <input type="file" id="backup-file-input" accept=".json,application/json" style="display:none" onchange="importBackup(event)">
+
+        <div class="section-title" style="margin-top: 25px">💾 Sauvegarde de secours</div>
+        <div class="card" style="flex-direction:column; gap:12px; align-items:stretch">
+            <p style="font-size:13px; color:var(--text-muted); margin:0">Télécharge une copie complète de tes données (clients, produits, BL, factures…) dans un fichier, indépendante du cloud. Garde-la précieusement : elle permet de tout restaurer.</p>
+            <div class="r2">
+                <button class="btn" style="background:rgba(255,255,255,0.06); font-size:12px" onclick="exportBackup()">📥 Télécharger la sauvegarde</button>
+                <button class="btn" style="background:rgba(255,255,255,0.06); font-size:12px" onclick="document.getElementById('backup-file-input').click()">📤 Restaurer un fichier</button>
+            </div>
+            <input type="file" id="backup-file-input" accept=".json,application/json" style="display:none" onchange="importBackup(event)">
+        </div>
     </div>
 </div>
 
@@ -375,6 +395,7 @@
     </div>
     <div class="field"><label>Seuil d'alerte stock (optionnel)</label><input type="number" id="mp-seuil" placeholder="ex : 5"></div>
     <button class="btn btn-gold" onclick="saveProd()">SAUVER</button>
+    <button class="btn" id="mp-archive" style="margin-top:10px; background:rgba(255,255,255,0.06); display:none" onclick="toggleArchive('prods', $('mp-id').value)">🗂 Archiver</button>
     <button class="btn btn-red" onclick="closeModals()" style="margin-top:10px">ANNULER</button>
 </div></div>
 
@@ -397,6 +418,7 @@
     </div>
     <div class="field"><label>Email</label><input type="email" id="mc-email"></div>
     <button class="btn btn-gold" onclick="saveCli()">SAUVER</button>
+    <button class="btn" id="mc-archive" style="margin-top:10px; background:rgba(255,255,255,0.06); display:none" onclick="toggleArchive('clis', $('mc-id').value)">🗂 Archiver</button>
     <button class="btn btn-red" onclick="closeModals()" style="margin-top:10px">ANNULER</button>
 </div></div>
 
