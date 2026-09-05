@@ -156,18 +156,35 @@ let db = {
 let curLines = [], blSel = [], curDraftId = null;
 
 // --- NAVIGATION ---
-function showPage(id) {
+// Historique interne : la flèche ← revient à la page PRÉCÉDENTE (elle allait
+// toujours à l'accueil auparavant, quel que soit le chemin parcouru).
+const navStack = [];
+
+function showPage(id, _sansHistorique) {
+    if (!_sansHistorique && showPage._cur && showPage._cur !== id) {
+        navStack.push(showPage._cur);
+        if (navStack.length > 30) navStack.shift();
+    }
+    showPage._cur = id;
+
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     $('page-' + id).classList.add('active');
-    
+
     $('hd-page-name').innerText = id === 'home' ? 'TABLEAU DE BORD' : id.toUpperCase();
     $('global-back').style.display = (id === 'home') ? 'none' : 'flex';
-    
+
     if (id === 'facture') $('f-num').value = genNum(); // aperçu ; le numéro définitif est réservé à l'aperçu facture
     if (id === 'mail') renderMailConnexion();
 
     window.scrollTo(0, 0);
     renderAll();
+}
+
+function goBack() {
+    // Dans Mes apps : un premier retour ramène à la vue d'ensemble du module
+    // avant de quitter la page (le module définit window.dashBack).
+    if (showPage._cur === 'dash' && typeof window.dashBack === 'function' && window.dashBack()) return;
+    showPage(navStack.pop() || 'home', true);
 }
 
 // Aperçu non engageant du prochain numéro (peut être dépassé si un autre appareil
