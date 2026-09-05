@@ -111,6 +111,10 @@
   function renderRailNav(route) {
     var slot = document.getElementById('rail-dash-slot');
     if (!slot) return;
+    // Mode focus : dans Mes apps, le rail se consacre au module — les entrées
+    // métier (Commande, Factures…) sont masquées par CSS via cette classe.
+    var rail = document.getElementById('gp-rail');
+    if (rail) rail.classList.add('dash-mode');
     var h = '<button type="button" class="rail-item rail-sub' + (route.page === 'accueil' ? ' active' : '') +
       '" onclick="dashGo(\'accueil\')"><span class="ico">⌂</span><span class="lbl">Vue d’ensemble</span></button>';
     DATA.apps.forEach(function (a) {
@@ -126,6 +130,8 @@
   function clearRailNav() {
     var slot = document.getElementById('rail-dash-slot');
     if (slot) slot.innerHTML = '';
+    var rail = document.getElementById('gp-rail');
+    if (rail) rail.classList.remove('dash-mode');
   }
 
   // ── Barre haute ────────────────────────────────────────────────────────────
