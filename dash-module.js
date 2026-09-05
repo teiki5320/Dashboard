@@ -104,28 +104,36 @@
   }
   window.dashGo = dashGo;
 
-  // ── Barre latérale ─────────────────────────────────────────────────────────
-  function renderSidebar(route) {
-    var h = '<div class="side-id">' + logoImg('avatar') + '<div class="hi">Salut, ' + esc(PRENOM) + ' 👋</div></div>';
-    h += '<nav class="side-nav">';
-    h += '<button type="button" class="nav-item' + (route.page === 'accueil' ? ' active' : '') + '" data-dash-go="accueil"><span class="ico tint-mint">⌂</span><span class="lbl">Vue d’ensemble</span></button>';
-    h += '<div class="side-label">Applications</div>';
+  // ── Navigation du module, fusionnée dans le rail global de gauche ──────────
+  // Plus de barre latérale interne : les entrées (Vue d'ensemble, apps,
+  // Catalogue) s'insèrent sous « Mes apps » dans #gp-rail, et s'effacent en
+  // quittant la page (voir l'accroche showPage en bas de fichier).
+  function renderRailNav(route) {
+    var slot = document.getElementById('rail-dash-slot');
+    if (!slot) return;
+    var h = '<button type="button" class="rail-item rail-sub' + (route.page === 'accueil' ? ' active' : '') +
+      '" onclick="dashGo(\'accueil\')"><span class="ico">⌂</span><span class="lbl">Vue d’ensemble</span></button>';
     DATA.apps.forEach(function (a) {
-      h += '<button type="button" class="nav-item' + (route.page === 'app' && route.id === a.id ? ' active' : '') + '" data-dash-go="app/' + esc(a.id) + '">' +
-        '<span class="ico">' + esc(a.emoji) + '</span><span class="lbl">' + esc(a.name) + '</span><i class="dot ci-' + ciInfo(a).k + '"></i></button>';
+      h += '<button type="button" class="rail-item rail-sub' + (route.page === 'app' && route.id === a.id ? ' active' : '') +
+        '" onclick="dashGo(\'app\',\'' + esc(a.id) + '\')" title="' + esc(a.name) + ' — ' + esc(ciInfo(a).label) + '">' +
+        '<span class="ico">' + esc(a.emoji) + '<i class="dot ci-' + ciInfo(a).k + '"></i></span>' +
+        '<span class="lbl">' + esc(a.name) + '</span></button>';
     });
-    h += '<div class="side-label">Ressources</div>';
-    h += '<button type="button" class="nav-item' + (route.page === 'catalogue' ? ' active' : '') + '" data-dash-go="catalogue"><span class="ico tint-sun">▤</span><span class="lbl">Catalogue</span></button>';
-    h += '</nav>';
-    var sync = fmtDate(DATA.generatedAt, true);
-    h += '<div class="side-card tint-sky"><b>Synchronisation</b><span>' + (sync ? 'Données du ' + esc(sync) : 'Données locales') + '</span>' +
-      '<a class="side-cta" href="https://github.com/teiki5320/Dashboard/actions" target="_blank" rel="noopener">Voir la synchro</a></div>';
-    return h;
+    h += '<button type="button" class="rail-item rail-sub' + (route.page === 'catalogue' ? ' active' : '') +
+      '" onclick="dashGo(\'catalogue\')"><span class="ico">▤</span><span class="lbl">Catalogue</span></button>';
+    slot.innerHTML = h;
+  }
+  function clearRailNav() {
+    var slot = document.getElementById('rail-dash-slot');
+    if (slot) slot.innerHTML = '';
   }
 
   // ── Barre haute ────────────────────────────────────────────────────────────
   function renderTopbar(route, app) {
-    var titre = 'Mes apps', sous = DATA.apps.length + ' applications';
+    // L'info de synchro vivait dans l'ancienne barre latérale du module :
+    // elle rejoint le sous-titre de la barre haute.
+    var sync = fmtDate(DATA.generatedAt, true);
+    var titre = 'Mes apps', sous = DATA.apps.length + ' applications' + (sync ? ' · données du ' + sync : '');
     if (route.page === 'app' && app) { titre = app.name; sous = (app.platforms || []).join(' · ') || 'Aucune plateforme'; }
     if (route.page === 'catalogue') { titre = 'Catalogue'; sous = DATA.services.length + ' services · ' + DATA.categories.length + ' familles'; }
     var kos = DATA.apps.filter(function (a) { return ciInfo(a).k === 'ko'; });
@@ -478,7 +486,8 @@
     if (!corps) return;
     var app = route.page === 'app' ? DATA.apps.filter(function (a) { return a.id === route.id; })[0] : null;
     if (route.page === 'app' && !app) { vue = { page: 'accueil', id: null, volet: 'technique' }; return dashRender(); }
-    if (side) side.innerHTML = renderSidebar(route);
+    if (side) side.innerHTML = '';
+    renderRailNav(route);
     var h = renderTopbar(route, app) + '<div class="dash-body">';
     if (route.page === 'catalogue') h += renderCatalogue();
     else if (app) h += renderAppHead(app, route.volet) + renderApp(app, route.volet);
@@ -541,7 +550,8 @@
     var original = window.showPage;
     window.showPage = function (id) {
       original.apply(this, arguments);
-      if (id === 'dash') dashInit();
+      if (id === 'dash') { dashInit(); if (initialise) renderRailNav(vue); }
+      else clearRailNav();
     };
     return true;
   }
