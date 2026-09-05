@@ -153,6 +153,24 @@ html[data-anim="off"] *, html[data-anim="off"] *::before, html[data-anim="off"] 
 .rail-item .lbl { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 #gp-rail .rail-sep { height: 1px; width: 60%; background: currentColor; opacity: .15; margin: 8px 0; flex: none; }
 
+/* Sous-navigation « Mes apps » fusionnée dans le rail (remplit #rail-dash-slot
+   uniquement quand la page Mes apps est ouverte ; display:contents laisse ses
+   boutons suivre la mise en page du rail, verticale comme horizontale). */
+#rail-dash-slot { display: contents; }
+#gp-rail .rail-sub { padding: 5px 4px; font-size: 8.5px; opacity: .92; }
+#gp-rail .rail-sub .ico {
+    width: 26px; height: 26px; font-size: 13px; border-radius: 9px;
+    position: relative; overflow: visible;
+}
+#gp-rail .rail-sub .ico .dot {
+    position: absolute; right: -3px; top: -3px;
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--none); border: 2px solid var(--side);
+}
+#gp-rail .rail-sub .ico .dot.ci-ok  { background: var(--ok); }
+#gp-rail .rail-sub .ico .dot.ci-ko  { background: var(--ko); }
+#gp-rail .rail-sub .ico .dot.ci-run { background: var(--run); }
+
 #gp-main { flex: 1 1 0; min-width: 0; width: 0; }
 
 /* ════════════════════════════════════════
@@ -704,45 +722,7 @@ html[data-anim="off"] *, html[data-anim="off"] *::before, html[data-anim="off"] 
 }
 
 /* ── Barre latérale ───────────────────────────────────────────────────────── */
-#dash-titre {
-  width: 230px; flex: none;
-  background: var(--d-side); color: var(--d-side-text);
-  padding: 22px 14px 24px; border-radius: 0 34px 34px 0;
-  display: flex; flex-direction: column; gap: 8px;
-  position: sticky; top: var(--d-top); align-self: start;
-  box-shadow: inset -6px 0 14px rgba(0, 0, 0, .05);
-  transition: background .3s;
-}
-#dash-titre .back { align-self: flex-start; }
-#dash-titre .side-id { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 12px 0 16px; }
-#dash-titre .avatar { width: 92px; height: 92px; border-radius: 50%; object-fit: cover; background: #fff; box-shadow: var(--d-clay); }
-#dash-titre .hi { font-size: 16px; font-weight: 800; }
-#dash-titre .side-nav { display: flex; flex-direction: column; gap: 4px; }
-#dash-titre .side-label { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; opacity: .6; padding: 12px 14px 4px; }
-#dash-titre .nav-item {
-  display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: 0; border-radius: 18px; cursor: pointer;
-  background: transparent; font-size: 14.5px; font-weight: 700; text-align: left; color: inherit; width: 100%;
-  transition: transform .18s var(--d-bounce), background .2s;
-}
-#dash-titre .nav-item:hover { background: var(--side-hover); }
-#dash-titre .nav-item:active { transform: scale(.96); }
-#dash-titre .nav-item.active { background: var(--d-card); color: var(--d-text); box-shadow: var(--d-clay-sm); }
-#dash-titre .nav-item .ico {
-  width: 30px; height: 30px; border-radius: 10px; flex: none; display: flex; align-items: center; justify-content: center;
-  font-size: 15px; background: var(--d-card); box-shadow: var(--d-clay-sm);
-}
-#dash-titre .nav-item .lbl { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-#dash-titre .side-card {
-  margin-top: 14px; padding: 14px 16px; border-radius: 22px; color: var(--d-text); box-shadow: var(--d-clay);
-  display: flex; flex-direction: column; gap: 4px; font-size: 12px; line-height: 1.4;
-}
-#dash-titre .side-card b { font-size: 13px; font-weight: 800; }
-#dash-titre .side-card span { color: var(--d-muted); font-weight: 600; }
-#dash-titre .side-cta {
-  margin-top: 8px; text-align: center; padding: 9px 12px; border-radius: 14px; background: var(--d-accent); color: var(--d-accent-text);
-  font-size: 12.5px; font-weight: 800; box-shadow: 0 4px 0 rgba(0, 0, 0, .12); transition: transform .18s var(--d-bounce);
-}
-#dash-titre .side-cta:active { transform: translateY(2px) scale(.97); box-shadow: 0 2px 0 rgba(0, 0, 0, .12); }
+#dash-titre { display: none; } /* barre latérale du module fusionnée dans le rail global (#rail-dash-slot) */
 
 /* Pastille d'état CI */
 #page-dash .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex: none; background: var(--d-none); }
