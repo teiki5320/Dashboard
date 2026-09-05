@@ -1665,6 +1665,18 @@ $('f-date').value = new Date().toLocaleDateString('fr-FR');
 showPage('home');
 Supa.pullAll();
 
+// « Suis-je à jour ? » — date de publication du fichier réellement chargé
+// (en-tête Last-Modified servi par GitHub Pages), affichée dans
+// Paramètres → Données pour lever le doute après un déploiement.
+try {
+    const lm = new Date(document.lastModified);
+    if (!isNaN(lm.getTime())) {
+        $('site-version').textContent = '🏷 Version du site : ' +
+            lm.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) + ' à ' +
+            lm.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    }
+} catch (e) {}
+
 // --- MAIL INTEGRATION ---
 //
 // SETUP GOOGLE CLOUD (à faire une seule fois, manuellement, avant utilisation) :
