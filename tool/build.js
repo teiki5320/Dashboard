@@ -416,6 +416,8 @@ function loadApps() {
       while ((m = iso.exec(tete))) dates.push(new Date(+m[1], +m[2] - 1, +m[3]));
       const fr = /(\d{1,2})(?:er)?\s+(janvier|f[ée]vrier|mars|avril|mai|juin|juillet|ao[ûu]t|septembre|octobre|novembre|d[ée]cembre)\s+(\d{4})/gi;
       while ((m = fr.exec(tete))) dates.push(new Date(+m[3], MOIS[m[2].toLowerCase()], +m[1]));
+      const jma = /(\d{1,2})\/(\d{1,2})\/(\d{4})/g; // « 20/07/2026 »
+      while ((m = jma.exec(tete))) dates.push(new Date(+m[3], +m[2] - 1, +m[1]));
       const valides = dates.filter((d) => !isNaN(d.getTime()));
       if (!valides.length) return null;
       const max = new Date(Math.max(...valides.map((d) => d.getTime())));
