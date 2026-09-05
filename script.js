@@ -305,10 +305,13 @@ function openProdModal(id = null) {
         $('mp-unite').value = p.unite; $('mp-tva').value = p.tva || 20;
         $('mp-poids').value = p.poids || '';
         $('mp-seuil').value = p.seuil || '';
+        $('mp-archive').style.display = 'flex';
+        $('mp-archive').textContent = p.archived ? '↩️ Restaurer' : '🗂 Archiver';
     } else {
         $('mp-title').innerText = "Nouveau Produit"; $('mp-id').value = ''; $('mp-icon').value = '';
         $('mp-nom').value = ''; $('mp-desc').value = ''; $('mp-prix').value = ''; $('mp-poids').value = '';
         $('mp-seuil').value = '';
+        $('mp-archive').style.display = 'none';
     }
     openModal('mod-prod');
 }
@@ -318,9 +321,12 @@ function openCliModal(id = null) {
         let c = db.clis.find(x => x.id == id);
         $('mc-title').innerText = "Modifier Client"; $('mc-id').value = c.id; $('mc-nom').value = c.nom;
         $('mc-adr').value = c.adr; $('mc-ville').value = c.ville || ''; $('mc-email').value = c.email || ''; $('mc-siret').value = c.siret || '';
+        $('mc-archive').style.display = 'flex';
+        $('mc-archive').textContent = c.archived ? '↩️ Restaurer' : '🗂 Archiver';
     } else {
         $('mc-title').innerText = "Nouveau Client"; $('mc-id').value = ''; $('mc-nom').value = '';
         $('mc-adr').value = ''; $('mc-ville').value = ''; $('mc-email').value = ''; $('mc-siret').value = '';
+        $('mc-archive').style.display = 'none';
     }
     openModal('mod-cli');
 }
@@ -331,7 +337,7 @@ function openCliPrixModal(cliId) {
     let prices = db.prixCli[cliId] || {};
     $('mcp-cli-id').value = cliId;
     $('mcp-title').innerText = `💰 Prix pour ${cli.nom}`;
-    $('mcp-list').innerHTML = db.prods.map(p => `
+    $('mcp-list').innerHTML = actifs(db.prods).map(p => `
         <div class="field">
             <label>${p.icon} ${p.nom} <small style="opacity:.5; font-weight:400">(base : ${eur(p.prix)} / ${p.unite})</small></label>
             <input type="number" id="cprix-${p.id}" step="0.01" value="${prices[p.id] !== undefined ? prices[p.id] : p.prix}">
@@ -342,7 +348,7 @@ function openCliPrixModal(cliId) {
 function saveCliPrix() {
     let cliId = $('mcp-cli-id').value;
     if (!db.prixCli[cliId]) db.prixCli[cliId] = {};
-    db.prods.forEach(p => {
+    actifs(db.prods).forEach(p => {
         let v = parseFloat($('cprix-' + p.id).value);
         if (!isNaN(v)) db.prixCli[cliId][p.id] = v;
     });
@@ -369,13 +375,14 @@ function openEntModal(id = null) {
 function saveProd() {
     let id = $('mp-id').value || Date.now();
     let o = { id, icon: $('mp-icon').value || '📦', nom: $('mp-nom').value, desc: $('mp-desc').value, prix: parseFloat($('mp-prix').value) || 0, unite: $('mp-unite').value, tva: parseFloat($('mp-tva').value), poids: parseFloat($('mp-poids').value) || 0, seuil: parseFloat($('mp-seuil').value) || 0, stock: 0 };
-    let ex = db.prods.find(p => p.id == id); if (ex) o.stock = ex.stock;
+    let ex = db.prods.find(p => p.id == id); if (ex) { o.stock = ex.stock; o.archived = ex.archived; }
     db.prods = db.prods.filter(p => p.id != id); db.prods.push(o); G.set('v90_prods', db.prods); closeModals(); renderAll();
 }
 
 function saveCli() {
     let id = $('mc-id').value || Date.now();
     let o = { id, nom: $('mc-nom').value, adr: $('mc-adr').value, ville: $('mc-ville').value, email: $('mc-email').value, siret: $('mc-siret').value };
+    let exCli = db.clis.find(c => c.id == id); if (exCli) o.archived = exCli.archived;
     db.clis = db.clis.filter(c => c.id != id); db.clis.push(o); G.set('v90_clis', db.clis); closeModals(); renderAll();
 }
 
@@ -495,7 +502,7 @@ function saveBL() {
     let cliId = $('bl-cli-select').value;
     let prixCli = (cliId && db.prixCli[cliId]) ? db.prixCli[cliId] : {};
     let items = [];
-    db.prods.forEach(p => {
+    actifs(db.prods).forEach(p => {
         let q = parseInt($('qty-' + p.id).value);
         let prixInput = parseFloat($('prix-' + p.id).value);
         let prixDefaut = prixCli[p.id] !== undefined ? prixCli[p.id] : p.prix;
@@ -576,7 +583,11 @@ function processBLToDraft() {
         });
         bl.status = 'facturé';
     });
-    db.drafts.push({ id: Date.now(), cid: sel[0].cid, cliNom: sel[0].cliNom, items: Object.values(cumul) });
+    db.drafts.push({
+        id: Date.now(), cid: sel[0].cid, cliNom: sel[0].cliNom, items: Object.values(cumul),
+        blIds: sel.map(b => b.id),
+        dates: [...new Set(sel.map(b => b.date))].join(', ')
+    });
     G.set('v90_drafts', db.drafts); G.set('v90_bls', db.bls);
     blSel = []; $('bl-bar').style.display = 'none';
     showPage('facture'); toggleFactTab('draft');
@@ -689,7 +700,7 @@ function getPoids(i) {
 function renderBLGrid() {
     let cliId = $('bl-cli-select').value;
     let prixCli = (cliId && db.prixCli[cliId]) ? db.prixCli[cliId] : {};
-    $('bl-prod-grid').innerHTML = db.prods.map(p => {
+    $('bl-prod-grid').innerHTML = actifs(db.prods).map(p => {
         let poidsLabel = p.poids ? `<span style="opacity:.6;font-size:13px">${p.poids} kg / ${p.unite}</span>` : '';
         let prix = prixCli[p.id] !== undefined ? prixCli[p.id] : p.prix;
         return `
@@ -709,23 +720,114 @@ function renderBLGrid() {
         </div>`; }).join('');
 }
 
+// --- ARCHIVAGE (clients / produits) ---
+// Un élément archivé disparaît des sélecteurs et grilles mais reste en base :
+// l'historique et les BL existants gardent leurs références intactes.
+function actifs(arr) { return arr.filter(x => !x.archived); }
+
+function toggleArchive(type, id) {
+    const item = db[type].find(x => x.id == id);
+    if (!item) return;
+    item.archived = !item.archived;
+    G.set('v90_' + type, db[type]);
+    closeModals();
+    renderAll();
+    toast(item.archived ? '🗂 Archivé — il n\'apparaît plus dans les listes, ses données restent conservées.' : '✅ Restauré.', 'success');
+}
+
+// --- SOUS-ONGLETS PARAMÈTRES ---
+function toggleParamTab(t) {
+    ['produits', 'clients', 'entreprises', 'donnees'].forEach(k => {
+        $('tab-param-' + k).classList.toggle('active', k === t);
+        $('view-param-' + k).style.display = k === t ? 'block' : 'none';
+    });
+}
+
+// --- BANDEAU « D'UN COUP D'ŒIL » (accueil) ---
+function renderHomeResume() {
+    const el = $('home-resume'); if (!el) return;
+    const now = new Date();
+    const todayFr = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`;
+    const moisKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
+    const aLivrer = db.bls.filter(b => b.status === 'en-cours' && b.date === todayFr);
+    const poids = aLivrer.reduce((s, b) => s + b.items.reduce((s2, i) => s2 + i.qte * getPoids(i), 0), 0);
+
+    const impayees = db.hist.filter(h => computeHistStatus(h) !== 'payee');
+    const duTtc = impayees.reduce((s, h) => s + (parseFloat((h.total || '').replace(/[^\d,]/g, '').replace(',', '.')) || 0), 0);
+
+    const bas = actifs(db.prods).filter(p => p.seuil > 0 && p.stock <= p.seuil);
+
+    const caMois = db.hist.filter(h => histMonthKey(h.date) === moisKey)
+        .reduce((s, h) => s + (h.items && h.items.length ? h.items.reduce((s2, i) => s2 + i.qte * i.prix, 0)
+            : (parseFloat((h.total || '').replace(/[^\d,]/g, '').replace(',', '.')) || 0) / 1.2), 0);
+
+    el.innerHTML = `
+        <div class="hr-card hr-mint" onclick="goResumeLivraisons()">
+            <b>${aLivrer.length}</b><span>À livrer aujourd'hui</span>
+            <small>${aLivrer.length ? poids.toFixed(0) + ' kg à charger' : 'rien de prévu'}</small>
+        </div>
+        <div class="hr-card hr-peach" onclick="goResumeImpayees()">
+            <b>${impayees.length}</b><span>Facture${impayees.length > 1 ? 's' : ''} impayée${impayees.length > 1 ? 's' : ''}</span>
+            <small>${impayees.length ? eur(duTtc) + ' TTC dus' : 'tout est réglé'}</small>
+        </div>
+        <div class="hr-card hr-sun" onclick="showPage('stock')">
+            <b>${bas.length}</b><span>Stock bas</span>
+            <small>${bas.length ? mailEsc(bas.slice(0, 2).map(p => p.nom).join(', ')) + (bas.length > 2 ? '…' : '') : 'niveaux OK'}</small>
+        </div>
+        <div class="hr-card hr-sky" onclick="goResumeCompta()">
+            <b>${eur(caMois)}</b><span>CA HT du mois</span>
+            <small>${db.hist.filter(h => histMonthKey(h.date) === moisKey).length} facture(s)</small>
+        </div>`;
+}
+
+function goResumeLivraisons() {
+    showPage('bl');
+    toggleBLTab('charge');
+    $('charge-date').value = new Date().toISOString().split('T')[0];
+    renderChargement();
+}
+function goResumeImpayees() {
+    showPage('historique');
+    toggleHistFilter('impayees');
+}
+function goResumeCompta() {
+    showPage('compta');
+    calcCompta();
+}
+
 // --- RENDU GLOBAL DES LISTES ---
 function renderAll() {
+    renderHomeResume();
     // 1. Sélecteur client + entreprise pour le BL
     $('bl-date').value = new Date().toISOString().split('T')[0];
     $('bl-ent-select').innerHTML = db.ents.map(e => `<option value="${e.id}">${e.nom}</option>`).join('');
-    $('bl-cli-select').innerHTML = db.clis.map(c => `<option value="${c.id}">${c.nom}</option>`).join('');
+    $('bl-cli-select').innerHTML = actifs(db.clis).map(c => `<option value="${c.id}">${c.nom}</option>`).join('');
 
     // 2. Grille des produits pour le BL
     renderBLGrid();
 
     // 3. Listes dans les paramètres
-    $('list-prods-settings').innerHTML = db.prods.map(p => `<div class="card card-link" onclick="openProdModal(${p.id})"><div><b>${p.icon} ${p.nom}</b></div><span>✏️</span></div>`).join('');
-    $('list-clis-settings').innerHTML = db.clis.map(c => `
+    $('list-prods-settings').innerHTML = actifs(db.prods).map(p => `<div class="card card-link" onclick="openProdModal(${p.id})"><div><b>${p.icon} ${p.nom}</b></div><span>✏️</span></div>`).join('');
+    const prodsArch = db.prods.filter(p => p.archived);
+    $('title-prods-archives').style.display = prodsArch.length ? 'block' : 'none';
+    $('list-prods-archives').innerHTML = prodsArch.map(p => `
+        <div class="card" style="gap:8px; align-items:center; opacity:.65">
+            <b style="flex:1">${p.icon} ${mailEsc(p.nom)}</b>
+            <button class="btn" style="width:auto;padding:6px 12px;font-size:12px;background:rgba(255,255,255,0.1)" onclick="toggleArchive('prods', ${p.id})">↩️ Restaurer</button>
+        </div>`).join('');
+    $('list-clis-settings').innerHTML = actifs(db.clis).map(c => `
         <div class="card" style="gap:8px; align-items:center">
             <b style="flex:1; cursor:pointer" onclick="openCliModal(${c.id})">👤 ${c.nom}</b>
             <button class="btn" style="width:auto;padding:6px 12px;font-size:12px;background:rgba(255,255,255,0.1)" onclick="openCliPrixModal(${c.id})">💰 Prix</button>
             <span style="cursor:pointer" onclick="openCliModal(${c.id})">✏️</span>
+        </div>`).join('');
+    const clisArch = db.clis.filter(c => c.archived);
+    $('title-clis-archives').style.display = clisArch.length ? 'block' : 'none';
+    $('list-clis-archives').innerHTML = clisArch.map(c => `
+        <div class="card" style="gap:8px; align-items:center; opacity:.65">
+            <b style="flex:1">👤 ${mailEsc(c.nom)}</b>
+            <button class="btn" style="width:auto;padding:6px 12px;font-size:12px;background:rgba(255,255,255,0.1)" onclick="toggleArchive('clis', ${c.id})">↩️ Restaurer</button>
         </div>`).join('');
     $('list-ents-settings').innerHTML = db.ents.map(e => `<div class="card card-link" onclick="openEntModal(${e.id})"><b>🏢 ${e.nom}</b><span>✏️</span></div>`).join('');
     
@@ -740,12 +842,12 @@ function renderAll() {
         sel.innerHTML = ['Toutes', ...entNames].map(n => `<option${n === cur ? ' selected' : ''}>${mailEsc(n)}</option>`).join('');
     });
     $('f-ent').innerHTML = db.ents.map(e => `<option value="${e.id}">${e.nom}</option>`).join('');
-    $('f-cli').innerHTML = db.clis.map(c => `<option value="${c.id}">${c.nom}</option>`).join('');
-    $('f-prod-picker').innerHTML = db.prods.map(p => `<option value="${p.id}">${p.nom}</option>`).join('');
+    $('f-cli').innerHTML = actifs(db.clis).map(c => `<option value="${c.id}">${c.nom}</option>`).join('');
+    $('f-prod-picker').innerHTML = actifs(db.prods).map(p => `<option value="${p.id}">${p.nom}</option>`).join('');
     
     // 5. Affichage du stock actuel et ajustement (avec alerte seuil bas)
-    const lowStock = db.prods.filter(p => p.seuil > 0 && p.stock <= p.seuil);
-    $('list-stock').innerHTML = db.prods.map(p => {
+    const lowStock = actifs(db.prods).filter(p => p.seuil > 0 && p.stock <= p.seuil);
+    $('list-stock').innerHTML = actifs(db.prods).map(p => {
         const bas = p.seuil > 0 && p.stock <= p.seuil;
         return `<div class="card${bas ? ' stock-low' : ''}" style="flex-direction:column">
             <b>${p.icon} ${p.nom}</b>
@@ -753,7 +855,7 @@ function renderAll() {
             ${bas ? `<span class="badge-statut badge-retard" style="margin-top:6px">⚠️ Stock bas (seuil : ${p.seuil})</span>` : ''}
         </div>`;
     }).join('');
-    $('adj-prod').innerHTML = db.prods.map(p => `<option value="${p.id}">${p.nom}</option>`).join('');
+    $('adj-prod').innerHTML = actifs(db.prods).map(p => `<option value="${p.id}">${p.nom}</option>`).join('');
     const stockBadge = $('stock-alert-badge');
     if (stockBadge) {
         stockBadge.style.display = lowStock.length ? 'flex' : 'none';
@@ -797,6 +899,11 @@ function relanceHist(id) {
     window.open(`mailto:${h.cliEmail}?subject=${sujet}&body=${corps}`, '_blank');
 }
 
+function toggleBlOrigin(histId) {
+    const el = $('bl-origin-' + histId);
+    if (el) el.hidden = !el.hidden;
+}
+
 let histFilter = 'toutes';
 function toggleHistFilter(f) {
     histFilter = f;
@@ -836,6 +943,18 @@ function renderHistorique() {
                     <span style="font-size:13px; font-weight:600">👤 ${mailEsc(h.cli)}</span>
                     <span class="badge-statut ${badgeCls}" style="margin-left:auto">${badgeLbl}</span>
                 </div>
+                ${(h.blIds && h.blIds.length) ? `
+                <div style="padding:8px 16px; border-bottom:1px solid rgba(255,255,255,0.08)">
+                    <span style="font-size:12px; cursor:pointer; color:var(--accent); font-weight:600" onclick="toggleBlOrigin(${h.id})">📦 ${h.blIds.length} bon${h.blIds.length > 1 ? 's' : ''} de livraison d'origine ▾</span>
+                    <div id="bl-origin-${h.id}" hidden style="margin-top:8px">
+                        ${h.blIds.map(bid => {
+                            const b = db.bls.find(x => x.id == bid);
+                            return b
+                                ? `<div style="font-size:12px; padding:4px 0; opacity:.8">📅 ${mailEsc(b.date)} — ${b.items.map(i => `${i.qte} ${mailEsc(i.unite)} ${mailEsc(i.nom)}`).join(' · ')}</div>`
+                                : `<div style="font-size:12px; padding:4px 0; opacity:.5">bon supprimé (réf. ${bid})</div>`;
+                        }).join('')}
+                    </div>
+                </div>` : ''}
                 ${itemsHtml ? `<div style="padding:8px 16px">${itemsHtml}</div>` : ''}
                 <div style="display:flex; justify-content:space-between; padding:12px 16px; background:rgba(255,255,255,0.04)">
                     ${h.ht ? `<span style="font-size:12px; opacity:.5">HT : ${mailEsc(h.ht)}</span>` : '<span></span>'}
@@ -916,6 +1035,9 @@ function finalizeInvoice() {
     let ttc = curLines.reduce((s, l) => s + (l.qte * l.prix * (1 + (l.tva || 20) / 100)), 0);
     let entObj = db.ents.find(e => e.id == $('f-ent').value);
     let cliObj = db.clis.find(c => c.id == $('f-cli').value);
+    // Traçabilité : si la facture vient d'un brouillon issu de BL, on garde
+    // les références des bons d'origine (affichées dans l'Historique).
+    let srcDraft = curDraftId ? db.drafts.find(d => d.id == curDraftId) : null;
     db.hist.push({
         id: Date.now(),
         num: $('f-num').value,
@@ -926,7 +1048,8 @@ function finalizeInvoice() {
         items: curLines.map(l => ({ icon: l.icon, nom: l.nom, qte: l.qte, prix: l.prix, unite: l.unite, tva: l.tva })),
         ht: eur(ht),
         total: eur(ttc),
-        statut: 'en_attente'
+        statut: 'en_attente',
+        blIds: srcDraft && srcDraft.blIds ? srcDraft.blIds : []
     });
     G.set('v90_hist', db.hist);
     if (curDraftId) db.drafts = db.drafts.filter(d => d.id != curDraftId);
