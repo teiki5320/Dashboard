@@ -418,7 +418,10 @@
         <div class="field"><label>CP / Ville</label><input type="text" id="mc-ville"></div>
         <div class="field"><label>SIRET / TVA Intra</label><input type="text" id="mc-siret"></div>
     </div>
-    <div class="field"><label>Email</label><input type="email" id="mc-email"></div>
+    <div class="r2">
+        <div class="field"><label>Email</label><input type="email" id="mc-email"></div>
+        <div class="field"><label>Délai de paiement (jours)</label><input type="number" id="mc-echeance" placeholder="30"></div>
+    </div>
     <button class="btn btn-gold" onclick="saveCli()">SAUVER</button>
     <button class="btn" id="mc-archive" style="margin-top:10px; background:rgba(255,255,255,0.06); display:none" onclick="toggleArchive('clis', $('mc-id').value)">🗂 Archiver</button>
     <button class="btn btn-red" onclick="closeModals()" style="margin-top:10px">ANNULER</button>
