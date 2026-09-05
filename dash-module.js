@@ -71,16 +71,16 @@
   function ciInfo(app) {
     var ci = app.status && app.status.ci;
     if (!app.repo) return { k: 'none', label: 'Sans dépôt', date: '' };
-    if (!ci) return { k: 'none', label: 'Pas de run', date: '' };
+    if (!ci) return { k: 'none', label: 'Jamais vérifiée', date: '' };
     var base = { url: ci.url || ('https://github.com/' + app.repo + '/actions'), date: fmtDate(ci.updatedAt), dateLong: fmtDate(ci.updatedAt, true) };
-    if (ci.status !== 'completed') return Object.assign(base, { k: 'run', label: 'CI en cours' });
-    if (ci.conclusion === 'success') return Object.assign(base, { k: 'ok', label: 'CI OK' });
-    if (ci.conclusion === 'failure') return Object.assign(base, { k: 'ko', label: 'CI échec' });
-    return Object.assign(base, { k: 'none', label: 'CI ' + (ci.conclusion || ci.status) });
+    if (ci.status !== 'completed') return Object.assign(base, { k: 'run', label: 'Vérification en cours' });
+    if (ci.conclusion === 'success') return Object.assign(base, { k: 'ok', label: 'Code OK' });
+    if (ci.conclusion === 'failure') return Object.assign(base, { k: 'ko', label: 'Erreur de code' });
+    return Object.assign(base, { k: 'none', label: 'Vérif. ' + (ci.conclusion || ci.status) });
   }
   function ciPill(app, big) {
     var c = ciInfo(app);
-    var inner = '<i class="dot"></i><span class="ci-lbl">' + esc(c.label) + (big ? '<small>' + esc(c.dateLong || (app.repo ? 'aucun run' : 'à créer')) + '</small>' : '') + '</span>';
+    var inner = '<i class="dot"></i><span class="ci-lbl">' + esc(c.label) + (big ? '<small>' + esc(c.dateLong || (app.repo ? 'aucune vérification' : 'à créer')) + '</small>' : '') + '</span>';
     var cls = 'ci ci-' + c.k + (big ? ' ci-big' : '');
     return (big && c.url)
       ? '<a class="' + cls + '" href="' + esc(c.url) + '" target="_blank" rel="noopener">' + inner + '</a>'
@@ -142,7 +142,7 @@
       h += '<label class="tb-search"><span>⌕</span><input id="dash-search" type="search" autocomplete="off" placeholder="' +
         (route.page === 'catalogue' ? 'Rechercher un service…' : 'Rechercher une app…') + '"></label>';
     }
-    h += '<button type="button" class="clay-btn bell"' + (kos.length ? ' data-dash-go="app/' + esc(kos[0].id) + '" title="' + esc(kos.map(function (a) { return a.name; }).join(', ')) + ' : CI en échec"' : ' title="Aucune alerte"') + '>🔔' +
+    h += '<button type="button" class="clay-btn bell"' + (kos.length ? ' data-dash-go="app/' + esc(kos[0].id) + '" title="' + esc(kos.map(function (a) { return a.name; }).join(', ')) + ' : erreur détectée dans le code"' : ' title="Aucune alerte"') + '>🔔' +
       (kos.length ? '<span class="badge-n">' + kos.length + '</span>' : '') + '</button>';
     return h + '</div>';
   }
@@ -175,7 +175,7 @@
     var h = '<div class="hero-row">';
     h += '<div class="tile tint-peach hero rise">' + logoImg('hero-img') + '<div class="hero-txt"><h3>Bonjour, ' + esc(PRENOM) + ' ☀️</h3>' +
       '<p>' + (ko
-        ? nbOk + ' app' + (nbOk > 1 ? 's' : '') + ' au vert, mais le dernier run CI de <b>' + esc(ko.name) + '</b> a échoué' + (koC.date ? ' le ' + esc(koC.date) : '') + '.'
+        ? nbOk + ' app' + (nbOk > 1 ? 's' : '') + ' au vert, mais la dernière vérification du code de <b>' + esc(ko.name) + '</b> a échoué' + (koC.date ? ' le ' + esc(koC.date) : '') + '.'
         : 'Toutes tes apps sont au vert. ' + total + ' action' + (total > 1 ? 's' : '') + ' marketing en attente.') + '</p>' +
       '<button type="button" class="cta" data-dash-go="' + (ko ? 'app/' + esc(ko.id) : 'catalogue') + '">' + (ko ? 'Voir ' + esc(ko.name) + ' →' : 'Ouvrir le catalogue →') + '</button></div></div>';
     h += '<div class="tile rise" style="animation-delay:.05s"><div class="tile-h"><b>Canaux marketing</b><span>toutes apps</span></div>' +
@@ -184,18 +184,18 @@
 
     h += '<div class="kpi-row">';
     h += '<div class="tile kpi tint-mint rise" style="animation-delay:.08s"><span class="kpi-ico">📱</span><span class="kpi-lab">Applications</span><b>' + DATA.apps.length + '</b><small>' + DATA.apps.filter(function (a) { return a.repo; }).length + ' dépôts suivis</small></div>';
-    h += '<div class="tile kpi tint-ok rise" style="animation-delay:.12s"><span class="kpi-ico">✅</span><span class="kpi-lab">CI au vert</span><b>' + nbOk + '</b><small class="c-ok">' + (lastRun ? 'dernier run ' + esc(fmtDate(lastRun.ts)) : 'aucun run') + '</small></div>';
-    h += '<div class="tile kpi ' + (nbKo ? 'tint-ko' : 'tint-none') + ' rise" style="animation-delay:.16s"><span class="kpi-ico">' + (nbKo ? '⚠️' : '🧘') + '</span><span class="kpi-lab">CI en échec</span><b>' + nbKo + '</b><small class="' + (nbKo ? 'c-ko' : '') + '">' + (ko ? esc(ko.name) + (koC.date ? ' · ' + esc(koC.date) : '') : 'tout est au vert') + '</small></div>';
+    h += '<div class="tile kpi tint-ok rise" style="animation-delay:.12s"><span class="kpi-ico">✅</span><span class="kpi-lab">Apps au vert</span><b>' + nbOk + '</b><small class="c-ok">' + (lastRun ? 'dernière vérif. ' + esc(fmtDate(lastRun.ts)) : 'aucune vérification') + '</small></div>';
+    h += '<div class="tile kpi ' + (nbKo ? 'tint-ko' : 'tint-none') + ' rise" style="animation-delay:.16s"><span class="kpi-ico">' + (nbKo ? '⚠️' : '🧘') + '</span><span class="kpi-lab">Apps en erreur</span><b>' + nbKo + '</b><small class="' + (nbKo ? 'c-ko' : '') + '">' + (ko ? esc(ko.name) + (koC.date ? ' · ' + esc(koC.date) : '') : 'tout est au vert') + '</small></div>';
     h += '<div class="tile kpi tint-sky rise" style="animation-delay:.2s"><span class="kpi-ico">🗒️</span><span class="kpi-lab">Actions à faire</span><b>' + (total - faites) + '</b><small>' + faites + ' cochée' + (faites > 1 ? 's' : '') + '</small></div>';
     h += '</div>';
 
     h += '<div class="two-col">';
-    h += '<div class="tile rise" style="animation-delay:.22s"><div class="tile-h"><b>Mes applications</b><span>état du dernier run CI</span></div><div class="rows" id="app-rows">';
+    h += '<div class="tile rise" style="animation-delay:.22s"><div class="tile-h"><b>Mes applications</b><span>état de la vérification automatique du code (CI)</span></div><div class="rows" id="app-rows">';
     DATA.apps.forEach(function (a, i) {
       var c = ciInfo(a), meta = [];
       meta.push((a.platforms || []).join(' · ') || 'Aucune plateforme');
       if (a.services.length) meta.push(a.services.length + ' services');
-      if (c.date) meta.push('run ' + c.date);
+      if (c.date) meta.push('vérif. ' + c.date);
       h += '<a class="row" data-dash-go="app/' + esc(a.id) + '" data-search="' + esc(norm(a.name + ' ' + a.tagline)) + '" style="animation-delay:' + (0.24 + i * 0.04).toFixed(2) + 's">' +
         '<span class="row-ico tint-' + appTint(a) + '">' + esc(a.emoji) + '</span>' +
         '<span class="row-txt"><b>' + esc(a.name) + '</b><small>' + esc(meta.join(' · ')) + '</small></span>' + ciPill(a) + '</a>';
