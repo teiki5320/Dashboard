@@ -5,9 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gestion Pro v9.0</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#05070a">
+    <meta name="theme-color" content="#0f0f10">
     <link rel="apple-touch-icon" href="assets/icon-180.png">
     <link rel="stylesheet" href="style.css">
+    <script>
+    // Thème avant le premier rendu : évite le flash clair/sombre.
+    try { if (localStorage.getItem('gp-theme') === 'clair') document.documentElement.setAttribute('data-theme', 'clair'); } catch (e) {}
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
@@ -18,12 +22,34 @@
 </head>
 <body>
 
+<div id="gp-shell">
+<aside id="gp-rail">
+    <img class="rail-logo" src="assets/dash-logo.png" alt="" onerror="this.onerror=null;this.src='assets/icon-192.png'">
+    <nav>
+        <button type="button" class="rail-item" data-page="home" onclick="showPage('home')"><span class="ico">⌂</span><span class="lbl">Accueil</span></button>
+        <button type="button" class="rail-item" data-page="dash" onclick="showPage('dash')"><span class="ico">📱</span><span class="lbl">Mes apps</span></button>
+        <div class="rail-sep"></div>
+        <button type="button" class="rail-item" data-page="bl" onclick="showPage('bl')"><span class="ico">🧾</span><span class="lbl">Commande</span></button>
+        <button type="button" class="rail-item" data-page="facture" onclick="showPage('facture')"><span class="ico">📄</span><span class="lbl">Factures</span></button>
+        <button type="button" class="rail-item" data-page="stock" onclick="showPage('stock')"><span class="ico">📦</span><span class="lbl">Stock</span></button>
+        <button type="button" class="rail-item" data-page="historique" onclick="showPage('historique')"><span class="ico">🕘</span><span class="lbl">Historique</span></button>
+        <div class="rail-sep"></div>
+        <button type="button" class="rail-item" data-page="tva" onclick="showPage('tva')"><span class="ico">📊</span><span class="lbl">TVA</span></button>
+        <button type="button" class="rail-item" data-page="compta" onclick="showPage('compta')"><span class="ico">💼</span><span class="lbl">Compta</span></button>
+        <button type="button" class="rail-item" data-page="mail" onclick="showPage('mail')"><span class="ico">✉️</span><span class="lbl">Mail</span></button>
+        <div class="rail-sep"></div>
+        <button type="button" class="rail-item" data-page="parametres" onclick="showPage('parametres')"><span class="ico">⚙️</span><span class="lbl">Réglages</span></button>
+    </nav>
+</aside>
+<div id="gp-main">
+
 <header>
     <div class="hd-left">
         <button id="global-back" class="global-back-btn" onclick="showPage('home')">←</button>
         <div class="hd-title" id="hd-page-name">Tableau de Bord</div>
     </div>
     <div class="hd-clock">
+        <button id="gp-theme" class="hd-btn" onclick="gpToggleTheme()" title="Clair / sombre">☀️</button>
         <button id="hd-anim-toggle" class="hd-anim-btn" onclick="toggleGlobalAnim()" title="Activer / couper les animations">⚡</button>
         <div class="hd-clock-text">
             <div id="hd-date">...</div>
@@ -428,10 +454,52 @@
     <div id="dash-contenu"></div>
 </div>
 
+</div>
+</div>
+
 <script src="script.js"></script>
 <script src="assets/dash-data.js"></script>
 <script src="dash-module.js"></script>
 <script>
+// ── Thème clair / sombre (sombre par défaut, mémorisé) ──────────────────────
+function gpTheme() {
+    return document.documentElement.getAttribute('data-theme') === 'clair' ? 'clair' : 'sombre';
+}
+function gpApplyTheme(t) {
+    if (t === 'clair') document.documentElement.setAttribute('data-theme', 'clair');
+    else document.documentElement.removeAttribute('data-theme');
+    try { localStorage.setItem('gp-theme', t); } catch (e) {}
+    var b = document.getElementById('gp-theme');
+    if (b) b.textContent = t === 'clair' ? '🌙' : '☀️';
+    var m = document.querySelector('meta[name="theme-color"]');
+    if (m) m.setAttribute('content', t === 'clair' ? '#efe3d6' : '#0f0f10');
+}
+function gpToggleTheme() { gpApplyTheme(gpTheme() === 'clair' ? 'sombre' : 'clair'); }
+gpApplyTheme(gpTheme());
+
+// ── Barre latérale : suit la page affichée ─────────────────────────────────
+(function () {
+    var TITRES = {
+        home: 'Tableau de bord', dash: 'Mes apps', bl: 'Prise de commande', facture: 'Facturation',
+        stock: 'Stock', historique: 'Historique', tva: 'Assistant TVA', compta: 'Comptabilité',
+        mail: 'Mail', parametres: 'Réglages'
+    };
+    function marquer(id) {
+        var t = document.getElementById('hd-page-name');
+        if (t && TITRES[id]) t.innerText = TITRES[id];
+        var items = document.querySelectorAll('#gp-rail .rail-item');
+        for (var i = 0; i < items.length; i++) {
+            items[i].classList.toggle('active', items[i].getAttribute('data-page') === id);
+        }
+    }
+    var original = window.showPage;
+    window.showPage = function (id) {
+        original.apply(this, arguments);
+        marquer(id);
+    };
+    marquer('home');
+})();
+
 // Mode hors-ligne (PWA) : inactif en file:// et sur les très vieux navigateurs.
 if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
     navigator.serviceWorker.register('./sw.js').catch(function () {});

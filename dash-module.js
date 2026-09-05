@@ -65,22 +65,7 @@
       '<span class="todo-txt"><span>' + texte + '</span>' + (sous ? '<small>' + sous + '</small>' : '') + '</span></label>';
   }
 
-  // ── Thème clair / sombre (mémorisé) ────────────────────────────────────────
-  var THEME_KEY = 'dash-theme';
-  function theme() {
-    try { var t = localStorage.getItem(THEME_KEY); if (t === 'clair' || t === 'sombre') return t; } catch (e) {}
-    return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'sombre' : 'clair';
-  }
-  function applyTheme() {
-    var t = theme();
-    var z = $('#page-dash'); if (z) z.setAttribute('data-theme', t);
-    if (overlayEl) overlayEl.setAttribute('data-theme', t);
-    var b = $('#dash-theme'); if (b) b.textContent = t === 'sombre' ? '☀️' : '🌙';
-  }
-  function toggleTheme() {
-    try { localStorage.setItem(THEME_KEY, theme() === 'sombre' ? 'clair' : 'sombre'); } catch (e) {}
-    applyTheme();
-  }
+  // Le thème clair / sombre est global : html[data-theme] et le bouton de l'en-tête.
 
   // ── Indicateurs vivants (release + CI) — voir tool/sync.js / apps/<id>/status.json ──
   function ciInfo(app) {
@@ -121,8 +106,7 @@
 
   // ── Barre latérale ─────────────────────────────────────────────────────────
   function renderSidebar(route) {
-    var h = '<button class="clay-btn back" type="button" data-dash-home title="Retour au tableau de bord">←</button>';
-    h += '<div class="side-id">' + logoImg('avatar') + '<div class="hi">Salut, ' + esc(PRENOM) + ' 👋</div></div>';
+    var h = '<div class="side-id">' + logoImg('avatar') + '<div class="hi">Salut, ' + esc(PRENOM) + ' 👋</div></div>';
     h += '<nav class="side-nav">';
     h += '<button type="button" class="nav-item' + (route.page === 'accueil' ? ' active' : '') + '" data-dash-go="accueil"><span class="ico tint-mint">⌂</span><span class="lbl">Vue d’ensemble</span></button>';
     h += '<div class="side-label">Applications</div>';
@@ -150,7 +134,6 @@
       h += '<label class="tb-search"><span>⌕</span><input id="dash-search" type="search" autocomplete="off" placeholder="' +
         (route.page === 'catalogue' ? 'Rechercher un service…' : 'Rechercher une app…') + '"></label>';
     }
-    h += '<button type="button" class="clay-btn" id="dash-theme" title="Clair / sombre">' + (theme() === 'sombre' ? '☀️' : '🌙') + '</button>';
     h += '<button type="button" class="clay-btn bell"' + (kos.length ? ' data-dash-go="app/' + esc(kos[0].id) + '" title="' + esc(kos.map(function (a) { return a.name; }).join(', ')) + ' : CI en échec"' : ' title="Aucune alerte"') + '>🔔' +
       (kos.length ? '<span class="badge-n">' + kos.length + '</span>' : '') + '</button>';
     return h + '</div>';
@@ -459,7 +442,6 @@
     sheetSvc = svc; sheetCtx = appCtx;
     overlayEl = document.createElement('div');
     overlayEl.className = 'dash-overlay';
-    overlayEl.setAttribute('data-theme', theme());
     overlayEl.innerHTML = '<div class="dash-sheet" role="dialog" aria-modal="true">' + serviceSheetHtml(svc, appCtx) + '</div>';
     overlayEl.addEventListener('click', function (e) {
       var nav = e.target.closest && e.target.closest('[data-nav]');
@@ -492,9 +474,8 @@
   function dashRender() {
     var route = vue;
     closeSheet();
-    var side = $('#dash-titre'), corps = $('#dash-contenu'), zone = $('#page-dash');
+    var side = $('#dash-titre'), corps = $('#dash-contenu');
     if (!corps) return;
-    if (zone) zone.setAttribute('data-theme', theme());
     var app = route.page === 'app' ? DATA.apps.filter(function (a) { return a.id === route.id; })[0] : null;
     if (route.page === 'app' && !app) { vue = { page: 'accueil', id: null, volet: 'technique' }; return dashRender(); }
     if (side) side.innerHTML = renderSidebar(route);
@@ -520,7 +501,6 @@
     zone.addEventListener('click', function (e) {
       var home = e.target.closest && e.target.closest('[data-dash-home]');
       if (home) { if (typeof window.showPage === 'function') window.showPage('home'); return; }
-      if (e.target.closest && e.target.closest('#dash-theme')) { toggleTheme(); return; }
       var go = e.target.closest && e.target.closest('[data-dash-go]');
       if (go) {
         e.preventDefault();
@@ -551,9 +531,6 @@
     zone.addEventListener('input', function (e) {
       if (e.target && e.target.id === 'dash-search') onSearch(e.target.value);
     });
-    if (window.matchMedia) {
-      try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme); } catch (e) {}
-    }
     dashRender();
   }
   window.dashInit = dashInit;
