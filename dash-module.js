@@ -104,6 +104,14 @@
   }
   window.dashGo = dashGo;
 
+  // Retour contextuel : depuis une app ou le Lexique, la flèche ← ramène
+  // d'abord à la vue d'ensemble du module (consommé → true) ; depuis la vue
+  // d'ensemble, elle rend la main à l'historique global (false).
+  window.dashBack = function () {
+    if (vue.page !== 'accueil') { dashGo('accueil'); return true; }
+    return false;
+  };
+
   // ── Navigation du module, fusionnée dans le rail global de gauche ──────────
   // Plus de barre latérale interne : les entrées (Vue d'ensemble, apps,
   // Catalogue) s'insèrent sous « Mes apps » dans #gp-rail, et s'effacent en
@@ -115,8 +123,9 @@
     // métier (Commande, Factures…) sont masquées par CSS via cette classe.
     var rail = document.getElementById('gp-rail');
     if (rail) rail.classList.add('dash-mode');
-    var h = '<button type="button" class="rail-item rail-sub' + (route.page === 'accueil' ? ' active' : '') +
-      '" onclick="dashGo(\'accueil\')"><span class="ico">⌂</span><span class="lbl">Vue d’ensemble</span></button>';
+    // Pas d'entrée « Vue d'ensemble » : cliquer « Mes apps » dans le rail y
+    // mène toujours (voir l'accroche showPage plus bas), c'est le même geste.
+    var h = '';
     DATA.apps.forEach(function (a) {
       h += '<button type="button" class="rail-item rail-sub' + (route.page === 'app' && route.id === a.id ? ' active' : '') +
         '" onclick="dashGo(\'app\',\'' + esc(a.id) + '\')" title="' + esc(a.name) + ' — ' + esc(ciInfo(a).label) + '">' +
@@ -556,8 +565,13 @@
     var original = window.showPage;
     window.showPage = function (id) {
       original.apply(this, arguments);
-      if (id === 'dash') { dashInit(); if (initialise) renderRailNav(vue); }
-      else clearRailNav();
+      if (id === 'dash') {
+        // « Mes apps » ouvre toujours la vue d'ensemble (l'entrée dédiée du
+        // rail a été retirée : c'est le même geste).
+        var deja = initialise;
+        dashInit();
+        if (deja) dashGo('accueil');
+      } else clearRailNav();
     };
     return true;
   }
