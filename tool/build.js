@@ -402,6 +402,26 @@ function loadApps() {
       }
     }
 
+    // Extrait la date la plus récente de l'en-tête d'une fiche : formats
+    // français (« 21 août 2026 »), ISO (2026-08-21, y compris avec des tirets
+    // typographiques U+2010/U+2011), première douzaine de lignes seulement.
+    function ficheDate(md) {
+      if (!md) return null;
+      const tete = md.split('\n').slice(0, 12).join('\n');
+      const MOIS = { janvier: 0, fevrier: 1, 'février': 1, mars: 2, avril: 3, mai: 4, juin: 5,
+        juillet: 6, aout: 7, 'août': 7, septembre: 8, octobre: 9, novembre: 10, 'décembre': 11, decembre: 11 };
+      const dates = [];
+      const iso = /(\d{4})[-‐‑](\d{2})[-‐‑](\d{2})/g;
+      let m;
+      while ((m = iso.exec(tete))) dates.push(new Date(+m[1], +m[2] - 1, +m[3]));
+      const fr = /(\d{1,2})(?:er)?\s+(janvier|f[ée]vrier|mars|avril|mai|juin|juillet|ao[ûu]t|septembre|octobre|novembre|d[ée]cembre)\s+(\d{4})/gi;
+      while ((m = fr.exec(tete))) dates.push(new Date(+m[3], MOIS[m[2].toLowerCase()], +m[1]));
+      const valides = dates.filter((d) => !isNaN(d.getTime()));
+      if (!valides.length) return null;
+      const max = new Date(Math.max(...valides.map((d) => d.getTime())));
+      return max.toISOString().slice(0, 10);
+    }
+
     const readMd = (file, label) => {
       const p = path.join(dir, file);
       if (fs.existsSync(p)) return fs.readFileSync(p, 'utf8');
@@ -423,6 +443,15 @@ function loadApps() {
     const publication = publicationMd
       ? mdToHtml(publicationMd, { anchorPrefix: 'p-' + slugify(id) })
       : null;
+
+    // Date de fraîcheur de chaque fiche, lue dans son en-tête (« Généré le… »,
+    // « mis à jour le… », dates ISO — on garde la PLUS RÉCENTE trouvée dans
+    // les 12 premières lignes). Sert à signaler les fiches à rafraîchir.
+    const fiches = {
+      infra: ficheDate(infraMd),
+      marketing: ficheDate(marketingMd),
+      publication: publicationMd ? ficheDate(publicationMd) : null,
+    };
 
     // Indicateurs vivants (release + statut CI) : optionnels, produits par
     // tool/sync.js à partir de l'API GitHub de app.repo. Absent tant que la
@@ -455,6 +484,7 @@ function loadApps() {
       publicationEssentiel: publicationMd ? extractInfraEssentiel(publicationMd) : null,
       publicationPlateformes: publicationMd ? extractPublicationPlateformes(publicationMd) : null,
       serviceAnchors: findServiceAnchors(services, infra.toc),
+      fiches,
       status,
     });
   }

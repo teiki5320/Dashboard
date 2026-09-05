@@ -211,6 +211,9 @@
       meta.push((a.platforms || []).join(' · ') || 'Aucune plateforme');
       if (a.services.length) meta.push(a.services.length + ' services');
       if (c.date) meta.push('vérif. ' + c.date);
+      var ages = [ficheAge(a.fiches && a.fiches.infra), ficheAge(a.fiches && a.fiches.marketing)]
+        .filter(function (x) { return x !== null; });
+      if (ages.length && Math.min.apply(null, ages) > FICHE_STALE_JOURS) meta.push('🔶 fiches à rafraîchir');
       h += '<a class="row" data-dash-go="app/' + esc(a.id) + '" data-search="' + esc(norm(a.name + ' ' + a.tagline)) + '" style="animation-delay:' + (0.24 + i * 0.04).toFixed(2) + 's">' +
         '<span class="row-ico tint-' + appTint(a) + '">' + esc(a.emoji) + '</span>' +
         '<span class="row-txt"><b>' + esc(a.name) + '</b><small>' + esc(meta.join(' · ')) + '</small></span>' + ciPill(a) + '</a>';
@@ -245,6 +248,15 @@
     return h + '</div>';
   }
 
+  // Âge d'une fiche en jours (null si la date est inconnue).
+  function ficheAge(iso) {
+    if (!iso) return null;
+    var d = new Date(iso + 'T12:00:00');
+    if (isNaN(d.getTime())) return null;
+    return Math.floor((Date.now() - d.getTime()) / 86400000);
+  }
+  var FICHE_STALE_JOURS = 45;
+
   function renderAppHead(app, volet) {
     var c = ciInfo(app);
     var h = '<div class="tile app-head tint-' + appTint(app) + ' rise">' +
@@ -263,7 +275,19 @@
     volets.forEach(function (v) {
       h += '<button type="button" class="' + (v[0] === volet ? 'active' : '') + '" data-dash-go="app/' + esc(app.id) + '/' + v[0] + '">' + v[1] + '</button>';
     });
-    return h + '</div>';
+    h += '</div>';
+
+    // Fraîcheur de la fiche affichée : sa date d'en-tête + alerte passé 45 j
+    // (rappel : la régénération se fait en relançant le prompt dans le dépôt).
+    var ficheKey = volet === 'technique' ? 'infra' : volet;
+    var iso = app.fiches && app.fiches[ficheKey];
+    var age = ficheAge(iso);
+    if (age !== null) {
+      var stale = age > FICHE_STALE_JOURS;
+      h += '<div class="fiche-date' + (stale ? ' stale' : '') + '">Fiche du ' + esc(fmtDate(iso)) +
+        (stale ? ' · 🔶 à rafraîchir (relancer le prompt dans le dépôt de l’app)' : '') + '</div>';
+    }
+    return h;
   }
 
   function renderServices(app) {
