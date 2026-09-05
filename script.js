@@ -338,11 +338,13 @@ function openCliModal(id = null) {
         let c = db.clis.find(x => x.id == id);
         $('mc-title').innerText = "Modifier Client"; $('mc-id').value = c.id; $('mc-nom').value = c.nom;
         $('mc-adr').value = c.adr; $('mc-ville').value = c.ville || ''; $('mc-email').value = c.email || ''; $('mc-siret').value = c.siret || '';
+        $('mc-echeance').value = c.echeanceJours || '';
         $('mc-archive').style.display = 'flex';
         $('mc-archive').textContent = c.archived ? '↩️ Restaurer' : '🗂 Archiver';
     } else {
         $('mc-title').innerText = "Nouveau Client"; $('mc-id').value = ''; $('mc-nom').value = '';
         $('mc-adr').value = ''; $('mc-ville').value = ''; $('mc-email').value = ''; $('mc-siret').value = '';
+        $('mc-echeance').value = '';
         $('mc-archive').style.display = 'none';
     }
     openModal('mod-cli');
@@ -398,7 +400,7 @@ function saveProd() {
 
 function saveCli() {
     let id = $('mc-id').value || Date.now();
-    let o = { id, nom: $('mc-nom').value, adr: $('mc-adr').value, ville: $('mc-ville').value, email: $('mc-email').value, siret: $('mc-siret').value };
+    let o = { id, nom: $('mc-nom').value, adr: $('mc-adr').value, ville: $('mc-ville').value, email: $('mc-email').value, siret: $('mc-siret').value, echeanceJours: parseInt($('mc-echeance').value) || 30 };
     let exCli = db.clis.find(c => c.id == id); if (exCli) o.archived = exCli.archived;
     db.clis = db.clis.filter(c => c.id != id); db.clis.push(o); G.set('v90_clis', db.clis); closeModals(); renderAll();
 }
@@ -888,6 +890,13 @@ function renderAll() {
 // c'est un simple libellé, jamais une action déclenchée automatiquement.
 function computeHistStatus(h) {
     if (h.statut === 'payee') return 'payee';
+    // Priorité à la vraie date d'échéance de la facture (délai de paiement du
+    // client) ; repli 30 jours après la date de facture pour les anciennes.
+    const ref = (h.echeance || '').split('/');
+    if (ref.length === 3) {
+        const d = new Date(+ref[2], +ref[1] - 1, +ref[0]);
+        return Date.now() > d.getTime() + 86400000 ? 'en_retard' : 'en_attente';
+    }
     const p = (h.date || '').split('/');
     if (p.length === 3) {
         const d = new Date(+p[2], +p[1] - 1, +p[0]);
@@ -919,6 +928,18 @@ function relanceHist(id) {
 function toggleBlOrigin(histId) {
     const el = $('bl-origin-' + histId);
     if (el) el.hidden = !el.hidden;
+}
+
+// Envoi manuel de la facture : ouvre le client mail avec un message prêt —
+// rien n'est envoyé automatiquement (et mailto: ne peut pas joindre de PDF,
+// le message le rappelle).
+function envoyerFactureMail(id) {
+    const h = db.hist.find(x => x.id == id);
+    if (!h) return;
+    if (!h.cliEmail) return toast("Pas d'email enregistré pour ce client — ajoute-le dans sa fiche (Paramètres).", 'error');
+    const sujet = encodeURIComponent(`Facture ${h.num}${h.ent ? ' — ' + h.ent : ''}`);
+    const corps = encodeURIComponent(`Bonjour,\n\nVeuillez trouver ci-joint la facture ${h.num} du ${h.date} d'un montant de ${h.total} TTC${h.echeance ? `, payable au plus tard le ${h.echeance}` : ''}.\n\nCordialement.\n\n(⚠️ Pense à joindre le PDF de la facture avant d'envoyer.)`);
+    window.open(`mailto:${h.cliEmail}?subject=${sujet}&body=${corps}`, '_blank');
 }
 
 let histFilter = 'toutes';
@@ -958,7 +979,7 @@ function renderHistorique() {
                 <div style="padding:12px 16px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08)">
                     ${h.ent ? `<span style="font-size:12px; opacity:.6">🏢 <b>${mailEsc(h.ent)}</b></span><span style="opacity:.3">→</span>` : ''}
                     <span style="font-size:13px; font-weight:600">👤 ${mailEsc(h.cli)}</span>
-                    <span class="badge-statut ${badgeCls}" style="margin-left:auto">${badgeLbl}</span>
+                    ${h.echeance && statut !== 'payee' ? `<span style="font-size:11px; opacity:.5; margin-left:auto">échéance ${mailEsc(h.echeance)}</span><span class="badge-statut ${badgeCls}">${badgeLbl}</span>` : `<span class="badge-statut ${badgeCls}" style="margin-left:auto">${badgeLbl}</span>`}
                 </div>
                 ${(h.blIds && h.blIds.length) ? `
                 <div style="padding:8px 16px; border-bottom:1px solid rgba(255,255,255,0.08)">
@@ -977,9 +998,10 @@ function renderHistorique() {
                     ${h.ht ? `<span style="font-size:12px; opacity:.5">HT : ${mailEsc(h.ht)}</span>` : '<span></span>'}
                     <b style="font-size:18px; color:var(--gold)">TTC : ${mailEsc(h.total)}</b>
                 </div>
-                <div style="display:flex; gap:8px; padding:0 16px 14px">
-                    <button class="btn" style="flex:1; font-size:11px; padding:8px; background:rgba(255,255,255,0.06)" onclick="toggleInvoicePaid(${h.id})">${statut === 'payee' ? '↩️ Marquer non payée' : '✅ Marquer payée'}</button>
-                    ${statut !== 'payee' ? `<button class="btn" style="flex:1; font-size:11px; padding:8px; background:rgba(255,255,255,0.06)" onclick="relanceHist(${h.id})">✉️ Relancer</button>` : ''}
+                <div style="display:flex; gap:8px; padding:0 16px 14px; flex-wrap:wrap">
+                    <button class="btn" style="flex:1; min-width:120px; font-size:11px; padding:8px; background:rgba(255,255,255,0.06)" onclick="toggleInvoicePaid(${h.id})">${statut === 'payee' ? '↩️ Marquer non payée' : '✅ Marquer payée'}</button>
+                    ${h.cliEmail ? `<button class="btn" style="flex:1; min-width:120px; font-size:11px; padding:8px; background:rgba(255,255,255,0.06)" onclick="envoyerFactureMail(${h.id})">📤 Envoyer</button>` : ''}
+                    ${statut !== 'payee' ? `<button class="btn" style="flex:1; min-width:120px; font-size:11px; padding:8px; background:rgba(255,255,255,0.06)" onclick="relanceHist(${h.id})">✉️ Relancer</button>` : ''}
                 </div>
             </div>`;
         }).join('');
@@ -1006,6 +1028,19 @@ function renderHistorique() {
 // (deux appareils qui facturent au même moment) ne peuvent jamais recevoir le
 // même numéro. Sans cette table, l'app repli sur un compteur local (voir
 // reserveInvoiceNumber) qui peut se dupliquer entre appareils.
+// Date d'échéance : date de facture + délai de paiement du client (30 j par défaut).
+function calcEcheance(dateFr, jours) {
+    const p = (dateFr || '').split('/');
+    if (p.length !== 3) return '';
+    const d = new Date(+p[2], +p[1] - 1, +p[0]);
+    d.setDate(d.getDate() + (jours || 30));
+    return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+}
+
+// Mentions obligatoires sur toute facture B2B (C. com. art. L441-10) — toujours
+// imprimées, en plus des mentions libres saisies dans la fiche entreprise.
+const MENTIONS_LEGALES = "En cas de retard de paiement : pénalités au taux de 3 fois le taux d'intérêt légal et indemnité forfaitaire pour frais de recouvrement de 40 €. Pas d'escompte pour paiement anticipé.";
+
 async function previewInvoice() {
     let ent = db.ents.find(e => e.id == $('f-ent').value), cli = db.clis.find(c => c.id == $('f-cli').value);
     if (!ent || !cli) return toast("Émetteur ou Client manquant", 'error');
@@ -1013,33 +1048,49 @@ async function previewInvoice() {
     $('f-num').value = '…';
     $('f-num').value = await reserveInvoiceNumber();
 
+    // Lignes avec taux de TVA affiché + ventilation de la TVA par taux
+    // (mentions obligatoires : taux par ligne, montant de taxe par taux).
     let rows = '', ht = 0, ttc = 0;
+    const parTaux = {};
     curLines.forEach(l => {
+        const taux = l.tva === undefined || l.tva === null ? 20 : l.tva;
         let lht = l.prix * l.qte;
-        let lttc = lht * (1 + (l.tva || 20) / 100);
-        ht += lht; ttc += lttc;
-        rows += `<tr><td>${l.nom}</td><td style="text-align:center">${l.qte}</td><td>${eur(l.prix)}</td><td style="text-align:right">${eur(lht)}</td></tr>`;
+        let ltva = lht * taux / 100;
+        ht += lht; ttc += lht + ltva;
+        parTaux[taux] = (parTaux[taux] || 0) + ltva;
+        rows += `<tr><td>${mailEsc(l.nom)}</td><td style="text-align:center">${l.qte}</td><td>${eur(l.prix)}</td><td style="text-align:center">${taux} %</td><td style="text-align:right">${eur(lht)}</td></tr>`;
     });
+    const lignesTva = Object.entries(parTaux)
+        .sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]))
+        .map(([taux, m]) => `<div class="inv-total-line"><span>TVA ${taux} %</span><span>${eur(m)}</span></div>`)
+        .join('');
+    const echeance = calcEcheance($('f-date').value, cli.echeanceJours);
 
     $('sheet-holder').innerHTML = `
         <div class="inv-wrap">
             <h1>Facture</h1>
             <div class="inv-header-grid">
-                <div><b>Émetteur</b>${ent.nom}<br>${ent.adr}<br>${ent.ville}<br>SIRET: ${ent.siret}</div>
-                <div style="text-align:right"><b>Client</b>${cli.nom}<br>${cli.adr}<br>${cli.ville}</div>
+                <div><b>Émetteur</b>${mailEsc(ent.nom)}<br>${mailEsc(ent.adr)}<br>${mailEsc(ent.ville)}<br>SIRET: ${mailEsc(ent.siret)}</div>
+                <div style="text-align:right"><b>Client</b>${mailEsc(cli.nom)}<br>${mailEsc(cli.adr)}<br>${mailEsc(cli.ville)}</div>
             </div>
-            <div style="margin-bottom:20px"><b>N° FACTURE :</b> ${$('f-num').value}<br><b>DATE :</b> ${$('f-date').value}</div>
+            <div style="margin-bottom:20px">
+                <b>N° FACTURE :</b> ${$('f-num').value}<br>
+                <b>DATE :</b> ${$('f-date').value}
+                ${echeance ? `<br><b>DATE D'ÉCHÉANCE :</b> ${echeance}` : ''}
+            </div>
             <table class="inv-table">
-                <thead><tr><th>Description</th><th>Qté</th><th>P.U HT</th><th style="text-align:right">Total HT</th></tr></thead>
+                <thead><tr><th>Description</th><th>Qté</th><th>P.U HT</th><th style="text-align:center">TVA</th><th style="text-align:right">Total HT</th></tr></thead>
                 <tbody>${rows}</tbody>
             </table>
             <div class="inv-totals">
                 <div class="inv-total-line"><span>Total HT</span><span>${eur(ht)}</span></div>
+                ${lignesTva}
+                <div class="inv-total-line"><span>Total TVA</span><span>${eur(ttc - ht)}</span></div>
                 <div class="inv-total-final"><span>TOTAL TTC</span><span>${eur(ttc)}</span></div>
             </div>
             <div class="payment-box">
-                <div><h3>Coordonnées Bancaires</h3>IBAN: ${ent.iban}</div>
-                <div class="payment-mentions">${ent.mentions.replace(/\n/g, '<br>')}</div>
+                <div><h3>Coordonnées Bancaires</h3>IBAN: ${mailEsc(ent.iban)}</div>
+                <div class="payment-mentions">${mailEsc(ent.mentions).replace(/\n/g, '<br>')}${ent.mentions ? '<br>' : ''}${MENTIONS_LEGALES}</div>
             </div>
         </div>`;
     $('preview-wrap').style.display = 'block';
@@ -1066,6 +1117,7 @@ function finalizeInvoice() {
         ht: eur(ht),
         total: eur(ttc),
         statut: 'en_attente',
+        echeance: calcEcheance($('f-date').value, cliObj.echeanceJours),
         blIds: srcDraft && srcDraft.blIds ? srcDraft.blIds : []
     });
     G.set('v90_hist', db.hist);
@@ -1568,7 +1620,60 @@ async function calcCompta() {
             <div class="card"><b>${mailEsc(h.num)}</b> — ${mailEsc(h.cli)}<b style="float:right">${mailEsc(h.total)}</b></div>
         `).join('') || '<div style="color:var(--text-muted); text-align:center">Aucune facture sur cette période</div>'}
         ${depensesHtml}
+        ${comptaTresoHtml(filtered)}
         ${comptaStatsHtml(filtered)}`;
+}
+
+// --- TRÉSORERIE (entrées encaissées vs dépenses, mois par mois) ---
+// Entrées = factures MARQUÉES PAYÉES (comptées à leur date de facture, la date
+// d'encaissement exacte n'étant pas saisie) ; sorties = dépenses détectées par
+// le module Mail. Vue de pilotage, pas un relevé bancaire.
+function comptaTresoHtml(filtered) {
+    const entrees = {}, sorties = {};
+    filtered.filter(h => h.statut === 'payee').forEach(h => {
+        const mk = histMonthKey(h.date);
+        if (!mk) return;
+        entrees[mk] = (entrees[mk] || 0) + (parseFloat((h.total || '').replace(/[^\d,]/g, '').replace(',', '.')) || 0);
+    });
+    (comptaState.mailInvoices || []).forEach(i => {
+        if (!i.invoice_date || i.amount == null) return;
+        const mk = i.invoice_date.slice(0, 7);
+        sorties[mk] = (sorties[mk] || 0) + i.amount;
+    });
+    const mois = [...new Set([...Object.keys(entrees), ...Object.keys(sorties)])].sort();
+    if (!mois.length) return '';
+    let totalIn = 0, totalOut = 0;
+    const lignes = mois.map(mk => {
+        const [y, m] = mk.split('-');
+        const ein = entrees[mk] || 0, out = sorties[mk] || 0, net = ein - out;
+        totalIn += ein; totalOut += out;
+        return `
+        <div style="display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px dashed var(--border); font-size:13px">
+            <b style="flex:0 0 70px">${m}/${y}</b>
+            <span style="flex:1; text-align:right; color:var(--sage)">+ ${eur(ein)}</span>
+            <span style="flex:1; text-align:right; color:var(--danger)">− ${eur(out)}</span>
+            <b style="flex:1; text-align:right; color:${net >= 0 ? 'var(--sage)' : 'var(--danger)'}">${net >= 0 ? '+' : '−'} ${eur(Math.abs(net))}</b>
+        </div>`;
+    }).join('');
+    const net = totalIn - totalOut;
+    return `
+        <div class="section-title" style="margin-top:28px">💶 Trésorerie (encaissé vs dépensé)</div>
+        <div class="card" style="flex-direction:column; align-items:stretch">
+            <div style="display:flex; gap:10px; font-size:11px; color:var(--text-muted); text-transform:uppercase; padding-bottom:6px">
+                <span style="flex:0 0 70px">Mois</span>
+                <span style="flex:1; text-align:right">Encaissé</span>
+                <span style="flex:1; text-align:right">Dépensé</span>
+                <span style="flex:1; text-align:right">Solde</span>
+            </div>
+            ${lignes}
+            <div style="display:flex; align-items:center; gap:10px; padding-top:10px; font-size:14px">
+                <b style="flex:0 0 70px">Total</b>
+                <b style="flex:1; text-align:right; color:var(--sage)">+ ${eur(totalIn)}</b>
+                <b style="flex:1; text-align:right; color:var(--danger)">− ${eur(totalOut)}</b>
+                <b style="flex:1; text-align:right; font-size:16px; color:${net >= 0 ? 'var(--sage)' : 'var(--danger)'}">${net >= 0 ? '+' : '−'} ${eur(Math.abs(net))}</b>
+            </div>
+            <div style="font-size:11px; opacity:.5; margin-top:8px">Entrées = factures marquées payées (à leur date de facture) · Sorties = dépenses détectées par mail</div>
+        </div>`;
 }
 
 // --- STATISTIQUES DE VENTES (CA mensuel, top produits, top clients) ---
