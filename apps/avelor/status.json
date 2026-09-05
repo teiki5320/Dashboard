@@ -2,9 +2,9 @@
   "release": null,
   "ci": {
     "status": "completed",
-    "conclusion": "failure",
-    "updatedAt": "2026-08-04T08:14:24Z",
-    "url": "https://github.com/teiki5320/avelor/actions/runs/30891079225"
+    "conclusion": "success",
+    "updatedAt": "2026-09-05T22:11:29Z",
+    "url": "https://github.com/teiki5320/avelor/actions/runs/33995137221"
   },
-  "fetchedAt": "2026-08-08T06:49:59.419Z"
+  "fetchedAt": "2026-09-05T22:14:22.659Z"
 }
