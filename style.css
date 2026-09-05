@@ -157,6 +157,11 @@ html[data-anim="off"] *, html[data-anim="off"] *::before, html[data-anim="off"] 
    uniquement quand la page Mes apps est ouverte ; display:contents laisse ses
    boutons suivre la mise en page du rail, verticale comme horizontale). */
 #rail-dash-slot { display: contents; }
+/* Mode focus « Mes apps » : les entrées métier de Gestion Pro n'ont pas de
+   raison de rester pendant qu'on navigue dans le module — seuls Accueil,
+   Mes apps et ses sous-entrées subsistent. Tout revient en quittant la page. */
+#gp-rail.dash-mode .rail-item:not(.rail-sub):not([data-page="home"]):not([data-page="dash"]),
+#gp-rail.dash-mode .rail-sep { display: none; }
 #gp-rail .rail-sub { padding: 5px 4px; font-size: 8.5px; opacity: .92; }
 #gp-rail .rail-sub .ico {
     width: 26px; height: 26px; font-size: 13px; border-radius: 9px;
