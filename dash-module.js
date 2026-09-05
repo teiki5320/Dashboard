@@ -124,7 +124,7 @@
         '<span class="lbl">' + esc(a.name) + '</span></button>';
     });
     h += '<button type="button" class="rail-item rail-sub' + (route.page === 'catalogue' ? ' active' : '') +
-      '" onclick="dashGo(\'catalogue\')"><span class="ico">▤</span><span class="lbl">Catalogue</span></button>';
+      '" onclick="dashGo(\'catalogue\')"><span class="ico">▤</span><span class="lbl">Lexique</span></button>';
     slot.innerHTML = h;
   }
   function clearRailNav() {
@@ -141,7 +141,7 @@
     var sync = fmtDate(DATA.generatedAt, true);
     var titre = 'Mes apps', sous = DATA.apps.length + ' applications' + (sync ? ' · données du ' + sync : '');
     if (route.page === 'app' && app) { titre = app.name; sous = (app.platforms || []).join(' · ') || 'Aucune plateforme'; }
-    if (route.page === 'catalogue') { titre = 'Catalogue'; sous = DATA.services.length + ' services · ' + DATA.categories.length + ' familles'; }
+    if (route.page === 'catalogue') { titre = 'Lexique'; sous = DATA.services.length + ' services · ' + DATA.categories.length + ' familles'; }
     var kos = DATA.apps.filter(function (a) { return ciInfo(a).k === 'ko'; });
     var h = '<div class="topbar"><div class="tb-title"><h2>' + esc(titre) + '</h2><span class="tb-sub">' + esc(sous) + '</span></div>';
     if (route.page !== 'app') {
