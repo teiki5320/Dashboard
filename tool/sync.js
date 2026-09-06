@@ -29,10 +29,27 @@
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 const ROOT = path.join(__dirname, '..');
 const APPS_DIR = path.join(ROOT, 'apps');
 const TOKEN = process.env.APPS_READ_TOKEN || process.env.GITHUB_TOKEN || '';
+
+// Les fiches peuvent aussi être régénérées CÔTÉ DASHBOARD (Routine quotidienne
+// Claude) : la copie du dépôt d'app ne doit donc écraser apps/<id>/*.md que si
+// elle a réellement changé depuis la dernière synchro — pas simplement parce
+// qu'elle diffère de la version locale. On mémorise pour cela le hachage de la
+// dernière version rapatriée de chaque fiche.
+const STATE_PATH = path.join(APPS_DIR, '.sync-state.json');
+const sha = (s) => crypto.createHash('sha256').update(s).digest('hex');
+
+function lireEtat() {
+  try {
+    return JSON.parse(fs.readFileSync(STATE_PATH, 'utf8'));
+  } catch {
+    return {};
+  }
+}
 
 const FILES = [
   { distant: 'docs/INFRA.md', local: 'infra.md' },
@@ -107,6 +124,8 @@ async function main() {
 
   let modifies = 0;
   let erreursAuth = false;
+  const etat = lireEtat();
+  let etatModifie = false;
 
   for (const entry of fs.readdirSync(APPS_DIR, { withFileTypes: true })) {
     if (!entry.isDirectory()) continue;
@@ -146,13 +165,26 @@ async function main() {
       }
       const localPath = path.join(APPS_DIR, id, f.local);
       const avant = fs.existsSync(localPath) ? fs.readFileSync(localPath, 'utf8') : null;
-      if (avant === r.contenu) {
-        console.log(`   ✔️  ${f.local} : déjà à jour`);
-      } else {
-        fs.writeFileSync(localPath, r.contenu);
-        console.log(`   ✅ ${f.local} : mis à jour (${(r.contenu.length / 1024).toFixed(1)} Ko)`);
-        modifies++;
+      const cle = `${id}/${f.local}`;
+      const hashDistant = sha(r.contenu);
+      if (etat[cle] === hashDistant) {
+        // La fiche du dépôt d'app n'a pas bougé depuis la dernière synchro :
+        // on garde la version locale, même si elle diffère (régénérée ici).
+        console.log(`   ✔️  ${f.local} : dépôt d'app inchangé — version locale conservée`);
+        continue;
       }
+      if (etat[cle] === undefined && avant === r.contenu) {
+        // Première synchro avec mémoire : contenu identique, on enregistre juste le hachage.
+        etat[cle] = hashDistant;
+        etatModifie = true;
+        console.log(`   ✔️  ${f.local} : déjà à jour`);
+        continue;
+      }
+      fs.writeFileSync(localPath, r.contenu);
+      etat[cle] = hashDistant;
+      etatModifie = true;
+      console.log(`   ✅ ${f.local} : mis à jour (${(r.contenu.length / 1024).toFixed(1)} Ko)`);
+      modifies++;
     }
 
     try {
@@ -169,6 +201,10 @@ async function main() {
     } catch (e) {
       console.warn(`   ⚠️  status.json : indicateurs vivants indisponibles (${e.message})`);
     }
+  }
+
+  if (etatModifie) {
+    fs.writeFileSync(STATE_PATH, JSON.stringify(etat, null, 2) + '\n');
   }
 
   console.log(`\n${modifies} fichier(s) mis à jour.`);
