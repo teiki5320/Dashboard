@@ -1,15 +1,15 @@
 # INFRA — fiche technique
 
-Généré le 21 août 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
+Généré le 7 septembre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
 
 ## Vue d'ensemble
 
-- **Plateforme** : application web 100 % locale sur macOS — serveur Express + interface React sur `127.0.0.1:4600`, lancée par le raccourci Bureau `Drama Studio.command`
-- **Stack** : Node.js ≥ 20, Express 4, React 18, Vite 5, Remotion 4 (rendu MP4 vertical 1080×1920, 30 fps)
+- **Plateforme** : application web 100 % locale sur macOS — serveur Express + interface React sur `127.0.0.1:4600`, lancée par le raccourci Bureau `Drama Studio.command` ; accès distant en option via le réseau privé Tailscale (`HOST=0.0.0.0` dans `.env`, désactivé par défaut)
+- **Stack** : Node.js ≥ 20, Express 4, React 18, Vite 5, Remotion 4 (rendu MP4 vertical 1080×1920, 30 fps), ffmpeg embarqué (binaire statique `ffmpeg-static`, avec détection des binaires cassés)
 - **Backend** : aucun serveur distant — données en JSON local (`projects/`, gitignoré), jobs de production en mémoire, aucun compte utilisateur
 - **Distribution** : dépôt GitHub public `teiki5320/Drama-Studio`, mise à jour automatique par `git pull` à chaque lancement du raccourci
-- **IA** : Claude (scénarios, sans clé API), OpenArt via MCP (images + clips vidéo, visages constants), ElevenLabs (voix FR), fal.ai (synchro labiale, optionnel)
-- **Particularités** : 3 versions au choix (normale 10×60 s · Synchro lèvres animées · Format long 30-60×40 s) ; export auto des MP4 vers iCloud Drive avec nom de fichier = description TikTok prête
+- **IA** : Claude (scénarios, sans clé API), OpenArt via MCP (images + clips vidéo + synchro labiale par défaut, visages constants), ElevenLabs (voix nativement françaises), fal.ai (synchro labiale en option)
+- **Particularités** : 3 modes au choix (Normale 10×60 s · Format long façon DramaWave : tout vidéo avec synchro labiale, épisodes de 1 à 2 min — 60 s conseillé —, saisons de 30 à 80 · Chaînes : vidéos à narrateur de 60-120 s sur n'importe quel sujet, identité fixe par chaîne) ; production par fournées (« les 5 prochains ») ; carte « 🧪 Test synchro » de diagnostic ; export auto des MP4 vers iCloud Drive avec nom de fichier = description TikTok prête
 
 ### 1. GitHub
 
@@ -29,7 +29,7 @@ Généré le 21 août 2026 par un scan du dépôt. Pour mettre à jour : relance
 
 ### 3. OpenArt
 
-- **Rôle** : génération des images (portraits de référence puis scènes, pour des visages constants) et des clips vidéo image-to-video (nombre et durée réglables par drama ; modèles chers Pro/Master/Omni interdits par prompt).
+- **Rôle** : génération des images (portraits de référence puis scènes, pour des visages constants), des clips vidéo image-to-video (nombre et durée réglables par drama ; modèles chers Pro/Master/Omni interdits par prompt) et, depuis septembre 2026, **synchronisation labiale par défaut** (outil lip sync du MCP, payée en crédits OpenArt).
 - **Console** : https://openart.ai (solde de crédits visible dans l'appli, panneau « Coûts »).
 - **Identifiants publics** : MCP officiel `https://mcp.openart.ai/mcp`, enregistré via `claude mcp add --transport http --scope user openart …`.
 - **Secrets** : authentification OAuth une seule fois via `claude` → `/mcp` → openart ; le jeton vit dans la configuration Claude Code du Mac. Variables optionnelles (sans secret) dans `~/bd/.env` : `IMAGE_PROVIDER=openart`, `OPENART_MCP_NAME`, `OPENART_VIDEO_MODEL`.
@@ -37,7 +37,7 @@ Généré le 21 août 2026 par un scan du dépôt. Pour mettre à jour : relance
 
 ### 4. ElevenLabs
 
-- **Rôle** : voix off et dialogues en français (modèle multilingual v2, langue ancrée par contexte anti-accent anglais) ; casting automatique par Claude depuis un catalogue de 11 voix validées, narrateur et voix modifiables par personnage dans l'appli.
+- **Rôle** : voix off et dialogues en français — bibliothèque de voix **nativement françaises** avec pré-écoute gratuite avant adoption (l'adoption d'une voix de bibliothèque via l'API demande un plan payant, message géré dans l'appli) ; casting automatique par Claude, narrateur et voix modifiables par personnage dans l'appli.
 - **Console** : https://elevenlabs.io (solde affiché dans l'appli avec jauge).
 - **Identifiants publics** : néant.
 - **Secrets** : `ELEVENLABS_API_KEY` dans `~/bd/.env` sur le Mac (fichier gitignoré, jamais commité). La clé se régénère sur elevenlabs.io → profil → API Keys.
@@ -45,11 +45,11 @@ Généré le 21 août 2026 par un scan du dépôt. Pour mettre à jour : relance
 
 ### 5. fal.ai
 
-- **Rôle** : synchronisation labiale du Format long (clip + piste voix des personnages → lèvres animées, modèle `fal-ai/sync-lipsync` par défaut) ; peut aussi servir de fournisseur d'images (`IMAGE_PROVIDER=fal`, FLUX).
+- **Rôle** : moteur de synchro labiale **alternatif** (OmniHuman, sync-lipsync… choisi via `FAL_LIPSYNC_MODEL` — le moteur par défaut est désormais OpenArt) ; peut aussi servir de fournisseur d'images (`IMAGE_PROVIDER=fal`, FLUX).
 - **Console** : https://fal.ai/dashboard (clés : https://fal.ai/dashboard/keys).
 - **Identifiants publics** : néant.
 - **Secrets** : `FAL_KEY` dans `~/bd/.env` (gitignoré). Variable optionnelle sans secret : `FAL_LIPSYNC_MODEL`.
-- **Coût** : à l'usage (~0,10-0,50 $ par clip synchronisé). **Statut : pas encore activé** — le Format long affiche un rappel tant que la clé est absente.
+- **Coût** : à l'usage (~0,10-0,50 $ par clip synchronisé) quand fal.ai est choisi comme moteur ; avec le moteur OpenArt par défaut, le stockage fal.ai sert seulement de relais pour héberger la voix (« sans frais notables » d'après l'appli). Dans les deux cas `FAL_KEY` doit être présent dans `.env` — l'appli affiche un message clair si la clé manque (statut réel sur le Mac : à vérifier dans l'appli).
 
 ### 6. iCloud Drive
 

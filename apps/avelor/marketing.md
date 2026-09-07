@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-> Généré le 20/07/2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
+> Généré le 5 septembre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
 > Aucun chiffre inventé : les valeurs non mesurées sont marquées comme telles.
 
 ## Modèle de rémunération
