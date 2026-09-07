@@ -1,6 +1,6 @@
 # PUBLICATION — état de la mise en ligne
 
-> Généré le 20/07/2026. Pour mettre à jour : relancer ce même prompt.
+> Généré le 5 septembre 2026. Pour mettre à jour : relancer ce même prompt.
 
 ## Vue d'ensemble
 
