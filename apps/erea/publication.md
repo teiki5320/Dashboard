@@ -13,7 +13,7 @@
 - **iOS** : **1.0.0 publiée le 3 septembre 2026** · 1.0.1 en attente de vérification depuis le 7 septembre
 - **Android** : test fermé envoyé pour examen le 3 septembre 2026
 - **Chemin critique** : 12 testeurs pendant 14 jours consécutifs, imposés par le compte Play personnel
-- **Version commune** : `1.0.1+2` (`pubspec.yaml`) — versionCode Android `2`, build iOS `143`
+- **Version commune** : `1.0.2+3` (`pubspec.yaml`) — la 1.0.1 (build `143`) est en examen, la 1.0.2 se construit
 - **Identifiant** : `com.teiki.erea`, identique sur les deux plateformes
 - **Monétisation** : interstitielle AdMob, consentement RGPD publié le 3 septembre 2026
 
@@ -32,7 +32,7 @@ la remplace est partie le 7 septembre.
 | Console | <https://appstoreconnect.apple.com> |
 | Version publiée | `1.0.0`, build `90`, en ligne depuis le 3 septembre 2026 à 23 h 57 |
 | Version soumise | `1.0.1`, build `143`, envoyée le 7 septembre 2026 — publication **automatique** dès approbation |
-| Achat intégré | `com.teiki.erea.sanspub` — dans le code, **absent des deux consoles** |
+| Achat intégré | `com.teiki.erea.sanspub` « Erea sans publicité », non consommable — **brouillon** dans App Store Connect, à finaliser ; absent de la Play Console |
 | Distribution | Xcode Cloud, action *Archiver*, préparation **App Store Connect** |
 
 **Pourquoi le build 90 ne convenait plus.** Cinq commits de code lui
@@ -109,13 +109,16 @@ la liste.
    description : le mode Duel, les « 1700 événements » et l'achat unique
    y figurent encore.
 4. **iOS** — attendre l'App Review de la 1.0.1, envoyée le 7 septembre.
-   Publication automatique : elle sort dès qu'Apple approuve.
+   Publication automatique : elle sort dès qu'Apple approuve. Dès qu'elle
+   est passée, soumettre la **1.0.2** avec l'achat intégré joint : elle
+   porte l'offre « sans pub » là où la pub se voit (après la pub, écran de
+   fin, accueil) et les réglages allégés de leurs outils de mise au point.
 5. **Les deux** — se déclarer **trader** au titre du DSA, après avoir
    nettoyé le complément d'adresse du compte, qui porte encore le nom
    d'une SARL sans rapport et deviendrait public.
-6. **Les deux** — créer `com.teiki.erea.sanspub` dans les deux consoles.
-   Côté Apple, un premier achat intégré doit accompagner une version : ce
-   sera donc la 1.0.2 au plus tôt.
+6. **iOS** — finaliser le brouillon `com.teiki.erea.sanspub` et le
+   joindre à une version : Apple exige qu'un premier achat intégré parte
+   avec une soumission. **Android** — le créer dans la Play Console.
 7. **Les deux** — vérifier sur appareil que le formulaire de consentement
    s'affiche et que le journal ne dit plus
    `no form(s) configured for the input app ID`.
