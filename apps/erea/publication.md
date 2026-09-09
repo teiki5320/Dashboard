@@ -11,7 +11,7 @@
 ## Vue d'ensemble
 
 - **iOS** : **1.0.2 + achat intégré approuvés le 8 septembre 2026** à 12 h 18, publication automatique en cours (jusqu'à 24 h pour apparaître)
-- **Android** : test fermé actif · **12 testeurs inscrits le 8 septembre à 23 h 40**, les 14 jours courent jusqu'au **22 septembre** · release 1.0.2 en examen
+- **Android** : release 1.0.2 **approuvée le 8 septembre à 9 h 38**, disponible pour les testeurs · **12 testeurs inscrits le soir même**, les 14 jours courent jusqu'au **22 septembre**
 - **Chemin critique** : 14 jours avec 12 testeurs inscrits sans interruption — démarré le 8 septembre, demande d'accès à la production possible le 22 septembre
 - **Version commune** : `1.0.3+4` (`pubspec.yaml`) depuis le 8 septembre — la 1.0.2 (build iOS `150`, bundle Android `3 (1.0.2)`) est close côté Apple, tout nouveau build ira dans la 1.0.3
 - **Identifiant** : `com.teiki.erea`, identique sur les deux plateformes
@@ -83,11 +83,11 @@ comprise. À traiter après nettoyage du complément d'adresse du compte.
 
 | | |
 |---|---|
-| État | **Release 1.0.2 en cours d'examen depuis le 8 septembre 2026** |
+| État | **Test fermé en cours, 14 jours jusqu'au 22 septembre 2026** |
 | Console | <https://play.google.com/console> |
 | Version publiée | aucune |
-| Canal en cours | test fermé « Alpha » — release `1 (1.0.0)` **approuvée** (envoyée le 3 septembre), release `3 (1.0.2)` en examen |
-| Envoyé pour examen | 8 septembre 2026 — trois modifications : la release 1.0.2, les testeurs, la description corrigée |
+| Canal en cours | test fermé « Alpha » — release `3 (1.0.2)` **disponible pour les testeurs depuis le 8 septembre à 9 h 38**, déploiement complet ; le bundle `1 (1.0.0)` est inactif |
+| Examen | envoyé le 8 septembre 2026 à 9 h 07 (release 1.0.2, testeurs, description corrigée), approuvé à 9 h 38 |
 | Testeurs | groupe Google `testers-community@googlegroups.com` — service **Testers Community**, plan Starter 14 €, 15 testeurs, souscrit le 8 septembre à 22 h ; **≥ 12 inscrits à 23 h 40**, coché par Google |
 | Achat intégré | `com.teiki.erea.sanspub`, option d'achat `sans-pub`, **actif** depuis le 8 septembre — 3,99 € en France, 173 pays, profil de paiement créé le même jour |
 | Distribution | App Bundle signé localement, certificat `CN=Toa` valable jusqu'en 2053 |
@@ -119,7 +119,10 @@ inscrit le 8 septembre au soir ; le compteur court jusqu'au
 
 1. **Android** — laisser courir les quatorze jours (jusqu'au
    22 septembre) en vérifiant de temps en temps que le tableau de bord
-   affiche toujours au moins douze inscrits. Pendant ce temps, **publier
+   affiche toujours au moins douze inscrits, et que le nombre
+   d'installations de la release décolle (0 le 9 septembre : inscrits
+   ne veut pas dire installés, et les statistiques ont deux jours de
+   retard). Pendant ce temps, **publier
    deux ou trois mises à jour** sur la piste (1.0.3 vers le 13, 1.0.4
    vers le 18) : le formulaire d'accès à la production demande ce qui a
    changé grâce aux retours des testeurs, et une piste figée se fait
