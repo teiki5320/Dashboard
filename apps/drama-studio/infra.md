@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Généré le 7 septembre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
+Généré le 9 septembre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
 
 ## Vue d'ensemble
 
@@ -8,8 +8,8 @@ Généré le 7 septembre 2026 par un scan du dépôt. Pour mettre à jour : rela
 - **Stack** : Node.js ≥ 20, Express 4, React 18, Vite 5, Remotion 4 (rendu MP4 vertical 1080×1920, 30 fps), ffmpeg embarqué (binaire statique `ffmpeg-static`, avec détection des binaires cassés)
 - **Backend** : aucun serveur distant — données en JSON local (`projects/`, gitignoré), jobs de production en mémoire, aucun compte utilisateur
 - **Distribution** : dépôt GitHub public `teiki5320/Drama-Studio`, mise à jour automatique par `git pull` à chaque lancement du raccourci
-- **IA** : Claude (scénarios, sans clé API), OpenArt via MCP (images + clips vidéo + synchro labiale par défaut, visages constants), ElevenLabs (voix nativement françaises), fal.ai (synchro labiale en option)
-- **Particularités** : 3 modes au choix (Normale 10×60 s · Format long façon DramaWave : tout vidéo avec synchro labiale, épisodes de 1 à 2 min — 60 s conseillé —, saisons de 30 à 80 · Chaînes : vidéos à narrateur de 60-120 s sur n'importe quel sujet, identité fixe par chaîne) ; production par fournées (« les 5 prochains ») ; carte « 🧪 Test synchro » de diagnostic ; export auto des MP4 vers iCloud Drive avec nom de fichier = description TikTok prête
+- **IA** : Claude (scénarios, sans clé API), OpenArt via MCP (images + clips vidéo + synchro labiale par défaut, visages constants) et OpenArt Director (tournage complet recommandé), ElevenLabs (voix nativement françaises), fal.ai (synchro labiale en option)
+- **Particularités** : 3 modes au choix (Normale 10×60 s · Format long façon DramaWave : tout vidéo avec synchro labiale, épisodes de 1 à 2 min — 60 s conseillé —, saisons de 30 à 80 · Chaînes : vidéos à narrateur de 60-120 s sur n'importe quel sujet, identité fixe par chaîne) ; depuis le 8 septembre, deux méthodes de production au choix pour chaque épisode — « 🎬 Studio Director » (recommandé) ou « 🛠️ production interne » (chaîne images → clips → synchro), l'épisode 1 n'étant plus produit automatiquement ; lieux traités comme des références à part entière (une description visuelle stable par décor, recopiée mot pour mot dans chaque plan) ; production par fournées (« les 5 prochains ») ; carte « 🧪 Test synchro » de diagnostic ; export auto des MP4 vers iCloud Drive avec nom de fichier = description TikTok prête
 
 ### 1. GitHub
 
@@ -21,7 +21,7 @@ Généré le 7 septembre 2026 par un scan du dépôt. Pour mettre à jour : rela
 
 ### 2. Anthropic — Claude Code
 
-- **Rôle** : écriture des scénarios, personnages, hashtags et régénérations (commande `claude -p` en mode headless, JSON structuré) ; pilote aussi le MCP OpenArt pour toutes les générations d'images/vidéos.
+- **Rôle** : écriture des scénarios, personnages, hashtags et régénérations (commande `claude -p` en mode headless, JSON structuré) ; pilote aussi le MCP OpenArt pour toutes les générations d'images/vidéos. En mode « Studio Director », Claude n'écrit que le scénario (et les portraits manquants) — aucune image de scène, clip ni voix.
 - **Console** : https://claude.ai (abonnement) — CLI installée via `npm i -g @anthropic-ai/claude-code`.
 - **Identifiants publics** : néant (outil local).
 - **Secrets** : aucune clé API — authentification par la session Claude Code du Mac (`claude` puis `/login`, jeton OAuth géré par Claude Code, jamais dans le dépôt ni dans `.env`).
@@ -29,7 +29,7 @@ Généré le 7 septembre 2026 par un scan du dépôt. Pour mettre à jour : rela
 
 ### 3. OpenArt
 
-- **Rôle** : génération des images (portraits de référence puis scènes, pour des visages constants), des clips vidéo image-to-video (nombre et durée réglables par drama ; modèles chers Pro/Master/Omni interdits par prompt) et, depuis septembre 2026, **synchronisation labiale par défaut** (outil lip sync du MCP, payée en crédits OpenArt).
+- **Rôle** : génération des images (portraits de référence puis scènes, pour des visages constants), des clips vidéo image-to-video (nombre et durée réglables par drama ; modèles chers Pro/Master/Omni interdits par prompt) et, depuis septembre 2026, **synchronisation labiale par défaut** (outil lip sync du MCP, payée en crédits OpenArt). Depuis le 8 septembre, **OpenArt Director** (openart.ai → menu Director) est la méthode de tournage recommandée : l'appli prépare un « kit » — planche officielle des visages assemblée dans le navigateur + texte exact à coller dans le chat de Director (réglages, casting ordonné, lieux, scènes et dialogues) — et Director tourne l'épisode **entier** en une passe, voix françaises et lèvres synchronisées nativement (480p conseillé pour le premier essai).
 - **Console** : https://openart.ai (solde de crédits visible dans l'appli, panneau « Coûts »).
 - **Identifiants publics** : MCP officiel `https://mcp.openart.ai/mcp`, enregistré via `claude mcp add --transport http --scope user openart …`.
 - **Secrets** : authentification OAuth une seule fois via `claude` → `/mcp` → openart ; le jeton vit dans la configuration Claude Code du Mac. Variables optionnelles (sans secret) dans `~/bd/.env` : `IMAGE_PROVIDER=openart`, `OPENART_MCP_NAME`, `OPENART_VIDEO_MODEL`.
