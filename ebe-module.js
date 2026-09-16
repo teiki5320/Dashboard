@@ -121,9 +121,7 @@
             '<div><label for="ebe-base">Appliquer à</label><select id="ebe-base">' +
               '<option value="moyenne">Moyenne de la sélection</option><option value="total">Total cumulé</option></select></div>' +
             '<div><label for="ebe-coef">Coefficient</label><input id="ebe-coef" type="text" inputmode="decimal" autocomplete="off"></div>' +
-            '<div><label>Raccourcis</label><div class="ebe-puces" id="ebe-raccourcis">' +
-              [3, 4, 5, 6, 7, 1].map(function (k) { return '<button class="tva-flt tva-flt-off" data-coef="' + k + '">×' + k + '</button>'; }).join('') +
-            '</div></div></div>' +
+          '</div>' +
           '<div id="ebe-calcul"></div>' +
           '<div class="ebe-enregistrement ebe-ecran">' +
             '<div style="flex:1; min-width:180px"><label for="ebe-libelle">Libellé du scénario</label>' +
@@ -131,9 +129,9 @@
             '<button class="btn btn-gold" id="ebe-enregistrer" style="width:auto">💾 Enregistrer cette valorisation</button></div>' +
         '</div></div>' +
       '<div class="ebe-ecran"><div class="section-title" style="margin-top:26px">Valorisations enregistrées</div><div id="ebe-historique"></div></div>' +
-      '<div class="ebe-ecran"><div class="section-title" style="margin-top:26px">Documents sources</div><div id="ebe-documents"></div></div>' +
-      '<div class="section-title" style="margin-top:26px">Notes</div>' +
-      '<div class="card ebe-bloc"><ul class="ebe-notes">' + ref.notes.map(function (n) { return '<li>' + esc(n) + '</li>'; }).join('') + '</ul></div>' +
+      '<details class="ebe-ecran ebe-repli"><summary class="section-title">Documents sources</summary><div id="ebe-documents"></div></details>' +
+      '<details class="ebe-repli"><summary class="section-title">Notes</summary>' +
+        '<div class="card ebe-bloc"><ul class="ebe-notes">' + ref.notes.map(function (n) { return '<li>' + esc(n) + '</li>'; }).join('') + '</ul></div></details>' +
       '<div class="ebe-impression ebe-pied-impression" id="ebe-pied"></div>';
 
     brancher();
@@ -275,10 +273,6 @@
   function dessinerMultiplicateur() {
     var a = analyse, m = a.multiplicateur;
     el('ebe-coef').setAttribute('aria-invalid', m.etat === 'invalide' ? 'true' : 'false');
-    [].forEach.call(el('ebe-raccourcis').querySelectorAll('[data-coef]'), function (bt) {
-      var on = m.coefficient != null && Math.abs(m.coefficient - Number(bt.dataset.coef)) < 1e-9;
-      bt.className = 'tva-flt ' + (on ? 'tva-flt-on' : 'tva-flt-off');
-    });
     el('ebe-enregistrer').disabled = m.etat !== 'ok';
     // À l'impression, ce bloc n'apparaît que si un coefficient autre que 1 est appliqué.
     el('ebe-mult').classList.toggle('ebe-mult-neutre', !(m.etat === 'ok' && Math.abs(m.coefficient - 1) > 1e-9));
@@ -361,22 +355,15 @@
   function docParId(id) { return (docs.documents || []).filter(function (d) { return d.id === id; })[0] || null; }
 
   // Lien signé de courte durée vers le PDF du stockage privé « comptes-annuels ».
-  function ouvrirDocument(d, page, telecharger) {
+  function ouvrirDocument(d, page) {
     if (!d || !d.chemin) { toast('📄 Document référencé mais introuvable dans le stockage.', 'error'); return; }
     // La fenêtre s'ouvre tout de suite : Safari bloque celles ouvertes après une attente réseau.
-    var fenetre = telecharger ? null : window.open('', '_blank');
+    var fenetre = window.open('', '_blank');
     fetch(SUPA_URL + '/storage/v1/object/sign/' + STOCKAGE + '/' + d.chemin.split('/').map(encodeURIComponent).join('/'), {
       method: 'POST', headers: Supa._h, body: JSON.stringify({ expiresIn: 600 })
     }).then(function (r) { return r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)); })
       .then(function (j) {
-        var adresse = SUPA_URL + '/storage/v1' + j.signedURL;
-        if (telecharger) {
-          var a = document.createElement('a');
-          a.href = adresse + '&download=' + encodeURIComponent(d.chemin.split('/').pop());
-          document.body.appendChild(a); a.click(); a.remove();
-        } else if (fenetre) {
-          fenetre.location.href = adresse + (page ? '#page=' + page : '');
-        }
+        if (fenetre) fenetre.location.href = SUPA_URL + '/storage/v1' + j.signedURL + (page ? '#page=' + page : '');
       })
       .catch(function () {
         if (fenetre) fenetre.close();
@@ -397,10 +384,10 @@
       if (d.exercice_court) pilules.push('<span class="mini-tag">exercice court</span>');
       if (d.statut === 'a_verifier') pilules.push('<span class="badge-statut badge-attente">à vérifier</span>');
       if (!d.chemin) pilules.push('<span class="badge-statut badge-retard">introuvable dans le stockage</span>');
-      var detail = [d.nom_origine ? '« ' + d.nom_origine + ' »' : null, d.verification === 'siren' ? 'SIREN vérifié' : null,
-        d.periode, d.pages ? d.pages + ' p.' : null, d.remarque].filter(Boolean).map(esc).join(' · ');
-      return '<div style="margin:0 0 9px"><b>' + esc(TYPES[d.type] || 'Document') + '</b> ' + pilules.join(' ') +
-        ' <a href="#" data-ouvrir="' + esc(d.id) + '">ouvrir</a> · <a href="#" data-telecharger="' + esc(d.id) + '">télécharger</a>' +
+      // Une seule ligne par document : son type ouvre le PDF, le reste n'est dit que si c'est utile.
+      var detail = d.statut === 'a_verifier' && d.remarque ? esc(d.remarque) : '';
+      return '<div style="margin:0 0 9px"><a href="#" title="Ouvrir le PDF" data-ouvrir="' + esc(d.id) + '">' +
+        esc(TYPES[d.type] || 'Document') + '</a> ' + pilules.join(' ') +
         (detail ? '<div class="ebe-note">' + detail + '</div>' : '') + '</div>';
     };
     var etat = function (s, x, docsAn) {
@@ -441,10 +428,8 @@
         dessiner(); return;
       }
       if ((t = c.closest('[data-rien]'))) { sel[t.dataset.rien] = []; dessiner(); return; }
-      if ((t = c.closest('[data-coef]'))) { sel.coefficient = t.dataset.coef; el('ebe-coef').value = sel.coefficient; dessiner(); return; }
       if ((t = c.closest('[data-doc]'))) { e.preventDefault(); ouvrirDocument(docParId(t.dataset.doc), Number(t.dataset.page)); return; }
       if ((t = c.closest('[data-ouvrir]'))) { e.preventDefault(); ouvrirDocument(docParId(t.dataset.ouvrir)); return; }
-      if ((t = c.closest('[data-telecharger]'))) { e.preventDefault(); ouvrirDocument(docParId(t.dataset.telecharger), null, true); return; }
       if ((t = c.closest('[data-recharger]'))) {
         var v = valorisations().filter(function (x) { return x.id === t.dataset.recharger; })[0];
         if (!v) return;
@@ -508,8 +493,19 @@
   }
 
   // ── Accroches ──────────────────────────────────────────────────────────────
-  window.addEventListener('beforeprint', function () { if (visible()) document.body.classList.add('impression-ebe'); });
-  window.addEventListener('afterprint', function () { document.body.classList.remove('impression-ebe'); });
+  // Les sections repliées à l'écran doivent quand même sortir à l'impression.
+  var depliees = [];
+  window.addEventListener('beforeprint', function () {
+    if (!visible()) return;
+    document.body.classList.add('impression-ebe');
+    depliees = [].filter.call(document.querySelectorAll('#ebe-contenu details.ebe-repli:not(.ebe-ecran)'), function (d) { return !d.open; });
+    depliees.forEach(function (d) { d.open = true; });
+  });
+  window.addEventListener('afterprint', function () {
+    document.body.classList.remove('impression-ebe');
+    depliees.forEach(function (d) { d.open = false; });
+    depliees = [];
+  });
 
   // Quand la synchronisation Supabase rapatrie de nouvelles données, la vue suit.
   if (typeof window.renderAll === 'function') {

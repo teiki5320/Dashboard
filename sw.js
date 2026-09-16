@@ -21,7 +21,7 @@
 // ⚠️ Incrémenter à chaque changement de stratégie : « activate » supprime
 // alors tous les anciens caches, ce qui force un rechargement complet chez
 // les visiteurs qui avaient encore l'ancienne version en réserve.
-const CACHE = 'gestion-pro-v4';
+const CACHE = 'gestion-pro-v5';
 
 // Fichiers dont une version périmée se remarque tout de suite.
 const VIVANTS = /(?:^|\/)(?:index\.html|script\.js|style\.css|dash-module\.js|dash-data\.js|ebe\.js|ebe-module\.js)$|\/$/;
