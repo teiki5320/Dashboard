@@ -1,6 +1,6 @@
 # PUBLICATION — état des boutiques
 
-> Mis à jour le 8 septembre 2026 d'après les consoles App Store Connect et
+> Mis à jour le 15 septembre 2026 d'après les consoles App Store Connect et
 > Google Play. Une ligne par système d'exploitation, dans un format
 > réutilisable d'une application à l'autre. Pour mettre à jour :
 > relancer ce même prompt.
@@ -10,10 +10,10 @@
 
 ## Vue d'ensemble
 
-- **iOS** : **1.0.2 + achat intégré approuvés le 8 septembre 2026** à 12 h 18, publication automatique en cours (jusqu'à 24 h pour apparaître)
+- **iOS** : **1.0.2 en ligne depuis le 8 septembre 2026 à 12 h 19**, achat intégré compris — la version d'août est remplacée
 - **Android** : release 1.0.2 **approuvée le 8 septembre à 9 h 38**, disponible pour les testeurs · **12 testeurs inscrits le soir même**, les 14 jours courent jusqu'au **22 septembre**
 - **Chemin critique** : 14 jours avec 12 testeurs inscrits sans interruption — démarré le 8 septembre, demande d'accès à la production possible le 22 septembre
-- **Version commune** : `1.0.3+4` (`pubspec.yaml`) depuis le 8 septembre — la 1.0.2 (build iOS `150`, bundle Android `3 (1.0.2)`) est close côté Apple, tout nouveau build ira dans la 1.0.3
+- **Version commune** : `1.0.3+4` — bundle Android `4 (1.0.3)` construit le 15 septembre (démo animée du geste dans la présentation, « Donner mon avis » dans les réglages), à déposer sur la piste Alpha ; côté iOS, la 1.0.3 se construit sur Xcode Cloud
 - **Identifiant** : `com.teiki.erea`, identique sur les deux plateformes
 - **Achat intégré** : `com.teiki.erea.sanspub` « Erea sans publicité », 3,99 €, non consommable — soumis avec la 1.0.2 sur iOS, **actif** sur Google Play
 - **Monétisation** : interstitielle AdMob une partie sur deux, consentement RGPD publié le 3 septembre 2026
@@ -31,9 +31,9 @@ rien ne raccourcit ont commencé, la production devient demandable le
 
 | | |
 |---|---|
-| État | **1.0.2 et achat intégré approuvés le 8 septembre 2026** — « Prête à être distribuée », publication automatique |
+| État | **1.0.2 en ligne depuis le 8 septembre 2026** |
 | Console | <https://appstoreconnect.apple.com> |
-| Version publiée | `1.0.2`, build `150`, approuvée le 8 septembre 2026 à 12 h 18 — remplace la `1.0.0` (build `90`) du 3 septembre ; l'API iTunes affichait encore 1.0.0 à 12 h 30 |
+| Version publiée | `1.0.2`, build `150`, en ligne depuis le 8 septembre 2026 à 12 h 19 (approuvée à 12 h 18, une minute avant) — remplace la `1.0.0` du 3 septembre |
 | Version soumise | aucune — la prochaine portera le nom long de l'app |
 | Achat intégré | `com.teiki.erea.sanspub` « Erea sans publicité », non consommable, **approuvé** le 8 septembre avec la 1.0.2 |
 | Distribution | Xcode Cloud, action *Archiver*, préparation **App Store Connect** |
@@ -88,7 +88,8 @@ comprise. À traiter après nettoyage du complément d'adresse du compte.
 | Version publiée | aucune |
 | Canal en cours | test fermé « Alpha » — release `3 (1.0.2)` **disponible pour les testeurs depuis le 8 septembre à 9 h 38**, déploiement complet ; le bundle `1 (1.0.0)` est inactif |
 | Examen | envoyé le 8 septembre 2026 à 9 h 07 (release 1.0.2, testeurs, description corrigée), approuvé à 9 h 38 |
-| Testeurs | groupe Google `testers-community@googlegroups.com` — service **Testers Community**, plan Starter 14 €, 15 testeurs, souscrit le 8 septembre à 22 h ; **≥ 12 inscrits à 23 h 40**, coché par Google |
+| Testeurs | groupe Google `testers-community@googlegroups.com` — service **Testers Community**, plan Starter 14 €, 15 testeurs, souscrit le 8 septembre à 22 h ; **« 12 testeurs inscrits pour 1 jour » le 10 septembre**, compteur Google |
+| Rapports | reçus le 15 septembre : rapport de test (aucun plantage, aucun bug ; trois « pistes » génériques : tutoriel dynamique, captures Play légendées, langues) et questionnaire d'accès à la production pré-rempli, à réécrire avec ce qui a réellement changé |
 | Achat intégré | `com.teiki.erea.sanspub`, option d'achat `sans-pub`, **actif** depuis le 8 septembre — 3,99 € en France, 173 pays, profil de paiement créé le même jour |
 | Distribution | App Bundle signé localement, certificat `CN=Toa` valable jusqu'en 2053 |
 | Taille | 56 Mo de bundle, **13,6 Mo** à l'installation après découpage par Play |
@@ -126,8 +127,10 @@ inscrit le 8 septembre au soir ; le compteur court jusqu'au
    deux ou trois mises à jour** sur la piste (1.0.3 vers le 13, 1.0.4
    vers le 18) : le formulaire d'accès à la production demande ce qui a
    changé grâce aux retours des testeurs, et une piste figée se fait
-   refuser. Le 22, « Demander un accès en production » et répondre aux
-   questions (aperçu dans le tableau de bord).
+   refuser. La 1.0.3 répond au rapport du 15 septembre : démo animée
+   du geste (« tutoriel dynamique »), captures Play légendées, ligne
+   « Donner mon avis ». Le 22, « Demander un accès en production » et
+   répondre aux questions (aperçu dans le tableau de bord).
 2. **iOS** — vérifier dans les 24 heures que l'App Store affiche bien la
    1.0.2 (l'API `itunes.apple.com/lookup?id=6794918301` répond avec le
    numéro de version), puis que l'achat apparaît dans le jeu installé
