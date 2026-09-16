@@ -682,6 +682,13 @@ b.ebe-neg, span.ebe-neg { color: var(--ko); }
 .ebe-croise th:first-child, .ebe-croise td:first-child { position: sticky; left: 0; z-index: 1; background: var(--carte); white-space: nowrap; }
 .ebe-croise tr.ebe-total td:first-child { background: var(--carte-2); }
 .ebe-documents td { vertical-align: top; }
+/* Sections repliées : la page reste courte, le détail s'ouvre à la demande. */
+.ebe-repli { margin-top: 26px; }
+.ebe-repli > summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px; }
+.ebe-repli > summary::-webkit-details-marker { display: none; }
+.ebe-repli > summary::after { content: "▾"; font-size: 12px; color: var(--muted); }
+.ebe-repli[open] > summary::after { content: "▴"; }
+.ebe-repli > summary .section-title, .ebe-repli > summary { margin: 0; }
 .ebe-signe { display: none; }
 .ebe-src { margin-left: 5px; font-size: 11px; color: var(--muted); }
 .ebe-src:hover { color: var(--accent); }
