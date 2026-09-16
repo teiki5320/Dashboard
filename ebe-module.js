@@ -2,9 +2,8 @@
 // Onglet Compta → sous-onglet « Analyse EBE » : trois sociétés, 2017 à 2023.
 // Les calculs sont dans ebe.js ; ce fichier ne fait que l'affichage.
 //
-// Organisation de la vue (piste 1a) :
-//   – trois onglets internes : Analyse · Scénarios · Documents ;
-//   – barre de valorisation fixée en bas de l'écran, toujours visible ;
+// Organisation de la vue :
+//   – deux onglets internes : Analyse · Documents ;
 //   – tableau croisé : seuls les négatifs sont surlignés, « s.o. » / « n.d. »
 //     en italique, ↗ discret en coin de case vers la page du document source.
 //
@@ -13,21 +12,20 @@
 //   v90_ebe_agregats       montants, sociétés, notes
 //   v90_ebe_documents      index des PDF (stockage « comptes-annuels ») et page
 //                          source de chaque montant
-//   v90_ebe_valorisations  historique des valorisations enregistrées (G.set)
 // =============================================================================
 'use strict';
 
 (function () {
-  var CLE_DONNEES = 'v90_ebe_agregats', CLE_DOCS = 'v90_ebe_documents', CLE_HIST = 'v90_ebe_valorisations';
+  var CLE_DONNEES = 'v90_ebe_agregats', CLE_DOCS = 'v90_ebe_documents';
   var STOCKAGE = 'comptes-annuels';
   var TYPES = { comptes_annuels: 'Comptes annuels', liasse_fiscale: 'Liasse fiscale', grand_livre: 'Grand livre',
     previsionnel: 'Rapport prévisionnel', courrier: 'Courrier', bilan_image: 'Bilan imagé', autre: 'Document' };
-  var ONGLETS = { analyse: 'Analyse', scenarios: 'Scénarios', documents: 'Documents' };
+  var ONGLETS = { analyse: 'Analyse', documents: 'Documents' };
 
   var sel = null;          // sélection propre à la vue : indicateur, sociétés, exercices, base, coefficient
   var onglet = 'analyse';  // onglet interne ouvert
   var vue = 'tableau';     // tableau | courbes
-  var ref = null, docs = null, analyse = null, empreinte = null, minuteur = null;
+  var ref = null, docs = null, analyse = null, empreinte = null;
 
   // ── Utilitaires ────────────────────────────────────────────────────────────
   function el(id) { return document.getElementById(id); }
@@ -56,7 +54,6 @@
   function classe(v) { return v < 0 ? 'ebe-neg' : ''; }
   function plus(v) { return v > 0 ? '<span class="ebe-signe">+</span>' : ''; }
   function plur(n, mot) { return n + ' ' + mot + (n > 1 ? 's' : ''); }
-  function coef(c) { return new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 4 }).format(c); }
   function nomSoc(code) { var s = ref.societes.filter(function (x) { return x.code === code; })[0]; return s ? s.nom : code; }
   function nomInd(code) { var i = ref.indicateurs.filter(function (x) { return x.code === code; })[0]; return i ? i.nom : code; }
   function serie(code) { return ref.societes.map(function (s) { return s.code; }).indexOf(code) + 1; }
@@ -83,7 +80,7 @@
   function rendre() {
     var hote = el('ebe-contenu');
     if (!hote) return;
-    empreinte = [CLE_DONNEES, CLE_DOCS, CLE_HIST].map(function (c) { return localStorage.getItem(c); }).join('|');
+    empreinte = [CLE_DONNEES, CLE_DOCS].map(function (c) { return localStorage.getItem(c); }).join('|');
     var brut = lire(CLE_DONNEES);
     ref = null;
     try { if (brut && !Array.isArray(brut)) ref = EBE.normaliser(brut); }
@@ -138,30 +135,12 @@
         '</div>' +
       '</div>' +
 
-      // Onglet Scénarios
-      '<div id="ebe-vue-scenarios" class="ebe-vue ebe-ecran"><div id="ebe-historique"></div></div>' +
-
       // Onglet Documents
       '<div id="ebe-vue-documents" class="ebe-vue ebe-ecran"><div id="ebe-documents"></div></div>' +
-
-      // Barre de valorisation, fixée en bas
-      '<div class="ebe-valo ebe-ecran" id="ebe-valo">' +
-        '<div class="ebe-segment"><button data-base="moyenne" id="ebe-base-moyenne">Moyenne</button>' +
-          '<button data-base="total" id="ebe-base-total">Total</button></div>' +
-        '<div class="ebe-formule">' +
-          '<div class="ebe-formule-ligne"><span id="ebe-valo-base">—</span><span class="ebe-op">×</span>' +
-            '<input id="ebe-coef" type="text" inputmode="decimal" autocomplete="off" aria-label="Coefficient">' +
-            '<span class="ebe-op">=</span><b class="ebe-resultat" id="ebe-valo-resultat">—</b></div>' +
-          '<div class="ebe-valo-note" id="ebe-valo-note"></div>' +
-        '</div>' +
-        '<input id="ebe-libelle" type="text" maxlength="120" placeholder="Libellé du scénario" aria-label="Libellé du scénario">' +
-        '<button class="btn btn-gold" id="ebe-enregistrer" style="width:auto">Enregistrer</button>' +
-      '</div>' +
 
       '<div class="ebe-impression ebe-pied-impression" id="ebe-pied"></div>';
 
     brancher();
-    el('ebe-coef').value = sel.coefficient;
     ouvrirOnglet(onglet);
     choisirVue(vue);
     dessiner();
@@ -177,7 +156,6 @@
     });
     // Copier / Imprimer ne concernent que l'analyse.
     el('ebe-copier').style.visibility = el('ebe-imprimer').style.visibility = onglet === 'analyse' ? '' : 'hidden';
-    if (onglet === 'scenarios' && analyse) dessinerHistorique();
   }
 
   function choisirVue(v) {
@@ -195,9 +173,7 @@
     dessinerTuiles();
     dessinerTableau();
     el('ebe-graphe').innerHTML = graphe();
-    dessinerValorisation();
     dessinerImpression();
-    if (onglet === 'scenarios') dessinerHistorique();
   }
 
   function dessinerControles() {
@@ -315,27 +291,8 @@
       '<svg class="ebe-svg" viewBox="0 0 ' + L + ' ' + H + '" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Évolution par société">' + s + '</svg>';
   }
 
-  // ── Barre de valorisation ──────────────────────────────────────────────────
-  function dessinerValorisation() {
-    var a = analyse, m = a.multiplicateur;
-    el('ebe-coef').setAttribute('aria-invalid', m.etat === 'invalide' ? 'true' : 'false');
-    el('ebe-enregistrer').disabled = m.etat !== 'ok';
-    el('ebe-base-moyenne').classList.toggle('actif', sel.base === 'moyenne');
-    el('ebe-base-total').classList.toggle('actif', sel.base === 'total');
-    var base = el('ebe-valo-base'), res = el('ebe-valo-resultat'), note = el('ebe-valo-note');
-    var vb = m.valeur_base != null && isFinite(m.valeur_base) ? m.valeur_base : (a.statistiques ? (sel.base === 'moyenne' ? a.statistiques.moyenne : a.statistiques.total) : null);
-    base.textContent = montant(vb);
-    base.className = classe(vb);
-    res.textContent = m.etat === 'ok' ? montant(m.resultat) : '—';
-    res.className = 'ebe-resultat ' + (m.etat === 'ok' ? classe(m.resultat) : '');
-    note.classList.toggle('ebe-ko', m.etat === 'invalide');
-    note.textContent = m.etat === 'ok'
-      ? nomInd(a.indicateur) + ' · ' + a.libelle_societes + ' · ' + a.libelle_exercices + ' · ' + plur(m.nb, 'exercice') + ' renseigné' + (m.nb > 1 ? 's' : '')
-      : (m.message || '');
-  }
-
   function dessinerImpression() {
-    var a = analyse, st = a.statistiques, m = a.multiplicateur;
+    var a = analyse, st = a.statistiques;
     var date = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
     var retenus = st ? plur(st.nb, 'exercice') + ' réellement renseigné' + (st.nb > 1 ? 's' : '') +
       (a.couverture.manquantes ? ' sur ' + a.couverture.attendues + ' attendus' : '') : 'aucune donnée pour cette sélection';
@@ -345,61 +302,9 @@
       '<dt>Sociétés</dt><dd>' + esc(a.societes.map(nomSoc).join(', ') || 'aucune') + '</dd>' +
       '<dt>Exercices</dt><dd>' + esc(a.libelle_exercices) + '</dd>' +
       '<dt>Exercices retenus</dt><dd>' + retenus + '</dd>' +
-      (m.etat === 'ok' && Math.abs(m.coefficient - 1) > 1e-9
-        ? '<dt>Valorisation</dt><dd>' + (m.base === 'moyenne' ? 'moyenne' : 'total cumulé') + ' ' + montant(m.valeur_base) + ' × ' + coef(m.coefficient) + ' = <b>' + montant(m.resultat) + '</b></dd>' : '') +
       '</dl>';
     el('ebe-pied').innerHTML = '<span>Source : ' + esc(ref.source) + ' — ' +
       ref.societes.map(function (s) { return esc(s.nom) + ' ' + esc(s.siren_affiche); }).join(' · ') + '</span><span>' + date + '</span>';
-  }
-
-  // ── Onglet Scénarios ───────────────────────────────────────────────────────
-  function valorisations() { var v = lire(CLE_HIST); return Array.isArray(v) ? v : []; }
-
-  function dessinerHistorique() {
-    var zone = el('ebe-historique'), liste = valorisations(), actuel = analyse.multiplicateur;
-    el('ebe-onglet-scenarios').textContent = 'Scénarios' + (liste.length ? ' (' + liste.length + ')' : '');
-    if (!liste.length) {
-      zone.innerHTML = '<div class="card ebe-vide-bloc">Aucun scénario enregistré — réglez le coefficient dans la barre du bas, puis « Enregistrer ».</div>';
-      return;
-    }
-    zone.innerHTML = '<div class="card ebe-carte-tableau">' +
-      '<div class="ebe-carte-tete"><span class="section-title">Scénarios enregistrés</span><span class="ebe-espace"></span>' +
-        '<span class="ebe-note">écart mesuré au calcul de la barre du bas</span></div>' +
-      '<div class="ebe-defile"><table class="tva-table ebe-scenarios"><thead><tr><th>Scénario</th>' +
-      '<th class="ebe-d">Base</th><th class="ebe-d">Coef.</th><th class="ebe-d">Résultat</th><th class="ebe-d">Écart</th><th></th></tr></thead><tbody>' +
-      liste.map(function (v) {
-        var refait = null;
-        try { refait = EBE.analyser(ref, v).multiplicateur.resultat; } catch (e) {}
-        var modifie = refait == null || Math.abs(refait - v.resultat) > 0.005;
-        var ecart = actuel.etat === 'ok' ? v.resultat - actuel.resultat : null;
-        return '<tr><td><div class="ebe-scenario-titre">' + (v.libelle ? esc(v.libelle) : '<span class="ebe-note">sans libellé</span>') +
-            (modifie ? ' <span class="badge-statut badge-attente">données modifiées</span>' : '') + '</div>' +
-            '<div class="ebe-note">' + esc(nomInd(v.indicateur)) + ' · ' + esc(EBE.libelleSocietes(ref, v.societes.filter(function (c) { return serie(c) > 0; }))) +
-            ' · ' + esc(EBE.libelleExercices(v.exercices)) + ' · ' + plur(v.nb_valeurs, 'exercice') + ' · ' + esc(new Date(v.cree_le).toLocaleDateString('fr-FR')) + '</div></td>' +
-          '<td class="ebe-d">' + montant(v.valeur_base) + '<div class="ebe-note">' + (v.base === 'moyenne' ? 'moyenne' : 'total cumulé') + '</div></td>' +
-          '<td class="ebe-d">× ' + coef(v.coefficient) + '</td>' +
-          '<td class="ebe-d"><b class="' + classe(v.resultat) + '">' + montant(v.resultat) + '</b></td>' +
-          '<td class="ebe-d ' + (ecart == null ? '' : ecart < 0 ? 'ebe-ecart-neg' : 'ebe-ecart-pos') + '">' + (ecart == null ? '—' : (ecart > 0 ? '+' : '') + montant(ecart)) + '</td>' +
-          '<td class="ebe-d ebe-actions-ligne"><button class="tva-btn-ghost" data-recharger="' + esc(v.id) + '">Recharger</button>' +
-            '<button class="ebe-croix" data-supprimer="' + esc(v.id) + '" title="Supprimer" aria-label="Supprimer">✕</button></td></tr>';
-      }).join('') + '</tbody></table></div></div>';
-  }
-
-  function enregistrer() {
-    var a = EBE.analyser(ref, sel), m = a.multiplicateur;           // recalcul : jamais l'affichage
-    if (m.etat !== 'ok') { toast(m.message, 'error'); return; }
-    var liste = valorisations();
-    liste.unshift({
-      id: String(Date.now()), cree_le: new Date().toISOString(),
-      libelle: el('ebe-libelle').value.trim().slice(0, 120) || null,
-      indicateur: a.indicateur, societes: a.societes, exercices: a.exercices,
-      base: m.base, coefficient: m.coefficient, valeur_base: m.valeur_base, resultat: m.resultat, nb_valeurs: m.nb
-    });
-    G.set(CLE_HIST, liste);                                             // localStorage + Supabase
-    el('ebe-libelle').value = '';
-    toast('💾 Scénario enregistré : ' + montant(m.resultat), 'success');
-    empreinte = null;
-    dessinerHistorique();
   }
 
   // ── Onglet Documents ───────────────────────────────────────────────────────
@@ -450,7 +355,6 @@
           esc(lib) + (d.exercice_court ? ' (court)' : '') + '</a>';
       }).join('') + '</div>';
     };
-    var aVerifier = liste.filter(function (d) { return d.statut === 'a_verifier'; });
     var h = '<div class="card ebe-carte-tableau">' +
       '<div class="ebe-carte-tete"><span class="section-title">Comptes annuels par exercice</span><span class="ebe-espace"></span>' +
         '<span class="ebe-note">toucher une case ouvre le PDF</span></div>' +
@@ -466,11 +370,6 @@
       h += '</tr>';
     });
     h += '</tbody></table></div></div>';
-    if (aVerifier.length) {
-      h += avis('run', plur(aVerifier.length, 'document') + ' à vérifier', aVerifier.map(function (d) {
-        return '<a href="#" data-ouvrir="' + esc(d.id) + '">' + esc((TYPES[d.type] || 'document').toLowerCase()) + ' ' + d.exercice + '</a>, classé sous ' + esc(nomSoc(d.societe)) + ' : ' + esc(d.remarque || '');
-      }).join(' ; '));
-    }
     zone.innerHTML = h;
   }
 
@@ -484,7 +383,6 @@
       var t;
       if ((t = c.closest('[data-onglet]'))) { ouvrirOnglet(t.dataset.onglet); return; }
       if ((t = c.closest('[data-vue]'))) { choisirVue(t.dataset.vue); return; }
-      if ((t = c.closest('[data-base]'))) { sel.base = t.dataset.base; dessiner(); return; }
       if ((t = c.closest('[data-societe]'))) { basculer(sel.societes, t.dataset.societe); dessiner(); return; }
       if ((t = c.closest('[data-exercice]'))) { basculer(sel.exercices, Number(t.dataset.exercice)); dessiner(); return; }
       if ((t = c.closest('[data-tout]'))) {
@@ -493,34 +391,8 @@
       }
       if ((t = c.closest('[data-doc]'))) { e.preventDefault(); ouvrirDocument(docParId(t.dataset.doc), Number(t.dataset.page)); return; }
       if ((t = c.closest('[data-ouvrir]'))) { e.preventDefault(); ouvrirDocument(docParId(t.dataset.ouvrir)); return; }
-      if ((t = c.closest('[data-recharger]'))) {
-        var v = valorisations().filter(function (x) { return x.id === t.dataset.recharger; })[0];
-        if (!v) return;
-        sel = { indicateur: v.indicateur, societes: v.societes.slice(), exercices: v.exercices.slice(), base: v.base,
-                coefficient: coef(v.coefficient).replace(/\s/g, '') };
-        el('ebe-coef').value = sel.coefficient;
-        dessiner();
-        ouvrirOnglet('analyse');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        toast('Scénario rechargé : ' + (v.libelle || 'sans libellé'), 'success');
-        return;
-      }
-      if ((t = c.closest('[data-supprimer]'))) {
-        var id = t.dataset.supprimer, cible = valorisations().filter(function (x) { return x.id === id; })[0];
-        if (!cible || !confirm('Supprimer le scénario' + (cible.libelle ? ' « ' + cible.libelle + ' »' : '') + ' ?')) return;
-        G.set(CLE_HIST, valorisations().filter(function (x) { return x.id !== id; }));
-        toast('Scénario supprimé', 'success');
-        dessinerHistorique();
-      }
     };
     el('ebe-indicateur').onchange = function (e) { sel.indicateur = e.target.value; dessiner(); };
-    el('ebe-coef').oninput = function (e) {
-      sel.coefficient = e.target.value;
-      clearTimeout(minuteur);
-      minuteur = setTimeout(function () { if (visible()) dessiner(); }, 120);
-    };
-    el('ebe-libelle').onkeydown = function (e) { if (e.key === 'Enter' && !el('ebe-enregistrer').disabled) enregistrer(); };
-    el('ebe-enregistrer').onclick = enregistrer;
     el('ebe-imprimer').onclick = function () {
       if (!analyse.statistiques) { toast('Sélection vide : rien à imprimer', 'warn'); return; }
       document.body.classList.add('impression-ebe');
@@ -571,7 +443,7 @@
     window.renderAll = function () {
       var r = renderAllOriginal.apply(this, arguments);
       if (visible()) {
-        var e = [CLE_DONNEES, CLE_DOCS, CLE_HIST].map(function (c) { return localStorage.getItem(c); }).join('|');
+        var e = [CLE_DONNEES, CLE_DOCS].map(function (c) { return localStorage.getItem(c); }).join('|');
         if (e !== empreinte) rendre();
       }
       return r;
