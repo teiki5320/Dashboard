@@ -640,6 +640,133 @@ select {
     .sub-tabs { top: 62px; }
 }
 
+/* ════════════════════════════════════════
+   ANALYSE EBE (onglet Compta → sous-onglet)
+   Uniquement des jetons du thème : clair et sombre suivent d'eux-mêmes.
+════════════════════════════════════════ */
+:root { --ebe-serie-1: var(--sky-ink); --ebe-serie-2: var(--peach-ink); --ebe-serie-3: var(--mint-ink); }
+.ebe-serie-1 { --ebe-c: var(--ebe-serie-1); }
+.ebe-serie-2 { --ebe-c: var(--ebe-serie-2); }
+.ebe-serie-3 { --ebe-c: var(--ebe-serie-3); }
+
+.card.ebe-controles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 16px 22px; align-items: start; }
+.card.ebe-bloc { display: block; }
+.ebe-tete { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.ebe-tete .section-title { margin: 0 4px 0 0; }
+.card.ebe-controles .ebe-indicateur-bloc { grid-column: 1 / -1; }
+.ebe-puces { display: flex; flex-wrap: wrap; gap: 6px; }
+.ebe-puces .tva-flt { display: inline-flex; align-items: center; gap: 6px; }
+.ebe-siren { font-weight: 700; opacity: .7; font-variant-numeric: tabular-nums; }
+.ebe-indice, .ebe-note { font-size: 11.5px; color: var(--muted); margin-top: 5px; font-weight: 600; }
+.ebe-avis { border-radius: var(--r-md); padding: 12px 16px; margin: 4px 0 12px; font-size: 13px; box-shadow: var(--clay-sm); color: var(--texte); }
+.ebe-avis-run { background: var(--run-tint); border-left: 4px solid var(--run); }
+.ebe-avis-ko { background: var(--ko-tint); border-left: 4px solid var(--ko); }
+
+.ebe-tuiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 4px; }
+.ebe-tuile b { font-size: 16px; white-space: nowrap; }
+.ebe-sub { font-size: 11px; font-weight: 700; color: var(--muted); overflow-wrap: anywhere; }
+@media (max-width: 1100px) { .ebe-tuiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .ebe-tuiles { grid-template-columns: minmax(0, 1fr); } }
+.ebe-puces .tva-flt { max-width: 100%; text-align: left; }
+b.ebe-pos, span.ebe-pos { color: var(--ok); }
+b.ebe-neg, span.ebe-neg { color: var(--ko); }
+
+.ebe-defile { overflow-x: auto; border-radius: var(--r-md); }
+.tva-table .ebe-d { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ebe-croise td.ebe-pos { color: var(--ok); background: var(--ok-tint); }
+.ebe-croise td.ebe-neg { color: var(--ko); background: var(--ko-tint); }
+.ebe-croise td.ebe-vide { color: var(--muted); font-style: italic; font-size: 12px; }
+.ebe-croise td.ebe-moy { font-weight: 800; background: var(--carte-2); }
+.tva-table tr.ebe-total td { font-weight: 800; background: var(--carte-2); }
+/* La colonne « Société » reste visible quand le tableau défile en largeur. */
+.ebe-croise th:first-child, .ebe-croise td:first-child { position: sticky; left: 0; z-index: 1; background: var(--carte); white-space: nowrap; }
+.ebe-croise tr.ebe-total td:first-child { background: var(--carte-2); }
+.ebe-documents td { vertical-align: top; }
+.ebe-signe { display: none; }
+.ebe-src { margin-left: 5px; font-size: 11px; color: var(--muted); }
+.ebe-src:hover { color: var(--accent); }
+
+.ebe-pastille { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: middle; background: var(--carte-2); box-shadow: inset 0 0 0 1px var(--ligne); }
+.ebe-pastille.ebe-pos { background: var(--ok-tint); box-shadow: inset 0 0 0 1.5px var(--ok); }
+.ebe-pastille.ebe-neg { background: var(--ko-tint); box-shadow: inset 0 0 0 1.5px var(--ko); }
+.ebe-pastille[class*="ebe-serie-"] { background: var(--ebe-c); box-shadow: none; margin-right: 0; }
+.ebe-croise .ebe-pastille[class*="ebe-serie-"] { margin-right: 7px; }
+.ebe-legende { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; font-weight: 600; color: var(--muted); margin: 10px 2px 0; }
+.ebe-legende > span { display: inline; }
+.ebe-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+
+.ebe-svg { display: block; width: 100%; height: auto; }
+.ebe-grille { stroke: var(--ligne); stroke-width: 1; }
+.ebe-axe { fill: var(--muted); font-size: 11px; font-weight: 700; font-family: var(--font); }
+.ebe-zero { stroke: var(--muted); stroke-width: 1.4; }
+.ebe-courbe { fill: none; stroke: var(--ebe-c); stroke-width: 2.6; stroke-linejoin: round; stroke-linecap: round; }
+.ebe-courbe.ebe-serie-2 { stroke-dasharray: 9 6; }
+.ebe-courbe.ebe-serie-3 { stroke-dasharray: 2 6; }
+.ebe-point { fill: var(--carte); stroke: var(--ebe-c); stroke-width: 2.2; }
+.ebe-trait { display: inline-block; width: 22px; border-top: 3px solid var(--ebe-c); margin-right: 7px; }
+.ebe-trait.ebe-serie-2 { border-top-style: dashed; }
+.ebe-trait.ebe-serie-3 { border-top-style: dotted; }
+
+.ebe-mult-controles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr)); gap: 12px 18px; align-items: end; margin-bottom: 14px; }
+#ebe-coef { text-align: right; font-variant-numeric: tabular-nums; }
+#ebe-coef[aria-invalid="true"] { background: var(--ko-tint); box-shadow: var(--inset), 0 0 0 2px var(--ko); }
+.ebe-calcul { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; font-size: 19px; font-weight: 800; font-variant-numeric: tabular-nums; margin: 6px 0; }
+.ebe-op { color: var(--muted); }
+.ebe-resultat { font-size: 26px; }
+.ebe-enregistrement { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; margin-top: 16px; }
+.ebe-enregistrement label { margin-bottom: 6px; }
+.btn:disabled { opacity: .45; cursor: default; transform: none; }
+.ebe-notes { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.65; color: var(--muted); }
+.ebe-impression { display: none; }
+
+/* Impression de l'analyse : A4, noir et blanc, sans navigation ni contrôles.
+   La classe impression-ebe n'est posée que le temps d'imprimer cette vue :
+   l'impression des factures et des BL reste inchangée. */
+@media print {
+    body.impression-ebe {
+        --fond: #fff; --carte: #fff; --carte-2: #ececec; --texte: #000; --muted: #333; --ligne: #999;
+        --ok: #000; --ko: #000; --run: #000; --ok-tint: #f6f6f6; --ko-tint: #d9d9d9; --run-tint: #fff;
+        --ebe-serie-1: #000; --ebe-serie-2: #000; --ebe-serie-3: #000;
+        --clay: none; --clay-sm: none; --inset: none;
+        font-size: 10pt; -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    body.impression-ebe #page-compta {
+        display: block !important; animation: none !important; max-width: none !important;
+        padding: 12mm 12mm 10mm !important; margin: 0 !important;
+    }
+    body.impression-ebe #view-compta-bilan, body.impression-ebe .ebe-ecran, body.impression-ebe .ebe-src,
+    body.impression-ebe .ebe-mult-neutre, body.impression-ebe #preview-wrap { display: none !important; }
+    body.impression-ebe .ebe-impression { display: block !important; }
+    body.impression-ebe .section-title { color: #000; font-size: 8pt; margin: 8pt 0 4pt !important; padding-bottom: 2pt; border-bottom: .5pt solid #000; }
+    body.impression-ebe .card { border: .5pt solid #000; border-radius: 0; padding: 5pt 8pt; margin-bottom: 5pt; break-inside: avoid; }
+    body.impression-ebe .ebe-avis { border: .5pt solid #000; border-radius: 0; padding: 4pt 8pt; font-size: 8.5pt; }
+    body.impression-ebe .ebe-tuiles { grid-template-columns: repeat(4, 1fr); gap: 5pt; }
+    body.impression-ebe .tva-stat { border: .5pt solid #000; border-radius: 0; padding: 4pt 6pt; }
+    body.impression-ebe .ebe-tuile b { font-size: 11.5pt; }
+    body.impression-ebe .ebe-sub { font-size: 7.5pt; }
+    body.impression-ebe .ebe-defile { overflow: visible; border-radius: 0; }
+    body.impression-ebe .tva-table { border-radius: 0; font-size: 8pt; border: .5pt solid #000; }
+    body.impression-ebe .tva-table th, body.impression-ebe .tva-table td { padding: 3pt 4pt; }
+    body.impression-ebe .ebe-croise th:first-child, body.impression-ebe .ebe-croise td:first-child { position: static; }
+    body.impression-ebe .ebe-croise td.ebe-neg { font-weight: 800; }
+    body.impression-ebe .ebe-signe { display: inline; }
+    body.impression-ebe .ebe-svg { max-height: 45mm; }
+    body.impression-ebe .ebe-calcul { font-size: 11pt; }
+    body.impression-ebe .ebe-resultat { font-size: 15pt; }
+    body.impression-ebe .ebe-notes { font-size: 7pt; line-height: 1.35; }
+    body.impression-ebe .ebe-legende { font-size: 7.5pt; margin-top: 3pt; }
+    .ebe-entete-impression { border-bottom: 2pt solid #000; padding-bottom: 6pt; margin-bottom: 8pt; }
+    .ebe-entete-impression .t { font-size: 14pt; font-weight: 800; }
+    .ebe-entete-impression .d { font-size: 8.5pt; margin-top: 2pt; }
+    .ebe-entete-impression dl { display: grid; grid-template-columns: auto 1fr; gap: 1.5pt 10pt; margin-top: 6pt; font-size: 9pt; }
+    .ebe-entete-impression dt { font-weight: 800; }
+    body.impression-ebe .ebe-pied-impression, .ebe-pied-impression {
+        display: flex !important; justify-content: space-between; gap: 10pt; margin-top: 5pt;
+        border-top: .5pt solid #000; padding-top: 3pt; font-size: 7pt; break-inside: avoid;
+    }
+    .ebe-pied-impression span:last-child { white-space: nowrap; }
+}
+
 /* ── Barres de défilement ─────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: transparent; }
