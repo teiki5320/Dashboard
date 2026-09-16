@@ -642,6 +642,8 @@ select {
 
 /* ════════════════════════════════════════
    ANALYSE EBE (onglet Compta → sous-onglet)
+   Remplace intégralement l'ancienne section « ANALYSE EBE » de style.css,
+   y compris son bloc @media print.
    Uniquement des jetons du thème : clair et sombre suivent d'eux-mêmes.
 ════════════════════════════════════════ */
 :root { --ebe-serie-1: var(--sky-ink); --ebe-serie-2: var(--peach-ink); --ebe-serie-3: var(--mint-ink); }
@@ -649,58 +651,90 @@ select {
 .ebe-serie-2 { --ebe-c: var(--ebe-serie-2); }
 .ebe-serie-3 { --ebe-c: var(--ebe-serie-3); }
 
-.card.ebe-controles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 16px 22px; align-items: start; }
-.card.ebe-bloc { display: block; }
-.ebe-tete { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
-.ebe-tete .section-title { margin: 0 4px 0 0; }
-.card.ebe-controles .ebe-indicateur-bloc { grid-column: 1 / -1; }
-.ebe-puces { display: flex; flex-wrap: wrap; gap: 6px; }
-.ebe-puces .tva-flt { display: inline-flex; align-items: center; gap: 6px; }
+.ebe-espace { flex: 1; }
+.ebe-indice, .ebe-note { font-size: 11.5px; color: var(--muted); font-weight: 600; }
 .ebe-siren { font-weight: 700; opacity: .7; font-variant-numeric: tabular-nums; }
-.ebe-indice, .ebe-note { font-size: 11.5px; color: var(--muted); margin-top: 5px; font-weight: 600; }
+b.ebe-neg, span.ebe-neg { color: var(--ko); }
+.ebe-signe { display: none; }
+
+/* ── Onglets internes : Analyse · Scénarios · Documents ─────────────────── */
+.ebe-onglets { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.ebe-onglet {
+    border: 0; background: transparent; color: var(--muted); cursor: pointer;
+    font-family: inherit; font-size: 12.5px; font-weight: 800; padding: 8px 14px; border-radius: 10px;
+    transition: transform .18s var(--bounce), background .25s, color .25s;
+}
+.ebe-onglet:hover { color: var(--texte); }
+.ebe-onglet:active { transform: scale(.96); }
+.ebe-onglet.actif { background: var(--carte); color: var(--texte); box-shadow: var(--clay-sm); }
+
+/* ── Filtres ───────────────────────────────────────────────────────────── */
+.card.ebe-controles {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+    gap: 12px 22px; align-items: start; padding: 14px 18px;
+}
+.ebe-ligne-indicateur { grid-column: 1 / -1; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.ebe-ligne-indicateur label, .ebe-ligne-indicateur .section-title { margin: 0; }
+.ebe-ligne-indicateur select { width: auto; padding: 8px 36px 8px 12px; font-size: 13px; border-radius: 12px; background-position: right 12px center; }
+.ebe-tete { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.ebe-tete .section-title { margin: 0; }
+.ebe-lien { border: 0; background: none; padding: 0; font-family: inherit; font-size: 11px; font-weight: 800; color: var(--accent); cursor: pointer; }
+.ebe-lien:hover { color: var(--accent-fort); }
+.ebe-puces { display: flex; flex-wrap: wrap; gap: 6px; }
+.ebe-puces .tva-flt { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; text-align: left; }
+
 .ebe-avis { border-radius: var(--r-md); padding: 12px 16px; margin: 4px 0 12px; font-size: 13px; box-shadow: var(--clay-sm); color: var(--texte); }
 .ebe-avis-run { background: var(--run-tint); border-left: 4px solid var(--run); }
 .ebe-avis-ko { background: var(--ko-tint); border-left: 4px solid var(--ko); }
 
-.ebe-tuiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 4px; }
+/* ── Chiffres clés ─────────────────────────────────────────────────────── */
+.ebe-tuiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }
+.ebe-tuile { padding: 12px 14px; text-align: left; gap: 3px; }
 .ebe-tuile b { font-size: 16px; white-space: nowrap; }
 .ebe-sub { font-size: 11px; font-weight: 700; color: var(--muted); overflow-wrap: anywhere; }
 @media (max-width: 1100px) { .ebe-tuiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 520px) { .ebe-tuiles { grid-template-columns: minmax(0, 1fr); } }
-.ebe-puces .tva-flt { max-width: 100%; text-align: left; }
-b.ebe-pos, span.ebe-pos { color: var(--ok); }
-b.ebe-neg, span.ebe-neg { color: var(--ko); }
 
-.ebe-defile { overflow-x: auto; border-radius: var(--r-md); }
+/* ── Carte tableau / courbes (aussi utilisée par Scénarios et Documents) ── */
+.card.ebe-carte-tableau { display: block; padding: 0; overflow: hidden; }
+.ebe-carte-tete { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 16px; border-bottom: 1px solid var(--ligne); }
+.ebe-carte-tete .section-title { margin: 0; }
+.ebe-segment { display: flex; gap: 3px; padding: 3px; border-radius: 12px; background: var(--carte-2); box-shadow: var(--inset); }
+.ebe-segment button {
+    border: 0; background: transparent; color: var(--muted); cursor: pointer; white-space: nowrap;
+    font-family: inherit; font-size: 11.5px; font-weight: 800; padding: 5px 11px; border-radius: 9px;
+    transition: background .25s, color .25s;
+}
+.ebe-segment button.actif { background: var(--carte); color: var(--texte); box-shadow: var(--clay-sm); }
+.ebe-carte-tableau[data-vue="courbes"] #ebe-tableau, .ebe-carte-tableau[data-vue="tableau"] #ebe-graphe { display: none; }
+.ebe-graphe { padding: 12px 16px 4px; }
+.ebe-vide-bloc { text-align: center; color: var(--muted); padding: 18px 16px; font-weight: 600; }
+.card.ebe-vide-bloc { justify-content: center; }
+
+.ebe-defile { overflow-x: auto; }
+.ebe-carte-tableau .tva-table { box-shadow: none; border-radius: 0; }
 .tva-table .ebe-d { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
-.ebe-croise td.ebe-pos { color: var(--ok); background: var(--ok-tint); }
-.ebe-croise td.ebe-neg { color: var(--ko); background: var(--ko-tint); }
+.tva-table .ebe-c { text-align: center; }
+.ebe-croise th, .ebe-croise td { padding: 8px 9px; }
+.ebe-croise th:first-child, .ebe-croise td:first-child { padding-left: 14px; padding-right: 12px; }
+.ebe-croise td.ebe-d { position: relative; }
+.ebe-croise td.ebe-neg { color: var(--ko); background: var(--ko-tint); font-weight: 800; }
 .ebe-croise td.ebe-vide { color: var(--muted); font-style: italic; font-size: 12px; }
-.ebe-croise td.ebe-moy { font-weight: 800; background: var(--carte-2); }
+.ebe-croise td.ebe-moy, .ebe-croise th.ebe-moy { font-weight: 800; background: var(--carte-2); }
 .tva-table tr.ebe-total td { font-weight: 800; background: var(--carte-2); }
 /* La colonne « Société » reste visible quand le tableau défile en largeur. */
 .ebe-croise th:first-child, .ebe-croise td:first-child { position: sticky; left: 0; z-index: 1; background: var(--carte); white-space: nowrap; }
 .ebe-croise tr.ebe-total td:first-child { background: var(--carte-2); }
-.ebe-documents td { vertical-align: top; }
-/* Sections repliées : la page reste courte, le détail s'ouvre à la demande. */
-.ebe-repli { margin-top: 26px; }
-.ebe-repli > summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px; }
-.ebe-repli > summary::-webkit-details-marker { display: none; }
-.ebe-repli > summary::after { content: "▾"; font-size: 12px; color: var(--muted); }
-.ebe-repli[open] > summary::after { content: "▴"; }
-.ebe-repli > summary .section-title, .ebe-repli > summary { margin: 0; }
-.ebe-signe { display: none; }
-.ebe-src { margin-left: 5px; font-size: 11px; color: var(--muted); }
-.ebe-src:hover { color: var(--accent); }
+.ebe-croise .ebe-pastille[class*="ebe-serie-"] { margin-right: 7px; }
+/* ↗ vers la page du document source : discret, en coin de case */
+.ebe-src { position: absolute; top: 2px; right: 3px; font-size: 9px; line-height: 1; color: var(--muted); opacity: .7; }
+.ebe-src:hover { color: var(--accent); opacity: 1; }
 
 .ebe-pastille { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: middle; background: var(--carte-2); box-shadow: inset 0 0 0 1px var(--ligne); }
-.ebe-pastille.ebe-pos { background: var(--ok-tint); box-shadow: inset 0 0 0 1.5px var(--ok); }
 .ebe-pastille.ebe-neg { background: var(--ko-tint); box-shadow: inset 0 0 0 1.5px var(--ko); }
 .ebe-pastille[class*="ebe-serie-"] { background: var(--ebe-c); box-shadow: none; margin-right: 0; }
-.ebe-croise .ebe-pastille[class*="ebe-serie-"] { margin-right: 7px; }
-.ebe-legende { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; font-weight: 600; color: var(--muted); margin: 10px 2px 0; }
-.ebe-legende > span { display: inline; }
-.ebe-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.ebe-legende { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 11px; font-weight: 600; color: var(--muted); padding: 9px 16px; }
+.ebe-legende-courbes { padding: 0 0 8px; }
 
 .ebe-svg { display: block; width: 100%; height: auto; }
 .ebe-grille { stroke: var(--ligne); stroke-width: 1; }
@@ -714,16 +748,44 @@ b.ebe-neg, span.ebe-neg { color: var(--ko); }
 .ebe-trait.ebe-serie-2 { border-top-style: dashed; }
 .ebe-trait.ebe-serie-3 { border-top-style: dotted; }
 
-.ebe-mult-controles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr)); gap: 12px 18px; align-items: end; margin-bottom: 14px; }
-#ebe-coef { text-align: right; font-variant-numeric: tabular-nums; }
-#ebe-coef[aria-invalid="true"] { background: var(--ko-tint); box-shadow: var(--inset), 0 0 0 2px var(--ko); }
-.ebe-calcul { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; font-size: 19px; font-weight: 800; font-variant-numeric: tabular-nums; margin: 6px 0; }
+/* ── Barre de valorisation, fixée en bas de l'écran ─────────────────────── */
+.ebe-valo {
+    position: sticky; bottom: 12px; z-index: 40; margin-top: 14px;
+    background: var(--carte); border-radius: var(--r-lg); box-shadow: var(--clay);
+    padding: 10px 12px 10px 14px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.ebe-formule { flex: 1; min-width: 230px; display: flex; flex-direction: column; gap: 1px; }
+.ebe-formule-ligne { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .ebe-op { color: var(--muted); }
-.ebe-resultat { font-size: 26px; }
-.ebe-enregistrement { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; margin-top: 16px; }
-.ebe-enregistrement label { margin-bottom: 6px; }
+#ebe-coef { width: 64px; padding: 7px 9px; border-radius: 10px; font-size: 14px; font-weight: 800; text-align: right; font-variant-numeric: tabular-nums; }
+#ebe-coef[aria-invalid="true"] { background: var(--ko-tint); box-shadow: var(--inset), 0 0 0 2px var(--ko); }
+.ebe-resultat { font-size: 20px; }
+.ebe-valo-note { font-size: 11px; color: var(--muted); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ebe-valo-note.ebe-ko { color: var(--ko); }
+#ebe-libelle { width: 160px; padding: 8px 11px; font-size: 12.5px; border-radius: 10px; }
+.ebe-valo .btn { padding: 10px 16px; font-size: 12.5px; border-radius: 14px; white-space: nowrap; }
 .btn:disabled { opacity: .45; cursor: default; transform: none; }
-.ebe-notes { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.65; color: var(--muted); }
+@media (max-width: 560px) { .ebe-valo { bottom: 0; border-radius: var(--r-lg) var(--r-lg) 0 0; } #ebe-libelle { flex: 1; width: auto; } }
+
+/* ── Scénarios ─────────────────────────────────────────────────────────── */
+.ebe-scenario-titre { font-weight: 800; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ebe-ecart-pos { color: var(--ok); font-weight: 700; }
+.ebe-ecart-neg { color: var(--ko); font-weight: 700; }
+.ebe-actions-ligne { white-space: nowrap; }
+.ebe-croix { border: 0; background: none; color: var(--muted); font-family: inherit; font-size: 12px; font-weight: 800; cursor: pointer; padding: 6px 8px; margin-left: 4px; }
+.ebe-croix:hover { color: var(--ko); }
+
+/* ── Documents ─────────────────────────────────────────────────────────── */
+.ebe-documents td { vertical-align: top; }
+.ebe-documents td:first-child { white-space: nowrap; font-weight: 700; }
+.ebe-documents a.badge-statut { cursor: pointer; }
+.ebe-documents a.badge-statut:hover { filter: brightness(.95); }
+.ebe-doc-autres { display: flex; flex-direction: column; gap: 2px; margin-top: 5px; font-size: 11px; font-weight: 700; }
+.ebe-doc-autres a { color: var(--muted); }
+.ebe-doc-autres a:hover { color: var(--accent); }
+.ebe-doc-autres a.ebe-doc-verif { color: var(--run); }
+.ebe-doc-autres a.ebe-doc-absent { text-decoration: line-through; }
+.ebe-hors { font-size: 9px; font-weight: 700; color: var(--muted); text-transform: none; letter-spacing: 0; }
 .ebe-impression { display: none; }
 
 /* Impression de l'analyse : A4, noir et blanc, sans navigation ni contrôles.
@@ -742,26 +804,27 @@ b.ebe-neg, span.ebe-neg { color: var(--ko); }
         padding: 12mm 12mm 10mm !important; margin: 0 !important;
     }
     body.impression-ebe #view-compta-bilan, body.impression-ebe .ebe-ecran, body.impression-ebe .ebe-src,
-    body.impression-ebe .ebe-mult-neutre, body.impression-ebe #preview-wrap { display: none !important; }
+    body.impression-ebe #ebe-vue-scenarios, body.impression-ebe #ebe-vue-documents, body.impression-ebe #preview-wrap { display: none !important; }
+    body.impression-ebe #ebe-vue-analyse, body.impression-ebe #ebe-tableau, body.impression-ebe #ebe-graphe { display: block !important; }
     body.impression-ebe .ebe-impression { display: block !important; }
-    body.impression-ebe .section-title { color: #000; font-size: 8pt; margin: 8pt 0 4pt !important; padding-bottom: 2pt; border-bottom: .5pt solid #000; }
-    body.impression-ebe .card { border: .5pt solid #000; border-radius: 0; padding: 5pt 8pt; margin-bottom: 5pt; break-inside: avoid; }
-    body.impression-ebe .ebe-avis { border: .5pt solid #000; border-radius: 0; padding: 4pt 8pt; font-size: 8.5pt; }
+    body.impression-ebe .section-title { color: #000; font-size: 8pt; margin: 0; }
+    body.impression-ebe .card { border: .5pt solid #000; border-radius: 0; padding: 5pt 8pt; margin-bottom: 5pt; break-inside: avoid; box-shadow: none; }
+    body.impression-ebe .card.ebe-carte-tableau { padding: 0; }
+    body.impression-ebe .ebe-carte-tete { padding: 3pt 6pt; border-bottom: .5pt solid #000; }
+    body.impression-ebe .ebe-graphe { padding: 4pt 6pt; border-top: .5pt solid #000; }
+    body.impression-ebe .ebe-avis { border: .5pt solid #000; border-radius: 0; padding: 4pt 8pt; font-size: 8.5pt; box-shadow: none; }
     body.impression-ebe .ebe-tuiles { grid-template-columns: repeat(4, 1fr); gap: 5pt; }
-    body.impression-ebe .tva-stat { border: .5pt solid #000; border-radius: 0; padding: 4pt 6pt; }
+    body.impression-ebe .tva-stat { border: .5pt solid #000; border-radius: 0; padding: 4pt 6pt; box-shadow: none; }
     body.impression-ebe .ebe-tuile b { font-size: 11.5pt; }
     body.impression-ebe .ebe-sub { font-size: 7.5pt; }
-    body.impression-ebe .ebe-defile { overflow: visible; border-radius: 0; }
-    body.impression-ebe .tva-table { border-radius: 0; font-size: 8pt; border: .5pt solid #000; }
+    body.impression-ebe .ebe-defile { overflow: visible; }
+    body.impression-ebe .tva-table { font-size: 8pt; }
     body.impression-ebe .tva-table th, body.impression-ebe .tva-table td { padding: 3pt 4pt; }
     body.impression-ebe .ebe-croise th:first-child, body.impression-ebe .ebe-croise td:first-child { position: static; }
     body.impression-ebe .ebe-croise td.ebe-neg { font-weight: 800; }
     body.impression-ebe .ebe-signe { display: inline; }
     body.impression-ebe .ebe-svg { max-height: 45mm; }
-    body.impression-ebe .ebe-calcul { font-size: 11pt; }
-    body.impression-ebe .ebe-resultat { font-size: 15pt; }
-    body.impression-ebe .ebe-notes { font-size: 7pt; line-height: 1.35; }
-    body.impression-ebe .ebe-legende { font-size: 7.5pt; margin-top: 3pt; }
+    body.impression-ebe .ebe-legende { font-size: 7.5pt; padding: 3pt 6pt; }
     .ebe-entete-impression { border-bottom: 2pt solid #000; padding-bottom: 6pt; margin-bottom: 8pt; }
     .ebe-entete-impression .t { font-size: 14pt; font-weight: 800; }
     .ebe-entete-impression .d { font-size: 8.5pt; margin-top: 2pt; }
