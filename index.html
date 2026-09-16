@@ -302,6 +302,12 @@
 </div>
 
 <div id="page-compta" class="page">
+    <div class="sub-tabs">
+        <div class="sub-tab active" id="tab-compta-bilan" onclick="toggleComptaTab('bilan')">Bilan</div>
+        <div class="sub-tab" id="tab-compta-ebe" onclick="toggleComptaTab('ebe')">Analyse EBE</div>
+    </div>
+    <div id="view-compta-ebe" style="display:none"><div id="ebe-contenu"></div></div>
+    <div id="view-compta-bilan">
     <div class="section-title">Comptabilité</div>
     <div id="compta-stats" style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:20px"></div>
     <div class="card" style="flex-direction:column; align-items:stretch">
@@ -316,6 +322,7 @@
         <button class="btn" style="margin-top:10px; background:rgba(255,255,255,0.06)" onclick="comptaExport()">📊 EXPORT EXCEL</button>
     </div>
     <div id="compta-result" style="margin-top:20px"></div>
+    </div>
 </div>
 
 <div id="page-mail" class="page">
@@ -487,6 +494,8 @@
 <script src="script.js"></script>
 <script src="assets/dash-data.js"></script>
 <script src="dash-module.js"></script>
+<script src="ebe.js"></script>
+<script src="ebe-module.js"></script>
 <script>
 // ── Thème clair / sombre (sombre par défaut, mémorisé) ──────────────────────
 function gpTheme() {

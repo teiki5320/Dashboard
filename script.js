@@ -12,8 +12,8 @@ const G = {
 };
 
 // Synchronisation Supabase
-const SUPA_URL = 'https://eusukwnfoixjsjqoptfr.supabase.co';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1c3Vrd25mb2l4anNqcW9wdGZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5OTQ3NjMsImV4cCI6MjA4OTU3MDc2M30.ZkmqvszuljAPmvAqrmWT87fFOlJEm7WyrqC6E_f_FbI';
+const SUPA_URL = 'https://kigaejkyzpehkoujzlyf.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpZ2Flamt5enBlaGtvdWp6bHlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxMjczNjEsImV4cCI6MjEwNDcwMzM2MX0.C46rOWypT0mu2U8b8zGGGzvmRZBkhymqDRUoyrCi2h0';
 
 // Réparation recommandée côté Supabase (SQL à exécuter une fois dans l'éditeur
 // SQL) — l'ancien push accumulait des lignes en double dans app_data, ce qui
