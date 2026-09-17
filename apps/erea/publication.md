@@ -135,18 +135,14 @@ inscrit le 8 septembre au soir ; le compteur court jusqu'au
    1.0.2 (l'API `itunes.apple.com/lookup?id=6794918301` répond avec le
    numéro de version), puis que l'achat apparaît dans le jeu installé
    depuis la boutique, à 3,99 €.
-3. **Android** — le prix de l'achat affiché sur le Pixel est **4,79 €**,
-   pas 3,99 € : Google a pris 3,99 comme prix hors taxe et ajouté la TVA.
-   À corriger dans la Play Console (Produits ponctuels → option
-   `sans-pub` → prix France : 3,99 TTC) pour aligner avec l'App Store.
-4. **Android, 1.0.4** — deux textes hérités d'iOS à reprendre : « Respecte
+3. **Android, 1.0.4** — deux textes hérités d'iOS à reprendre : « Respecte
    le bouton silencieux de l'iPhone » et la ligne « Classement mondial »
    des réglages, sans Play Jeux derrière.
-5. **Les deux** — se déclarer **trader** au titre du DSA, après avoir
+4. **Les deux** — se déclarer **trader** au titre du DSA, après avoir
    nettoyé le complément d'adresse du compte Apple, qui porte encore le
    nom d'une SARL sans rapport et deviendrait public.
-6. **iOS** — choisir le nom long de l'app pour la version suivante.
-7. **iOS** — élucider les builds Xcode Cloud 141 et 142, échoués le
+5. **iOS** — choisir le nom long de l'app pour la version suivante.
+6. **iOS** — élucider les builds Xcode Cloud 141 et 142, échoués le
    4 septembre sur des commits de documentation ; 143 à 150 sont verts.
 
 ---
@@ -174,5 +170,9 @@ inscrit le 8 septembre au soir ; le compteur court jusqu'au
   installée par `adb` : le formulaire se charge (`load_complete ok`), un
   choix est enregistré (`IABTCF_TCString`), la ligne « Publicité
   personnalisée » apparaît dans les réglages. Douze jours après la
-  configuration, le journal ne dit plus `no form(s) configured`. Approuvé par Apple le 8 septembre, sept jours
+  configuration, le journal ne dit plus `no form(s) configured`.
+- **Prix Play aligné** : le Pixel affichait 4,79 € (3,99 pris hors taxe
+  par la saisie « toutes les régions », plus 20 % de TVA). Ressaisi sur
+  la ligne France le 16 septembre : **3,99 €** affiché dans l'heure, comme
+  sur l'App Store. Approuvé par Apple le 8 septembre, sept jours
   après la première soumission ratée sans lui.
