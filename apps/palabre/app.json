@@ -1,0 +1,10 @@
+{
+  "name": "Palabre",
+  "emoji": "🃏",
+  "visible": true,
+  "order": 7,
+  "repo": "teiki5320/palabre",
+  "platforms": ["iOS", "Android"],
+  "tagline": "Président pour 100 jours — jeu de cartes façon Reigns.",
+  "services": ["github"]
+}
