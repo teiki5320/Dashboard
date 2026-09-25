@@ -21,7 +21,7 @@ Vente directe en ligne de produits physiques. Frais de port par défaut : 4,90 �
 | 1. Lancement | Gestion des stocks et des commandes dans l'admin | ✅ |
 | 1. Lancement | E-mails de confirmation de commande | ⬜ (code prêt, SMTP non configuré) |
 | 1. Lancement | Vrais produits, photos et certificats d'analyse | ⬜ |
-| 2. Conversion | Paiement par carte (prestataire acceptant le CBD) | ⬜ (emplacement prévu : `src/lib/payments/providers/_template.ts`) |
+| 2. Conversion | Paiement par carte, Apple Pay, Google Pay (Stripe Checkout) | ✅ en mode test (accord de Stripe pour le CBD à obtenir avant les clés réelles) |
 | 2. Conversion | Livraison offerte au-delà d'un seuil | ✅ |
 | 2. Conversion | Mise en avant « Coup de cœur » et tri | ✅ |
 | 3. Fidélisation | Codes promo, programme de fidélité | ⬜ (absent du code) |
@@ -29,7 +29,7 @@ Vente directe en ligne de produits physiques. Frais de port par défaut : 4,90 �
 
 ## Canaux
 
-- **Référencement naturel** : sitemap et robots.txt générés automatiquement, métadonnées Open Graph, données structurées JSON-LD sur l'accueil et les fiches produit. ✅ dans le code ; l'URL publique du site reste à renseigner (`NEXT_PUBLIC_SITE_URL`).
+- **Référencement naturel** : sitemap et robots.txt générés automatiquement, métadonnées Open Graph, données structurées JSON-LD sur l'accueil et les fiches produit. ✅ dans le code, sur le domaine https://www.alohash.fr.
 - **Réseaux sociaux** : aucun lien ni intégration dans le code. ⬜
 - **E-mail** : e-mails transactionnels prêts, aucun outil d'e-mailing marketing. ⬜
 - **Publicité payante** : aucune intégration. Les régies grand public limitent fortement la publicité pour le CBD : à vérifier avant toute campagne. ⬜
@@ -50,7 +50,7 @@ Aucun outil de mesure d'audience n'est installé : la bannière cookies recueill
 
 Aucune date n'est fixée dans le dépôt. Ordre prévu :
 
-1. Préparer l'ouverture : vrais produits, coordonnées bancaires, SMTP, nom de domaine.
+1. Préparer l'ouverture : vrais produits, coordonnées bancaires, SMTP (nom de domaine fait).
 2. Ouvrir la boutique : paiement par virement, référencement naturel.
 3. Ajouter le paiement par carte, puis la mesure d'audience.
 4. Fidéliser : newsletter, codes promo.
@@ -62,6 +62,7 @@ Aucune date n'est fixée dans le dépôt. Ordre prévu :
 - ⬜ Remplacer les 16 produits de démo par les vrais produits (photos, certificats d'analyse)
 - ⬜ Renseigner l'IBAN et les coordonnées bancaires (`PAYMENT_BANK_*`)
 - ⬜ Configurer le SMTP pour les e-mails de commande
-- ⬜ Relier un nom de domaine et renseigner `NEXT_PUBLIC_SITE_URL`
+- ✅ Nom de domaine www.alohash.fr relié, `NEXT_PUBLIC_SITE_URL` renseignée
 - ⬜ Choisir un outil de mesure d'audience respectueux du consentement
-- ⬜ Trouver un prestataire de paiement par carte qui accepte le CBD
+- ✅ Paiement par carte branché (Stripe, mode test)
+- ⬜ Obtenir l'accord de Stripe pour l'activité CBD, puis passer aux clés réelles
