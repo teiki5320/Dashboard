@@ -1,0 +1,10 @@
+{
+  "name": "OptiLED",
+  "emoji": "💡",
+  "visible": true,
+  "order": 9,
+  "repo": "teiki5320/optiled",
+  "platforms": ["Web"],
+  "tagline": "Calculateur d'éclairage LED et guides de culture indoor.",
+  "services": ["github", "hebergement-web", "nom-de-domaine"]
+}
