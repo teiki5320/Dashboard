@@ -21,13 +21,13 @@
 ## Visibilité
 
 - **Référencement** : sitemap (`sitemap.xml`) et `robots.txt` générés au build, adresses canoniques, balises Open Graph et Twitter Card avec une image de partage par page, données structurées schema.org (WebApplication pour l'accueil, Article pour les guides).
-- **Google Search Console** : site non déclaré d'après le dépôt ; une vérification Google existe dans la zone DNS du domaine — état à vérifier dans la console.
+- **Google Search Console** : propriété de type Domaine `optiled.fr` vérifiée ; sitemap `https://www.optiled.fr/sitemap.xml` envoyé le 25 septembre 2026 (16 pages découvertes ce jour-là) ; le sitemap compte 45 pages depuis l'ajout des 26 pages détaillées des cultures et des 3 guides d'achat.
 - **Pages indexées** : à vérifier dans la console.
 - **Analytics** : aucune mesure active. Plausible est prévu dans le code (`PLAUSIBLE_DOMAIN`), mais la variable n'est pas définie dans le workflow.
 - **PWA** : installable sur mobile, consultable hors ligne.
 
 ## Ce qui reste, dans l'ordre
 
-1. Déclarer `www.optiled.fr` dans Google Search Console et envoyer `https://www.optiled.fr/sitemap.xml`.
-2. Vérifier que la routine mensuelle des lampes Amazon arrive à publier sur `main` (premier passage le 1er octobre 2026).
+1. Vérifier que la routine mensuelle des lampes Amazon arrive à publier sur `main` (premier passage le 1er octobre 2026).
+2. Suivre l'indexation des 45 pages dans Search Console (rubrique Pages).
 3. Activer une mesure d'audience si souhaité, puis mettre à jour la rubrique « Données personnelles et cookies » de `mentions-legales.html`.
