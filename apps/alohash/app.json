@@ -1,10 +1,10 @@
 {
   "name": "Alohash",
-  "emoji": "🌿",
+  "emoji": "🍲",
   "visible": true,
   "order": 8,
   "repo": "teiki5320/alohash",
   "platforms": ["Web"],
-  "tagline": "Boutique en ligne de CBD français.",
-  "services": ["github", "hebergement-web", "stockage-cdn", "email-transactionnel"]
+  "tagline": "Recettes africaines & épicerie en ligne de produits rares.",
+  "services": ["github", "hebergement-web", "stockage-cdn", "email-transactionnel", "stripe"]
 }

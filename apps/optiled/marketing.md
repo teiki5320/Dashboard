@@ -33,6 +33,7 @@ Mis à jour le 25 septembre 2026. Compagnon de INFRA.md.
 | Référencement naturel (base technique) | Sitemap, robots.txt, adresses canoniques, Open Graph et Twitter Card avec images de partage 1200 × 630, données structurées schema.org (WebApplication, Article) | ✅ |
 | Google Search Console | Propriété `optiled.fr` vérifiée, sitemap envoyé le 25 septembre 2026 (16 pages découvertes) | ✅ |
 | Guides d'achat | 3 guides (`led-puissance`, `led-comparer`, `led-semis`) avec tableaux calculés depuis les données du site, sans prix ni liens Amazon dans le texte | ✅ |
+| Articles de conseil | Rubrique « Conseils » : 10 articles publiés le 25 septembre 2026, puis un par semaine (publication automatique le lundi) | ✅ en cours |
 | Pages détaillées par culture | 26 pages `legume-<id>.html` (lumière, exemple pour 1 m², lampes, climat, solution nutritive, récolte) | ✅ |
 | Partage par les visiteurs | Bouton « Partager » du calculateur (lien avec les réglages) | ✅ |
 | Installation sur mobile | Manifest et service worker (PWA) | ✅ |

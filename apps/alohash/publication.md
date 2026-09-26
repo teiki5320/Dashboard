@@ -6,8 +6,8 @@
 
 | Version | En production ? | URL | Hébergeur |
 | --- | --- | --- | --- |
-| Web — boutique complète | Oui, en préouverture : mode maintenance activable depuis l'admin, produits de démo, paiement par virement | https://www.alohash.fr (aussi https://alohash.vercel.app) | Vercel (plan Hobby), base Neon, fichiers Vercel Blob |
-| Web — vitrine statique | Oui (démo, commande désactivée) | https://teiki5320.github.io/alohash/ | GitHub Pages |
+| Web — site complet (recettes + épicerie) | Oui, en préouverture : **en maintenance** (écran « On prépare la marmite »), 46 recettes et 26 produits de démo en base | https://www.alohash.fr (aussi https://alohash.vercel.app) | Vercel (plan Hobby), base Neon |
+| Web — vitrine statique | Oui (démo : commande, avis, newsletter et admin désactivés) | https://teiki5320.github.io/alohash/ | GitHub Pages |
 
 Les deux versions sont republiées automatiquement à chaque push sur `main`.
 
@@ -20,7 +20,7 @@ Les deux versions sont republiées automatiquement à chaque push sur `main`.
 
 ## Visibilité
 
-- **Référencement** : sitemap (`/sitemap.xml`), robots.txt (admin, panier et commande exclus), métadonnées Open Graph et données JSON-LD présents dans le code.
+- **Référencement** : sitemap (`/sitemap.xml`, 95 adresses dont les 46 recettes et les pages pays), robots.txt (admin, panier et commande exclus), métadonnées Open Graph et données JSON-LD (Recipe, Product) présents dans le code.
   - `NEXT_PUBLIC_SITE_URL` vaut `https://www.alohash.fr` sur Vercel : sitemap, robots.txt et liens canoniques utilisent le domaine.
   - Inscription à Google Search Console : à vérifier dans la console.
 - **Analytics** : aucun outil installé. Le consentement « mesure d'audience » est recueilli par la bannière cookies, mais aucun script n'y est branché.
@@ -28,11 +28,11 @@ Les deux versions sont republiées automatiquement à chaque push sur `main`.
 
 ## Ce qui reste, dans l'ordre
 
-1. Passer une commande de test de bout en bout, puis l'annuler pour vérifier la remise en stock.
-2. Vérifier que le plan Vercel convient à un usage commercial (Hobby réservé au non commercial).
-3. Configurer le SMTP (`SMTP_*`, `EMAIL_FROM`) pour les e-mails de commande.
-4. Renseigner les coordonnées bancaires (`PAYMENT_BANK_*`).
-5. Remplacer les produits de démo par les vrais produits : photos et certificats d'analyse ajoutés dans le dépôt (`public/products`, `public/coa`), pas par l'envoi depuis l'admin.
-6. Désactiver le mode maintenance pour ouvrir la boutique.
-7. Déclarer le site dans Google Search Console et choisir un outil de mesure d'audience.
-8. Paiement par carte : tester avec la carte de test Stripe, obtenir l'accord de Stripe pour le CBD, puis passer aux clés réelles (nouveau webhook et nouvelles clés).
+1. Remplacer les produits et photos de démo par les vrais (photos ajoutées dans le dépôt : `public/products`, `public/recipes`), avec un étiquetage complet (ingrédients, allergènes, conservation, DDM).
+2. Déclarer l'activité alimentaire à la DDPP de Vendée.
+3. Paiement : rouvrir un compte Stripe pour l'activité alimentaire (le compte CBD a été fermé), tester avec la carte de test, puis passer aux clés réelles ; ou renseigner les coordonnées bancaires (`PAYMENT_BANK_*`) pour le virement.
+4. Configurer le SMTP (`SMTP_*`, `EMAIL_FROM`) pour les e-mails de commande.
+5. Vérifier que le plan Vercel convient à un usage commercial (Hobby réservé au non commercial).
+6. Passer une commande de test de bout en bout, puis l'annuler pour vérifier la remise en stock.
+7. Désactiver le mode maintenance (Admin → Maintenance) pour ouvrir le site.
+8. Déclarer le site dans Google Search Console, brancher l'envoi de la newsletter et un outil de mesure d'audience.
