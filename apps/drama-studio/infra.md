@@ -1,15 +1,15 @@
 # INFRA — fiche technique
 
-Généré le 26 septembre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
+Généré le 21 août 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
 
 ## Vue d'ensemble
 
-- **Plateforme** : application web 100 % locale sur macOS — serveur Express + interface React sur `127.0.0.1:4600`, lancée par le raccourci Bureau `Drama Studio.command` ; accès distant en option via le réseau privé Tailscale (`HOST=0.0.0.0` dans `.env`, désactivé par défaut)
-- **Stack** : Node.js ≥ 20, Express 4, React 18, Vite 5, Remotion 4 (rendu MP4 vertical 1080×1920, 30 fps), ffmpeg embarqué (binaire statique `ffmpeg-static`, avec détection des binaires cassés)
+- **Plateforme** : application web 100 % locale sur macOS — serveur Express + interface React sur `127.0.0.1:4600`, lancée par le raccourci Bureau `Drama Studio.command`
+- **Stack** : Node.js ≥ 20, Express 4, React 18, Vite 5, Remotion 4 (rendu MP4 vertical 1080×1920, 30 fps)
 - **Backend** : aucun serveur distant — données en JSON local (`projects/`, gitignoré), jobs de production en mémoire, aucun compte utilisateur
 - **Distribution** : dépôt GitHub public `teiki5320/Drama-Studio`, mise à jour automatique par `git pull` à chaque lancement du raccourci
-- **IA** : Claude (scénarios, sans clé API), OpenArt via MCP (images + clips vidéo + synchro labiale par défaut, visages constants) et OpenArt Director (tournage complet recommandé), ElevenLabs (voix nativement françaises), fal.ai (synchro labiale en option)
-- **Particularités** : 4 modes au choix (Normale 10×60 s · Format long façon DramaWave : tout vidéo avec synchro labiale, épisodes de 1 à 2 min — 60 s conseillé —, saisons de 30 à 80 · Chaînes : vidéos à narrateur de 60-120 s sur n'importe quel sujet, identité fixe par chaîne · 📣 Publicité, depuis le 25 septembre : une appli décrite une fois — nom, public, offre, ton, appel à l'action — puis autant de pubs de 30-60 s à narrateur que d'angles à tester, Claude en proposant 8 classés du plus vendeur au moins vendeur, avec captures d'écran de l'appli insérées telles quelles et figures récurrentes) ; depuis le 8 septembre, deux méthodes de production au choix pour chaque épisode — « 🎬 Studio Director » (recommandé) ou « 🛠️ production interne », l'épisode 1 n'étant plus produit automatiquement ; depuis le 17 septembre, la production interne passe par une étape **Storyboard** (un appel Claude, gratuit) : chaque scène est découpée en plans (type, durée cible, personnages, lieu, réplique), une image par plan, et les clips animés sont choisis par priorité réplique → cliffhanger → ordre, plafonnés par le réglage « Plans animés/épisode » — les anciens épisodes et les chaînes gardent le comportement « une scène = une image » ; lieux traités comme des références à part entière : une description visuelle stable par décor et, depuis le 17 septembre, un **décor de référence** en image généré une fois par série puis réutilisé dans tous les plans qui s'y déroulent (régénérable, bouton « ✨ Nouveau décor ») ; production par fournées (« les 5 prochains ») ; carte « 🧪 Test synchro » de diagnostic ; export auto des MP4 vers iCloud Drive avec nom de fichier = description TikTok prête
+- **IA** : Claude (scénarios, sans clé API), OpenArt via MCP (images + clips vidéo, visages constants), ElevenLabs (voix FR), fal.ai (synchro labiale, optionnel)
+- **Particularités** : 4 formats au choix (dramas, chaînes, publicités d'applis, recettes Alohash) — historiquement 3 versions (normale 10×60 s · Synchro lèvres animées · Format long 30-60×40 s) ; export auto des MP4 vers iCloud Drive avec nom de fichier = description TikTok prête
 
 ### 1. GitHub
 
@@ -21,7 +21,7 @@ Généré le 26 septembre 2026 par un scan du dépôt. Pour mettre à jour : rel
 
 ### 2. Anthropic — Claude Code
 
-- **Rôle** : écriture des scénarios, personnages, hashtags et régénérations (commande `claude -p` en mode headless, JSON structuré) ; pilote aussi le MCP OpenArt pour toutes les générations d'images/vidéos. En mode « Studio Director », Claude n'écrit que le scénario (et les portraits manquants) — aucune image de scène, clip ni voix.
+- **Rôle** : écriture des scénarios, personnages, hashtags et régénérations (commande `claude -p` en mode headless, JSON structuré) ; pilote aussi le MCP OpenArt pour toutes les générations d'images/vidéos.
 - **Console** : https://claude.ai (abonnement) — CLI installée via `npm i -g @anthropic-ai/claude-code`.
 - **Identifiants publics** : néant (outil local).
 - **Secrets** : aucune clé API — authentification par la session Claude Code du Mac (`claude` puis `/login`, jeton OAuth géré par Claude Code, jamais dans le dépôt ni dans `.env`).
@@ -29,7 +29,7 @@ Généré le 26 septembre 2026 par un scan du dépôt. Pour mettre à jour : rel
 
 ### 3. OpenArt
 
-- **Rôle** : génération des images (portraits et décors de référence, puis une image par plan — visages et lieux constants), des clips vidéo image-to-video (nombre et durée réglables par drama ; modèles chers Pro/Master/Omni interdits par prompt) et, depuis septembre 2026, **synchronisation labiale par défaut** (outil lip sync du MCP, payée en crédits OpenArt). Depuis le 8 septembre, **OpenArt Director** (openart.ai → menu Director) est la méthode de tournage recommandée : l'appli prépare un « kit » — planche officielle des visages assemblée dans le navigateur + texte exact à coller dans le chat de Director (réglages, casting ordonné, lieux, scènes et dialogues) — et Director tourne l'épisode **entier** en une passe, voix françaises et lèvres synchronisées nativement (480p conseillé pour le premier essai).
+- **Rôle** : génération des images (portraits de référence puis scènes, pour des visages constants) et des clips vidéo image-to-video (nombre et durée réglables par drama ; modèles chers Pro/Master/Omni interdits par prompt).
 - **Console** : https://openart.ai (solde de crédits visible dans l'appli, panneau « Coûts »).
 - **Identifiants publics** : MCP officiel `https://mcp.openart.ai/mcp`, enregistré via `claude mcp add --transport http --scope user openart …`.
 - **Secrets** : authentification OAuth une seule fois via `claude` → `/mcp` → openart ; le jeton vit dans la configuration Claude Code du Mac. Variables optionnelles (sans secret) dans `~/bd/.env` : `IMAGE_PROVIDER=openart`, `OPENART_MCP_NAME`, `OPENART_VIDEO_MODEL`.
@@ -37,7 +37,7 @@ Généré le 26 septembre 2026 par un scan du dépôt. Pour mettre à jour : rel
 
 ### 4. ElevenLabs
 
-- **Rôle** : voix off et dialogues en français — bibliothèque de voix **nativement françaises** avec pré-écoute gratuite avant adoption (l'adoption d'une voix de bibliothèque via l'API demande un plan payant, message géré dans l'appli) ; casting automatique par Claude, narrateur et voix modifiables par personnage dans l'appli.
+- **Rôle** : voix off et dialogues en français (modèle multilingual v2, langue ancrée par contexte anti-accent anglais) ; casting automatique par Claude depuis un catalogue de 11 voix validées, narrateur et voix modifiables par personnage dans l'appli.
 - **Console** : https://elevenlabs.io (solde affiché dans l'appli avec jauge).
 - **Identifiants publics** : néant.
 - **Secrets** : `ELEVENLABS_API_KEY` dans `~/bd/.env` sur le Mac (fichier gitignoré, jamais commité). La clé se régénère sur elevenlabs.io → profil → API Keys.
@@ -45,11 +45,11 @@ Généré le 26 septembre 2026 par un scan du dépôt. Pour mettre à jour : rel
 
 ### 5. fal.ai
 
-- **Rôle** : moteur de synchro labiale **alternatif** (OmniHuman, sync-lipsync… choisi via `FAL_LIPSYNC_MODEL` — le moteur par défaut est désormais OpenArt) ; peut aussi servir de fournisseur d'images (`IMAGE_PROVIDER=fal`, FLUX).
+- **Rôle** : synchronisation labiale du Format long (clip + piste voix des personnages → lèvres animées, modèle `fal-ai/sync-lipsync` par défaut) ; peut aussi servir de fournisseur d'images (`IMAGE_PROVIDER=fal`, FLUX).
 - **Console** : https://fal.ai/dashboard (clés : https://fal.ai/dashboard/keys).
 - **Identifiants publics** : néant.
 - **Secrets** : `FAL_KEY` dans `~/bd/.env` (gitignoré). Variable optionnelle sans secret : `FAL_LIPSYNC_MODEL`.
-- **Coût** : à l'usage (~0,10-0,50 $ par clip synchronisé) quand fal.ai est choisi comme moteur ; avec le moteur OpenArt par défaut, le stockage fal.ai sert seulement de relais pour héberger la voix (« sans frais notables » d'après l'appli). Dans les deux cas `FAL_KEY` doit être présent dans `.env` — l'appli affiche un message clair si la clé manque (statut réel sur le Mac : à vérifier dans l'appli).
+- **Coût** : à l'usage (~0,10-0,50 $ par clip synchronisé). **Statut : pas encore activé** — le Format long affiche un rappel tant que la clé est absente.
 
 ### 6. iCloud Drive
 
@@ -58,3 +58,22 @@ Généré le 26 septembre 2026 par un scan du dépôt. Pour mettre à jour : rel
 - **Identifiants publics** : compte Apple du Mac.
 - **Secrets** : aucun — accès par la session iCloud du Mac. Variable sans secret dans `~/bd/.env` : `EXPORT_DIR` (chemin personnalisé, `~/` accepté ; actuellement le dossier `01 TOA CORP/04 APPLIS/04 DRAMA/Dramas`).
 - **Coût** : inclus dans le forfait iCloud+ existant.
+
+
+## Format Recettes — source des données (ajouté)
+
+- **Rôle** : le format 🍲 Recettes lit les fiches du site **Alohash** pour en faire des vidéos
+  verticales. Aucune base de données : tout est lu à la volée sur le site public.
+- **Source** : `RECIPE_SITE_URL` dans `~/bd/.env` — défaut `https://teiki5320.github.io/alohash`
+  (le domaine `https://www.alohash.fr` est en maintenance et prendra le relais en changeant
+  cette seule variable).
+- **Protocole** : `GET <base>/sitemap.xml` pour lister les URL contenant `/recette/`, puis
+  `GET <base>/recette/<slug>/` dont on extrait le bloc `<script type="application/ld+json">`
+  de type `schema.org/Recipe` (name, description, image, prepTime, cookTime, recipeYield,
+  recipeCuisine, recipeIngredient[], recipeInstructions[] en HowToStep).
+- **Identifiants publics** : site public, lecture seule, aucun jeton.
+- **Secrets** : aucun.
+- **Coût** : gratuit (GitHub Pages). Les crédits consommés restent ceux d'OpenArt (images et
+  clips) et d'ElevenLabs (voix) — la photo du plat fini peut être reprise du site, sans crédit.
+- **Garde-fou éditorial** : aucune allégation de santé dans les textes générés (consigne dans le
+  prompt Claude + vérification bloquante avant le rendu, qui nomme le mot en cause).
