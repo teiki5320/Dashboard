@@ -30,4 +30,5 @@
 
 1. Vérifier que la routine mensuelle des lampes Amazon arrive à publier sur `main` (premier passage le 1er octobre 2026).
 2. Suivre l'indexation des 45 pages dans Search Console (rubrique Pages).
-3. Activer une mesure d'audience si souhaité, puis mettre à jour la rubrique « Données personnelles et cookies » de `mentions-legales.html`.
+3. Écrire et programmer les 40 articles de conseil suivants (un par lundi).
+4. Activer une mesure d'audience si souhaité, puis mettre à jour la rubrique « Données personnelles et cookies » de `mentions-legales.html`.
