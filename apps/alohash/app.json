@@ -6,5 +6,5 @@
   "repo": "teiki5320/alohash",
   "platforms": ["Web"],
   "tagline": "Recettes africaines & épicerie en ligne de produits rares.",
-  "services": ["github", "hebergement-web", "stockage-cdn", "email-transactionnel", "stripe"]
+  "services": ["github", "hebergement-web", "stockage-cdn", "email-transactionnel", "affiliation"]
 }
