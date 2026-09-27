@@ -18,7 +18,7 @@ Vente directe en ligne de produits alimentaires ; les recettes sont gratuites et
 | --- | --- | --- |
 | 1. Lancement | Recettes en ligne (fiches, pays, recherche par ingrédient, favoris) | ✅ |
 | 1. Lancement | Épicerie : catalogue, panier, commande, stocks | ✅ |
-| 1. Lancement | Paiement par carte (Stripe Checkout) | ⬜ (code prêt ; compte Stripe à rouvrir pour l'activité alimentaire) |
+| 1. Lancement | Achat via Amazon Partenaires (bouton « Acheter », tag kultiva-21) | ✅ |
 | 1. Lancement | E-mails de confirmation de commande | ⬜ (code prêt, SMTP non configuré) |
 | 1. Lancement | Vrais produits, étiquetage, photos | ⬜ |
 | 2. Conversion | « Tout ajouter au panier » depuis une recette | ✅ |
@@ -61,7 +61,6 @@ Aucune date n'est fixée dans le dépôt. Ordre prévu :
 - ✅ Admin : recettes, avis, newsletter, maintenance
 - ⬜ Remplacer les produits et photos de démo par les vrais
 - ⬜ Déclarer l'activité alimentaire à la DDPP de Vendée et vérifier l'étiquetage (règlement INCO)
-- ⬜ Rouvrir un compte Stripe pour l'activité alimentaire, puis passer aux clés réelles
 - ⬜ Configurer le SMTP pour les e-mails de commande
 - ⬜ Brancher l'envoi de la newsletter (Brevo)
 - ⬜ Choisir un outil de mesure d'audience respectueux du consentement
