@@ -30,7 +30,7 @@ Les deux versions sont republiées automatiquement à chaque push sur `main`.
 
 1. Remplacer les produits et photos de démo par les vrais (photos ajoutées dans le dépôt : `public/products`, `public/recipes`), avec un étiquetage complet (ingrédients, allergènes, conservation, DDM).
 2. Déclarer l'activité alimentaire à la DDPP de Vendée.
-3. Paiement : rouvrir un compte Stripe pour l'activité alimentaire (le compte CBD a été fermé), tester avec la carte de test, puis passer aux clés réelles ; ou renseigner les coordonnées bancaires (`PAYMENT_BANK_*`) pour le virement.
+3. Achat : les boutons « Acheter » mènent à Amazon (tag partenaire kultiva-21) ; rien à configurer.
 4. Configurer le SMTP (`SMTP_*`, `EMAIL_FROM`) pour les e-mails de commande.
 5. Vérifier que le plan Vercel convient à un usage commercial (Hobby réservé au non commercial).
 6. Passer une commande de test de bout en bout, puis l'annuler pour vérifier la remise en stock.
