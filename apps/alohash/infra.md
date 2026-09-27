@@ -15,7 +15,7 @@ Généré le 25 septembre 2026 par un scan du dépôt. Pour mettre à jour : rel
   - étiquetage alimentaire sur chaque produit (ingrédients, allergènes, conservation), obligatoire pour publier ;
   - avis des visiteurs publiés seulement après validation dans l'admin ;
   - espace admin protégé par un mot de passe unique et un cookie signé de 7 jours (`src/lib/admin-session.ts`, `src/proxy.ts`) ;
-  - paiement par Stripe Checkout et/ou virement, via une couche `PaymentProvider` extensible (`src/lib/payments/`).
+  - achat des produits sur Amazon.fr (programme Partenaires, tag `kultiva-21`) ; panier et commande par virement conservés dans le code mais masqués (`src/lib/payments/`).
 
 ### 1. GitHub
 
@@ -59,13 +59,11 @@ Généré le 25 septembre 2026 par un scan du dépôt. Pour mettre à jour : rel
 
 ### 6. Paiement
 
-- **Rôle** : deux moyens de paiement (`src/lib/payments/`), choisis par `PAYMENT_PROVIDERS` :
-  - **Stripe Checkout** (`providers/stripe.ts`) : page de paiement hébergée par Stripe (carte, Apple Pay, Google Pay…), confirmation automatique par webhook `/api/payments/stripe/webhook` et au retour du client ; session expirée ou refusée = commande annulée et stock remis en vente ;
-  - **virement bancaire** (`providers/bank-transfer.ts`) : l'admin passe la commande en « payée » à réception.
-- **Console** : https://dashboard.stripe.com (compte en mode test) ; banque de la société pour le virement.
-- **Identifiants publics** : destination webhook Stripe `https://www.alohash.fr/api/payments/stripe/webhook` (4 événements `checkout.session.*`) ; coordonnées bancaires via `PAYMENT_BANK_*` (non renseignées : valeurs d'exemple).
-- **Secrets** : `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` (variables Vercel, clés de test) ; `PAYMENT_PROVIDERS` dans Vercel.
-- **Coût** : commissions Stripe par transaction, à vérifier dans la console. Le 25 septembre 2026, Stripe a fermé le compte ouvert pour l'ancienne activité CBD ; l'épicerie alimentaire doit être déclarée sur un compte Stripe (nouveau ou réactivé) avant les clés réelles.
+- **Rôle** : les boutons « Acheter » mènent à Amazon.fr (programme Partenaires, tag `kultiva-21`, `src/lib/amazon.ts`) ; Amazon encaisse et livre. Le panier et la commande par virement (`src/lib/payments/providers/bank-transfer.ts`) restent dans le code, masqués. Stripe n'est plus utilisé (compte fermé, code supprimé le 26 septembre 2026).
+- **Console** : https://partenaires.amazon.fr.
+- **Identifiants publics** : tag partenaire `kultiva-21` (`NEXT_PUBLIC_AMAZON_TAG` pour le changer).
+- **Secrets** : aucun.
+- **Coût** : gratuit ; commission versée par Amazon sur les achats.
 
 ### 7. Domaine
 

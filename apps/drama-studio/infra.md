@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Généré le 21 août 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
+Généré le 25 septembre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
 
 ## Vue d'ensemble
 
