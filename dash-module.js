@@ -33,6 +33,11 @@
   var TINTS = ['mint', 'peach', 'sun', 'sky', 'lilac'];
   function famTint(cat) { var i = DATA.categories.indexOf(cat); return TINTS[(i >= 0 ? i : 0) % TINTS.length]; }
   function appTint(app) { return TINTS[DATA.apps.indexOf(app) % TINTS.length]; }
+  // Un « site internet » est une app dont la seule plateforme est le Web
+  // (Avelor, Alohash, OptiLED, Keur Déco…) ; tout le reste est une appli.
+  function estSite(a) { var p = a.platforms || []; return p.length > 0 && p.every(function (x) { return x === 'Web'; }); }
+  function lesApplis() { return DATA.apps.filter(function (a) { return !estSite(a); }); }
+  function lesSites() { return DATA.apps.filter(estSite); }
   function fmtDate(iso, withTime) {
     if (!iso) return '';
     var d = new Date(iso);
@@ -126,12 +131,17 @@
     // Pas d'entrée « Vue d'ensemble » : cliquer « Mes apps » dans le rail y
     // mène toujours (voir l'accroche showPage plus bas), c'est le même geste.
     var h = '';
-    DATA.apps.forEach(function (a) {
+    var railApp = function (a) {
       h += '<button type="button" class="rail-item rail-sub' + (route.page === 'app' && route.id === a.id ? ' active' : '') +
         '" onclick="dashGo(\'app\',\'' + esc(a.id) + '\')" title="' + esc(a.name) + ' — ' + esc(ciInfo(a).label) + '">' +
         '<span class="ico">' + esc(a.emoji) + '<i class="dot ci-' + ciInfo(a).k + '"></i></span>' +
         '<span class="lbl">' + esc(a.name) + '</span></button>';
-    });
+    };
+    var applis = lesApplis(), sites = lesSites();
+    if (applis.length && sites.length) h += '<span class="rail-grp">Applis</span>';
+    applis.forEach(railApp);
+    if (sites.length) h += '<span class="rail-grp">Sites</span>';
+    sites.forEach(railApp);
     h += '<button type="button" class="rail-item rail-sub' + (route.page === 'catalogue' ? ' active' : '') +
       '" onclick="dashGo(\'catalogue\')"><span class="ico">▤</span><span class="lbl">Lexique</span></button>';
     slot.innerHTML = h;
@@ -148,7 +158,7 @@
     // L'info de synchro vivait dans l'ancienne barre latérale du module :
     // elle rejoint le sous-titre de la barre haute.
     var sync = fmtDate(DATA.generatedAt, true);
-    var titre = 'Mes apps', sous = DATA.apps.length + ' applications' + (sync ? ' · données du ' + sync : '');
+    var titre = 'Mes apps', sous = lesApplis().length + ' applis · ' + lesSites().length + ' sites' + (sync ? ' · données du ' + sync : '');
     if (route.page === 'app' && app) { titre = app.name; sous = (app.platforms || []).join(' · ') || 'Aucune plateforme'; }
     if (route.page === 'catalogue') { titre = 'Lexique'; sous = DATA.services.length + ' services · ' + DATA.categories.length + ' familles'; }
     var kos = DATA.apps.filter(function (a) { return ciInfo(a).k === 'ko'; });
@@ -198,15 +208,16 @@
     h += '</div>';
 
     h += '<div class="kpi-row">';
-    h += '<div class="tile kpi tint-mint rise" style="animation-delay:.08s"><span class="kpi-ico">📱</span><span class="kpi-lab">Applications</span><b>' + DATA.apps.length + '</b><small>' + DATA.apps.filter(function (a) { return a.repo; }).length + ' dépôts suivis</small></div>';
+    h += '<div class="tile kpi tint-mint rise" style="animation-delay:.08s"><span class="kpi-ico">📱</span><span class="kpi-lab">Applis & sites</span><b>' + DATA.apps.length + '</b><small>' + lesApplis().length + ' applis · ' + lesSites().length + ' sites</small></div>';
     h += '<div class="tile kpi tint-ok rise" style="animation-delay:.12s"><span class="kpi-ico">✅</span><span class="kpi-lab">Apps au vert</span><b>' + nbOk + '</b><small class="c-ok">' + (lastRun ? 'dernière vérif. ' + esc(fmtDate(lastRun.ts)) : 'aucune vérification') + '</small></div>';
     h += '<div class="tile kpi ' + (nbKo ? 'tint-ko' : 'tint-none') + ' rise" style="animation-delay:.16s"><span class="kpi-ico">' + (nbKo ? '⚠️' : '🧘') + '</span><span class="kpi-lab">Apps en erreur</span><b>' + nbKo + '</b><small class="' + (nbKo ? 'c-ko' : '') + '">' + (ko ? esc(ko.name) + (koC.date ? ' · ' + esc(koC.date) : '') : 'tout est au vert') + '</small></div>';
     h += '<div class="tile kpi tint-sky rise" style="animation-delay:.2s"><span class="kpi-ico">🗒️</span><span class="kpi-lab">Actions à faire</span><b>' + (total - faites) + '</b><small>' + faites + ' cochée' + (faites > 1 ? 's' : '') + '</small></div>';
     h += '</div>';
 
     h += '<div class="two-col">';
-    h += '<div class="tile rise" style="animation-delay:.22s"><div class="tile-h"><b>Mes applications</b><span>état de la vérification automatique du code (CI)</span></div><div class="rows" id="app-rows">';
-    DATA.apps.forEach(function (a, i) {
+    h += '<div class="tile rise" style="animation-delay:.22s"><div class="tile-h"><b>Mes applis & sites</b><span>état de la vérification automatique du code (CI)</span></div><div class="rows" id="app-rows">';
+    var iRow = 0;
+    var appRow = function (a) {
       var c = ciInfo(a), meta = [];
       meta.push((a.platforms || []).join(' · ') || 'Aucune plateforme');
       if (a.services.length) meta.push(a.services.length + ' services');
@@ -214,10 +225,16 @@
       var ages = [ficheAge(a.fiches && a.fiches.infra), ficheAge(a.fiches && a.fiches.marketing)]
         .filter(function (x) { return x !== null; });
       if (ages.length && Math.min.apply(null, ages) > FICHE_STALE_JOURS) meta.push('🔶 fiches à rafraîchir');
-      h += '<a class="row" data-dash-go="app/' + esc(a.id) + '" data-search="' + esc(norm(a.name + ' ' + a.tagline)) + '" style="animation-delay:' + (0.24 + i * 0.04).toFixed(2) + 's">' +
+      h += '<a class="row" data-dash-go="app/' + esc(a.id) + '" data-search="' + esc(norm(a.name + ' ' + a.tagline)) + '" style="animation-delay:' + (0.24 + iRow * 0.04).toFixed(2) + 's">' +
         '<span class="row-ico tint-' + appTint(a) + '">' + esc(a.emoji) + '</span>' +
         '<span class="row-txt"><b>' + esc(a.name) + '</b><small>' + esc(meta.join(' · ')) + '</small></span>' + ciPill(a) + '</a>';
-    });
+      iRow++;
+    };
+    var grpApplis = lesApplis(), grpSites = lesSites();
+    if (grpApplis.length && grpSites.length) h += '<div class="rows-grp">📱 Applis</div>';
+    grpApplis.forEach(appRow);
+    if (grpSites.length) h += '<div class="rows-grp">🌐 Sites internet</div>';
+    grpSites.forEach(appRow);
     h += '</div></div>';
     h += '<div class="tile rise" style="animation-delay:.26s"><div class="tile-h"><b>Prochaines actions</b><span>' + (total - faites) + ' restantes</span></div><div class="todos">';
     if (actions.length) {

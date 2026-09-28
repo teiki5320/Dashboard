@@ -165,6 +165,12 @@ html[data-anim="off"] *, html[data-anim="off"] *::before, html[data-anim="off"] 
 /* Les sous-entrées héritent exactement de la taille des boutons Accueil /
    Mes apps (.rail-item) — seule la pastille d'état s'ajoute en coin d'icône. */
 #gp-rail .rail-sub .ico { position: relative; overflow: visible; }
+/* Groupes du rail « Mes apps » : Applis / Sites */
+#gp-rail .rail-grp {
+    width: 100%; text-align: center; flex: none;
+    font-size: 8.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+    opacity: .55; margin: 8px 0 0;
+}
 #gp-rail .rail-sub .ico .dot {
     position: absolute; right: -3px; top: -3px;
     width: 11px; height: 11px; border-radius: 50%;
@@ -992,6 +998,12 @@ html[data-anim="off"] *, html[data-anim="off"] *::before, html[data-anim="off"] 
 
 /* Lignes d'apps */
 #page-dash .rows { display: flex; flex-direction: column; gap: 10px; }
+/* Sous-titres de groupe dans une liste de lignes (Applis / Sites internet) */
+#page-dash .rows .rows-grp {
+  font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--d-muted); margin: 6px 2px 0;
+}
+#page-dash .rows .rows-grp:first-child { margin-top: 0; }
 #page-dash .row {
   display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 10px 12px; border-radius: 20px;
   background: var(--d-card2); box-shadow: var(--d-clay-sm); cursor: pointer; animation: rise .5s cubic-bezier(.2, .8, .2, 1) both;
