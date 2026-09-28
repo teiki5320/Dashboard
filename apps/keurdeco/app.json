@@ -1,0 +1,10 @@
+{
+  "name": "Keur Déco",
+  "emoji": "🛋️",
+  "visible": true,
+  "order": 10,
+  "repo": "teiki5320/Keurdeco",
+  "platforms": ["Web"],
+  "tagline": "Décoration africaine : idées, guides et matières.",
+  "services": ["github", "hebergement-web", "affiliation", "reseaux-sociaux"]
+}
