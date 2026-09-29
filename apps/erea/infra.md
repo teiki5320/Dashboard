@@ -241,7 +241,7 @@ passe par le compte Google (+ double facteur).
 
 La marche à suivre complète est dans `docs/FICHE_PLAY_STORE.md`.
 
-**Où vivent les secrets :** la clé de signature `~/erea-upload.jks` et
+**Où vivent les secrets :** la clé de signature `erea_flutter/android/erea-upload.jks` (ignorée par git) et
 `erea_flutter/android/key.properties`, tous deux **hors dépôt**
 (`.gitignore` couvre `android/key.properties`, `*.jks`, `*.keystore`).
 Créée le 14 août 2026. ⚠️ La perdre interdit toute mise à jour de
@@ -271,7 +271,7 @@ cette dépendance disparaît avec lui.
 | Certificats et profils de signature iOS | Gérés automatiquement par Apple (signature dans le cloud) | Non |
 | Mot de passe Apple Developer / App Store Connect | Compte Apple du propriétaire (+ 2FA) | Non |
 | Accès en écriture au dépôt | Compte GitHub `teiki5320` | Non |
-| Keystore de signature Android | `~/erea-upload.jks` + `android/key.properties`, hors dépôt — **à sauvegarder ailleurs que sur le Mac** | Non |
+| Keystore de signature Android | `erea_flutter/android/erea-upload.jks` + `android/key.properties`, ignorés par git ; **copie de secours dans iCloud Drive → `Sauvegardes/erea-keystore/`** (29 septembre 2026) | Non |
 | Mot de passe du keystore | `android/key.properties`, hors dépôt | Non |
 | Accès Google Play Console / AdMob | Compte Google du propriétaire (+ 2FA) | Non |
 | Coordonnées bancaires | Saisies chez Apple ; chez Google après les premières recettes | Non |
@@ -303,7 +303,7 @@ Le dépôt peut être public sans risque : il ne contient aucun secret.
 7. `flutter build ipa --release`, ou laisser Xcode Cloud construire depuis `main`
 
 **Construire pour Android :**
-8. Restaurer `~/erea-upload.jks` depuis la sauvegarde, puis recréer
+8. Restaurer `erea-upload.jks` et `key.properties` depuis iCloud Drive (`Sauvegardes/erea-keystore/`) dans `erea_flutter/android/`, puis recréer
    `erea_flutter/android/key.properties` avec les chemins et mots de passe
 9. `flutter build appbundle --release`, puis vérifier le certificat (voir
    `docs/FICHE_PLAY_STORE.md` §1)

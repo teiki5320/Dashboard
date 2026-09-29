@@ -65,7 +65,7 @@ Généré le 25 septembre 2026 par un scan du dépôt. Pour mettre à jour : rel
 
 ### 7. Routine mensuelle (Claude Code)
 
-- **Rôle** : vérification mensuelle de la sélection de lampes Amazon (note, disponibilité, chiffres, date `verifie_le`), avec mise à jour de `src/data/lampes.json` et envoi sur `main`. Le 1er de chaque mois à 9 h (heure de Paris).
+- **Rôle** : vérification mensuelle de la sélection de lampes Amazon (bonne évaluation, disponibilité, chiffres, date `verifie_le` ; les notes et avis ne sont plus enregistrés), avec mise à jour de `src/data/lampes.json` et envoi sur `main`. Le 1er de chaque mois à 9 h (heure de Paris).
 - **Console** : https://claude.ai/code/routines
 - **Identifiants publics** : aucun dans le code.
 - **Secrets** : aucun dans le dépôt.
