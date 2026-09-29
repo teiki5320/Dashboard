@@ -65,3 +65,9 @@ Mis à jour le 25 septembre 2026. Compagnon de INFRA.md.
 - ⬜ Vérifier que la routine mensuelle arrive à publier ses mises à jour
 - ⬜ Choisir et activer une mesure d'audience (Plausible prévu dans le code), puis mettre à jour la rubrique cookies des mentions légales
 - ⬜ Faire connaître le site dans les communautés de culture en intérieur
+
+## Pinterest
+
+- 12 épingles verticales (1000 × 1500) dans `public/images/pinterest/`, générées par `node scripts/epingles.mjs` à partir des photos et schémas du site (aucun crédit OpenArt).
+- Import groupé : `docs/pinterest.csv` (titre, adresse de l'image, tableau « Culture indoor sous LED », description, lien). Sur Pinterest : compte professionnel → Créer → Créer des épingles en masse → importer le fichier.
+- Pour en ajouter : compléter la liste `EPINGLES` du script, relancer, publier sur main, puis importer les nouvelles lignes.

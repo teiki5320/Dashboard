@@ -6,12 +6,12 @@
 
 | Version | En production ? | URL | Hébergeur |
 | --- | --- | --- | --- |
-| Web — Keur Cook (recettes, conseils, boutique) | En préparation : bascule vers Cloudflare à terminer (voir « À faire ») ; **maintenance activée** (écran « On prépare la marmite », pages en `noindex`, sitemap vide) | https://keurcook.com (`www` redirigé) | Cloudflare Pages (projet `keurcook`) |
+| Web — Keur Cook (recettes, conseils, boutique) | En ligne sur Cloudflare Pages ; **maintenance activée** (écran « On prépare la marmite », pages en `noindex`, sitemap vide) | https://keurcook.com (`www` redirigé) | Cloudflare Pages (projet `keurcook`) |
 
 Site 100 % statique (Next.js `output: "export"`, dossier `out/`), sans serveur ni base de données. Il est construit et publié par GitHub Actions (`.github/workflows/deploy.yml`, « Publier le site ») :
 
 - à chaque push sur `main` ;
-- chaque lundi à 0 h 15 (cron), pour publier les articles « Conseils » programmés ;
+- chaque lundi à 0 h 15, heure de Paris en hiver (1 h 15 en été ; cron), pour publier les articles « Conseils » programmés ;
 - à la main (onglet **Actions → Publier le site → Run workflow**) ;
 - après le bouton « Maintenance ».
 
@@ -27,11 +27,11 @@ Pendant la maintenance : écran « On prépare la marmite », pages en `noindex`
 
 ## Domaine, e-mail & SSL
 
-- **Domaine** : `keurcook.com` chez Cloudflare, à relier au projet Pages `keurcook` (avec `www`).
+- **Domaine** : `keurcook.com` chez Cloudflare, relié au projet Pages `keurcook` (SSL actif) ; `www.keurcook.com` redirigé vers `keurcook.com`.
 - **E-mail** : `contact@keurcook.com`, renvoyé par Cloudflare Email Routing vers `contact@alohash.fr` (boîte IONOS conservée).
 - **Ancien domaine** : `alohash.fr` reste chez IONOS pour la messagerie (MX, SPF, DKIM, DMARC à ne pas toucher) ; aucun site n'y est plus publié (pas de redirection).
 - **SSL** : certificat HTTPS géré par Cloudflare ; en-têtes de sécurité (CSP, HSTS…) dans `public/_headers`.
-- **Redirections** : `public/_redirects` (`/cgv`, `/categorie/:slug`, anciennes pages `/panier`, `/commande`, `/admin`…).
+- **Redirections** : `public/_redirects` (`/cgv`, `/categorie/<gamme>` (une règle par gamme), anciennes pages `/panier`, `/commande`, `/admin`…).
 
 ## Visibilité
 

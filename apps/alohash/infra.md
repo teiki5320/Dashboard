@@ -13,9 +13,9 @@ Mis à jour le 29 septembre 2026 par un scan du dépôt. Pour mettre à jour : r
   - liste des allégations de santé interdites (`src/lib/compliance.ts`) ;
   - étiquetage alimentaire sur chaque produit (ingrédients, allergènes, conservation) ;
   - mode maintenance piloté par le bouton « Maintenance » de GitHub Actions ; en maintenance, pages en `noindex` et sitemap vide ;
-  - en-têtes de sécurité (CSP, HSTS, `X-Frame-Options`, `nosniff`…) dans `public/_headers` ; redirections (`/cgv`, `/categorie/:slug`, anciennes pages `/panier`, `/commande`, `/admin`…) dans `public/_redirects` ;
+  - en-têtes de sécurité (CSP, HSTS, `X-Frame-Options`, `nosniff`…) dans `public/_headers` ; redirections (`/cgv`, `/categorie/<gamme>` (une règle par gamme), anciennes pages `/panier`, `/commande`, `/admin`…) dans `public/_redirects` ;
   - favoris stockés dans le navigateur (aucun compte) ;
-  - liens Amazon construits par `src/lib/amazon.ts` (tag `keurcook-21`, champ `amazon_asin`) ; prix indicatifs relevés le 27/09/2026.
+  - liens Amazon construits par `src/lib/amazon.ts` (tag `keurcook-21`, champ `amazonAsin` (rempli depuis les offres de `src/lib/demo/catalog*.ts`)) ; prix indicatifs relevés le 27/09/2026.
 
 ### 1. GitHub
 
