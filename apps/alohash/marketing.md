@@ -23,13 +23,12 @@ Affiliation Amazon Partenaires : les boutons « Acheter · prix » mènent à Am
 | 1. Lancement | Boutique : 91 produits, 8 gammes, boutons « Acheter · prix » vers Amazon.fr | ✅ |
 | 1. Lancement | Rubrique « Conseils », un article chaque lundi | ✅ (67 articles programmés) |
 | 2. Conversion | Bouton d'achat Amazon sur les ingrédients des recettes | ✅ |
-| 2. Conversion | Avis des visiteurs (validés dans l'admin) | ✅ |
 | 2. Conversion | Mise à jour régulière des prix indicatifs | ⬜ (relevé manuel) |
 | 3. Fidélisation | Newsletter « la recette de la semaine » | ✅ collecte des inscrits et export CSV ; ⬜ envoi (Brevo à brancher) |
 
 ## Canaux
 
-- **Référencement naturel** : sitemap avec les recettes, les pages pays et les articles publiés, données structurées Google « Recipe » (temps, ingrédients, étapes, note des avis) et « Product ». ✅ dans le code, sur https://www.alohash.fr (sitemap vide tant que le site est en maintenance ; la vitrine GitHub Pages est en `noindex`).
+- **Référencement naturel** : sitemap avec les recettes, les pages pays et les articles publiés, données structurées Google « Recipe » (temps, ingrédients, étapes) et « Product ». ✅ dans le code, sur https://www.alohash.fr (sitemap vide tant que le site est en maintenance ; la vitrine GitHub Pages est en `noindex`).
 - **Contenu régulier** : un article « Conseils » chaque lundi, publié automatiquement. ✅
 - **Partage** : bouton « Partager sur WhatsApp » et version imprimable sur chaque recette. ✅
 - **E-mail** : newsletter (inscription sur l'accueil et l'écran de maintenance), outil d'envoi à brancher. ⬜
@@ -42,7 +41,6 @@ Aucun outil de mesure d'audience n'est installé ; la bannière cookies est une 
 
 | Indicateur | Source | Valeur |
 | --- | --- | --- |
-| Recettes publiées, avis à valider, inscrits newsletter, produits en ligne | Admin → Tableau de bord | à vérifier dans la console |
 | Clics, achats et commissions Amazon | https://partenaires.amazon.fr | à vérifier dans la console |
 | Visites, recettes et articles les plus vus | Outil de mesure d'audience (à installer) | à vérifier dans la console |
 
@@ -58,7 +56,7 @@ Articles « Conseils » : un chaque lundi du 20/07/2026 au 25/10/2027 (`docs/CON
 
 - ✅ Site de recettes africaines (46 recettes, 16 pays) et rubrique « Conseils » (67 articles programmés)
 - ✅ Boutique de 91 produits vers Amazon Partenaires (tag kultiva-21)
-- ✅ Admin : recettes, produits (ASIN Amazon), avis, newsletter, maintenance
+- ✅ Admin : mise en maintenance du site
 - ⬜ Désactiver la maintenance et déclarer le site à Google Search Console
 - ⬜ Brancher l'envoi de la newsletter (Brevo)
 - ⬜ Mettre à jour les prix indicatifs régulièrement
