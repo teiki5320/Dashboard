@@ -6,19 +6,18 @@ Généré le 28 septembre 2026 par un scan du dépôt. Pour mettre à jour : rel
 
 - **Plateforme** : site web en français de recettes de plats africains (46 recettes, 16 pays), rubrique « Conseils » (articles Markdown dans `content/conseils/`, un par lundi, publication programmée) et boutique de 91 produits en 8 gammes dont les boutons « Acheter · prix » mènent à Amazon.fr (programme Partenaires). Le site ne vend rien lui-même.
 - **Stack** : Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · Zod (validation) · Three.js (carte de l'Afrique en particules) · Marked (articles Markdown).
-- **Backend** : fonctions serveur Next.js (Server Actions, route handlers) ; base PostgreSQL chez Neon via le pilote `@neondatabase/serverless` (`src/lib/db/`) ; envoi de photos depuis l'admin vers Vercel Blob (`src/app/admin/upload/route.ts`). Sans `DATABASE_URL`, le site tourne en mode démo avec les données de `src/lib/demo/`.
+- **Backend** : fonctions serveur Next.js (Server Actions, route handlers) ; base PostgreSQL chez Neon via le pilote `@neondatabase/serverless` (`src/lib/db/`). Sans `DATABASE_URL`, le site tourne en mode démo avec les données de `src/lib/demo/`.
 - **Distribution** : deux versions publiées depuis la branche `main` :
-  - site de référence sur Vercel (`www.alohash.fr` : recettes, conseils, boutique, avis, newsletter, espace admin) ;
-  - vitrine de démonstration sur GitHub Pages (`npm run build:pages`), en `noindex`, sans avis, newsletter ni admin.
+  - site de référence sur Vercel (`www.alohash.fr` : recettes, conseils, boutique, newsletter, espace admin de mise en maintenance) ;
+  - vitrine de démonstration sur GitHub Pages (`npm run build:pages`), en `noindex`, sans newsletter ni admin.
 - **Particularités** :
   - pages légales `/conditions` (CGU ; `/cgv` y redirige), `/mentions-legales`, `/confidentialite` ; bannière cookies d'information (cookies nécessaires seulement) ;
-  - blocage des allégations de santé à l'enregistrement d'un produit ou d'une recette (`src/lib/compliance.ts`) ;
-  - étiquetage alimentaire sur chaque produit (ingrédients, allergènes, conservation), obligatoire pour publier ;
-  - avis des visiteurs publiés seulement après validation dans l'admin ;
-  - espace admin protégé par un mot de passe unique et un cookie signé de 7 jours (`src/lib/admin-session.ts`, `src/proxy.ts`) ;
-  - limitation des tentatives (table `rate_limits`, IP hachée) : connexion admin 5 par 15 min, avis et newsletter 5 par heure (`src/lib/rate-limit.ts`) ;
+  - liste des allégations de santé interdites (`src/lib/compliance.ts`) ;
+  - étiquetage alimentaire sur chaque produit (ingrédients, allergènes, conservation) ;
+  - espace admin (mise en maintenance uniquement) protégé par un mot de passe unique et un cookie signé de 7 jours (`src/lib/admin-session.ts`, `src/proxy.ts`) ;
+  - limitation des tentatives (table `rate_limits`, IP hachée) : connexion admin 5 par 15 min, newsletter 5 par heure (`src/lib/rate-limit.ts`) ;
   - CSP et HSTS dans `next.config.ts` ; en maintenance, pages en `noindex` et sitemap vide ;
-  - liens Amazon construits par `src/lib/amazon.ts` (tag `kultiva-21`, champ `amazon_asin` en base et dans l'admin) ; prix indicatifs relevés le 27/09/2026.
+  - liens Amazon construits par `src/lib/amazon.ts` (tag `kultiva-21`, champ `amazon_asin`) ; prix indicatifs relevés le 27/09/2026.
 
 ### 1. GitHub
 
@@ -38,21 +37,13 @@ Généré le 28 septembre 2026 par un scan du dépôt. Pour mettre à jour : rel
 
 ### 3. Neon (base de données PostgreSQL)
 
-- **Rôle** : recettes, avis (à valider), inscrits à la newsletter, catalogue (gammes, produits, variantes, ASIN Amazon), réglages (maintenance) et limitation des tentatives (`rate_limits`).
+- **Rôle** : recettes, inscrits à la newsletter, catalogue (gammes, produits, variantes, ASIN Amazon), réglages (maintenance) et limitation des tentatives (`rate_limits`).
 - **Console** : https://console.neon.tech, projet `alohash`.
 - **Identifiants publics** : région AWS Europe Central 1 (Francfort) ; schéma dans `db/schema.sql`, données de démo dans `db/seed.sql`.
 - **Secrets** : chaîne de connexion dans `DATABASE_URL` (variables Vercel ; en local, `.env.local`, non versionné).
 - **Coût** : offre gratuite ; limites à vérifier dans la console.
 
-### 4. Vercel Blob (fichiers)
-
-- **Rôle** : prévu pour les photos des produits et des recettes envoyées depuis l'admin, par URL présignée. Non utilisé pour l'instant : le stockage relié est en accès Private, et les photos sont ajoutées directement dans le dépôt (`public/products`, `public/recipes`, `public/conseils`).
-- **Console** : Vercel → projet `alohash` → Storage.
-- **Identifiants publics** : `BLOB_STORE_ID` (ajouté par Vercel lors de la liaison du stockage) ; images servies depuis `*.public.blob.vercel-storage.com` (`next.config.ts`).
-- **Secrets** : aucun sur Vercel (accès par OIDC) ; hors Vercel, `BLOB_READ_WRITE_TOKEN`.
-- **Coût** : à vérifier dans la console.
-
-### 5. Amazon Partenaires
+### 4. Amazon Partenaires
 
 - **Rôle** : les boutons « Acheter · prix » mènent à Amazon.fr (programme Partenaires, tag `kultiva-21`, `src/lib/amazon.ts`) ; Amazon encaisse et livre. Produits retenus : plus de 3,5 étoiles sur Amazon ; prix indicatifs relevés le 27/09/2026.
 - **Console** : https://partenaires.amazon.fr.
@@ -60,7 +51,7 @@ Généré le 28 septembre 2026 par un scan du dépôt. Pour mettre à jour : rel
 - **Secrets** : aucun.
 - **Coût** : gratuit ; commission versée par Amazon sur les achats.
 
-### 6. Domaine
+### 5. Domaine
 
 - **Rôle** : adresse du site, `www.alohash.fr` (principale) ; `alohash.fr` redirige vers `www`.
 - **Console** : IONOS (Domaines & SSL → alohash.fr → DNS) et Vercel (projet alohash → Domains).
@@ -68,7 +59,7 @@ Généré le 28 septembre 2026 par un scan du dépôt. Pour mettre à jour : rel
 - **Secrets** : aucun dans le dépôt (accès au compte IONOS hors dépôt).
 - **Coût** : à vérifier dans la console IONOS.
 
-### 7. Photos (OpenArt)
+### 6. Photos (OpenArt)
 
 - **Rôle** : photos des recettes, des produits et des articles « Conseils », générées avec OpenArt (modèle Seedream 4.5), converties en WebP dans `public/recipes`, `public/products` et `public/conseils`.
 - **Console** : https://openart.ai.

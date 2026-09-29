@@ -7,7 +7,7 @@
 | Version | En production ? | URL | Hébergeur |
 | --- | --- | --- | --- |
 | Web — site de référence (recettes, conseils, boutique) | Oui, en préouverture : **en maintenance** (écran « On prépare la marmite », pages en `noindex`, sitemap vide) | https://www.alohash.fr (aussi https://alohash.vercel.app) | Vercel (plan Hobby), base Neon |
-| Web — vitrine de démonstration | Oui, copie en `noindex` (avis, newsletter et admin désactivés) | https://teiki5320.github.io/alohash/ | GitHub Pages |
+| Web — vitrine de démonstration | Oui, copie en `noindex` (newsletter et admin désactivés) | https://teiki5320.github.io/alohash/ | GitHub Pages |
 
 Le site de référence est redéployé à chaque push sur `main` ; la vitrine est reconstruite à chaque push et chaque lundi (cron), pour publier les articles « Conseils » programmés.
 
@@ -36,6 +36,6 @@ Contenu : 46 recettes (16 pays), 67 articles « Conseils » programmés du 20/07
 
 1. Relire les pages légales (`/conditions`, `/mentions-legales`, `/confidentialite`) et compléter les variables `NEXT_PUBLIC_LEGAL_*`.
 2. Vérifier que le plan Vercel convient aux revenus d'affiliation (Hobby réservé au non commercial).
-3. Désactiver le mode maintenance (Admin → Maintenance) pour ouvrir le site.
+3. Désactiver le mode maintenance (page `/admin`) pour ouvrir le site.
 4. Déclarer le site dans Google Search Console, brancher l'envoi de la newsletter.
 5. Mettre à jour régulièrement les prix indicatifs des produits.
