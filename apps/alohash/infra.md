@@ -1,68 +1,60 @@
 # INFRA — fiche technique
 
-Généré le 28 septembre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
+Mis à jour le 29 septembre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
 
 ## Vue d'ensemble
 
-- **Plateforme** : site web en français de recettes de plats africains (46 recettes, 16 pays), rubrique « Conseils » (articles Markdown dans `content/conseils/`, un par lundi, publication programmée) et boutique de 91 produits en 8 gammes dont les boutons « Acheter · prix » mènent à Amazon.fr (programme Partenaires). Le site ne vend rien lui-même.
-- **Stack** : Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · Zod (validation) · Three.js (carte de l'Afrique en particules) · Marked (articles Markdown).
-- **Backend** : fonctions serveur Next.js (Server Actions, route handlers) ; base PostgreSQL chez Neon via le pilote `@neondatabase/serverless` (`src/lib/db/`). Sans `DATABASE_URL`, le site tourne en mode démo avec les données de `src/lib/demo/`.
-- **Distribution** : deux versions publiées depuis la branche `main` :
-  - site de référence sur Vercel (`www.alohash.fr` : recettes, conseils, boutique, newsletter, espace admin de mise en maintenance) ;
-  - vitrine de démonstration sur GitHub Pages (`npm run build:pages`), en `noindex`, sans newsletter ni admin.
+- **Plateforme** : site web en français **Keur Cook** (anciennement Alohash) de recettes de plats africains (46 recettes, 16 pays), rubrique « Conseils » (articles Markdown dans `content/conseils/`, un par lundi, publication programmée) et boutique de 91 produits en 8 gammes dont les boutons « Acheter · prix » mènent à Amazon.fr (programme Partenaires). Le site ne vend rien lui-même. Éditeur : ALOHASH (SAS).
+- **Stack** : Next.js 16 (App Router, `output: "export"`) · React 19 · TypeScript · Tailwind CSS 4 · Three.js (carte de l'Afrique en particules) · Marked (articles Markdown).
+- **Backend** : aucun. Site 100 % statique (dossier `out/`) : pas de serveur, pas de base de données, pas d'espace admin. Recettes et produits dans `src/lib/demo/`, articles dans `content/conseils/`, mode maintenance dans `content/maintenance.json` (lu au build).
+- **Distribution** : une seule version, https://keurcook.com (`www` redirigé), publiée sur Cloudflare Pages par GitHub Actions depuis la branche `main`.
 - **Particularités** :
-  - pages légales `/conditions` (CGU ; `/cgv` y redirige), `/mentions-legales`, `/confidentialite` ; bannière cookies d'information (cookies nécessaires seulement) ;
+  - pages légales `/conditions` (CGU ; `/cgv` y redirige), `/mentions-legales`, `/confidentialite`, groupe de routes `src/app/(legal)` accessible même en maintenance ; hébergeur indiqué : Cloudflare, Inc. ; bannière cookies d'information (cookies nécessaires seulement) ;
   - liste des allégations de santé interdites (`src/lib/compliance.ts`) ;
   - étiquetage alimentaire sur chaque produit (ingrédients, allergènes, conservation) ;
-  - espace admin (mise en maintenance uniquement) protégé par un mot de passe unique et un cookie signé de 7 jours (`src/lib/admin-session.ts`, `src/proxy.ts`) ;
-  - limitation des tentatives (table `rate_limits`, IP hachée) : connexion admin 5 par 15 min, newsletter 5 par heure (`src/lib/rate-limit.ts`) ;
-  - CSP et HSTS dans `next.config.ts` ; en maintenance, pages en `noindex` et sitemap vide ;
-  - liens Amazon construits par `src/lib/amazon.ts` (tag `kultiva-21`, champ `amazon_asin`) ; prix indicatifs relevés le 27/09/2026.
+  - mode maintenance piloté par le bouton « Maintenance » de GitHub Actions ; en maintenance, pages en `noindex` et sitemap vide ;
+  - en-têtes de sécurité (CSP, HSTS, `X-Frame-Options`, `nosniff`…) dans `public/_headers` ; redirections (`/cgv`, `/categorie/:slug`, anciennes pages `/panier`, `/commande`, `/admin`…) dans `public/_redirects` ;
+  - favoris stockés dans le navigateur (aucun compte) ;
+  - liens Amazon construits par `src/lib/amazon.ts` (tag `keurcook-21`, champ `amazon_asin`) ; prix indicatifs relevés le 27/09/2026.
 
 ### 1. GitHub
 
-- **Rôle** : dépôt du code et publication automatique de la vitrine de démonstration (workflow `.github/workflows/pages.yml` : lint, types, tests, build, déploiement à chaque push sur `main` et chaque lundi à 0 h 15 par cron, pour publier les articles programmés).
-- **Console** : https://github.com/teiki5320/alohash (Actions, Settings → Pages).
-- **Identifiants publics** : dépôt `teiki5320/alohash` ; vitrine https://teiki5320.github.io/alohash/.
-- **Secrets** : aucun secret utilisé par le workflow.
+- **Rôle** : dépôt du code et publication automatique.
+  - `.github/workflows/deploy.yml` (« Publier le site ») : lint, types, tests, build, puis `wrangler pages deploy out --project-name=keurcook` ; à chaque push sur `main`, chaque lundi à 0 h 15 (cron, articles programmés), à la main et après la maintenance.
+  - `.github/workflows/maintenance.yml` (« Maintenance ») : choix Oui/Non et message facultatif ; modifie `content/maintenance.json`, l'enregistre sur `main` et relance la publication.
+- **Console** : https://github.com/teiki5320/keurcook (Actions, Settings → Secrets and variables → Actions).
+- **Identifiants publics** : dépôt `teiki5320/keurcook` (anciennement `teiki5320/alohash`).
+- **Secrets** : `CLOUDFLARE_API_TOKEN` (jeton API Cloudflare, droit Cloudflare Pages : Edit) et `CLOUDFLARE_ACCOUNT_ID`, dans les secrets Actions du dépôt. Sans eux, le workflow affiche un avertissement et ne publie pas.
 - **Coût** : à vérifier dans la console.
 
-### 2. Vercel (site de référence)
+### 2. Cloudflare
 
-- **Rôle** : héberge le site de référence ; redéploie à chaque push sur `main` (dépôt relié au projet).
-- **Console** : https://vercel.com, projet `alohash`, équipe `teiki5320-2617s-projects`.
-- **Identifiants publics** : https://www.alohash.fr (domaine principal) et https://alohash.vercel.app.
-- **Secrets** : dans les variables d'environnement du projet Vercel (Environment Variables) : `DATABASE_URL`, `ADMIN_PASSWORD`. Variable publique : `NEXT_PUBLIC_SITE_URL`. Liste complète des variables attendues : `.env.example`.
-- **Coût** : plan Hobby (gratuit). Les conditions de Vercel réservent Hobby à un usage non commercial : à vérifier avec les revenus d'affiliation (plan Pro éventuellement nécessaire).
+- **Rôle** : hébergement du site (Cloudflare Pages, projet `keurcook`, envoi direct depuis GitHub Actions), domaine `keurcook.com` et Cloudflare Email Routing (`contact@keurcook.com` renvoyé vers `contact@alohash.fr`). Sert aussi les en-têtes (`public/_headers`) et les redirections (`public/_redirects`).
+- **Console** : https://dash.cloudflare.com (Workers & Pages → keurcook ; keurcook.com → DNS, Email Routing).
+- **Identifiants publics** : https://keurcook.com (domaine principal), `www.keurcook.com` redirigé.
+- **Secrets** : jeton API et identifiant de compte, uniquement dans les secrets GitHub (voir ci-dessus).
+- **Coût** : à vérifier dans la console.
 
-### 3. Neon (base de données PostgreSQL)
+### 3. IONOS
 
-- **Rôle** : recettes, inscrits à la newsletter, catalogue (gammes, produits, variantes, ASIN Amazon), réglages (maintenance) et limitation des tentatives (`rate_limits`).
-- **Console** : https://console.neon.tech, projet `alohash`.
-- **Identifiants publics** : région AWS Europe Central 1 (Francfort) ; schéma dans `db/schema.sql`, données de démo dans `db/seed.sql`.
-- **Secrets** : chaîne de connexion dans `DATABASE_URL` (variables Vercel ; en local, `.env.local`, non versionné).
-- **Coût** : offre gratuite ; limites à vérifier dans la console.
-
-### 4. Amazon Partenaires
-
-- **Rôle** : les boutons « Acheter · prix » mènent à Amazon.fr (programme Partenaires, tag `kultiva-21`, `src/lib/amazon.ts`) ; Amazon encaisse et livre. Produits retenus : plus de 3,5 étoiles sur Amazon ; prix indicatifs relevés le 27/09/2026.
-- **Console** : https://partenaires.amazon.fr.
-- **Identifiants publics** : tag partenaire `kultiva-21` (`NEXT_PUBLIC_AMAZON_TAG` pour le changer).
-- **Secrets** : aucun.
-- **Coût** : gratuit ; commission versée par Amazon sur les achats.
-
-### 5. Domaine
-
-- **Rôle** : adresse du site, `www.alohash.fr` (principale) ; `alohash.fr` redirige vers `www`.
-- **Console** : IONOS (Domaines & SSL → alohash.fr → DNS) et Vercel (projet alohash → Domains).
-- **Identifiants publics** : A `@` et CNAME `www` pointés vers Vercel ; messagerie IONOS (MX, SPF, DKIM, DMARC) sur le même domaine, adresse `contact@alohash.fr`.
+- **Rôle** : domaine `alohash.fr` et messagerie (boîte `contact@alohash.fr`, qui reçoit aussi les messages envoyés à `contact@keurcook.com`). Le domaine ne sert plus qu'à la messagerie : aucun site n'y est publié (choix du propriétaire, pas de redirection).
+- **Console** : IONOS (Domaines & SSL → alohash.fr ; E-mail).
+- **Identifiants publics** : enregistrements de messagerie (MX, SPF, DKIM, DMARC) sur `alohash.fr`, à conserver.
 - **Secrets** : aucun dans le dépôt (accès au compte IONOS hors dépôt).
 - **Coût** : à vérifier dans la console IONOS.
 
-### 6. Photos (OpenArt)
+### 4. Amazon Partenaires
 
-- **Rôle** : photos des recettes, des produits et des articles « Conseils », générées avec OpenArt (modèle Seedream 4.5), converties en WebP dans `public/recipes`, `public/products` et `public/conseils`.
+- **Rôle** : les boutons « Acheter · prix » mènent à Amazon.fr (programme Partenaires, tag `keurcook-21`, `src/lib/amazon.ts`) ; Amazon encaisse et livre. Produits retenus : plus de 3,5 étoiles sur Amazon ; prix indicatifs relevés le 27/09/2026. `keurcook.com` doit être ajouté à la liste des sites du compte.
+- **Console** : https://partenaires.amazon.fr.
+- **Identifiants publics** : tag partenaire `keurcook-21` (`NEXT_PUBLIC_AMAZON_TAG` pour le changer).
+- **Secrets** : aucun.
+- **Coût** : gratuit ; commission versée par Amazon sur les achats.
+
+### 5. Photos (OpenArt)
+
+- **Rôle** : photos OpenArt des recettes, des produits et des articles « Conseils », converties en WebP dans `public/recipes`, `public/products` et `public/conseils`.
 - **Console** : https://openart.ai.
 - **Identifiants publics** : aucun.
 - **Secrets** : aucun dans le dépôt.
-- **Coût** : crédits OpenArt (15 crédits par image au réglage utilisé).
+- **Coût** : crédits OpenArt.

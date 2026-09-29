@@ -1,41 +1,61 @@
 # PUBLICATION — état de la mise en ligne
 
-> Généré le 28 septembre 2026. Aucun secret ici.
+> Mis à jour le 29 septembre 2026. Aucun secret ici.
 
 ## Vue d'ensemble
 
 | Version | En production ? | URL | Hébergeur |
 | --- | --- | --- | --- |
-| Web — site de référence (recettes, conseils, boutique) | Oui, en préouverture : **en maintenance** (écran « On prépare la marmite », pages en `noindex`, sitemap vide) | https://www.alohash.fr (aussi https://alohash.vercel.app) | Vercel (plan Hobby), base Neon |
-| Web — vitrine de démonstration | Oui, copie en `noindex` (newsletter et admin désactivés) | https://teiki5320.github.io/alohash/ | GitHub Pages |
+| Web — Keur Cook (recettes, conseils, boutique) | En préparation : bascule vers Cloudflare à terminer (voir « À faire ») ; **maintenance activée** (écran « On prépare la marmite », pages en `noindex`, sitemap vide) | https://keurcook.com (`www` redirigé) | Cloudflare Pages (projet `keurcook`) |
 
-Le site de référence est redéployé à chaque push sur `main` ; la vitrine est reconstruite à chaque push et chaque lundi (cron), pour publier les articles « Conseils » programmés.
+Site 100 % statique (Next.js `output: "export"`, dossier `out/`), sans serveur ni base de données. Il est construit et publié par GitHub Actions (`.github/workflows/deploy.yml`, « Publier le site ») :
 
-Contenu : 46 recettes (16 pays), 67 articles « Conseils » programmés du 20/07/2026 au 25/10/2027, 91 produits en 8 gammes dont les boutons « Acheter · prix » mènent à Amazon.fr (tag `kultiva-21`, prix indicatifs relevés le 27/09/2026). Le site ne vend rien lui-même.
+- à chaque push sur `main` ;
+- chaque lundi à 0 h 15 (cron), pour publier les articles « Conseils » programmés ;
+- à la main (onglet **Actions → Publier le site → Run workflow**) ;
+- après le bouton « Maintenance ».
 
-## Domaine & SSL
+Étapes : lint, types, tests, build, puis `wrangler pages deploy out --project-name=keurcook`. Sans les secrets GitHub `CLOUDFLARE_API_TOKEN` et `CLOUDFLARE_ACCOUNT_ID`, le workflow affiche un avertissement et ne publie rien.
 
-- **Domaine** : `www.alohash.fr` (adresse principale), relié au projet Vercel le 25 septembre 2026 ; `alohash.fr` redirige vers `www.alohash.fr` (redirection 308).
-- **DNS** : chez IONOS. Enregistrement A de `alohash.fr` et CNAME de `www` vers Vercel ; enregistrements de messagerie IONOS (MX, SPF, DKIM, DMARC) conservés.
-- **SSL** : certificat HTTPS généré automatiquement par Vercel ; HSTS et CSP envoyés par le site (`next.config.ts`).
-- `alohash.vercel.app` reste accessible en parallèle (redirection vers le domaine possible plus tard).
+Contenu : 46 recettes (16 pays), 67 articles « Conseils » programmés du 20/07/2026 au 25/10/2027, 91 produits en 8 gammes dont les boutons « Acheter · prix » mènent à Amazon.fr (tag `keurcook-21`, prix indicatifs relevés le 27/09/2026). Le site ne vend rien lui-même.
+
+## Maintenance
+
+Onglet **Actions → Maintenance → Run workflow** : choisir « Oui, mettre en pause » ou « Non, rouvrir le site », avec un message facultatif. Le workflow modifie `content/maintenance.json`, l'enregistre sur `main` et republie le site.
+
+Pendant la maintenance : écran « On prépare la marmite », pages en `noindex`, sitemap vide. Les pages légales (`/mentions-legales`, `/confidentialite`, `/conditions`) restent accessibles.
+
+## Domaine, e-mail & SSL
+
+- **Domaine** : `keurcook.com` chez Cloudflare, à relier au projet Pages `keurcook` (avec `www`).
+- **E-mail** : `contact@keurcook.com`, renvoyé par Cloudflare Email Routing vers `contact@alohash.fr` (boîte IONOS conservée).
+- **Ancien domaine** : `alohash.fr` reste chez IONOS pour la messagerie (MX, SPF, DKIM, DMARC à ne pas toucher) ; aucun site n'y est plus publié (pas de redirection).
+- **SSL** : certificat HTTPS géré par Cloudflare ; en-têtes de sécurité (CSP, HSTS…) dans `public/_headers`.
+- **Redirections** : `public/_redirects` (`/cgv`, `/categorie/:slug`, anciennes pages `/panier`, `/commande`, `/admin`…).
 
 ## Visibilité
 
-- **Référencement** : sitemap (`/sitemap.xml` : recettes, pays, articles publiés ; vide en maintenance), robots.txt (admin exclu), métadonnées Open Graph et données JSON-LD (Recipe, Product) présents dans le code.
-  - `NEXT_PUBLIC_SITE_URL` vaut `https://www.alohash.fr` sur Vercel : sitemap, robots.txt et liens canoniques utilisent le domaine.
-  - Inscription à Google Search Console : à vérifier dans la console.
+- **Référencement** : sitemap (`/sitemap.xml` : recettes, pays, articles publiés ; vide en maintenance), robots.txt, métadonnées Open Graph et données JSON-LD (Recipe, Product) présents dans le code. Le build de production utilise `NEXT_PUBLIC_SITE_URL=https://keurcook.com`.
+  - Inscription à Google Search Console : à faire.
 - **Analytics** : aucun outil installé ; bannière cookies d'information (cookies nécessaires seulement).
-- **Accès** : `www.alohash.fr` et `alohash.vercel.app` sont publiques ; pendant la maintenance, les visiteurs voient l'écran « Maintenance ».
+- **Newsletter** : aucune ; formulaire retiré en attendant le choix d'un outil (Brevo envisagé, non confirmé).
 
 ## Vérifications avant envoi
 
-`npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, `npm run build:pages`.
+`npm run lint`, `npm run typecheck`, `npm test`, `npm run build`.
 
-## Ce qui reste, dans l'ordre
+## À faire
 
-1. Relire les pages légales (`/conditions`, `/mentions-legales`, `/confidentialite`) et compléter les variables `NEXT_PUBLIC_LEGAL_*`.
-2. Vérifier que le plan Vercel convient aux revenus d'affiliation (Hobby réservé au non commercial).
-3. Désactiver le mode maintenance (page `/admin`) pour ouvrir le site.
-4. Déclarer le site dans Google Search Console, brancher l'envoi de la newsletter.
-5. Mettre à jour régulièrement les prix indicatifs des produits.
+Mise en route (propriétaire) :
+
+- [x] Première publication faite le 29 septembre 2026 (https://keurcook.pages.dev, projet créé automatiquement) ; `keurcook.com` relié (SSL actif) et `www.keurcook.com` redirigé vers `keurcook.com` (règle de redirection Cloudflare « Rediriger de WWW vers la racine », 301, chaîne de requête conservée).
+- [x] Créer un jeton API Cloudflare (droit **Cloudflare Pages : Edit**), puis ajouter les secrets `CLOUDFLARE_API_TOKEN` et `CLOUDFLARE_ACCOUNT_ID` dans GitHub (**Settings → Secrets and variables → Actions**).
+- [ ] Ajouter `keurcook.com` à la liste des sites du compte Amazon Partenaires.
+
+Ensuite :
+
+- [ ] Relire les pages légales (`/conditions`, `/mentions-legales`, `/confidentialite`) et compléter les variables `NEXT_PUBLIC_LEGAL_*` si besoin.
+- [ ] Couper la maintenance (bouton « Maintenance » → « Non, rouvrir le site ») pour ouvrir le site.
+- [ ] Déclarer le site dans Google Search Console.
+- [ ] Choisir un outil de newsletter.
+- [ ] Mettre à jour régulièrement les prix indicatifs des produits.
