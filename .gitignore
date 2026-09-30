@@ -1,0 +1,21 @@
+# Dépôt public : rien de personnel ni de secret ne doit pouvoir y entrer
+# par inadvertance (un « git add . » suffirait).
+.env
+.env.*
+*.local
+
+# Sauvegardes de l'app : elles contiennent tous les clients, factures et SIRET
+Sauvegarde_GestionPro_*.json
+
+# Exports de travail
+*.xlsx
+*.pdf
+
+# macOS et éditeurs
+.DS_Store
+.vscode/
+.idea/
+
+# Outillage local (clone de travail de la CLI Supabase, dépendances)
+supabase/
+node_modules/

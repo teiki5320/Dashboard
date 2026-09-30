@@ -161,6 +161,9 @@ let curLines = [], blSel = [], curDraftId = null;
 const navStack = [];
 
 function showPage(id, _sansHistorique) {
+    // L'aperçu d'impression couvre toute la page : sans ça, il restait
+    // par-dessus la page suivante et les clics du menu tombaient dessus.
+    if ($('preview-wrap') && $('preview-wrap').style.display === 'block') closePreview();
     if (!_sansHistorique && showPage._cur && showPage._cur !== id) {
         navStack.push(showPage._cur);
         if (navStack.length > 30) navStack.shift();
@@ -189,9 +192,57 @@ function goBack() {
 
 // Aperçu non engageant du prochain numéro (peut être dépassé si un autre appareil
 // facture entre-temps) — le numéro réellement attribué vient de reserveInvoiceNumber().
+// SheetJS (lecture et écriture de fichiers Excel) n'est chargé qu'au premier
+// import ou export : dans l'en-tête, il bloquait l'affichage jusqu'à quatre
+// secondes au premier lancement, pour une bibliothèque que l'accueil n'utilise
+// jamais. L'empreinte garantit que le fichier servi est bien celui attendu.
+let _xlsxEnCours = null;
+function chargerXLSX() {
+    if (typeof XLSX !== 'undefined') return Promise.resolve();
+    if (_xlsxEnCours) return _xlsxEnCours;
+    _xlsxEnCours = new Promise((resoudre, rejeter) => {
+        const b = document.createElement('script');
+        b.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+        b.integrity = 'sha384-vtjasyidUo0kW94K5MXDXntzOJpQgBKXmE7e2Ga4LG0skTTLeBi97eFAXsqewJjw';
+        b.crossOrigin = 'anonymous';
+        b.onload = () => resoudre();
+        b.onerror = () => { _xlsxEnCours = null; rejeter(new Error('SheetJS indisponible')); };
+        document.head.appendChild(b);
+    });
+    return _xlsxEnCours;
+}
+
+// Valeur glissée dans un gestionnaire onclick : échappée d'abord pour
+// JavaScript, puis pour l'attribut HTML. Sans ça, un guillemet dans un
+// numéro de facture ou un nom de fichier suffit à sortir de l'attribut.
+function jsArg(v) { return mailEsc(JSON.stringify(String(v == null ? '' : v))); }
+
 function genNum() {
     let c = (parseInt(G.val('v90_inv_count')) || 0) + 1;
     return new Date().getFullYear() + "-" + String(c).padStart(3, '0');
+}
+
+// Lecture d'un montant écrit pour l'affichage (« 1 234,56 € ») : on garde le
+// signe, sans quoi un avoir de -500 € serait compté +500 €.
+function montantDepuisTexte(t) {
+    const n = parseFloat(String(t == null ? '' : t).replace(/[^\d,-]/g, '').replace(',', '.'));
+    return isFinite(n) ? n : 0;
+}
+
+// Montants d'une facture de l'historique. Les lignes font foi : elles portent
+// le taux de TVA de chaque produit. Le total formaté n'est relu que pour les
+// vieilles factures sans détail, et 20 % n'est alors qu'un repli.
+function histMontants(h) {
+    if (h && typeof h.htNum === 'number' && typeof h.ttcNum === 'number' && isFinite(h.htNum) && isFinite(h.ttcNum)) {
+        return { ht: h.htNum, tva: h.ttcNum - h.htNum, ttc: h.ttcNum };
+    }
+    if (h && h.items && h.items.length) {
+        const ht = h.items.reduce((s, i) => s + (Number(i.qte) || 0) * (Number(i.prix) || 0), 0);
+        const tva = h.items.reduce((s, i) => s + (Number(i.qte) || 0) * (Number(i.prix) || 0) * ((i.tva == null ? 20 : Number(i.tva) || 0) / 100), 0);
+        return { ht: ht, tva: tva, ttc: ht + tva };
+    }
+    const ttc = montantDepuisTexte(h && h.total);
+    return { ht: ttc / 1.2, tva: ttc - ttc / 1.2, ttc: ttc };
 }
 
 // Réservation atomique du numéro de facture via une fonction Postgres
@@ -242,6 +293,26 @@ function exportBackup() {
     toast(`✅ Sauvegarde téléchargée (${Object.keys(data).length} collection(s)).`, 'success');
 }
 
+// Une sauvegarde circule par mail ou par clé USB : on ne réécrit que des clés
+// connues, et seulement si leur contenu a la forme attendue. Sans ce filtre,
+// le fichier pouvait injecter n'importe quoi dans l'application, puis le
+// propager au cloud et aux autres appareils.
+const FORMES_SAUVEGARDE = {
+    v90_clis: 'tableau', v90_prods: 'tableau', v90_ents: 'tableau', v90_hist: 'tableau',
+    v90_bls: 'tableau', v90_drafts: 'tableau', v90_mail_categories: 'tableau',
+    v90_prix_cli: 'objet', v90_inv_count: 'nombre'
+};
+function valeurSauvegardeValide(cle, brut) {
+    const forme = FORMES_SAUVEGARDE[cle];
+    if (!forme) return false;
+    if (typeof brut !== 'string') return false;
+    if (forme === 'nombre') return /^\d+$/.test(brut.trim());
+    let v;
+    try { v = JSON.parse(brut); } catch (e) { return false; }
+    if (forme === 'tableau') return Array.isArray(v);
+    return v !== null && typeof v === 'object' && !Array.isArray(v);
+}
+
 function importBackup(ev) {
     const file = ev.target.files && ev.target.files[0];
     ev.target.value = '';
@@ -253,9 +324,12 @@ function importBackup(ev) {
         if (!payload || payload.app !== 'gestion-pro' || !payload.data) {
             return toast('❌ Ce fichier n\'est pas une sauvegarde Gestion Pro.', 'error');
         }
-        const n = Object.keys(payload.data).length;
+        const entrees = Object.entries(payload.data).filter(([k, v]) => valeurSauvegardeValide(k, v));
+        const ignorees = Object.keys(payload.data).length - entrees.length;
+        if (!entrees.length) return toast('❌ Sauvegarde inutilisable : aucune collection reconnue.', 'error');
+        const n = entrees.length;
         if (!confirm(`Restaurer cette sauvegarde du ${new Date(payload.exportedAt).toLocaleDateString('fr-FR')} ?\n${n} collection(s) — les données actuelles de cet appareil seront remplacées.`)) return;
-        Object.entries(payload.data).forEach(([k, v]) => localStorage.setItem(k, v));
+        entrees.forEach(([k, v]) => localStorage.setItem(k, v));
         db.clis   = G.get('v90_clis');
         db.prods  = G.get('v90_prods');
         db.ents   = G.get('v90_ents');
@@ -265,7 +339,7 @@ function importBackup(ev) {
         db.prixCli = JSON.parse(localStorage.getItem('v90_prix_cli') || '{}');
         db.mailCategories = G.get('v90_mail_categories');
         renderAll();
-        toast(`✅ Sauvegarde restaurée (${n} collection(s)). Envoi vers le cloud…`, 'success');
+        toast(`✅ Sauvegarde restaurée (${n} collection(s)${ignorees ? `, ${ignorees} ignorée(s) car non reconnue(s)` : ''}). Envoi vers le cloud…`, 'success');
         Supa.forcePushAll();
     };
     reader.readAsText(file);
@@ -358,7 +432,7 @@ function openCliPrixModal(cliId) {
     $('mcp-title').innerText = `💰 Prix pour ${cli.nom}`;
     $('mcp-list').innerHTML = actifs(db.prods).map(p => `
         <div class="field">
-            <label>${p.icon} ${p.nom} <small style="opacity:.5; font-weight:400">(base : ${eur(p.prix)} / ${p.unite})</small></label>
+            <label>${p.icon} ${mailEsc(p.nom)} <small style="opacity:.5; font-weight:400">(base : ${eur(p.prix)} / ${p.unite})</small></label>
             <input type="number" id="cprix-${p.id}" step="0.01" value="${prices[p.id] !== undefined ? prices[p.id] : p.prix}">
         </div>`).join('');
     openModal('mod-cli-prix');
@@ -514,7 +588,7 @@ function printChargement() {
 
 function changeQty(id, d) {
     let e = $('qty-' + id);
-    e.value = Math.max(0, parseInt(e.value) + d);
+    e.value = Math.max(0, (parseFloat(e.value) || 0) + d);
 }
 
 function saveBL() {
@@ -522,16 +596,19 @@ function saveBL() {
     let prixCli = (cliId && db.prixCli[cliId]) ? db.prixCli[cliId] : {};
     let items = [];
     actifs(db.prods).forEach(p => {
-        let q = parseInt($('qty-' + p.id).value);
+        let q = parseFloat($('qty-' + p.id).value);
         let prixInput = parseFloat($('prix-' + p.id).value);
         let prixDefaut = prixCli[p.id] !== undefined ? prixCli[p.id] : p.prix;
         let prix = isNaN(prixInput) ? prixDefaut : prixInput;
         if (q > 0) items.push({ pid: p.id, icon: p.icon, nom: p.nom, prix: prix, qte: q, unite: p.unite, tva: p.tva, poids: p.poids || 0 });
     });
-    if (!items.length) return;
+    if (!items.length) return toast("Aucune quantité saisie", 'warn');
+    const cli = db.clis.find(c => c.id == cliId);
+    if (!cli) return toast("Choisis un client avant d'enregistrer la livraison", 'error');
+    if (!$('bl-date').value) return toast("Choisis une date de livraison", 'error');
     const [y, m, d] = $('bl-date').value.split('-');
     const dateStr = `${d}/${m}/${y}`;
-    db.bls.push({ id: Date.now(), date: dateStr, cid: cliId, cliNom: db.clis.find(c => c.id == cliId).nom, entId: $('bl-ent-select').value, items, status: 'en-cours' });
+    db.bls.push({ id: Date.now(), date: dateStr, cid: cliId, cliNom: cli.nom, entId: $('bl-ent-select').value, items, status: 'en-cours' });
     G.set('v90_bls', db.bls);
     toast("✅ Livraison enregistrée !", 'success');
     showPage('home');
@@ -573,7 +650,7 @@ function renderSuiviBL() {
                         <b style="font-size: 24px; color: var(--gold);">${eur(b.items.reduce((s,i) => s + i.qte * i.prix * (1 + (i.tva||20)/100), 0))}</b>
                         <div style="font-size: 14px; color: var(--text-muted); margin-top:2px">${poidsTotal.toFixed(2)} kg</div>
                     </div>
-                    <button class="btn" style="width: 40px; height: 40px; padding: 0; font-size: 18px; border-radius: 8px; background:rgba(255,255,255,0.1)" onclick="printBL(${b.id})" title="Imprimer ce bon">🖨️</button>
+                    <button class="btn" style="width: 40px; height: 40px; padding: 0; font-size: 18px; border-radius: 8px; background:var(--ligne)" onclick="printBL(${b.id})" title="Imprimer ce bon">🖨️</button>
                     <button class="btn btn-red" style="width: 40px; height: 40px; padding: 0; font-size: 16px; border-radius: 8px;" onclick="deleteItem('bls',${b.id})" title="Supprimer ce bon">✕</button>
                 </div>
             </div>
@@ -594,11 +671,22 @@ function toggleBLSel(id, s) {
 function processBLToDraft() {
     let sel = db.bls.filter(b => blSel.includes(b.id));
     if (!sel.length) return;
+    // Un brouillon ne concerne qu'un seul client : sinon la facture partirait
+    // au nom du premier avec les marchandises livrées aux autres.
+    const clients = [...new Set(sel.map(b => b.cid))];
+    if (clients.length > 1) {
+        const noms = [...new Set(sel.map(b => b.cliNom))].join(', ');
+        return toast(`Ces bons concernent plusieurs clients (${noms}) : fais-en un brouillon par client.`, 'error');
+    }
     let cumul = {};
     sel.forEach(bl => {
         bl.items.forEach(it => {
-            if (!cumul[it.pid]) cumul[it.pid] = { ...it };
-            else cumul[it.pid].qte += it.qte;
+            // On ne regroupe que ce qui a le même produit ET le même prix :
+            // deux livraisons au même prix se cumulent, deux prix différents
+            // restent deux lignes, sinon le second prix serait perdu.
+            const cle = it.pid + '@' + it.prix;
+            if (!cumul[cle]) cumul[cle] = { ...it };
+            else cumul[cle].qte += it.qte;
         });
         bl.status = 'facturé';
     });
@@ -685,8 +773,8 @@ function renderLines() {
         <div class="card" style="flex-direction:column;align-items:stretch">
             <b>${l.icon} ${l.nom}</b>
             <div class="r2" style="margin-top:5px">
-                <input type="number" step="0.01" value="${l.qte}" oninput="curLines[${i}].qte=parseFloat(this.value);calcFact()">
-                <input type="number" step="0.01" value="${l.prix}" oninput="curLines[${i}].prix=parseFloat(this.value);calcFact()">
+                <input type="number" step="0.01" value="${l.qte}" oninput="curLines[${i}].qte=parseFloat(this.value)||0;calcFact()">
+                <input type="number" step="0.01" value="${l.prix}" oninput="curLines[${i}].prix=parseFloat(this.value)||0;calcFact()">
             </div>
             <button class="btn btn-red" style="margin-top:5px;padding:4px;font-size:10px" onclick="curLines.splice(${i},1);renderLines()">Supprimer</button>
         </div>`).join('');
@@ -724,7 +812,7 @@ function renderBLGrid() {
         let prix = prixCli[p.id] !== undefined ? prixCli[p.id] : p.prix;
         return `
         <div class="card" style="flex-direction:column; padding: 20px; align-items: center;">
-            <div style="font-size: 18px; margin-bottom: 6px;">${p.icon} <b>${p.nom}</b></div>
+            <div style="font-size: 18px; margin-bottom: 6px;">${p.icon} <b>${mailEsc(p.nom)}</b></div>
             ${poidsLabel ? `<div style="margin-bottom: 12px;">${poidsLabel}</div>` : ''}
             <div style="display:flex; gap:12px; align-items:center; justify-content: center;">
                 <button class="btn btn-gold" style="width: 60px; height: 60px; padding: 0; font-size: 35px; border-radius: 12px; display: flex; align-items: center; justify-content: center; line-height: 1;" onclick="changeQty('${p.id}',-1)">−</button>
@@ -773,13 +861,12 @@ function renderHomeResume() {
     const poids = aLivrer.reduce((s, b) => s + b.items.reduce((s2, i) => s2 + i.qte * getPoids(i), 0), 0);
 
     const impayees = db.hist.filter(h => computeHistStatus(h) !== 'payee');
-    const duTtc = impayees.reduce((s, h) => s + (parseFloat((h.total || '').replace(/[^\d,]/g, '').replace(',', '.')) || 0), 0);
+    const duTtc = impayees.reduce((s, h) => s + histMontants(h).ttc, 0);
 
     const bas = actifs(db.prods).filter(p => p.seuil > 0 && p.stock <= p.seuil);
 
     const caMois = db.hist.filter(h => histMonthKey(h.date) === moisKey)
-        .reduce((s, h) => s + (h.items && h.items.length ? h.items.reduce((s2, i) => s2 + i.qte * i.prix, 0)
-            : (parseFloat((h.total || '').replace(/[^\d,]/g, '').replace(',', '.')) || 0) / 1.2), 0);
+        .reduce((s, h) => s + histMontants(h).ht, 0);
 
     el.innerHTML = `
         <div class="hr-card hr-mint" onclick="goResumeLivraisons()">
@@ -817,11 +904,12 @@ function goResumeCompta() {
 
 // --- RENDU GLOBAL DES LISTES ---
 function renderAll() {
+    setTimeout(appliquerAccessibilite, 0);
     renderHomeResume();
     // 1. Sélecteur client + entreprise pour le BL
     $('bl-date').value = new Date().toISOString().split('T')[0];
-    $('bl-ent-select').innerHTML = db.ents.map(e => `<option value="${e.id}">${e.nom}</option>`).join('');
-    $('bl-cli-select').innerHTML = actifs(db.clis).map(c => `<option value="${c.id}">${c.nom}</option>`).join('');
+    $('bl-ent-select').innerHTML = db.ents.map(e => `<option value="${e.id}">${mailEsc(e.nom)}</option>`).join('');
+    $('bl-cli-select').innerHTML = actifs(db.clis).map(c => `<option value="${c.id}">${mailEsc(c.nom)}</option>`).join('');
 
     // 2. Grille des produits pour le BL
     renderBLGrid();
@@ -833,12 +921,12 @@ function renderAll() {
     $('list-prods-archives').innerHTML = prodsArch.map(p => `
         <div class="card" style="gap:8px; align-items:center; opacity:.65">
             <b style="flex:1">${p.icon} ${mailEsc(p.nom)}</b>
-            <button class="btn" style="width:auto;padding:6px 12px;font-size:12px;background:rgba(255,255,255,0.1)" onclick="toggleArchive('prods', ${p.id})">↩️ Restaurer</button>
+            <button class="btn" style="width:auto;padding:6px 12px;font-size:12px;background:var(--ligne)" onclick="toggleArchive('prods', ${p.id})">↩️ Restaurer</button>
         </div>`).join('');
     $('list-clis-settings').innerHTML = actifs(db.clis).map(c => `
         <div class="card" style="gap:8px; align-items:center">
-            <b style="flex:1; cursor:pointer" onclick="openCliModal(${c.id})">👤 ${c.nom}</b>
-            <button class="btn" style="width:auto;padding:6px 12px;font-size:12px;background:rgba(255,255,255,0.1)" onclick="openCliPrixModal(${c.id})">💰 Prix</button>
+            <b style="flex:1; cursor:pointer" onclick="openCliModal(${c.id})">👤 ${mailEsc(c.nom)}</b>
+            <button class="btn" style="width:auto;padding:6px 12px;font-size:12px;background:var(--ligne)" onclick="openCliPrixModal(${c.id})">💰 Prix</button>
             <span style="cursor:pointer" onclick="openCliModal(${c.id})">✏️</span>
         </div>`).join('');
     const clisArch = db.clis.filter(c => c.archived);
@@ -846,7 +934,7 @@ function renderAll() {
     $('list-clis-archives').innerHTML = clisArch.map(c => `
         <div class="card" style="gap:8px; align-items:center; opacity:.65">
             <b style="flex:1">👤 ${mailEsc(c.nom)}</b>
-            <button class="btn" style="width:auto;padding:6px 12px;font-size:12px;background:rgba(255,255,255,0.1)" onclick="toggleArchive('clis', ${c.id})">↩️ Restaurer</button>
+            <button class="btn" style="width:auto;padding:6px 12px;font-size:12px;background:var(--ligne)" onclick="toggleArchive('clis', ${c.id})">↩️ Restaurer</button>
         </div>`).join('');
     $('list-ents-settings').innerHTML = db.ents.map(e => `<div class="card card-link" onclick="openEntModal(${e.id})"><b>🏢 ${e.nom}</b><span>✏️</span></div>`).join('');
     
@@ -860,21 +948,21 @@ function renderAll() {
         const cur = sel.value || 'Toutes';
         sel.innerHTML = ['Toutes', ...entNames].map(n => `<option${n === cur ? ' selected' : ''}>${mailEsc(n)}</option>`).join('');
     });
-    $('f-ent').innerHTML = db.ents.map(e => `<option value="${e.id}">${e.nom}</option>`).join('');
-    $('f-cli').innerHTML = actifs(db.clis).map(c => `<option value="${c.id}">${c.nom}</option>`).join('');
-    $('f-prod-picker').innerHTML = actifs(db.prods).map(p => `<option value="${p.id}">${p.nom}</option>`).join('');
+    $('f-ent').innerHTML = db.ents.map(e => `<option value="${e.id}">${mailEsc(e.nom)}</option>`).join('');
+    $('f-cli').innerHTML = actifs(db.clis).map(c => `<option value="${c.id}">${mailEsc(c.nom)}</option>`).join('');
+    $('f-prod-picker').innerHTML = actifs(db.prods).map(p => `<option value="${p.id}">${mailEsc(p.nom)}</option>`).join('');
     
     // 5. Affichage du stock actuel et ajustement (avec alerte seuil bas)
     const lowStock = actifs(db.prods).filter(p => p.seuil > 0 && p.stock <= p.seuil);
     $('list-stock').innerHTML = actifs(db.prods).map(p => {
         const bas = p.seuil > 0 && p.stock <= p.seuil;
         return `<div class="card${bas ? ' stock-low' : ''}" style="flex-direction:column">
-            <b>${p.icon} ${p.nom}</b>
+            <b>${p.icon} ${mailEsc(p.nom)}</b>
             <div style="font-size:20px;color:${bas ? 'var(--danger)' : 'var(--sage)'};font-weight:700">${p.stock} ${p.unite}</div>
             ${bas ? `<span class="badge-statut badge-retard" style="margin-top:6px">⚠️ Stock bas (seuil : ${p.seuil})</span>` : ''}
         </div>`;
     }).join('');
-    $('adj-prod').innerHTML = actifs(db.prods).map(p => `<option value="${p.id}">${p.nom}</option>`).join('');
+    $('adj-prod').innerHTML = actifs(db.prods).map(p => `<option value="${p.id}">${mailEsc(p.nom)}</option>`).join('');
     const stockBadge = $('stock-alert-badge');
     if (stockBadge) {
         stockBadge.style.display = lowStock.length ? 'flex' : 'none';
@@ -954,11 +1042,16 @@ function renderHistorique() {
     let list = histFilter === 'impayees' ? db.hist.filter(h => computeHistStatus(h) !== 'payee') : db.hist;
     const entFilter = $('hist-ent-filter') ? $('hist-ent-filter').value : '';
     if (entFilter && entFilter !== 'Toutes') list = list.filter(h => (h.ent || '') === entFilter);
+    // Au-delà de cinquante factures, la page devenait lourde à chaque
+    // navigation : on affiche les plus récentes, le reste à la demande.
+    const total = list.length;
+    if (!renderHistorique.limite) renderHistorique.limite = 50;
+    const visibles = list.slice(Math.max(0, total - renderHistorique.limite));
     $('list-hist').innerHTML = list.length === 0
         ? `<div style="text-align:center; padding:40px 20px; opacity:.4; font-size:14px">${histFilter === 'impayees' ? 'Aucune facture impayée 🎉' : 'Aucune facture archivée'}</div>`
-        : list.slice().reverse().map(h => {
+        : visibles.slice().reverse().map(h => {
             const itemsHtml = (h.items || []).map(i =>
-                `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.06); font-size:13px">
+                `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--carte-2); font-size:13px">
                     <span>${i.icon || ''} ${mailEsc(i.nom)}</span>
                     <span style="opacity:.6">${i.qte} ${mailEsc(i.unite)} × ${eur(i.prix)}</span>
                     <span style="font-weight:600">${eur(i.qte * i.prix * (1 + (i.tva || 20) / 100))}</span>
@@ -969,20 +1062,20 @@ function renderHistorique() {
             const badgeLbl = statut === 'payee' ? '✅ Payée' : statut === 'en_retard' ? '⏰ En retard' : '⏳ En attente';
             return `
             <div class="card" style="flex-direction:column; align-items:stretch; gap:0; padding:0; overflow:hidden">
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border-bottom:1px solid rgba(255,255,255,0.08)">
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border-bottom:1px solid var(--carte-2)">
                     <div>
                         <b style="font-size:16px; color:var(--gold)">🧾 ${mailEsc(h.num)}</b>
                         ${h.date ? `<span style="font-size:12px; opacity:.5; margin-left:10px">📅 ${mailEsc(h.date)}</span>` : ''}
                     </div>
-                    <button class="btn btn-red" style="width:34px; height:34px; padding:0; font-size:14px; border-radius:8px; flex-shrink:0" onclick="deleteHist(${h.id || 0}, '${(h.num || '').replace(/'/g, "\\'")}')">✕</button>
+                    <button class="btn btn-red" style="width:34px; height:34px; padding:0; font-size:14px; border-radius:8px; flex-shrink:0" onclick="deleteHist(${h.id || 0}, ${jsArg(h.num)})">✕</button>
                 </div>
-                <div style="padding:12px 16px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08)">
+                <div style="padding:12px 16px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; border-bottom:1px solid var(--carte-2)">
                     ${h.ent ? `<span style="font-size:12px; opacity:.6">🏢 <b>${mailEsc(h.ent)}</b></span><span style="opacity:.3">→</span>` : ''}
                     <span style="font-size:13px; font-weight:600">👤 ${mailEsc(h.cli)}</span>
                     ${h.echeance && statut !== 'payee' ? `<span style="font-size:11px; opacity:.5; margin-left:auto">échéance ${mailEsc(h.echeance)}</span><span class="badge-statut ${badgeCls}">${badgeLbl}</span>` : `<span class="badge-statut ${badgeCls}" style="margin-left:auto">${badgeLbl}</span>`}
                 </div>
                 ${(h.blIds && h.blIds.length) ? `
-                <div style="padding:8px 16px; border-bottom:1px solid rgba(255,255,255,0.08)">
+                <div style="padding:8px 16px; border-bottom:1px solid var(--carte-2)">
                     <span style="font-size:12px; cursor:pointer; color:var(--accent); font-weight:600" onclick="toggleBlOrigin(${h.id})">📦 ${h.blIds.length} bon${h.blIds.length > 1 ? 's' : ''} de livraison d'origine ▾</span>
                     <div id="bl-origin-${h.id}" hidden style="margin-top:8px">
                         ${h.blIds.map(bid => {
@@ -994,14 +1087,14 @@ function renderHistorique() {
                     </div>
                 </div>` : ''}
                 ${itemsHtml ? `<div style="padding:8px 16px">${itemsHtml}</div>` : ''}
-                <div style="display:flex; justify-content:space-between; padding:12px 16px; background:rgba(255,255,255,0.04)">
+                <div style="display:flex; justify-content:space-between; padding:12px 16px; background:var(--carte-2)">
                     ${h.ht ? `<span style="font-size:12px; opacity:.5">HT : ${mailEsc(h.ht)}</span>` : '<span></span>'}
                     <b style="font-size:18px; color:var(--gold)">TTC : ${mailEsc(h.total)}</b>
                 </div>
                 <div style="display:flex; gap:8px; padding:0 16px 14px; flex-wrap:wrap">
-                    <button class="btn" style="flex:1; min-width:120px; font-size:11px; padding:8px; background:rgba(255,255,255,0.06)" onclick="toggleInvoicePaid(${h.id})">${statut === 'payee' ? '↩️ Marquer non payée' : '✅ Marquer payée'}</button>
-                    ${h.cliEmail ? `<button class="btn" style="flex:1; min-width:120px; font-size:11px; padding:8px; background:rgba(255,255,255,0.06)" onclick="envoyerFactureMail(${h.id})">📤 Envoyer</button>` : ''}
-                    ${statut !== 'payee' ? `<button class="btn" style="flex:1; min-width:120px; font-size:11px; padding:8px; background:rgba(255,255,255,0.06)" onclick="relanceHist(${h.id})">✉️ Relancer</button>` : ''}
+                    <button class="btn" style="flex:1; min-width:120px; font-size:11px; padding:8px; background:var(--carte-2)" onclick="toggleInvoicePaid(${h.id})">${statut === 'payee' ? '↩️ Marquer non payée' : '✅ Marquer payée'}</button>
+                    ${h.cliEmail ? `<button class="btn" style="flex:1; min-width:120px; font-size:11px; padding:8px; background:var(--carte-2)" onclick="envoyerFactureMail(${h.id})">📤 Envoyer</button>` : ''}
+                    ${statut !== 'payee' ? `<button class="btn" style="flex:1; min-width:120px; font-size:11px; padding:8px; background:var(--carte-2)" onclick="relanceHist(${h.id})">✉️ Relancer</button>` : ''}
                 </div>
             </div>`;
         }).join('');
@@ -1045,8 +1138,9 @@ async function previewInvoice() {
     let ent = db.ents.find(e => e.id == $('f-ent').value), cli = db.clis.find(c => c.id == $('f-cli').value);
     if (!ent || !cli) return toast("Émetteur ou Client manquant", 'error');
 
-    $('f-num').value = '…';
-    $('f-num').value = await reserveInvoiceNumber();
+    // Numéro provisoire à l'aperçu : le définitif n'est réservé qu'à la
+    // validation, pour qu'un aperçu abandonné ne laisse pas de trou.
+    if (!$('f-num').value || $('f-num').value === '…') $('f-num').value = genNum();
 
     // Lignes avec taux de TVA affiché + ventilation de la TVA par taux
     // (mentions obligatoires : taux par ligne, montant de taxe par taux).
@@ -1074,8 +1168,8 @@ async function previewInvoice() {
                 <div style="text-align:right"><b>Client</b>${mailEsc(cli.nom)}<br>${mailEsc(cli.adr)}<br>${mailEsc(cli.ville)}</div>
             </div>
             <div style="margin-bottom:20px">
-                <b>N° FACTURE :</b> ${$('f-num').value}<br>
-                <b>DATE :</b> ${$('f-date').value}
+                <b>N° FACTURE :</b> ${mailEsc($('f-num').value)}<br>
+                <b>DATE :</b> ${mailEsc($('f-date').value)}
                 ${echeance ? `<br><b>DATE D'ÉCHÉANCE :</b> ${echeance}` : ''}
             </div>
             <table class="inv-table">
@@ -1096,13 +1190,22 @@ async function previewInvoice() {
     $('preview-wrap').style.display = 'block';
 }
 
-function finalizeInvoice() {
-    curLines.forEach(l => { let p = db.prods.find(x => x.id == l.pid); if (p) p.stock -= l.qte; });
-    G.set('v90_prods', db.prods);
-    let ht = curLines.reduce((s, l) => s + (l.qte * l.prix), 0);
-    let ttc = curLines.reduce((s, l) => s + (l.qte * l.prix * (1 + (l.tva || 20) / 100)), 0);
+async function finalizeInvoice() {
     let entObj = db.ents.find(e => e.id == $('f-ent').value);
     let cliObj = db.clis.find(c => c.id == $('f-cli').value);
+    if (!cliObj) return toast("Client manquant : impossible de valider la facture", 'error');
+    if (!curLines.length) return toast("Facture vide : ajoute au moins une ligne", 'error');
+    let ht = curLines.reduce((s, l) => s + ((Number(l.qte) || 0) * (Number(l.prix) || 0)), 0);
+    let ttc = curLines.reduce((s, l) => s + ((Number(l.qte) || 0) * (Number(l.prix) || 0) * (1 + ((l.tva == null ? 20 : Number(l.tva) || 0) / 100))), 0);
+    if (!isFinite(ht) || !isFinite(ttc) || ttc <= 0) {
+        return toast("Une quantité ou un prix est vide : corrige la ligne avant de valider", 'error');
+    }
+    // Le numéro définitif n'est réservé qu'ici, puis l'aperçu est redessiné
+    // pour que la feuille imprimée porte bien ce numéro.
+    $('f-num').value = await reserveInvoiceNumber();
+    await previewInvoice();
+    curLines.forEach(l => { let p = db.prods.find(x => x.id == l.pid); if (p) p.stock -= (Number(l.qte) || 0); });
+    G.set('v90_prods', db.prods);
     // Traçabilité : si la facture vient d'un brouillon issu de BL, on garde
     // les références des bons d'origine (affichées dans l'Historique).
     let srcDraft = curDraftId ? db.drafts.find(d => d.id == curDraftId) : null;
@@ -1116,6 +1219,8 @@ function finalizeInvoice() {
         items: curLines.map(l => ({ icon: l.icon, nom: l.nom, qte: l.qte, prix: l.prix, unite: l.unite, tva: l.tva })),
         ht: eur(ht),
         total: eur(ttc),
+        htNum: ht,
+        ttcNum: ttc,
         statut: 'en_attente',
         echeance: calcEcheance($('f-date').value, cliObj.echeanceJours),
         blIds: srcDraft && srcDraft.blIds ? srcDraft.blIds : []
@@ -1123,6 +1228,12 @@ function finalizeInvoice() {
     G.set('v90_hist', db.hist);
     if (curDraftId) db.drafts = db.drafts.filter(d => d.id != curDraftId);
     G.set('v90_drafts', db.drafts);
+    // Remise à zéro : sans elle, les lignes de cette facture repartaient dans
+    // la suivante et le stock était décrémenté une seconde fois.
+    curLines = [];
+    curDraftId = null;
+    renderLines();
+    $('f-num').value = genNum();
     // Le numéro a déjà été réservé (atomiquement) dans previewInvoice() — ne pas réincrémenter ici.
     window.print();
     closePreview();
@@ -1211,7 +1322,8 @@ function tvaParseAmount(val) {
     return isNaN(n) ? null : n;
 }
 
-function tvaParseExcel(buffer, bankName) {
+async function tvaParseExcel(buffer, bankName) {
+    await chargerXLSX();
     const wb = XLSX.read(buffer, { type: 'array', cellDates: true, raw: true });
     const ws = wb.Sheets[wb.SheetNames[0]];
     const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: null, raw: true });
@@ -1275,8 +1387,10 @@ function tvaParseExcel(buffer, bankName) {
 function tvaLoadFile(file) {
     const name = file.name.replace(/\.xlsx?$/i, '');
     const reader = new FileReader();
-    reader.onload = e => {
-        const parsed = tvaParseExcel(new Uint8Array(e.target.result), name);
+    reader.onload = async e => {
+        let parsed;
+        try { parsed = await tvaParseExcel(new Uint8Array(e.target.result), name); }
+        catch (err) { return toast("📊 Fichier illisible ou outil Excel indisponible.", 'error'); }
         tvaState.rows = tvaState.rows.filter(r => r.source !== name).concat(parsed).sort((a, b) => {
             return a.date.split('/').reverse().join('').localeCompare(b.date.split('/').reverse().join(''));
         });
@@ -1336,13 +1450,13 @@ function tvaRenderStats() {
     const el = $('tva-stats-bar'); if (!el) return;
     if (!tvaState.rows.length) { el.style.display = 'none'; return; }
     const tot = tvaCalcTotaux();
-    const soldeColor = tot.solde >= 0 ? '#fbbf24' : '#4ade80';
+    const soldeColor = tot.solde >= 0 ? 'var(--run)' : 'var(--ok)';
     el.style.cssText = 'display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; justify-content:center';
     el.innerHTML = `
         <div class="tva-stat">${tvaState.rows.length}<small>Transactions</small></div>
-        <div class="tva-stat" style="color:#4ade80">${tvaFmt(tot.tvaC)}<small>TVA collectée</small></div>
-        <div class="tva-stat" style="color:#fb923c">${tvaFmt(tot.tvaD)}<small>TVA déductible brute</small></div>
-        ${tot.tvaR > 0 ? `<div class="tva-stat" style="color:#a78bfa">${tvaFmt(tot.tvaR)}<small>TVA annulée (rejets)</small></div>` : ''}
+        <div class="tva-stat" style="color:var(--ok)">${tvaFmt(tot.tvaC)}<small>TVA collectée</small></div>
+        <div class="tva-stat" style="color:var(--peach-ink)">${tvaFmt(tot.tvaD)}<small>TVA déductible brute</small></div>
+        ${tot.tvaR > 0 ? `<div class="tva-stat" style="color:var(--lilac-ink)">${tvaFmt(tot.tvaR)}<small>TVA annulée (rejets)</small></div>` : ''}
         <div class="tva-stat" style="color:${soldeColor}">${tvaFmt(Math.abs(tot.solde))}<small>${tot.solde >= 0 ? 'À reverser' : 'Crédit TVA'}</small></div>`;
 }
 
@@ -1350,7 +1464,7 @@ function tvaRenderBanksList() {
     const el = $('tva-banks-list'); if (!el) return;
     el.innerHTML = tvaState.banks.map(b => {
         const count = tvaState.rows.filter(r => r.source === b).length;
-        return `<span class="tva-bank-tag">✓ ${b} <span style="opacity:.7">(${count})</span> <span onclick="tvaRemoveBank('${b.replace(/'/g, "\\'")}')" style="cursor:pointer; margin-left:4px; opacity:.6">×</span></span>`;
+        return `<span class="tva-bank-tag">✓ ${mailEsc(b)} <span style="opacity:.7">(${count})</span> <span onclick="tvaRemoveBank(${jsArg(b)})" style="cursor:pointer; margin-left:4px; opacity:.6">×</span></span>`;
     }).join('');
 }
 
@@ -1370,12 +1484,12 @@ function tvaRenderToolbar() {
         <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px">
             <div class="tva-defaults-bar">
                 <span style="font-size:12px; opacity:.6">Taux défaut :</span>
-                <label style="font-size:12px; color:#fb923c; display:flex; align-items:center; gap:5px">Achats
+                <label style="font-size:12px; color:var(--peach-ink); display:flex; align-items:center; gap:5px">Achats
                     <select class="tva-sel" onchange="tvaState.defaultAchat=this.value">
                         ${TAUX.map(t => `<option${t === tvaState.defaultAchat ? ' selected' : ''}>${t}</option>`).join('')}
                     </select>
                 </label>
-                <label style="font-size:12px; color:#4ade80; display:flex; align-items:center; gap:5px">Ventes
+                <label style="font-size:12px; color:var(--ok); display:flex; align-items:center; gap:5px">Ventes
                     <select class="tva-sel" onchange="tvaState.defaultVente=this.value">
                         ${TAUX.map(t => `<option${t === tvaState.defaultVente ? ' selected' : ''}>${t}</option>`).join('')}
                     </select>
@@ -1408,23 +1522,23 @@ function tvaRenderTable() {
         const ttc = r.montant || 0;
         const ht = t > 0 ? ttc / (1 + t) : ttc;
         const tva = ttc - ht;
-        const bg = i % 2 === 0 ? 'rgba(255,255,255,0.03)' : 'transparent';
-        const typeColor = r.type === 'vente' ? '#4ade80' : r.type === 'rejet' ? '#a78bfa' : '#fb923c';
+        const bg = i % 2 === 0 ? 'var(--carte-2)' : 'transparent';
+        const typeColor = r.type === 'vente' ? 'var(--ok)' : r.type === 'rejet' ? 'var(--lilac-ink)' : 'var(--peach-ink)';
         const typeBg = r.type === 'vente' ? 'rgba(74,222,128,0.1)' : r.type === 'rejet' ? 'rgba(167,139,250,0.1)' : 'rgba(251,146,60,0.1)';
         const typeBd = r.type === 'vente' ? 'rgba(74,222,128,0.3)' : r.type === 'rejet' ? 'rgba(167,139,250,0.3)' : 'rgba(251,146,60,0.3)';
-        const tvaColor = r.type === 'vente' ? '#4ade80' : r.type === 'rejet' ? '#a78bfa' : tva > 0 ? '#fb923c' : 'rgba(255,255,255,0.3)';
+        const tvaColor = r.type === 'vente' ? 'var(--ok)' : r.type === 'rejet' ? 'var(--lilac-ink)' : tva > 0 ? 'var(--peach-ink)' : 'var(--muted)';
         const tc = r.taux === '0%' ? 'zero' : r.taux === '5.5%' ? 'low' : r.taux === '10%' ? 'mid' : 'high';
         const rid = r.id.replace(/'/g, "\\'");
-        return `<tr style="border-bottom:1px solid rgba(255,255,255,0.05)">
-            <td style="padding:9px 12px;background:${bg};font-size:11px;opacity:.7;white-space:nowrap">${r.date}</td>
+        return `<tr style="border-bottom:1px solid var(--carte-2)">
+            <td style="padding:9px 12px;background:${bg};font-size:11px;opacity:.7;white-space:nowrap">${mailEsc(r.date)}</td>
             <td style="padding:9px 12px;background:${bg};max-width:220px">
-                <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;color:${r.isRejet ? '#a78bfa' : 'inherit'}" title="${r.label.replace(/"/g,'&quot;')}">
-                    ${r.isRejet ? '<span style="font-size:10px;margin-right:4px;opacity:.7">⊘</span>' : ''}${r.label}
+                <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;color:${r.isRejet ? 'var(--lilac-ink)' : 'inherit'}" title="${r.label.replace(/"/g,'&quot;')}">
+                    ${r.isRejet ? '<span style="font-size:10px;margin-right:4px;opacity:.7">⊘</span>' : ''}${mailEsc(r.label)}
                 </div>
             </td>
-            <td style="padding:9px 12px;background:${bg}"><span style="background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 8px;font-size:11px;opacity:.7">${r.source}</span></td>
+            <td style="padding:9px 12px;background:${bg}"><span style="background:var(--carte-2);border-radius:6px;padding:2px 8px;font-size:11px;opacity:.7">${mailEsc(r.source)}</span></td>
             <td style="padding:9px 12px;background:${bg}">
-                <select onchange="tvaUpdate('${rid}','type',this.value)" style="background:${typeBg};color:${typeColor};border:1px solid ${typeBd};border-radius:20px;padding:3px 8px;font-size:12px;font-weight:600;cursor:pointer;outline:none;font-family:inherit">
+                <select onchange="tvaUpdate(${jsArg(rid)},'type',this.value)" style="background:${typeBg};color:${typeColor};border:1px solid ${typeBd};border-radius:20px;padding:3px 8px;font-size:12px;font-weight:600;cursor:pointer;outline:none;font-family:inherit">
                     <option value="vente"${r.type === 'vente' ? ' selected' : ''}>Vente</option>
                     <option value="achat"${r.type === 'achat' ? ' selected' : ''}>Achat</option>
                     <option value="rejet"${r.type === 'rejet' ? ' selected' : ''}>Rejet</option>
@@ -1432,7 +1546,7 @@ function tvaRenderTable() {
             </td>
             <td style="padding:9px 12px;background:${bg};text-align:right;font-weight:600;white-space:nowrap">${tvaFmt(ttc)}</td>
             <td style="padding:9px 12px;background:${bg};text-align:center">
-                <select class="tva-sel tva-taux-${tc}" onchange="tvaUpdate('${rid}','taux',this.value)">
+                <select class="tva-sel tva-taux-${tc}" onchange="tvaUpdate(${jsArg(rid)},'taux',this.value)">
                     ${TAUX.map(tx => `<option${tx === r.taux ? ' selected' : ''}>${tx}</option>`).join('')}
                 </select>
             </td>
@@ -1445,18 +1559,18 @@ function tvaRenderTable() {
 
     const rejetRow = tot.tvaR > 0 ? `
         <tr style="background:rgba(167,139,250,0.07);border-top:1px solid rgba(167,139,250,0.3)">
-            <td colspan="4" style="padding:11px 14px;font-weight:700;color:#a78bfa;font-size:13px">REJETS (TVA annulée)</td>
-            <td style="padding:11px 14px;text-align:right;font-weight:700;color:#a78bfa">${tvaFmt(tot.ttcR)}</td>
+            <td colspan="4" style="padding:11px 14px;font-weight:700;color:var(--lilac-ink);font-size:13px">REJETS (TVA annulée)</td>
+            <td style="padding:11px 14px;text-align:right;font-weight:700;color:var(--lilac-ink)">${tvaFmt(tot.ttcR)}</td>
             <td></td><td></td>
-            <td style="padding:11px 14px;text-align:right;font-weight:800;color:#a78bfa;font-size:15px">−${tvaFmt(tot.tvaR)}</td>
+            <td style="padding:11px 14px;text-align:right;font-weight:800;color:var(--lilac-ink);font-size:15px">−${tvaFmt(tot.tvaR)}</td>
         </tr>` : '';
-    const soldeColor = tot.solde >= 0 ? '#fbbf24' : '#4ade80';
+    const soldeColor = tot.solde >= 0 ? 'var(--run)' : 'var(--ok)';
     const soldeBg = tot.solde >= 0 ? 'rgba(251,191,36,0.05)' : 'rgba(74,222,128,0.05)';
 
     wrap.innerHTML = `
         <table class="tva-table">
             <thead>
-                <tr style="background:rgba(255,255,255,0.04);border-bottom:2px solid rgba(255,255,255,0.1)">
+                <tr style="background:var(--carte-2);border-bottom:2px solid var(--ligne)">
                     ${['Date','Libellé','Banque','Type','Montant TTC','Taux TVA','HT','TVA'].map((h, i) =>
                         `<th style="padding:10px 12px;text-align:${i >= 4 ? 'right' : 'left'};font-size:11px;font-weight:600;letter-spacing:.5px;opacity:.5;white-space:nowrap">${h}</th>`
                     ).join('')}
@@ -1465,25 +1579,25 @@ function tvaRenderTable() {
             <tbody>${rowsHtml}</tbody>
             <tfoot>
                 <tr style="background:rgba(74,222,128,0.07);border-top:2px solid rgba(74,222,128,0.3)">
-                    <td colspan="4" style="padding:11px 14px;font-weight:700;color:#4ade80;font-size:13px">TOTAL VENTES</td>
-                    <td style="padding:11px 14px;text-align:right;font-weight:700;color:#4ade80">${tvaFmt(tot.ttcV)}</td>
+                    <td colspan="4" style="padding:11px 14px;font-weight:700;color:var(--ok);font-size:13px">TOTAL VENTES</td>
+                    <td style="padding:11px 14px;text-align:right;font-weight:700;color:var(--ok)">${tvaFmt(tot.ttcV)}</td>
                     <td></td>
-                    <td style="padding:11px 14px;text-align:right;font-weight:700;color:#4ade80">${tvaFmt(tot.htV)}</td>
-                    <td style="padding:11px 14px;text-align:right;font-weight:800;color:#4ade80;font-size:15px">${tvaFmt(tot.tvaC)}</td>
+                    <td style="padding:11px 14px;text-align:right;font-weight:700;color:var(--ok)">${tvaFmt(tot.htV)}</td>
+                    <td style="padding:11px 14px;text-align:right;font-weight:800;color:var(--ok);font-size:15px">${tvaFmt(tot.tvaC)}</td>
                 </tr>
                 <tr style="background:rgba(251,146,60,0.07);border-top:1px solid rgba(251,146,60,0.3)">
-                    <td colspan="4" style="padding:11px 14px;font-weight:700;color:#fb923c;font-size:13px">TOTAL ACHATS (brut)</td>
-                    <td style="padding:11px 14px;text-align:right;font-weight:700;color:#fb923c">${tvaFmt(tot.ttcA)}</td>
+                    <td colspan="4" style="padding:11px 14px;font-weight:700;color:var(--peach-ink);font-size:13px">TOTAL ACHATS (brut)</td>
+                    <td style="padding:11px 14px;text-align:right;font-weight:700;color:var(--peach-ink)">${tvaFmt(tot.ttcA)}</td>
                     <td></td>
-                    <td style="padding:11px 14px;text-align:right;font-weight:700;color:#fb923c">${tvaFmt(tot.htA)}</td>
-                    <td style="padding:11px 14px;text-align:right;font-weight:800;color:#fb923c;font-size:15px">${tvaFmt(tot.tvaD)}</td>
+                    <td style="padding:11px 14px;text-align:right;font-weight:700;color:var(--peach-ink)">${tvaFmt(tot.htA)}</td>
+                    <td style="padding:11px 14px;text-align:right;font-weight:800;color:var(--peach-ink);font-size:15px">${tvaFmt(tot.tvaD)}</td>
                 </tr>
                 ${rejetRow}
-                <tr style="border-top:1px solid rgba(255,255,255,0.08)">
+                <tr style="border-top:1px solid var(--carte-2)">
                     <td colspan="7" style="padding:11px 14px;font-size:12px;opacity:.5">TVA déductible nette (achats − rejets)</td>
-                    <td style="padding:11px 14px;text-align:right;font-weight:800;color:#fb923c;font-size:15px">${tvaFmt(tot.tvaDeductibleNette)}</td>
+                    <td style="padding:11px 14px;text-align:right;font-weight:800;color:var(--peach-ink);font-size:15px">${tvaFmt(tot.tvaDeductibleNette)}</td>
                 </tr>
-                <tr style="background:${soldeBg};border-top:2px solid rgba(255,255,255,0.1)">
+                <tr style="background:${soldeBg};border-top:2px solid var(--ligne)">
                     <td colspan="6" style="padding:14px;font-weight:700;color:${soldeColor};font-size:14px">
                         ${tot.solde >= 0 ? '▶ TVA NETTE À REVERSER' : '▶ CRÉDIT DE TVA'}
                         <span style="font-weight:400;font-size:12px;margin-left:8px;opacity:.6">collectée − déductible nette</span>
@@ -1510,7 +1624,8 @@ function tvaDrop(e) {
 }
 function tvaFileChange(e) { if (e.target.files[0]) tvaLoadFile(e.target.files[0]); }
 
-function tvaExport() {
+async function tvaExport() {
+    try { await chargerXLSX(); } catch (e) { return toast("📊 Outil Excel indisponible : vérifie ta connexion, puis réessaie.", 'error'); }
     if (!window.XLSX) return toast('SheetJS non chargé', 'error');
     const wb = XLSX.utils.book_new();
     const headers = ['Date','Libellé','Banque','Type','Montant TTC','Taux TVA','HT','TVA'];
@@ -1570,9 +1685,9 @@ async function calcCompta() {
 
     let ca = 0, tvaCol = 0;
     filtered.forEach(h => {
-        let ttc = parseFloat(h.total.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
-        ca += ttc / 1.2;
-        tvaCol += ttc - (ttc / 1.2);
+        const m = histMontants(h);
+        ca += m.ht;
+        tvaCol += m.tva;
     });
 
     let depensesHtml = '';
@@ -1599,7 +1714,7 @@ async function calcCompta() {
                             <div style="font-size:12px; opacity:.6">${mailEsc(i.invoice_date || '—')} · ${mailEsc(i.entity || '—')} · ${i.status === 'valide' ? '✅ vérifiée' : '⏳ à vérifier'}</div>
                         </div>
                         <b>${i.amount != null ? eur(i.amount) : '—'}</b>
-                        ${i.status !== 'valide' ? `<button class="btn" style="width:auto; padding:6px 12px; font-size:11px; background:rgba(255,255,255,0.08)" onclick="comptaValiderDepense('${(i.gmail_message_id||'').replace(/'/g,"\\'")}')">✅ Vérifier</button>` : ''}
+                        ${i.status !== 'valide' ? `<button class="btn" style="width:auto; padding:6px 12px; font-size:11px; background:var(--carte-2)" onclick="comptaValiderDepense('${(i.gmail_message_id||'').replace(/'/g,"\\'")}')">✅ Vérifier</button>` : ''}
                     </div>`).join('')}
                 <div class="card" style="background:var(--bg-elev-2)"><span style="font-weight:700">Total dépenses (période)</span><b style="color:var(--danger)">${eur(totalDepenses)}</b></div>`;
         }
@@ -1633,7 +1748,7 @@ function comptaTresoHtml(filtered) {
     filtered.filter(h => h.statut === 'payee').forEach(h => {
         const mk = histMonthKey(h.date);
         if (!mk) return;
-        entrees[mk] = (entrees[mk] || 0) + (parseFloat((h.total || '').replace(/[^\d,]/g, '').replace(',', '.')) || 0);
+        entrees[mk] = (entrees[mk] || 0) + histMontants(h).ttc;
     });
     (comptaState.mailInvoices || []).forEach(i => {
         if (!i.invoice_date || i.amount == null) return;
@@ -1681,9 +1796,7 @@ function comptaTresoHtml(filtered) {
 // pur, aucune dépendance. Le HT vient des lignes quand elles existent, sinon
 // du total TTC / 1,2 (anciennes factures sans détail).
 function comptaHistHt(h) {
-    if (h.items && h.items.length) return h.items.reduce((s, i) => s + i.qte * i.prix, 0);
-    const ttc = parseFloat((h.total || '').replace(/[^\d,]/g, '').replace(',', '.')) || 0;
-    return ttc / 1.2;
+    return histMontants(h).ht;
 }
 
 function comptaBarList(entries, color) {
@@ -1691,7 +1804,7 @@ function comptaBarList(entries, color) {
     return entries.map(([label, val]) => `
         <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px">
             <span style="flex:0 0 110px; font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap" title="${mailEsc(label)}">${mailEsc(label)}</span>
-            <div style="flex:1; height:18px; background:rgba(255,255,255,0.05); border-radius:4px; overflow:hidden">
+            <div style="flex:1; height:18px; background:var(--carte-2); border-radius:4px; overflow:hidden">
                 <div style="width:${(val / max * 100).toFixed(1)}%; height:100%; background:${color}; border-radius:4px"></div>
             </div>
             <b style="flex:0 0 90px; text-align:right; font-size:12px">${eur(val)}</b>
@@ -1737,7 +1850,8 @@ async function comptaValiderDepense(gmailMessageId) {
     }
 }
 
-function comptaExport() {
+async function comptaExport() {
+    try { await chargerXLSX(); } catch (e) { return toast("📊 Outil Excel indisponible : vérifie ta connexion, puis réessaie.", 'error'); }
     if (!window.XLSX) return toast('SheetJS non chargé', 'error');
     if (!comptaState.filtered.length && !comptaState.mailInvoices.length) return toast('Aucune donnée à exporter pour cette période (clique d\'abord sur "Voir le bilan").', 'error');
 
@@ -1751,8 +1865,8 @@ function comptaExport() {
 
     let ca = 0, tvaCol = 0;
     comptaState.filtered.forEach(h => {
-        let ttc = parseFloat(h.total.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
-        ca += ttc / 1.2; tvaCol += ttc - (ttc / 1.2);
+        const m = histMontants(h);
+        ca += m.ht; tvaCol += m.tva;
     });
     const totalDepenses = comptaState.mailInvoices.reduce((s, i) => s + (i.amount || 0), 0);
     const ws2 = XLSX.utils.aoa_to_sheet([
@@ -1782,10 +1896,43 @@ function comptaStatutLabel(h) {
     return s === 'payee' ? 'Payée' : s === 'en_retard' ? 'En retard' : 'En attente';
 }
 
+// Les tuiles et les sous-onglets sont des div cliquables : on les rend
+// atteignables au clavier, on relie chaque libellé à son champ et on annonce
+// les intertitres, sans toucher à l'apparence.
+function appliquerAccessibilite() {
+    document.querySelectorAll('[onclick]:not(button):not(a):not(input):not(select):not(textarea)').forEach(el => {
+        if (el.dataset.clavierOk) return;
+        el.dataset.clavierOk = '1';
+        if (!el.hasAttribute('tabindex')) el.tabIndex = 0;
+        if (!el.hasAttribute('role')) el.setAttribute('role', 'button');
+        el.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+        });
+    });
+    document.querySelectorAll('label:not([for])').forEach(l => {
+        const champ = l.parentElement && l.parentElement.querySelector('input[id], select[id], textarea[id]');
+        if (champ) l.setAttribute('for', champ.id);
+    });
+    document.querySelectorAll('.section-title:not([role])').forEach(t => {
+        t.setAttribute('role', 'heading');
+        t.setAttribute('aria-level', '2');
+    });
+}
+
+// Échap ferme la fenêtre ouverte, quelle qu'elle soit.
+document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    const apercu = $('preview-wrap');
+    if (apercu && apercu.style.display === 'block') return closePreview();
+    const ouverte = [...document.querySelectorAll('.modal-overlay')].find(m => m.style.display === 'flex');
+    if (ouverte) closeModals();
+});
+
 // Initialisation
 $('f-date').value = new Date().toLocaleDateString('fr-FR');
 showPage('home');
 Supa.pullAll();
+appliquerAccessibilite();
 
 // « Suis-je à jour ? » — date de publication du fichier réellement chargé
 // (en-tête Last-Modified servi par GitHub Pages), affichée dans
@@ -1918,6 +2065,24 @@ function clearMailClaudeKey() {
 }
 
 // --- OAuth Gmail (Google Identity Services) ---
+// Chargé seulement quand on connecte Gmail : dans l'en-tête, ce script tiers
+// prenait deux à trois secondes de réseau à chaque ouverture de l'app, y
+// compris pour quelqu'un qui n'utilise jamais le module Mail.
+let _gsiEnCours = null;
+function chargerGSI() {
+    if (window.google && google.accounts && google.accounts.oauth2) return Promise.resolve();
+    if (_gsiEnCours) return _gsiEnCours;
+    _gsiEnCours = new Promise((resoudre, rejeter) => {
+        const b = document.createElement('script');
+        b.src = 'https://accounts.google.com/gsi/client';
+        b.async = true;
+        b.onload = () => resoudre();
+        b.onerror = () => { _gsiEnCours = null; rejeter(new Error('Google Identity indisponible')); };
+        document.head.appendChild(b);
+    });
+    return _gsiEnCours;
+}
+
 function mailInitTokenClient() {
     if (!window.google || !google.accounts || !google.accounts.oauth2) return null;
     if (mailState.tokenClient) return mailState.tokenClient;
@@ -1935,13 +2100,15 @@ function mailInitTokenClient() {
     return mailState.tokenClient;
 }
 
-function mailConnectGmail() {
+async function mailConnectGmail() {
     if (GMAIL_CLIENT_ID === 'GMAIL_CLIENT_ID') {
         toast("⚠️ Configuration requise : remplace GMAIL_CLIENT_ID dans script.js par ton Client ID Google Cloud (voir le commentaire en tête de la section Mail).", 'warn');
         return;
     }
+    try { await chargerGSI(); }
+    catch (e) { toast("Connexion à Google impossible : vérifie ta connexion internet, puis réessaie.", 'error'); return; }
     const client = mailInitTokenClient();
-    if (!client) { toast("Google Identity Services n'est pas encore chargé. Vérifie ta connexion internet et recharge la page.", 'error'); return; }
+    if (!client) { toast("Connexion à Google impossible pour le moment. Réessaie dans un instant.", 'error'); return; }
     client.requestAccessToken({ prompt: mailState.token ? '' : 'consent' });
 }
 
@@ -2486,7 +2653,7 @@ async function renderMailInvoicesTable() {
                 ${['Date', 'Entité', 'Fournisseur', 'Montant', 'Catégorie', 'Statut'].map(h => `<th style="padding:10px 12px; text-align:left; font-size:11px; opacity:.5; text-transform:uppercase">${h}</th>`).join('')}
             </tr></thead>
             <tbody>${list.map(i => `
-                <tr style="border-bottom:1px solid rgba(255,255,255,0.05)">
+                <tr style="border-bottom:1px solid var(--carte-2)">
                     <td style="padding:9px 12px; font-size:12px">${mailEsc(i.invoice_date || '—')}</td>
                     <td style="padding:9px 12px; font-size:12px">${mailEsc(i.entity || '—')}</td>
                     <td style="padding:9px 12px; font-size:13px">${mailEsc(i.vendor || '—')}</td>
@@ -2498,7 +2665,8 @@ async function renderMailInvoicesTable() {
         </table>`;
 }
 
-function mailExportInvoices() {
+async function mailExportInvoices() {
+    try { await chargerXLSX(); } catch (e) { return toast("📊 Outil Excel indisponible : vérifie ta connexion, puis réessaie.", 'error'); }
     if (!window.XLSX) return toast('SheetJS non chargé', 'error');
     if (!mailState.invoices.length) return toast('Aucune facture à exporter.', 'error');
     const headers = ['Date facture', 'Entité', 'Fournisseur', 'Montant', 'Devise', 'Catégorie', 'Statut'];

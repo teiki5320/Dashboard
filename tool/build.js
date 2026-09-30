@@ -134,8 +134,10 @@ function extractMarketingSummary(md) {
   const canauxLines = sectionLines(lines, /canaux|diffusion|acquisition/) || lines;
   let done = 0, todo = 0;
   for (const l of canauxLines) {
-    if (!l.includes('|')) continue;               // uniquement les tableaux
-    if (/^\s*\|?\s*:?-{2,}/.test(l)) continue;    // ligne séparatrice
+    if (/^\s*\|?\s*:?-{2,}/.test(l)) continue;    // ligne séparatrice de tableau
+    // Tableaux ET listes à puces : trois fiches sur dix listent leurs canaux
+    // en puces et affichaient « 0 fait, 0 à faire ».
+    if (!l.includes('|') && !/^\s*[-*+]\s/.test(l)) continue;
     done += (l.match(/✅/g) || []).length;
     todo += (l.match(/⬜|🔲|☐/g) || []).length;
   }
@@ -154,7 +156,7 @@ function extractMarketingSummary(md) {
     const checked = revLines.find((l) => l.includes('|') && l.includes('✅'));
     // 3. Première ligne pleine — jamais l'en-tête ni le séparateur du tableau.
     const first = revLines.find((l, i) => i !== headerIdx && !isSep(l) && cleanLine(l));
-    const src = hit || checked || first;
+    const src = hit || first || checked;
     if (src) {
       model = cleanLine(src).replace(/^.*?actuel(?:le)?\s*[:—-]?\s*/i, (m0) =>
         /[:—-]\s*$/.test(m0) ? '' : m0
@@ -355,7 +357,7 @@ function findServiceAnchors(serviceIds, toc) {
     // Alias explicites du catalogue (ex. "API externe" pour api-tierce)
     for (const alt of svc.alias || []) needles.push(normalize(alt));
     const entry = toc.find((t) => {
-      const title = normalize(t.text).replace(/[^a-z0-9]+/g, ' ').trim();
+      const title = normalize(t.text).replace(/^\s*\d+[.)]\s*/, '').replace(/[^a-z0-9]+/g, ' ').trim();
       return needles.some((n) => {
         const needle = n.replace(/[^a-z0-9]+/g, ' ').trim();
         if (!needle || needle.length < 3) return false;
@@ -413,13 +415,26 @@ function loadApps() {
       const dates = [];
       const iso = /(\d{4})[-‐‑](\d{2})[-‐‑](\d{2})/g;
       let m;
-      while ((m = iso.exec(tete))) dates.push(new Date(+m[1], +m[2] - 1, +m[3]));
+      while ((m = iso.exec(tete))) dates.push(new Date(Date.UTC(+m[1], +m[2] - 1, +m[3])));
       const fr = /(\d{1,2})(?:er)?\s+(janvier|f[ée]vrier|mars|avril|mai|juin|juillet|ao[ûu]t|septembre|octobre|novembre|d[ée]cembre)\s+(\d{4})/gi;
-      while ((m = fr.exec(tete))) dates.push(new Date(+m[3], MOIS[m[2].toLowerCase()], +m[1]));
+      while ((m = fr.exec(tete))) dates.push(new Date(Date.UTC(+m[3], MOIS[m[2].toLowerCase()], +m[1])));
       const jma = /(\d{1,2})\/(\d{1,2})\/(\d{4})/g; // « 20/07/2026 »
-      while ((m = jma.exec(tete))) dates.push(new Date(+m[3], +m[2] - 1, +m[1]));
+      while ((m = jma.exec(tete))) dates.push(new Date(Date.UTC(+m[3], +m[2] - 1, +m[1])));
       const valides = dates.filter((d) => !isNaN(d.getTime()));
       if (!valides.length) return null;
+      // Une ligne « Mis à jour le … » / « Généré le … » fait foi : sinon, un
+      // calendrier de publication cité en tête donnait une date à venir.
+      const ligneMaj = tete.split('\n').find((l) => /\b(mis\s*[àa]\s*jour|g[ée]n[ée]r[ée]|v[ée]rifi[ée])\b/i.test(l));
+      if (ligneMaj) {
+        const sousDates = [];
+        let mm;
+        const isoL = /(\d{4})[-‐‑](\d{2})[-‐‑](\d{2})/g;
+        while ((mm = isoL.exec(ligneMaj))) sousDates.push(new Date(Date.UTC(+mm[1], +mm[2] - 1, +mm[3])));
+        const frL = /(\d{1,2})(?:er)?\s+(janvier|f[ée]vrier|mars|avril|mai|juin|juillet|ao[ûu]t|septembre|octobre|novembre|d[ée]cembre)\s+(\d{4})/gi;
+        while ((mm = frL.exec(ligneMaj))) sousDates.push(new Date(Date.UTC(+mm[3], MOIS[mm[2].toLowerCase()], +mm[1])));
+        const bonnes = sousDates.filter((d) => !isNaN(d.getTime()));
+        if (bonnes.length) return new Date(Math.max(...bonnes.map((d) => d.getTime()))).toISOString().slice(0, 10);
+      }
       const max = new Date(Math.max(...valides.map((d) => d.getTime())));
       return max.toISOString().slice(0, 10);
     }
@@ -516,6 +531,24 @@ function build() {
 
   fs.mkdirSync(ASSETS_DIR, { recursive: true });
   const out = path.join(ASSETS_DIR, 'dash-data.js');
+
+  // L'horodatage de génération change à chaque exécution : sans cette
+  // comparaison, chaque passage de la CI produisait un commit sans contenu.
+  if (fs.existsSync(out)) {
+    try {
+      const ancien = fs.readFileSync(out, 'utf8').match(/window\.DASH_DATA = ([\s\S]*);\n?$/);
+      if (ancien) {
+        const a = JSON.parse(ancien[1].replace(/\\u003c/g, '<'));
+        delete a.generatedAt;
+        const b = JSON.parse(JSON.stringify(data));
+        delete b.generatedAt;
+        if (JSON.stringify(a) === JSON.stringify(b)) {
+          console.log('\n\u2705 assets/dash-data.js inchang\u00e9 (aucune donn\u00e9e modifi\u00e9e)');
+          return;
+        }
+      }
+    } catch (e) { /* fichier illisible : on régénère */ }
+  }
   fs.writeFileSync(out,
     '// \u2699\ufe0f Fichier G\u00c9N\u00c9R\u00c9 par tool/build.js \u2014 ne pas \u00e9diter \u00e0 la main.\n' +
     '// Donn\u00e9es du module \u00ab Mes apps \u00bb (dash-module.js).\n' +
