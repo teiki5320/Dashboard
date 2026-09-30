@@ -161,6 +161,9 @@ let curLines = [], blSel = [], curDraftId = null;
 const navStack = [];
 
 function showPage(id, _sansHistorique) {
+    // L'aperçu d'impression couvre toute la page : sans ça, il restait
+    // par-dessus la page suivante et les clics du menu tombaient dessus.
+    if ($('preview-wrap') && $('preview-wrap').style.display === 'block') closePreview();
     if (!_sansHistorique && showPage._cur && showPage._cur !== id) {
         navStack.push(showPage._cur);
         if (navStack.length > 30) navStack.shift();
