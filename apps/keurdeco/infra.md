@@ -29,7 +29,7 @@ Généré le 30 septembre 2026 par un scan du dépôt (côté Dashboard : le dé
 ### 3. Cloudflare (nom de domaine)
 
 - **Rôle** : registrar et DNS du domaine `keurdeco.com` (renouvellement automatique) ; héberge aussi la mesure d'audience sans cookie **Cloudflare Web Analytics** (en place). Proxy **désactivé** (nuage gris) pour laisser GitHub émettre le certificat HTTPS : 4 enregistrements A vers GitHub Pages + CNAME `www` → `teiki5320.github.io`.
-- **Console** : https://dash.cloudflare.com (compte teiki5320@gmail.com).
+- **Console** : https://dash.cloudflare.com (compte Google du propriétaire).
 - **Identifiants publics** : zone `keurdeco.com`.
 - **Secrets** : jeton API « Modifier le DNS de zone » limité à keurdeco.com, rangé dans `.env` local (`CLOUDFLARE_API_TOKEN`), jamais commité.
 - **Coût** : prix annuel du domaine — à vérifier dans la console ; Web Analytics gratuit.

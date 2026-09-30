@@ -55,12 +55,13 @@ toutes les plateformes sont `Web` est un **site**, sinon c'est une **appli**.
 | Applis | D-Sign | `d-sign` | — |
 | Applis | Palabre | `palabre` | `teiki5320/palabre` |
 | Sites | Avelor | `avelor` | `teiki5320/avelor` |
-| Sites | Keur Cook | `alohash` | `teiki5320/alohash` |
+| Sites | Keur Cook | `alohash` | `teiki5320/keurcook` |
 | Sites | OptiLED | `optiled` | `teiki5320/optiled` |
 | Sites | Keur Déco | `keurdeco` | `teiki5320/Keurdeco` |
 
-À retenir : **Keur Cook porte l'identifiant `alohash`** et le domaine
-`keurcook.com`. **Avelor est en pause** (⏸️), mais son site est encore servi
+À retenir : **Keur Cook porte l'identifiant `alohash`** — héritage de son
+ancien nom — alors que son dépôt s'appelle `teiki5320/keurcook`, comme son
+domaine `keurcook.com`. **Avelor est en pause** (⏸️), mais son site est encore servi
 par `avelor.vercel.app`.
 
 ## La synchro automatique (`.github/workflows/sync.yml`)
