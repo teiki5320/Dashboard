@@ -192,6 +192,31 @@ function goBack() {
 
 // Aperçu non engageant du prochain numéro (peut être dépassé si un autre appareil
 // facture entre-temps) — le numéro réellement attribué vient de reserveInvoiceNumber().
+// SheetJS (lecture et écriture de fichiers Excel) n'est chargé qu'au premier
+// import ou export : dans l'en-tête, il bloquait l'affichage jusqu'à quatre
+// secondes au premier lancement, pour une bibliothèque que l'accueil n'utilise
+// jamais. L'empreinte garantit que le fichier servi est bien celui attendu.
+let _xlsxEnCours = null;
+function chargerXLSX() {
+    if (typeof XLSX !== 'undefined') return Promise.resolve();
+    if (_xlsxEnCours) return _xlsxEnCours;
+    _xlsxEnCours = new Promise((resoudre, rejeter) => {
+        const b = document.createElement('script');
+        b.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+        b.integrity = 'sha384-vtjasyidUo0kW94K5MXDXntzOJpQgBKXmE7e2Ga4LG0skTTLeBi97eFAXsqewJjw';
+        b.crossOrigin = 'anonymous';
+        b.onload = () => resoudre();
+        b.onerror = () => { _xlsxEnCours = null; rejeter(new Error('SheetJS indisponible')); };
+        document.head.appendChild(b);
+    });
+    return _xlsxEnCours;
+}
+
+// Valeur glissée dans un gestionnaire onclick : échappée d'abord pour
+// JavaScript, puis pour l'attribut HTML. Sans ça, un guillemet dans un
+// numéro de facture ou un nom de fichier suffit à sortir de l'attribut.
+function jsArg(v) { return mailEsc(JSON.stringify(String(v == null ? '' : v))); }
+
 function genNum() {
     let c = (parseInt(G.val('v90_inv_count')) || 0) + 1;
     return new Date().getFullYear() + "-" + String(c).padStart(3, '0');
@@ -268,6 +293,26 @@ function exportBackup() {
     toast(`✅ Sauvegarde téléchargée (${Object.keys(data).length} collection(s)).`, 'success');
 }
 
+// Une sauvegarde circule par mail ou par clé USB : on ne réécrit que des clés
+// connues, et seulement si leur contenu a la forme attendue. Sans ce filtre,
+// le fichier pouvait injecter n'importe quoi dans l'application, puis le
+// propager au cloud et aux autres appareils.
+const FORMES_SAUVEGARDE = {
+    v90_clis: 'tableau', v90_prods: 'tableau', v90_ents: 'tableau', v90_hist: 'tableau',
+    v90_bls: 'tableau', v90_drafts: 'tableau', v90_mail_categories: 'tableau',
+    v90_prix_cli: 'objet', v90_inv_count: 'nombre'
+};
+function valeurSauvegardeValide(cle, brut) {
+    const forme = FORMES_SAUVEGARDE[cle];
+    if (!forme) return false;
+    if (typeof brut !== 'string') return false;
+    if (forme === 'nombre') return /^\d+$/.test(brut.trim());
+    let v;
+    try { v = JSON.parse(brut); } catch (e) { return false; }
+    if (forme === 'tableau') return Array.isArray(v);
+    return v !== null && typeof v === 'object' && !Array.isArray(v);
+}
+
 function importBackup(ev) {
     const file = ev.target.files && ev.target.files[0];
     ev.target.value = '';
@@ -279,9 +324,12 @@ function importBackup(ev) {
         if (!payload || payload.app !== 'gestion-pro' || !payload.data) {
             return toast('❌ Ce fichier n\'est pas une sauvegarde Gestion Pro.', 'error');
         }
-        const n = Object.keys(payload.data).length;
+        const entrees = Object.entries(payload.data).filter(([k, v]) => valeurSauvegardeValide(k, v));
+        const ignorees = Object.keys(payload.data).length - entrees.length;
+        if (!entrees.length) return toast('❌ Sauvegarde inutilisable : aucune collection reconnue.', 'error');
+        const n = entrees.length;
         if (!confirm(`Restaurer cette sauvegarde du ${new Date(payload.exportedAt).toLocaleDateString('fr-FR')} ?\n${n} collection(s) — les données actuelles de cet appareil seront remplacées.`)) return;
-        Object.entries(payload.data).forEach(([k, v]) => localStorage.setItem(k, v));
+        entrees.forEach(([k, v]) => localStorage.setItem(k, v));
         db.clis   = G.get('v90_clis');
         db.prods  = G.get('v90_prods');
         db.ents   = G.get('v90_ents');
@@ -291,7 +339,7 @@ function importBackup(ev) {
         db.prixCli = JSON.parse(localStorage.getItem('v90_prix_cli') || '{}');
         db.mailCategories = G.get('v90_mail_categories');
         renderAll();
-        toast(`✅ Sauvegarde restaurée (${n} collection(s)). Envoi vers le cloud…`, 'success');
+        toast(`✅ Sauvegarde restaurée (${n} collection(s)${ignorees ? `, ${ignorees} ignorée(s) car non reconnue(s)` : ''}). Envoi vers le cloud…`, 'success');
         Supa.forcePushAll();
     };
     reader.readAsText(file);
@@ -384,7 +432,7 @@ function openCliPrixModal(cliId) {
     $('mcp-title').innerText = `💰 Prix pour ${cli.nom}`;
     $('mcp-list').innerHTML = actifs(db.prods).map(p => `
         <div class="field">
-            <label>${p.icon} ${p.nom} <small style="opacity:.5; font-weight:400">(base : ${eur(p.prix)} / ${p.unite})</small></label>
+            <label>${p.icon} ${mailEsc(p.nom)} <small style="opacity:.5; font-weight:400">(base : ${eur(p.prix)} / ${p.unite})</small></label>
             <input type="number" id="cprix-${p.id}" step="0.01" value="${prices[p.id] !== undefined ? prices[p.id] : p.prix}">
         </div>`).join('');
     openModal('mod-cli-prix');
@@ -764,7 +812,7 @@ function renderBLGrid() {
         let prix = prixCli[p.id] !== undefined ? prixCli[p.id] : p.prix;
         return `
         <div class="card" style="flex-direction:column; padding: 20px; align-items: center;">
-            <div style="font-size: 18px; margin-bottom: 6px;">${p.icon} <b>${p.nom}</b></div>
+            <div style="font-size: 18px; margin-bottom: 6px;">${p.icon} <b>${mailEsc(p.nom)}</b></div>
             ${poidsLabel ? `<div style="margin-bottom: 12px;">${poidsLabel}</div>` : ''}
             <div style="display:flex; gap:12px; align-items:center; justify-content: center;">
                 <button class="btn btn-gold" style="width: 60px; height: 60px; padding: 0; font-size: 35px; border-radius: 12px; display: flex; align-items: center; justify-content: center; line-height: 1;" onclick="changeQty('${p.id}',-1)">−</button>
@@ -859,8 +907,8 @@ function renderAll() {
     renderHomeResume();
     // 1. Sélecteur client + entreprise pour le BL
     $('bl-date').value = new Date().toISOString().split('T')[0];
-    $('bl-ent-select').innerHTML = db.ents.map(e => `<option value="${e.id}">${e.nom}</option>`).join('');
-    $('bl-cli-select').innerHTML = actifs(db.clis).map(c => `<option value="${c.id}">${c.nom}</option>`).join('');
+    $('bl-ent-select').innerHTML = db.ents.map(e => `<option value="${e.id}">${mailEsc(e.nom)}</option>`).join('');
+    $('bl-cli-select').innerHTML = actifs(db.clis).map(c => `<option value="${c.id}">${mailEsc(c.nom)}</option>`).join('');
 
     // 2. Grille des produits pour le BL
     renderBLGrid();
@@ -876,7 +924,7 @@ function renderAll() {
         </div>`).join('');
     $('list-clis-settings').innerHTML = actifs(db.clis).map(c => `
         <div class="card" style="gap:8px; align-items:center">
-            <b style="flex:1; cursor:pointer" onclick="openCliModal(${c.id})">👤 ${c.nom}</b>
+            <b style="flex:1; cursor:pointer" onclick="openCliModal(${c.id})">👤 ${mailEsc(c.nom)}</b>
             <button class="btn" style="width:auto;padding:6px 12px;font-size:12px;background:rgba(255,255,255,0.1)" onclick="openCliPrixModal(${c.id})">💰 Prix</button>
             <span style="cursor:pointer" onclick="openCliModal(${c.id})">✏️</span>
         </div>`).join('');
@@ -899,21 +947,21 @@ function renderAll() {
         const cur = sel.value || 'Toutes';
         sel.innerHTML = ['Toutes', ...entNames].map(n => `<option${n === cur ? ' selected' : ''}>${mailEsc(n)}</option>`).join('');
     });
-    $('f-ent').innerHTML = db.ents.map(e => `<option value="${e.id}">${e.nom}</option>`).join('');
-    $('f-cli').innerHTML = actifs(db.clis).map(c => `<option value="${c.id}">${c.nom}</option>`).join('');
-    $('f-prod-picker').innerHTML = actifs(db.prods).map(p => `<option value="${p.id}">${p.nom}</option>`).join('');
+    $('f-ent').innerHTML = db.ents.map(e => `<option value="${e.id}">${mailEsc(e.nom)}</option>`).join('');
+    $('f-cli').innerHTML = actifs(db.clis).map(c => `<option value="${c.id}">${mailEsc(c.nom)}</option>`).join('');
+    $('f-prod-picker').innerHTML = actifs(db.prods).map(p => `<option value="${p.id}">${mailEsc(p.nom)}</option>`).join('');
     
     // 5. Affichage du stock actuel et ajustement (avec alerte seuil bas)
     const lowStock = actifs(db.prods).filter(p => p.seuil > 0 && p.stock <= p.seuil);
     $('list-stock').innerHTML = actifs(db.prods).map(p => {
         const bas = p.seuil > 0 && p.stock <= p.seuil;
         return `<div class="card${bas ? ' stock-low' : ''}" style="flex-direction:column">
-            <b>${p.icon} ${p.nom}</b>
+            <b>${p.icon} ${mailEsc(p.nom)}</b>
             <div style="font-size:20px;color:${bas ? 'var(--danger)' : 'var(--sage)'};font-weight:700">${p.stock} ${p.unite}</div>
             ${bas ? `<span class="badge-statut badge-retard" style="margin-top:6px">⚠️ Stock bas (seuil : ${p.seuil})</span>` : ''}
         </div>`;
     }).join('');
-    $('adj-prod').innerHTML = actifs(db.prods).map(p => `<option value="${p.id}">${p.nom}</option>`).join('');
+    $('adj-prod').innerHTML = actifs(db.prods).map(p => `<option value="${p.id}">${mailEsc(p.nom)}</option>`).join('');
     const stockBadge = $('stock-alert-badge');
     if (stockBadge) {
         stockBadge.style.display = lowStock.length ? 'flex' : 'none';
@@ -1013,7 +1061,7 @@ function renderHistorique() {
                         <b style="font-size:16px; color:var(--gold)">🧾 ${mailEsc(h.num)}</b>
                         ${h.date ? `<span style="font-size:12px; opacity:.5; margin-left:10px">📅 ${mailEsc(h.date)}</span>` : ''}
                     </div>
-                    <button class="btn btn-red" style="width:34px; height:34px; padding:0; font-size:14px; border-radius:8px; flex-shrink:0" onclick="deleteHist(${h.id || 0}, '${(h.num || '').replace(/'/g, "\\'")}')">✕</button>
+                    <button class="btn btn-red" style="width:34px; height:34px; padding:0; font-size:14px; border-radius:8px; flex-shrink:0" onclick="deleteHist(${h.id || 0}, ${jsArg(h.num)})">✕</button>
                 </div>
                 <div style="padding:12px 16px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08)">
                     ${h.ent ? `<span style="font-size:12px; opacity:.6">🏢 <b>${mailEsc(h.ent)}</b></span><span style="opacity:.3">→</span>` : ''}
@@ -1114,8 +1162,8 @@ async function previewInvoice() {
                 <div style="text-align:right"><b>Client</b>${mailEsc(cli.nom)}<br>${mailEsc(cli.adr)}<br>${mailEsc(cli.ville)}</div>
             </div>
             <div style="margin-bottom:20px">
-                <b>N° FACTURE :</b> ${$('f-num').value}<br>
-                <b>DATE :</b> ${$('f-date').value}
+                <b>N° FACTURE :</b> ${mailEsc($('f-num').value)}<br>
+                <b>DATE :</b> ${mailEsc($('f-date').value)}
                 ${echeance ? `<br><b>DATE D'ÉCHÉANCE :</b> ${echeance}` : ''}
             </div>
             <table class="inv-table">
@@ -1268,7 +1316,8 @@ function tvaParseAmount(val) {
     return isNaN(n) ? null : n;
 }
 
-function tvaParseExcel(buffer, bankName) {
+async function tvaParseExcel(buffer, bankName) {
+    await chargerXLSX();
     const wb = XLSX.read(buffer, { type: 'array', cellDates: true, raw: true });
     const ws = wb.Sheets[wb.SheetNames[0]];
     const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: null, raw: true });
@@ -1332,8 +1381,10 @@ function tvaParseExcel(buffer, bankName) {
 function tvaLoadFile(file) {
     const name = file.name.replace(/\.xlsx?$/i, '');
     const reader = new FileReader();
-    reader.onload = e => {
-        const parsed = tvaParseExcel(new Uint8Array(e.target.result), name);
+    reader.onload = async e => {
+        let parsed;
+        try { parsed = await tvaParseExcel(new Uint8Array(e.target.result), name); }
+        catch (err) { return toast("📊 Fichier illisible ou outil Excel indisponible.", 'error'); }
         tvaState.rows = tvaState.rows.filter(r => r.source !== name).concat(parsed).sort((a, b) => {
             return a.date.split('/').reverse().join('').localeCompare(b.date.split('/').reverse().join(''));
         });
@@ -1407,7 +1458,7 @@ function tvaRenderBanksList() {
     const el = $('tva-banks-list'); if (!el) return;
     el.innerHTML = tvaState.banks.map(b => {
         const count = tvaState.rows.filter(r => r.source === b).length;
-        return `<span class="tva-bank-tag">✓ ${b} <span style="opacity:.7">(${count})</span> <span onclick="tvaRemoveBank('${b.replace(/'/g, "\\'")}')" style="cursor:pointer; margin-left:4px; opacity:.6">×</span></span>`;
+        return `<span class="tva-bank-tag">✓ ${mailEsc(b)} <span style="opacity:.7">(${count})</span> <span onclick="tvaRemoveBank(${jsArg(b)})" style="cursor:pointer; margin-left:4px; opacity:.6">×</span></span>`;
     }).join('');
 }
 
@@ -1473,15 +1524,15 @@ function tvaRenderTable() {
         const tc = r.taux === '0%' ? 'zero' : r.taux === '5.5%' ? 'low' : r.taux === '10%' ? 'mid' : 'high';
         const rid = r.id.replace(/'/g, "\\'");
         return `<tr style="border-bottom:1px solid rgba(255,255,255,0.05)">
-            <td style="padding:9px 12px;background:${bg};font-size:11px;opacity:.7;white-space:nowrap">${r.date}</td>
+            <td style="padding:9px 12px;background:${bg};font-size:11px;opacity:.7;white-space:nowrap">${mailEsc(r.date)}</td>
             <td style="padding:9px 12px;background:${bg};max-width:220px">
                 <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;color:${r.isRejet ? '#a78bfa' : 'inherit'}" title="${r.label.replace(/"/g,'&quot;')}">
-                    ${r.isRejet ? '<span style="font-size:10px;margin-right:4px;opacity:.7">⊘</span>' : ''}${r.label}
+                    ${r.isRejet ? '<span style="font-size:10px;margin-right:4px;opacity:.7">⊘</span>' : ''}${mailEsc(r.label)}
                 </div>
             </td>
-            <td style="padding:9px 12px;background:${bg}"><span style="background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 8px;font-size:11px;opacity:.7">${r.source}</span></td>
+            <td style="padding:9px 12px;background:${bg}"><span style="background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 8px;font-size:11px;opacity:.7">${mailEsc(r.source)}</span></td>
             <td style="padding:9px 12px;background:${bg}">
-                <select onchange="tvaUpdate('${rid}','type',this.value)" style="background:${typeBg};color:${typeColor};border:1px solid ${typeBd};border-radius:20px;padding:3px 8px;font-size:12px;font-weight:600;cursor:pointer;outline:none;font-family:inherit">
+                <select onchange="tvaUpdate(${jsArg(rid)},'type',this.value)" style="background:${typeBg};color:${typeColor};border:1px solid ${typeBd};border-radius:20px;padding:3px 8px;font-size:12px;font-weight:600;cursor:pointer;outline:none;font-family:inherit">
                     <option value="vente"${r.type === 'vente' ? ' selected' : ''}>Vente</option>
                     <option value="achat"${r.type === 'achat' ? ' selected' : ''}>Achat</option>
                     <option value="rejet"${r.type === 'rejet' ? ' selected' : ''}>Rejet</option>
@@ -1489,7 +1540,7 @@ function tvaRenderTable() {
             </td>
             <td style="padding:9px 12px;background:${bg};text-align:right;font-weight:600;white-space:nowrap">${tvaFmt(ttc)}</td>
             <td style="padding:9px 12px;background:${bg};text-align:center">
-                <select class="tva-sel tva-taux-${tc}" onchange="tvaUpdate('${rid}','taux',this.value)">
+                <select class="tva-sel tva-taux-${tc}" onchange="tvaUpdate(${jsArg(rid)},'taux',this.value)">
                     ${TAUX.map(tx => `<option${tx === r.taux ? ' selected' : ''}>${tx}</option>`).join('')}
                 </select>
             </td>
@@ -1567,7 +1618,8 @@ function tvaDrop(e) {
 }
 function tvaFileChange(e) { if (e.target.files[0]) tvaLoadFile(e.target.files[0]); }
 
-function tvaExport() {
+async function tvaExport() {
+    try { await chargerXLSX(); } catch (e) { return toast("📊 Outil Excel indisponible : vérifie ta connexion, puis réessaie.", 'error'); }
     if (!window.XLSX) return toast('SheetJS non chargé', 'error');
     const wb = XLSX.utils.book_new();
     const headers = ['Date','Libellé','Banque','Type','Montant TTC','Taux TVA','HT','TVA'];
@@ -1792,7 +1844,8 @@ async function comptaValiderDepense(gmailMessageId) {
     }
 }
 
-function comptaExport() {
+async function comptaExport() {
+    try { await chargerXLSX(); } catch (e) { return toast("📊 Outil Excel indisponible : vérifie ta connexion, puis réessaie.", 'error'); }
     if (!window.XLSX) return toast('SheetJS non chargé', 'error');
     if (!comptaState.filtered.length && !comptaState.mailInvoices.length) return toast('Aucune donnée à exporter pour cette période (clique d\'abord sur "Voir le bilan").', 'error');
 
@@ -2553,7 +2606,8 @@ async function renderMailInvoicesTable() {
         </table>`;
 }
 
-function mailExportInvoices() {
+async function mailExportInvoices() {
+    try { await chargerXLSX(); } catch (e) { return toast("📊 Outil Excel indisponible : vérifie ta connexion, puis réessaie.", 'error'); }
     if (!window.XLSX) return toast('SheetJS non chargé', 'error');
     if (!mailState.invoices.length) return toast('Aucune facture à exporter.', 'error');
     const headers = ['Date facture', 'Entité', 'Fournisseur', 'Montant', 'Devise', 'Catégorie', 'Statut'];
