@@ -574,7 +574,7 @@ select {
 }
 .prev-actions .btn { box-shadow: var(--clay-sm); }
 .inv-wrap {
-    background: #fffdfa; width: 210mm; min-height: 297mm; margin: 0 auto; padding: 20mm;
+    background: #fffdfa; width: min(210mm, 100%); min-height: 297mm; margin: 0 auto; padding: 20mm;
     color: #3f3a33; font-family: var(--font); font-size: 14px;
     display: flex; flex-direction: column; position: relative;
     border-radius: 8px; box-shadow: 0 12px 40px rgba(0, 0, 0, .18);
@@ -616,12 +616,19 @@ select {
     #gp-rail, header, .sub-tabs, .action-bar, .page, .prev-actions, .modal-overlay, .toast, #toast-holder { display: none !important; }
     #gp-shell, #gp-main { display: block !important; }
     #preview-wrap { display: block !important; position: static !important; background: #fff !important; padding: 0 !important; }
+    /* Hauteur libre : une facture de plus de onze lignes était coupée, avec
+       ses mentions légales, sans rien signaler à l'écran. */
     .inv-wrap {
-        width: 100% !important; min-height: 0 !important; height: 250mm !important; max-height: 250mm !important;
+        width: 100% !important; min-height: 0 !important; height: auto !important; max-height: none !important;
         margin: 0 auto !important; padding: 10mm 15mm !important; border-radius: 0 !important; box-shadow: none !important;
-        overflow: hidden !important; -webkit-print-color-adjust: exact; print-color-adjust: exact;
+        overflow: visible !important; -webkit-print-color-adjust: exact; print-color-adjust: exact;
     }
-    .payment-box { margin-top: auto !important; page-break-inside: avoid !important; }
+    /* L'en-tête du tableau se répète sur chaque page, aucune ligne n'est
+       coupée en deux, et le bloc de paiement reste d'un seul tenant. */
+    .inv-table thead { display: table-header-group !important; }
+    .inv-table tr, .inv-totals { break-inside: avoid !important; page-break-inside: avoid !important; }
+    .payment-box { margin-top: 18px !important; break-inside: avoid !important; page-break-inside: avoid !important; }
+    @page { margin: 10mm 0; }
     @page { size: A4 portrait; margin: 0; }
 }
 
