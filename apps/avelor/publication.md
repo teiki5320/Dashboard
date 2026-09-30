@@ -1,11 +1,12 @@
 # PUBLICATION — état de la mise en ligne
 
 > Généré le 5 septembre 2026. Pour mettre à jour : relancer ce même prompt.
+> Vérifié le 30 septembre 2026 : le site répond toujours (HTTP 200, serveur Vercel).
 
 ## Vue d'ensemble
 
 - **URL publique** : https://avelor.vercel.app
-- **État** : en ligne (version du 28/05/2026 — la mise à niveau complète attend le merge de la PR #3)
+- **État** : en ligne (version du 28/05/2026 — la mise à niveau complète attend le merge de la PR #3) · **projet en pause** (acté le 30 septembre 2026 — le site reste servi, développement et promotion suspendus)
 - **Hébergeur** : Vercel
 - **Domaine + SSL** : sous-domaine `*.vercel.app` avec SSL automatique ; domaine propre non acheté
 - **Dernière mise en production** : commit `7d99443` du 28/05/2026 sur `main` (heure exacte du déploiement : à vérifier dans la console Vercel)
