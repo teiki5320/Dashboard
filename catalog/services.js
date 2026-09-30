@@ -308,14 +308,14 @@ const SERVICES = [
   // ── Web & domaine ──────────────────────────────────────────────────────────
   {
     id: 'hebergement-web',
-    nom: 'Hébergement web (Vercel / Netlify / GitHub Pages)',
+    nom: 'Hébergement web (GitHub Pages / Cloudflare Pages)',
     emoji: '🌐',
     categorie: 'Web & domaine',
     badge: 'gratuit',
     resume: "Héberger le site vitrine, la page support ou la webapp.",
     role:
       "Chaque app a besoin d'au moins une page web : site vitrine, page support (exigée par les " +
-      "stores), politique de confidentialité, fichiers de deep links. Vercel, Netlify ou GitHub " +
+      "stores), politique de confidentialité, fichiers de deep links. GitHub Pages ou Cloudflare " +
       "Pages déploient automatiquement un site statique depuis le dépôt Git.",
     concepts: [
       { terme: 'Site statique', def: "Des fichiers HTML/CSS/JS servis tels quels — rapide, gratuit, sans serveur à maintenir. (Ce dashboard en est un !)" },
@@ -324,7 +324,8 @@ const SERVICES = [
     ],
     cout: "Gratuit pour un usage personnel (quotas très larges).",
     quand: "Dès la préparation de la sortie : page support + politique de confidentialité sont demandées à la soumission.",
-    alternatives: "Cloudflare Pages, OVH mutualisé, serveur perso.",
+    alternatives: "OVH mutualisé, serveur perso.",
+    alias: ['vercel', 'netlify'],
     consigner: [
       "Plateforme utilisée et dépôt source du site",
       "URLs : vitrine, support, politique de confidentialité",
@@ -349,7 +350,7 @@ const SERVICES = [
     ],
     cout: "≈ 10–15 € / an (.com) ; certaines extensions plus chères.",
     quand: "Quand l'app devient sérieuse : image de marque, deep links, e-mail pro.",
-    alternatives: "Sous-domaine gratuit de l'hébergeur (monapp.vercel.app) pour démarrer.",
+    alternatives: "Sous-domaine gratuit de l'hébergeur (teiki5320.github.io) pour démarrer.",
     consigner: [
       "Domaine, registrar, date de renouvellement",
       "Où est géré le DNS et enregistrements importants",
