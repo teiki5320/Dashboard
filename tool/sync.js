@@ -44,10 +44,18 @@ const STATE_PATH = path.join(APPS_DIR, '.sync-state.json');
 const sha = (s) => crypto.createHash('sha256').update(s).digest('hex');
 
 function lireEtat() {
+  if (!fs.existsSync(STATE_PATH)) return {};
   try {
-    return JSON.parse(fs.readFileSync(STATE_PATH, 'utf8'));
-  } catch {
-    return {};
+    const etat = JSON.parse(fs.readFileSync(STATE_PATH, 'utf8'));
+    if (!etat || typeof etat !== 'object' || Array.isArray(etat)) throw new Error('forme inattendue');
+    return etat;
+  } catch (e) {
+    // Repartir d'un état vide écraserait silencieusement toutes les fiches
+    // retouchées côté Dashboard : mieux vaut s'arrêter et le dire.
+    console.error(`🛑 apps/.sync-state.json illisible (${e.message}).`);
+    console.error('   Répare-le ou supprime-le volontairement avant de relancer :');
+    console.error('   sans lui, la synchro réécrirait toutes les fiches locales.');
+    process.exit(1);
   }
 }
 
@@ -211,8 +219,13 @@ async function main() {
   if (modifies > 0) {
     console.log('→ Lancer maintenant : node tool/build.js');
   }
-  // Une erreur d'authentification fait échouer le job pour être visible dans Actions.
-  if (erreursAuth) process.exit(1);
+  // Un dépôt inaccessible (droit manquant, ou quota GitHub dépassé, qui renvoie
+  // le même code) ne doit pas jeter les fiches correctement rapatriées pour les
+  // autres apps : on le signale bien visiblement, sans faire échouer le job.
+  if (erreursAuth) {
+    console.warn('\n⚠️  Au moins un dépôt a refusé l\'accès (droit manquant ou quota dépassé).');
+    console.warn('   Les autres apps ont bien été synchronisées. Vérifie APPS_READ_TOKEN si cela se répète.');
+  }
 }
 
 main().catch((e) => {

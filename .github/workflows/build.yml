@@ -10,6 +10,13 @@ on:
       - "apps/**"
       - "catalog/**"
       - "tool/**"
+  # Contrôle avant fusion : une fiche ou un app.json malformé était constaté
+  # seulement après coup, et le site continuait de servir d'anciennes données.
+  pull_request:
+    paths:
+      - "apps/**"
+      - "catalog/**"
+      - "tool/**"
   workflow_dispatch:
 
 permissions:
@@ -28,7 +35,11 @@ jobs:
       - name: Générer les données
         run: node tool/build.js
 
+      - name: Tests
+        run: node --test tool/test-ebe.js
+
       - name: Commiter assets/ si les données ont changé
+        if: github.event_name != 'pull_request'
         run: |
           git config user.name "build-bot"
           git config user.email "actions@users.noreply.github.com"
