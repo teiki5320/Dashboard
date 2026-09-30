@@ -15,7 +15,6 @@
     // Thème avant le premier rendu : évite le flash clair/sombre.
     try { if (localStorage.getItem('gp-theme') === 'clair') document.documentElement.setAttribute('data-theme', 'clair'); } catch (e) {}
     </script>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
 
     <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -253,8 +252,8 @@
             <p id="site-version" style="font-size:12px; color:var(--text-muted); margin:0; opacity:.8"></p>
         <p id="sync-status" style="font-size:13px; color:var(--text-muted); margin:0">Aucune synchronisation effectuée pour l'instant.</p>
             <div class="r2">
-                <button class="btn" style="background:rgba(255,255,255,0.06); font-size:12px" onclick="Supa.forcePushAll()">⬆️ Forcer l'envoi</button>
-                <button class="btn" style="background:rgba(255,255,255,0.06); font-size:12px" onclick="Supa.pullAll(true)">⬇️ Récupérer du cloud</button>
+                <button class="btn" style="background:var(--carte-2); font-size:12px" onclick="Supa.forcePushAll()">⬆️ Forcer l'envoi</button>
+                <button class="btn" style="background:var(--carte-2); font-size:12px" onclick="Supa.pullAll(true)">⬇️ Récupérer du cloud</button>
             </div>
         </div>
 
@@ -262,8 +261,8 @@
         <div class="card" style="flex-direction:column; gap:12px; align-items:stretch">
             <p style="font-size:13px; color:var(--text-muted); margin:0">Télécharge une copie complète de tes données (clients, produits, BL, factures…) dans un fichier, indépendante du cloud. Garde-la précieusement : elle permet de tout restaurer.</p>
             <div class="r2">
-                <button class="btn" style="background:rgba(255,255,255,0.06); font-size:12px" onclick="exportBackup()">📥 Télécharger la sauvegarde</button>
-                <button class="btn" style="background:rgba(255,255,255,0.06); font-size:12px" onclick="document.getElementById('backup-file-input').click()">📤 Restaurer un fichier</button>
+                <button class="btn" style="background:var(--carte-2); font-size:12px" onclick="exportBackup()">📥 Télécharger la sauvegarde</button>
+                <button class="btn" style="background:var(--carte-2); font-size:12px" onclick="document.getElementById('backup-file-input').click()">📤 Restaurer un fichier</button>
             </div>
             <input type="file" id="backup-file-input" accept=".json,application/json" style="display:none" onchange="importBackup(event)">
         </div>
@@ -321,7 +320,7 @@
             <input type="month" id="compta-fin">
         </div>
         <button class="btn btn-gold" onclick="calcCompta()">💼 VOIR LE BILAN</button>
-        <button class="btn" style="margin-top:10px; background:rgba(255,255,255,0.06)" onclick="comptaExport()">📊 EXPORT EXCEL</button>
+        <button class="btn" style="margin-top:10px; background:var(--carte-2)" onclick="comptaExport()">📊 EXPORT EXCEL</button>
     </div>
     <div id="compta-result" style="margin-top:20px"></div>
     </div>
@@ -377,7 +376,7 @@
     <div id="view-mail-extraction" style="display:none">
         <div style="display:flex; gap:10px; flex-wrap:wrap">
             <button class="btn btn-gold" style="flex:1; min-width:200px" onclick="mailScanInvoices()">📄 SCANNER LES FACTURES</button>
-            <button class="btn" style="width:auto; padding:12px 20px; background:rgba(255,255,255,0.06)" onclick="mailExportInvoices()">📊 EXPORT EXCEL</button>
+            <button class="btn" style="width:auto; padding:12px 20px; background:var(--carte-2)" onclick="mailExportInvoices()">📊 EXPORT EXCEL</button>
         </div>
         <div id="mail-extraction-status" style="font-size:13px; margin-top:10px"></div>
         <div style="display:flex; gap:8px; align-items:center; margin-top:14px; flex-wrap:wrap">
@@ -406,7 +405,7 @@
     </div>
     <div class="field"><label>Seuil d'alerte stock (optionnel)</label><input type="number" id="mp-seuil" placeholder="ex : 5"></div>
     <button class="btn btn-gold" onclick="saveProd()">SAUVER</button>
-    <button class="btn" id="mp-archive" style="margin-top:10px; background:rgba(255,255,255,0.06); display:none" onclick="toggleArchive('prods', $('mp-id').value)">🗂 Archiver</button>
+    <button class="btn" id="mp-archive" style="margin-top:10px; background:var(--carte-2); display:none" onclick="toggleArchive('prods', $('mp-id').value)">🗂 Archiver</button>
     <button class="btn btn-red" onclick="closeModals()" style="margin-top:10px">ANNULER</button>
 </div></div>
 
@@ -432,7 +431,7 @@
         <div class="field"><label>Délai de paiement (jours)</label><input type="number" id="mc-echeance" placeholder="30"></div>
     </div>
     <button class="btn btn-gold" onclick="saveCli()">SAUVER</button>
-    <button class="btn" id="mc-archive" style="margin-top:10px; background:rgba(255,255,255,0.06); display:none" onclick="toggleArchive('clis', $('mc-id').value)">🗂 Archiver</button>
+    <button class="btn" id="mc-archive" style="margin-top:10px; background:var(--carte-2); display:none" onclick="toggleArchive('clis', $('mc-id').value)">🗂 Archiver</button>
     <button class="btn btn-red" onclick="closeModals()" style="margin-top:10px">ANNULER</button>
 </div></div>
 
