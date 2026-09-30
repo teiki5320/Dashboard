@@ -194,6 +194,29 @@ function genNum() {
     return new Date().getFullYear() + "-" + String(c).padStart(3, '0');
 }
 
+// Lecture d'un montant écrit pour l'affichage (« 1 234,56 € ») : on garde le
+// signe, sans quoi un avoir de -500 € serait compté +500 €.
+function montantDepuisTexte(t) {
+    const n = parseFloat(String(t == null ? '' : t).replace(/[^\d,-]/g, '').replace(',', '.'));
+    return isFinite(n) ? n : 0;
+}
+
+// Montants d'une facture de l'historique. Les lignes font foi : elles portent
+// le taux de TVA de chaque produit. Le total formaté n'est relu que pour les
+// vieilles factures sans détail, et 20 % n'est alors qu'un repli.
+function histMontants(h) {
+    if (h && typeof h.htNum === 'number' && typeof h.ttcNum === 'number' && isFinite(h.htNum) && isFinite(h.ttcNum)) {
+        return { ht: h.htNum, tva: h.ttcNum - h.htNum, ttc: h.ttcNum };
+    }
+    if (h && h.items && h.items.length) {
+        const ht = h.items.reduce((s, i) => s + (Number(i.qte) || 0) * (Number(i.prix) || 0), 0);
+        const tva = h.items.reduce((s, i) => s + (Number(i.qte) || 0) * (Number(i.prix) || 0) * ((i.tva == null ? 20 : Number(i.tva) || 0) / 100), 0);
+        return { ht: ht, tva: tva, ttc: ht + tva };
+    }
+    const ttc = montantDepuisTexte(h && h.total);
+    return { ht: ttc / 1.2, tva: ttc - ttc / 1.2, ttc: ttc };
+}
+
 // Réservation atomique du numéro de facture via une fonction Postgres
 // (voir le SQL en commentaire au-dessus de finalizeInvoice) : évite que deux
 // appareils facturant au même moment obtiennent le même numéro. Repli sur le
@@ -514,7 +537,7 @@ function printChargement() {
 
 function changeQty(id, d) {
     let e = $('qty-' + id);
-    e.value = Math.max(0, parseInt(e.value) + d);
+    e.value = Math.max(0, (parseFloat(e.value) || 0) + d);
 }
 
 function saveBL() {
@@ -522,16 +545,19 @@ function saveBL() {
     let prixCli = (cliId && db.prixCli[cliId]) ? db.prixCli[cliId] : {};
     let items = [];
     actifs(db.prods).forEach(p => {
-        let q = parseInt($('qty-' + p.id).value);
+        let q = parseFloat($('qty-' + p.id).value);
         let prixInput = parseFloat($('prix-' + p.id).value);
         let prixDefaut = prixCli[p.id] !== undefined ? prixCli[p.id] : p.prix;
         let prix = isNaN(prixInput) ? prixDefaut : prixInput;
         if (q > 0) items.push({ pid: p.id, icon: p.icon, nom: p.nom, prix: prix, qte: q, unite: p.unite, tva: p.tva, poids: p.poids || 0 });
     });
-    if (!items.length) return;
+    if (!items.length) return toast("Aucune quantité saisie", 'warn');
+    const cli = db.clis.find(c => c.id == cliId);
+    if (!cli) return toast("Choisis un client avant d'enregistrer la livraison", 'error');
+    if (!$('bl-date').value) return toast("Choisis une date de livraison", 'error');
     const [y, m, d] = $('bl-date').value.split('-');
     const dateStr = `${d}/${m}/${y}`;
-    db.bls.push({ id: Date.now(), date: dateStr, cid: cliId, cliNom: db.clis.find(c => c.id == cliId).nom, entId: $('bl-ent-select').value, items, status: 'en-cours' });
+    db.bls.push({ id: Date.now(), date: dateStr, cid: cliId, cliNom: cli.nom, entId: $('bl-ent-select').value, items, status: 'en-cours' });
     G.set('v90_bls', db.bls);
     toast("✅ Livraison enregistrée !", 'success');
     showPage('home');
@@ -594,11 +620,22 @@ function toggleBLSel(id, s) {
 function processBLToDraft() {
     let sel = db.bls.filter(b => blSel.includes(b.id));
     if (!sel.length) return;
+    // Un brouillon ne concerne qu'un seul client : sinon la facture partirait
+    // au nom du premier avec les marchandises livrées aux autres.
+    const clients = [...new Set(sel.map(b => b.cid))];
+    if (clients.length > 1) {
+        const noms = [...new Set(sel.map(b => b.cliNom))].join(', ');
+        return toast(`Ces bons concernent plusieurs clients (${noms}) : fais-en un brouillon par client.`, 'error');
+    }
     let cumul = {};
     sel.forEach(bl => {
         bl.items.forEach(it => {
-            if (!cumul[it.pid]) cumul[it.pid] = { ...it };
-            else cumul[it.pid].qte += it.qte;
+            // On ne regroupe que ce qui a le même produit ET le même prix :
+            // deux livraisons au même prix se cumulent, deux prix différents
+            // restent deux lignes, sinon le second prix serait perdu.
+            const cle = it.pid + '@' + it.prix;
+            if (!cumul[cle]) cumul[cle] = { ...it };
+            else cumul[cle].qte += it.qte;
         });
         bl.status = 'facturé';
     });
@@ -685,8 +722,8 @@ function renderLines() {
         <div class="card" style="flex-direction:column;align-items:stretch">
             <b>${l.icon} ${l.nom}</b>
             <div class="r2" style="margin-top:5px">
-                <input type="number" step="0.01" value="${l.qte}" oninput="curLines[${i}].qte=parseFloat(this.value);calcFact()">
-                <input type="number" step="0.01" value="${l.prix}" oninput="curLines[${i}].prix=parseFloat(this.value);calcFact()">
+                <input type="number" step="0.01" value="${l.qte}" oninput="curLines[${i}].qte=parseFloat(this.value)||0;calcFact()">
+                <input type="number" step="0.01" value="${l.prix}" oninput="curLines[${i}].prix=parseFloat(this.value)||0;calcFact()">
             </div>
             <button class="btn btn-red" style="margin-top:5px;padding:4px;font-size:10px" onclick="curLines.splice(${i},1);renderLines()">Supprimer</button>
         </div>`).join('');
@@ -773,13 +810,12 @@ function renderHomeResume() {
     const poids = aLivrer.reduce((s, b) => s + b.items.reduce((s2, i) => s2 + i.qte * getPoids(i), 0), 0);
 
     const impayees = db.hist.filter(h => computeHistStatus(h) !== 'payee');
-    const duTtc = impayees.reduce((s, h) => s + (parseFloat((h.total || '').replace(/[^\d,]/g, '').replace(',', '.')) || 0), 0);
+    const duTtc = impayees.reduce((s, h) => s + histMontants(h).ttc, 0);
 
     const bas = actifs(db.prods).filter(p => p.seuil > 0 && p.stock <= p.seuil);
 
     const caMois = db.hist.filter(h => histMonthKey(h.date) === moisKey)
-        .reduce((s, h) => s + (h.items && h.items.length ? h.items.reduce((s2, i) => s2 + i.qte * i.prix, 0)
-            : (parseFloat((h.total || '').replace(/[^\d,]/g, '').replace(',', '.')) || 0) / 1.2), 0);
+        .reduce((s, h) => s + histMontants(h).ht, 0);
 
     el.innerHTML = `
         <div class="hr-card hr-mint" onclick="goResumeLivraisons()">
@@ -1045,8 +1081,9 @@ async function previewInvoice() {
     let ent = db.ents.find(e => e.id == $('f-ent').value), cli = db.clis.find(c => c.id == $('f-cli').value);
     if (!ent || !cli) return toast("Émetteur ou Client manquant", 'error');
 
-    $('f-num').value = '…';
-    $('f-num').value = await reserveInvoiceNumber();
+    // Numéro provisoire à l'aperçu : le définitif n'est réservé qu'à la
+    // validation, pour qu'un aperçu abandonné ne laisse pas de trou.
+    if (!$('f-num').value || $('f-num').value === '…') $('f-num').value = genNum();
 
     // Lignes avec taux de TVA affiché + ventilation de la TVA par taux
     // (mentions obligatoires : taux par ligne, montant de taxe par taux).
@@ -1096,13 +1133,22 @@ async function previewInvoice() {
     $('preview-wrap').style.display = 'block';
 }
 
-function finalizeInvoice() {
-    curLines.forEach(l => { let p = db.prods.find(x => x.id == l.pid); if (p) p.stock -= l.qte; });
-    G.set('v90_prods', db.prods);
-    let ht = curLines.reduce((s, l) => s + (l.qte * l.prix), 0);
-    let ttc = curLines.reduce((s, l) => s + (l.qte * l.prix * (1 + (l.tva || 20) / 100)), 0);
+async function finalizeInvoice() {
     let entObj = db.ents.find(e => e.id == $('f-ent').value);
     let cliObj = db.clis.find(c => c.id == $('f-cli').value);
+    if (!cliObj) return toast("Client manquant : impossible de valider la facture", 'error');
+    if (!curLines.length) return toast("Facture vide : ajoute au moins une ligne", 'error');
+    let ht = curLines.reduce((s, l) => s + ((Number(l.qte) || 0) * (Number(l.prix) || 0)), 0);
+    let ttc = curLines.reduce((s, l) => s + ((Number(l.qte) || 0) * (Number(l.prix) || 0) * (1 + ((l.tva == null ? 20 : Number(l.tva) || 0) / 100))), 0);
+    if (!isFinite(ht) || !isFinite(ttc) || ttc <= 0) {
+        return toast("Une quantité ou un prix est vide : corrige la ligne avant de valider", 'error');
+    }
+    // Le numéro définitif n'est réservé qu'ici, puis l'aperçu est redessiné
+    // pour que la feuille imprimée porte bien ce numéro.
+    $('f-num').value = await reserveInvoiceNumber();
+    await previewInvoice();
+    curLines.forEach(l => { let p = db.prods.find(x => x.id == l.pid); if (p) p.stock -= (Number(l.qte) || 0); });
+    G.set('v90_prods', db.prods);
     // Traçabilité : si la facture vient d'un brouillon issu de BL, on garde
     // les références des bons d'origine (affichées dans l'Historique).
     let srcDraft = curDraftId ? db.drafts.find(d => d.id == curDraftId) : null;
@@ -1116,6 +1162,8 @@ function finalizeInvoice() {
         items: curLines.map(l => ({ icon: l.icon, nom: l.nom, qte: l.qte, prix: l.prix, unite: l.unite, tva: l.tva })),
         ht: eur(ht),
         total: eur(ttc),
+        htNum: ht,
+        ttcNum: ttc,
         statut: 'en_attente',
         echeance: calcEcheance($('f-date').value, cliObj.echeanceJours),
         blIds: srcDraft && srcDraft.blIds ? srcDraft.blIds : []
@@ -1123,6 +1171,12 @@ function finalizeInvoice() {
     G.set('v90_hist', db.hist);
     if (curDraftId) db.drafts = db.drafts.filter(d => d.id != curDraftId);
     G.set('v90_drafts', db.drafts);
+    // Remise à zéro : sans elle, les lignes de cette facture repartaient dans
+    // la suivante et le stock était décrémenté une seconde fois.
+    curLines = [];
+    curDraftId = null;
+    renderLines();
+    $('f-num').value = genNum();
     // Le numéro a déjà été réservé (atomiquement) dans previewInvoice() — ne pas réincrémenter ici.
     window.print();
     closePreview();
@@ -1570,9 +1624,9 @@ async function calcCompta() {
 
     let ca = 0, tvaCol = 0;
     filtered.forEach(h => {
-        let ttc = parseFloat(h.total.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
-        ca += ttc / 1.2;
-        tvaCol += ttc - (ttc / 1.2);
+        const m = histMontants(h);
+        ca += m.ht;
+        tvaCol += m.tva;
     });
 
     let depensesHtml = '';
@@ -1633,7 +1687,7 @@ function comptaTresoHtml(filtered) {
     filtered.filter(h => h.statut === 'payee').forEach(h => {
         const mk = histMonthKey(h.date);
         if (!mk) return;
-        entrees[mk] = (entrees[mk] || 0) + (parseFloat((h.total || '').replace(/[^\d,]/g, '').replace(',', '.')) || 0);
+        entrees[mk] = (entrees[mk] || 0) + histMontants(h).ttc;
     });
     (comptaState.mailInvoices || []).forEach(i => {
         if (!i.invoice_date || i.amount == null) return;
@@ -1681,9 +1735,7 @@ function comptaTresoHtml(filtered) {
 // pur, aucune dépendance. Le HT vient des lignes quand elles existent, sinon
 // du total TTC / 1,2 (anciennes factures sans détail).
 function comptaHistHt(h) {
-    if (h.items && h.items.length) return h.items.reduce((s, i) => s + i.qte * i.prix, 0);
-    const ttc = parseFloat((h.total || '').replace(/[^\d,]/g, '').replace(',', '.')) || 0;
-    return ttc / 1.2;
+    return histMontants(h).ht;
 }
 
 function comptaBarList(entries, color) {
@@ -1751,8 +1803,8 @@ function comptaExport() {
 
     let ca = 0, tvaCol = 0;
     comptaState.filtered.forEach(h => {
-        let ttc = parseFloat(h.total.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
-        ca += ttc / 1.2; tvaCol += ttc - (ttc / 1.2);
+        const m = histMontants(h);
+        ca += m.ht; tvaCol += m.tva;
     });
     const totalDepenses = comptaState.mailInvoices.reduce((s, i) => s + (i.amount || 0), 0);
     const ws2 = XLSX.utils.aoa_to_sheet([
