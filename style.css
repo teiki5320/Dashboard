@@ -64,7 +64,7 @@ html[data-theme="clair"] {
     --carte:      #fffaf4;
     --carte-2:    #f3e7db;
     --texte:      #4a4238;
-    --muted:      #8b8076;
+    --muted:      #6d6259;   /* assombri : #8b8076 tombait sous le seuil de lisibilité sur fond clair */
     --ligne:      rgba(74, 66, 56, .1);
 
     --peach: #f6d5c9; --sun: #f9e9b8; --sky: #cfdcef; --mint: #d8e9dc; --lilac: #e4d9f3;
@@ -409,6 +409,12 @@ select {
 .btn:hover { transform: translateY(-1px); }
 .btn:active { transform: scale(.97); }
 .btn:focus-visible { box-shadow: var(--clay-sm), 0 0 0 3px var(--accent-dim); }
+/* Même anneau de focus sur le menu, l'en-tête et les éléments rendus
+   cliquables au clavier : sans lui, on ne sait pas où l'on est. */
+.rail-item:focus-visible, .hd-btn:focus-visible, .hd-anim-btn:focus-visible,
+[role="button"]:focus-visible, .sub-tab:focus-visible, .home-btn:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 2px;
+}
 
 .btn-gold {
     width: 100%; background: var(--accent) !important; color: var(--accent-ink) !important;

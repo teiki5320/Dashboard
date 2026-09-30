@@ -650,7 +650,7 @@ function renderSuiviBL() {
                         <b style="font-size: 24px; color: var(--gold);">${eur(b.items.reduce((s,i) => s + i.qte * i.prix * (1 + (i.tva||20)/100), 0))}</b>
                         <div style="font-size: 14px; color: var(--text-muted); margin-top:2px">${poidsTotal.toFixed(2)} kg</div>
                     </div>
-                    <button class="btn" style="width: 40px; height: 40px; padding: 0; font-size: 18px; border-radius: 8px; background:rgba(255,255,255,0.1)" onclick="printBL(${b.id})" title="Imprimer ce bon">🖨️</button>
+                    <button class="btn" style="width: 40px; height: 40px; padding: 0; font-size: 18px; border-radius: 8px; background:var(--ligne)" onclick="printBL(${b.id})" title="Imprimer ce bon">🖨️</button>
                     <button class="btn btn-red" style="width: 40px; height: 40px; padding: 0; font-size: 16px; border-radius: 8px;" onclick="deleteItem('bls',${b.id})" title="Supprimer ce bon">✕</button>
                 </div>
             </div>
@@ -904,6 +904,7 @@ function goResumeCompta() {
 
 // --- RENDU GLOBAL DES LISTES ---
 function renderAll() {
+    setTimeout(appliquerAccessibilite, 0);
     renderHomeResume();
     // 1. Sélecteur client + entreprise pour le BL
     $('bl-date').value = new Date().toISOString().split('T')[0];
@@ -920,12 +921,12 @@ function renderAll() {
     $('list-prods-archives').innerHTML = prodsArch.map(p => `
         <div class="card" style="gap:8px; align-items:center; opacity:.65">
             <b style="flex:1">${p.icon} ${mailEsc(p.nom)}</b>
-            <button class="btn" style="width:auto;padding:6px 12px;font-size:12px;background:rgba(255,255,255,0.1)" onclick="toggleArchive('prods', ${p.id})">↩️ Restaurer</button>
+            <button class="btn" style="width:auto;padding:6px 12px;font-size:12px;background:var(--ligne)" onclick="toggleArchive('prods', ${p.id})">↩️ Restaurer</button>
         </div>`).join('');
     $('list-clis-settings').innerHTML = actifs(db.clis).map(c => `
         <div class="card" style="gap:8px; align-items:center">
             <b style="flex:1; cursor:pointer" onclick="openCliModal(${c.id})">👤 ${mailEsc(c.nom)}</b>
-            <button class="btn" style="width:auto;padding:6px 12px;font-size:12px;background:rgba(255,255,255,0.1)" onclick="openCliPrixModal(${c.id})">💰 Prix</button>
+            <button class="btn" style="width:auto;padding:6px 12px;font-size:12px;background:var(--ligne)" onclick="openCliPrixModal(${c.id})">💰 Prix</button>
             <span style="cursor:pointer" onclick="openCliModal(${c.id})">✏️</span>
         </div>`).join('');
     const clisArch = db.clis.filter(c => c.archived);
@@ -933,7 +934,7 @@ function renderAll() {
     $('list-clis-archives').innerHTML = clisArch.map(c => `
         <div class="card" style="gap:8px; align-items:center; opacity:.65">
             <b style="flex:1">👤 ${mailEsc(c.nom)}</b>
-            <button class="btn" style="width:auto;padding:6px 12px;font-size:12px;background:rgba(255,255,255,0.1)" onclick="toggleArchive('clis', ${c.id})">↩️ Restaurer</button>
+            <button class="btn" style="width:auto;padding:6px 12px;font-size:12px;background:var(--ligne)" onclick="toggleArchive('clis', ${c.id})">↩️ Restaurer</button>
         </div>`).join('');
     $('list-ents-settings').innerHTML = db.ents.map(e => `<div class="card card-link" onclick="openEntModal(${e.id})"><b>🏢 ${e.nom}</b><span>✏️</span></div>`).join('');
     
@@ -1041,11 +1042,16 @@ function renderHistorique() {
     let list = histFilter === 'impayees' ? db.hist.filter(h => computeHistStatus(h) !== 'payee') : db.hist;
     const entFilter = $('hist-ent-filter') ? $('hist-ent-filter').value : '';
     if (entFilter && entFilter !== 'Toutes') list = list.filter(h => (h.ent || '') === entFilter);
+    // Au-delà de cinquante factures, la page devenait lourde à chaque
+    // navigation : on affiche les plus récentes, le reste à la demande.
+    const total = list.length;
+    if (!renderHistorique.limite) renderHistorique.limite = 50;
+    const visibles = list.slice(Math.max(0, total - renderHistorique.limite));
     $('list-hist').innerHTML = list.length === 0
         ? `<div style="text-align:center; padding:40px 20px; opacity:.4; font-size:14px">${histFilter === 'impayees' ? 'Aucune facture impayée 🎉' : 'Aucune facture archivée'}</div>`
-        : list.slice().reverse().map(h => {
+        : visibles.slice().reverse().map(h => {
             const itemsHtml = (h.items || []).map(i =>
-                `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.06); font-size:13px">
+                `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--carte-2); font-size:13px">
                     <span>${i.icon || ''} ${mailEsc(i.nom)}</span>
                     <span style="opacity:.6">${i.qte} ${mailEsc(i.unite)} × ${eur(i.prix)}</span>
                     <span style="font-weight:600">${eur(i.qte * i.prix * (1 + (i.tva || 20) / 100))}</span>
@@ -1056,20 +1062,20 @@ function renderHistorique() {
             const badgeLbl = statut === 'payee' ? '✅ Payée' : statut === 'en_retard' ? '⏰ En retard' : '⏳ En attente';
             return `
             <div class="card" style="flex-direction:column; align-items:stretch; gap:0; padding:0; overflow:hidden">
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border-bottom:1px solid rgba(255,255,255,0.08)">
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border-bottom:1px solid var(--carte-2)">
                     <div>
                         <b style="font-size:16px; color:var(--gold)">🧾 ${mailEsc(h.num)}</b>
                         ${h.date ? `<span style="font-size:12px; opacity:.5; margin-left:10px">📅 ${mailEsc(h.date)}</span>` : ''}
                     </div>
                     <button class="btn btn-red" style="width:34px; height:34px; padding:0; font-size:14px; border-radius:8px; flex-shrink:0" onclick="deleteHist(${h.id || 0}, ${jsArg(h.num)})">✕</button>
                 </div>
-                <div style="padding:12px 16px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08)">
+                <div style="padding:12px 16px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; border-bottom:1px solid var(--carte-2)">
                     ${h.ent ? `<span style="font-size:12px; opacity:.6">🏢 <b>${mailEsc(h.ent)}</b></span><span style="opacity:.3">→</span>` : ''}
                     <span style="font-size:13px; font-weight:600">👤 ${mailEsc(h.cli)}</span>
                     ${h.echeance && statut !== 'payee' ? `<span style="font-size:11px; opacity:.5; margin-left:auto">échéance ${mailEsc(h.echeance)}</span><span class="badge-statut ${badgeCls}">${badgeLbl}</span>` : `<span class="badge-statut ${badgeCls}" style="margin-left:auto">${badgeLbl}</span>`}
                 </div>
                 ${(h.blIds && h.blIds.length) ? `
-                <div style="padding:8px 16px; border-bottom:1px solid rgba(255,255,255,0.08)">
+                <div style="padding:8px 16px; border-bottom:1px solid var(--carte-2)">
                     <span style="font-size:12px; cursor:pointer; color:var(--accent); font-weight:600" onclick="toggleBlOrigin(${h.id})">📦 ${h.blIds.length} bon${h.blIds.length > 1 ? 's' : ''} de livraison d'origine ▾</span>
                     <div id="bl-origin-${h.id}" hidden style="margin-top:8px">
                         ${h.blIds.map(bid => {
@@ -1081,14 +1087,14 @@ function renderHistorique() {
                     </div>
                 </div>` : ''}
                 ${itemsHtml ? `<div style="padding:8px 16px">${itemsHtml}</div>` : ''}
-                <div style="display:flex; justify-content:space-between; padding:12px 16px; background:rgba(255,255,255,0.04)">
+                <div style="display:flex; justify-content:space-between; padding:12px 16px; background:var(--carte-2)">
                     ${h.ht ? `<span style="font-size:12px; opacity:.5">HT : ${mailEsc(h.ht)}</span>` : '<span></span>'}
                     <b style="font-size:18px; color:var(--gold)">TTC : ${mailEsc(h.total)}</b>
                 </div>
                 <div style="display:flex; gap:8px; padding:0 16px 14px; flex-wrap:wrap">
-                    <button class="btn" style="flex:1; min-width:120px; font-size:11px; padding:8px; background:rgba(255,255,255,0.06)" onclick="toggleInvoicePaid(${h.id})">${statut === 'payee' ? '↩️ Marquer non payée' : '✅ Marquer payée'}</button>
-                    ${h.cliEmail ? `<button class="btn" style="flex:1; min-width:120px; font-size:11px; padding:8px; background:rgba(255,255,255,0.06)" onclick="envoyerFactureMail(${h.id})">📤 Envoyer</button>` : ''}
-                    ${statut !== 'payee' ? `<button class="btn" style="flex:1; min-width:120px; font-size:11px; padding:8px; background:rgba(255,255,255,0.06)" onclick="relanceHist(${h.id})">✉️ Relancer</button>` : ''}
+                    <button class="btn" style="flex:1; min-width:120px; font-size:11px; padding:8px; background:var(--carte-2)" onclick="toggleInvoicePaid(${h.id})">${statut === 'payee' ? '↩️ Marquer non payée' : '✅ Marquer payée'}</button>
+                    ${h.cliEmail ? `<button class="btn" style="flex:1; min-width:120px; font-size:11px; padding:8px; background:var(--carte-2)" onclick="envoyerFactureMail(${h.id})">📤 Envoyer</button>` : ''}
+                    ${statut !== 'payee' ? `<button class="btn" style="flex:1; min-width:120px; font-size:11px; padding:8px; background:var(--carte-2)" onclick="relanceHist(${h.id})">✉️ Relancer</button>` : ''}
                 </div>
             </div>`;
         }).join('');
@@ -1444,13 +1450,13 @@ function tvaRenderStats() {
     const el = $('tva-stats-bar'); if (!el) return;
     if (!tvaState.rows.length) { el.style.display = 'none'; return; }
     const tot = tvaCalcTotaux();
-    const soldeColor = tot.solde >= 0 ? '#fbbf24' : '#4ade80';
+    const soldeColor = tot.solde >= 0 ? 'var(--run)' : 'var(--ok)';
     el.style.cssText = 'display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; justify-content:center';
     el.innerHTML = `
         <div class="tva-stat">${tvaState.rows.length}<small>Transactions</small></div>
-        <div class="tva-stat" style="color:#4ade80">${tvaFmt(tot.tvaC)}<small>TVA collectée</small></div>
-        <div class="tva-stat" style="color:#fb923c">${tvaFmt(tot.tvaD)}<small>TVA déductible brute</small></div>
-        ${tot.tvaR > 0 ? `<div class="tva-stat" style="color:#a78bfa">${tvaFmt(tot.tvaR)}<small>TVA annulée (rejets)</small></div>` : ''}
+        <div class="tva-stat" style="color:var(--ok)">${tvaFmt(tot.tvaC)}<small>TVA collectée</small></div>
+        <div class="tva-stat" style="color:var(--peach-ink)">${tvaFmt(tot.tvaD)}<small>TVA déductible brute</small></div>
+        ${tot.tvaR > 0 ? `<div class="tva-stat" style="color:var(--lilac-ink)">${tvaFmt(tot.tvaR)}<small>TVA annulée (rejets)</small></div>` : ''}
         <div class="tva-stat" style="color:${soldeColor}">${tvaFmt(Math.abs(tot.solde))}<small>${tot.solde >= 0 ? 'À reverser' : 'Crédit TVA'}</small></div>`;
 }
 
@@ -1478,12 +1484,12 @@ function tvaRenderToolbar() {
         <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px">
             <div class="tva-defaults-bar">
                 <span style="font-size:12px; opacity:.6">Taux défaut :</span>
-                <label style="font-size:12px; color:#fb923c; display:flex; align-items:center; gap:5px">Achats
+                <label style="font-size:12px; color:var(--peach-ink); display:flex; align-items:center; gap:5px">Achats
                     <select class="tva-sel" onchange="tvaState.defaultAchat=this.value">
                         ${TAUX.map(t => `<option${t === tvaState.defaultAchat ? ' selected' : ''}>${t}</option>`).join('')}
                     </select>
                 </label>
-                <label style="font-size:12px; color:#4ade80; display:flex; align-items:center; gap:5px">Ventes
+                <label style="font-size:12px; color:var(--ok); display:flex; align-items:center; gap:5px">Ventes
                     <select class="tva-sel" onchange="tvaState.defaultVente=this.value">
                         ${TAUX.map(t => `<option${t === tvaState.defaultVente ? ' selected' : ''}>${t}</option>`).join('')}
                     </select>
@@ -1516,21 +1522,21 @@ function tvaRenderTable() {
         const ttc = r.montant || 0;
         const ht = t > 0 ? ttc / (1 + t) : ttc;
         const tva = ttc - ht;
-        const bg = i % 2 === 0 ? 'rgba(255,255,255,0.03)' : 'transparent';
-        const typeColor = r.type === 'vente' ? '#4ade80' : r.type === 'rejet' ? '#a78bfa' : '#fb923c';
+        const bg = i % 2 === 0 ? 'var(--carte-2)' : 'transparent';
+        const typeColor = r.type === 'vente' ? 'var(--ok)' : r.type === 'rejet' ? 'var(--lilac-ink)' : 'var(--peach-ink)';
         const typeBg = r.type === 'vente' ? 'rgba(74,222,128,0.1)' : r.type === 'rejet' ? 'rgba(167,139,250,0.1)' : 'rgba(251,146,60,0.1)';
         const typeBd = r.type === 'vente' ? 'rgba(74,222,128,0.3)' : r.type === 'rejet' ? 'rgba(167,139,250,0.3)' : 'rgba(251,146,60,0.3)';
-        const tvaColor = r.type === 'vente' ? '#4ade80' : r.type === 'rejet' ? '#a78bfa' : tva > 0 ? '#fb923c' : 'rgba(255,255,255,0.3)';
+        const tvaColor = r.type === 'vente' ? 'var(--ok)' : r.type === 'rejet' ? 'var(--lilac-ink)' : tva > 0 ? 'var(--peach-ink)' : 'var(--muted)';
         const tc = r.taux === '0%' ? 'zero' : r.taux === '5.5%' ? 'low' : r.taux === '10%' ? 'mid' : 'high';
         const rid = r.id.replace(/'/g, "\\'");
-        return `<tr style="border-bottom:1px solid rgba(255,255,255,0.05)">
+        return `<tr style="border-bottom:1px solid var(--carte-2)">
             <td style="padding:9px 12px;background:${bg};font-size:11px;opacity:.7;white-space:nowrap">${mailEsc(r.date)}</td>
             <td style="padding:9px 12px;background:${bg};max-width:220px">
-                <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;color:${r.isRejet ? '#a78bfa' : 'inherit'}" title="${r.label.replace(/"/g,'&quot;')}">
+                <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;color:${r.isRejet ? 'var(--lilac-ink)' : 'inherit'}" title="${r.label.replace(/"/g,'&quot;')}">
                     ${r.isRejet ? '<span style="font-size:10px;margin-right:4px;opacity:.7">⊘</span>' : ''}${mailEsc(r.label)}
                 </div>
             </td>
-            <td style="padding:9px 12px;background:${bg}"><span style="background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 8px;font-size:11px;opacity:.7">${mailEsc(r.source)}</span></td>
+            <td style="padding:9px 12px;background:${bg}"><span style="background:var(--carte-2);border-radius:6px;padding:2px 8px;font-size:11px;opacity:.7">${mailEsc(r.source)}</span></td>
             <td style="padding:9px 12px;background:${bg}">
                 <select onchange="tvaUpdate(${jsArg(rid)},'type',this.value)" style="background:${typeBg};color:${typeColor};border:1px solid ${typeBd};border-radius:20px;padding:3px 8px;font-size:12px;font-weight:600;cursor:pointer;outline:none;font-family:inherit">
                     <option value="vente"${r.type === 'vente' ? ' selected' : ''}>Vente</option>
@@ -1553,18 +1559,18 @@ function tvaRenderTable() {
 
     const rejetRow = tot.tvaR > 0 ? `
         <tr style="background:rgba(167,139,250,0.07);border-top:1px solid rgba(167,139,250,0.3)">
-            <td colspan="4" style="padding:11px 14px;font-weight:700;color:#a78bfa;font-size:13px">REJETS (TVA annulée)</td>
-            <td style="padding:11px 14px;text-align:right;font-weight:700;color:#a78bfa">${tvaFmt(tot.ttcR)}</td>
+            <td colspan="4" style="padding:11px 14px;font-weight:700;color:var(--lilac-ink);font-size:13px">REJETS (TVA annulée)</td>
+            <td style="padding:11px 14px;text-align:right;font-weight:700;color:var(--lilac-ink)">${tvaFmt(tot.ttcR)}</td>
             <td></td><td></td>
-            <td style="padding:11px 14px;text-align:right;font-weight:800;color:#a78bfa;font-size:15px">−${tvaFmt(tot.tvaR)}</td>
+            <td style="padding:11px 14px;text-align:right;font-weight:800;color:var(--lilac-ink);font-size:15px">−${tvaFmt(tot.tvaR)}</td>
         </tr>` : '';
-    const soldeColor = tot.solde >= 0 ? '#fbbf24' : '#4ade80';
+    const soldeColor = tot.solde >= 0 ? 'var(--run)' : 'var(--ok)';
     const soldeBg = tot.solde >= 0 ? 'rgba(251,191,36,0.05)' : 'rgba(74,222,128,0.05)';
 
     wrap.innerHTML = `
         <table class="tva-table">
             <thead>
-                <tr style="background:rgba(255,255,255,0.04);border-bottom:2px solid rgba(255,255,255,0.1)">
+                <tr style="background:var(--carte-2);border-bottom:2px solid var(--ligne)">
                     ${['Date','Libellé','Banque','Type','Montant TTC','Taux TVA','HT','TVA'].map((h, i) =>
                         `<th style="padding:10px 12px;text-align:${i >= 4 ? 'right' : 'left'};font-size:11px;font-weight:600;letter-spacing:.5px;opacity:.5;white-space:nowrap">${h}</th>`
                     ).join('')}
@@ -1573,25 +1579,25 @@ function tvaRenderTable() {
             <tbody>${rowsHtml}</tbody>
             <tfoot>
                 <tr style="background:rgba(74,222,128,0.07);border-top:2px solid rgba(74,222,128,0.3)">
-                    <td colspan="4" style="padding:11px 14px;font-weight:700;color:#4ade80;font-size:13px">TOTAL VENTES</td>
-                    <td style="padding:11px 14px;text-align:right;font-weight:700;color:#4ade80">${tvaFmt(tot.ttcV)}</td>
+                    <td colspan="4" style="padding:11px 14px;font-weight:700;color:var(--ok);font-size:13px">TOTAL VENTES</td>
+                    <td style="padding:11px 14px;text-align:right;font-weight:700;color:var(--ok)">${tvaFmt(tot.ttcV)}</td>
                     <td></td>
-                    <td style="padding:11px 14px;text-align:right;font-weight:700;color:#4ade80">${tvaFmt(tot.htV)}</td>
-                    <td style="padding:11px 14px;text-align:right;font-weight:800;color:#4ade80;font-size:15px">${tvaFmt(tot.tvaC)}</td>
+                    <td style="padding:11px 14px;text-align:right;font-weight:700;color:var(--ok)">${tvaFmt(tot.htV)}</td>
+                    <td style="padding:11px 14px;text-align:right;font-weight:800;color:var(--ok);font-size:15px">${tvaFmt(tot.tvaC)}</td>
                 </tr>
                 <tr style="background:rgba(251,146,60,0.07);border-top:1px solid rgba(251,146,60,0.3)">
-                    <td colspan="4" style="padding:11px 14px;font-weight:700;color:#fb923c;font-size:13px">TOTAL ACHATS (brut)</td>
-                    <td style="padding:11px 14px;text-align:right;font-weight:700;color:#fb923c">${tvaFmt(tot.ttcA)}</td>
+                    <td colspan="4" style="padding:11px 14px;font-weight:700;color:var(--peach-ink);font-size:13px">TOTAL ACHATS (brut)</td>
+                    <td style="padding:11px 14px;text-align:right;font-weight:700;color:var(--peach-ink)">${tvaFmt(tot.ttcA)}</td>
                     <td></td>
-                    <td style="padding:11px 14px;text-align:right;font-weight:700;color:#fb923c">${tvaFmt(tot.htA)}</td>
-                    <td style="padding:11px 14px;text-align:right;font-weight:800;color:#fb923c;font-size:15px">${tvaFmt(tot.tvaD)}</td>
+                    <td style="padding:11px 14px;text-align:right;font-weight:700;color:var(--peach-ink)">${tvaFmt(tot.htA)}</td>
+                    <td style="padding:11px 14px;text-align:right;font-weight:800;color:var(--peach-ink);font-size:15px">${tvaFmt(tot.tvaD)}</td>
                 </tr>
                 ${rejetRow}
-                <tr style="border-top:1px solid rgba(255,255,255,0.08)">
+                <tr style="border-top:1px solid var(--carte-2)">
                     <td colspan="7" style="padding:11px 14px;font-size:12px;opacity:.5">TVA déductible nette (achats − rejets)</td>
-                    <td style="padding:11px 14px;text-align:right;font-weight:800;color:#fb923c;font-size:15px">${tvaFmt(tot.tvaDeductibleNette)}</td>
+                    <td style="padding:11px 14px;text-align:right;font-weight:800;color:var(--peach-ink);font-size:15px">${tvaFmt(tot.tvaDeductibleNette)}</td>
                 </tr>
-                <tr style="background:${soldeBg};border-top:2px solid rgba(255,255,255,0.1)">
+                <tr style="background:${soldeBg};border-top:2px solid var(--ligne)">
                     <td colspan="6" style="padding:14px;font-weight:700;color:${soldeColor};font-size:14px">
                         ${tot.solde >= 0 ? '▶ TVA NETTE À REVERSER' : '▶ CRÉDIT DE TVA'}
                         <span style="font-weight:400;font-size:12px;margin-left:8px;opacity:.6">collectée − déductible nette</span>
@@ -1708,7 +1714,7 @@ async function calcCompta() {
                             <div style="font-size:12px; opacity:.6">${mailEsc(i.invoice_date || '—')} · ${mailEsc(i.entity || '—')} · ${i.status === 'valide' ? '✅ vérifiée' : '⏳ à vérifier'}</div>
                         </div>
                         <b>${i.amount != null ? eur(i.amount) : '—'}</b>
-                        ${i.status !== 'valide' ? `<button class="btn" style="width:auto; padding:6px 12px; font-size:11px; background:rgba(255,255,255,0.08)" onclick="comptaValiderDepense('${(i.gmail_message_id||'').replace(/'/g,"\\'")}')">✅ Vérifier</button>` : ''}
+                        ${i.status !== 'valide' ? `<button class="btn" style="width:auto; padding:6px 12px; font-size:11px; background:var(--carte-2)" onclick="comptaValiderDepense('${(i.gmail_message_id||'').replace(/'/g,"\\'")}')">✅ Vérifier</button>` : ''}
                     </div>`).join('')}
                 <div class="card" style="background:var(--bg-elev-2)"><span style="font-weight:700">Total dépenses (période)</span><b style="color:var(--danger)">${eur(totalDepenses)}</b></div>`;
         }
@@ -1798,7 +1804,7 @@ function comptaBarList(entries, color) {
     return entries.map(([label, val]) => `
         <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px">
             <span style="flex:0 0 110px; font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap" title="${mailEsc(label)}">${mailEsc(label)}</span>
-            <div style="flex:1; height:18px; background:rgba(255,255,255,0.05); border-radius:4px; overflow:hidden">
+            <div style="flex:1; height:18px; background:var(--carte-2); border-radius:4px; overflow:hidden">
                 <div style="width:${(val / max * 100).toFixed(1)}%; height:100%; background:${color}; border-radius:4px"></div>
             </div>
             <b style="flex:0 0 90px; text-align:right; font-size:12px">${eur(val)}</b>
@@ -1890,10 +1896,43 @@ function comptaStatutLabel(h) {
     return s === 'payee' ? 'Payée' : s === 'en_retard' ? 'En retard' : 'En attente';
 }
 
+// Les tuiles et les sous-onglets sont des div cliquables : on les rend
+// atteignables au clavier, on relie chaque libellé à son champ et on annonce
+// les intertitres, sans toucher à l'apparence.
+function appliquerAccessibilite() {
+    document.querySelectorAll('[onclick]:not(button):not(a):not(input):not(select):not(textarea)').forEach(el => {
+        if (el.dataset.clavierOk) return;
+        el.dataset.clavierOk = '1';
+        if (!el.hasAttribute('tabindex')) el.tabIndex = 0;
+        if (!el.hasAttribute('role')) el.setAttribute('role', 'button');
+        el.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+        });
+    });
+    document.querySelectorAll('label:not([for])').forEach(l => {
+        const champ = l.parentElement && l.parentElement.querySelector('input[id], select[id], textarea[id]');
+        if (champ) l.setAttribute('for', champ.id);
+    });
+    document.querySelectorAll('.section-title:not([role])').forEach(t => {
+        t.setAttribute('role', 'heading');
+        t.setAttribute('aria-level', '2');
+    });
+}
+
+// Échap ferme la fenêtre ouverte, quelle qu'elle soit.
+document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    const apercu = $('preview-wrap');
+    if (apercu && apercu.style.display === 'block') return closePreview();
+    const ouverte = [...document.querySelectorAll('.modal-overlay')].find(m => m.style.display === 'flex');
+    if (ouverte) closeModals();
+});
+
 // Initialisation
 $('f-date').value = new Date().toLocaleDateString('fr-FR');
 showPage('home');
 Supa.pullAll();
+appliquerAccessibilite();
 
 // « Suis-je à jour ? » — date de publication du fichier réellement chargé
 // (en-tête Last-Modified servi par GitHub Pages), affichée dans
@@ -2026,6 +2065,24 @@ function clearMailClaudeKey() {
 }
 
 // --- OAuth Gmail (Google Identity Services) ---
+// Chargé seulement quand on connecte Gmail : dans l'en-tête, ce script tiers
+// prenait deux à trois secondes de réseau à chaque ouverture de l'app, y
+// compris pour quelqu'un qui n'utilise jamais le module Mail.
+let _gsiEnCours = null;
+function chargerGSI() {
+    if (window.google && google.accounts && google.accounts.oauth2) return Promise.resolve();
+    if (_gsiEnCours) return _gsiEnCours;
+    _gsiEnCours = new Promise((resoudre, rejeter) => {
+        const b = document.createElement('script');
+        b.src = 'https://accounts.google.com/gsi/client';
+        b.async = true;
+        b.onload = () => resoudre();
+        b.onerror = () => { _gsiEnCours = null; rejeter(new Error('Google Identity indisponible')); };
+        document.head.appendChild(b);
+    });
+    return _gsiEnCours;
+}
+
 function mailInitTokenClient() {
     if (!window.google || !google.accounts || !google.accounts.oauth2) return null;
     if (mailState.tokenClient) return mailState.tokenClient;
@@ -2043,13 +2100,15 @@ function mailInitTokenClient() {
     return mailState.tokenClient;
 }
 
-function mailConnectGmail() {
+async function mailConnectGmail() {
     if (GMAIL_CLIENT_ID === 'GMAIL_CLIENT_ID') {
         toast("⚠️ Configuration requise : remplace GMAIL_CLIENT_ID dans script.js par ton Client ID Google Cloud (voir le commentaire en tête de la section Mail).", 'warn');
         return;
     }
+    try { await chargerGSI(); }
+    catch (e) { toast("Connexion à Google impossible : vérifie ta connexion internet, puis réessaie.", 'error'); return; }
     const client = mailInitTokenClient();
-    if (!client) { toast("Google Identity Services n'est pas encore chargé. Vérifie ta connexion internet et recharge la page.", 'error'); return; }
+    if (!client) { toast("Connexion à Google impossible pour le moment. Réessaie dans un instant.", 'error'); return; }
     client.requestAccessToken({ prompt: mailState.token ? '' : 'consent' });
 }
 
@@ -2594,7 +2653,7 @@ async function renderMailInvoicesTable() {
                 ${['Date', 'Entité', 'Fournisseur', 'Montant', 'Catégorie', 'Statut'].map(h => `<th style="padding:10px 12px; text-align:left; font-size:11px; opacity:.5; text-transform:uppercase">${h}</th>`).join('')}
             </tr></thead>
             <tbody>${list.map(i => `
-                <tr style="border-bottom:1px solid rgba(255,255,255,0.05)">
+                <tr style="border-bottom:1px solid var(--carte-2)">
                     <td style="padding:9px 12px; font-size:12px">${mailEsc(i.invoice_date || '—')}</td>
                     <td style="padding:9px 12px; font-size:12px">${mailEsc(i.entity || '—')}</td>
                     <td style="padding:9px 12px; font-size:13px">${mailEsc(i.vendor || '—')}</td>
