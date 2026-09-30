@@ -2,7 +2,10 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <!-- Ce que la page a le droit de charger et de contacter. Tout le reste est
+         refusé par le navigateur, y compris si du code était injecté. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://accounts.google.com https://apis.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co https://api.anthropic.com https://gmail.googleapis.com https://www.googleapis.com https://oauth2.googleapis.com https://cdn.jsdelivr.net; frame-src https://accounts.google.com; object-src 'none'; base-uri 'self'; form-action 'none'">
     <title>Gestion Pro v9.0</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f0f10">
@@ -12,7 +15,6 @@
     // Thème avant le premier rendu : évite le flash clair/sombre.
     try { if (localStorage.getItem('gp-theme') === 'clair') document.documentElement.setAttribute('data-theme', 'clair'); } catch (e) {}
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
     <meta name="apple-mobile-web-app-capable" content="yes">
