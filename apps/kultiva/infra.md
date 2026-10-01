@@ -9,7 +9,8 @@ Généré le 2026-08-21 par un scan du dépôt. Pour mettre à jour : relancer c
 
 - **Plateforme** : iOS + Android (Flutter ≥ 3.38), portrait, iPhone + iPad — app `com.toa.kultiva`, v1.0.0+5
 - **Stack** : Flutter/Dart Material 3, local-first (SharedPreferences + services singletons, `ValueNotifier`, sans framework d'état)
-- **Backend** : Supabase (auth, Postgres RLS, Storage, 2 edge functions) — facultatif, l'app fonctionne hors ligne
+- **Backend** : Supabase (auth, Postgres RLS, Storage, 2 edge functions) — facultatif, l'app fonctionne hors ligne.
+  ⏸️ Vérifié le 1er octobre 2026 : le projet Supabase est **en pause**, son adresse ne répond plus ; à réveiller depuis la console avant toute reprise.
 - **Distribution** : App Store via Xcode Cloud + Play Store (AAB signé) — en pré-publication, textes des fiches prêts (`docs/store-listings.md`)
 - **Marchés** : bi-marché France + 8 pays francophones d'Afrique de l'Ouest, détection du pays et de la sous-zone climatique
 - **Particularités** : météo Open-Meteo sans clé d'API, notifications locales uniquement, tutos et contenu 100 % hors ligne
