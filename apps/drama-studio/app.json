@@ -4,12 +4,12 @@
   "visible": true,
   "order": 3,
   "repo": "teiki5320/Drama-studio",
-  "platforms": ["iOS"],
+  "platforms": [
+    "iOS"
+  ],
   "tagline": "Production des épisodes de drama.",
   "services": [
     "github",
-    "apple-developer",
-    "app-store-connect",
-    "xcode-cloud"
+    "api-ia"
   ]
 }

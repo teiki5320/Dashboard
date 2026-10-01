@@ -4,7 +4,18 @@
   "visible": true,
   "order": 7,
   "repo": "teiki5320/palabre",
-  "platforms": ["iOS", "Android"],
+  "platforms": [
+    "iOS",
+    "Android"
+  ],
   "tagline": "Président pour 100 jours — jeu de cartes façon Reigns.",
-  "services": ["github"]
+  "services": [
+    "github",
+    "apple-developer",
+    "app-store-connect",
+    "xcode-cloud",
+    "play-console",
+    "api-ia",
+    "visuels-store"
+  ]
 }
