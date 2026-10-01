@@ -16,6 +16,8 @@
     "app-store-connect",
     "xcode-cloud",
     "game-services",
-    "hebergement-web"
+    "hebergement-web",
+    "admob",
+    "play-console"
   ]
 }
