@@ -7,6 +7,9 @@
 # Sauvegardes de l'app : elles contiennent tous les clients, factures et SIRET
 Sauvegarde_GestionPro_*.json
 
+# Notes et prompts de travail : ils citent des SIREN et des montants réels
+PROMPT_*.md
+
 # Exports de travail
 *.xlsx
 *.pdf
