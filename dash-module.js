@@ -316,7 +316,11 @@
       if (!list.length) return;
       h += '<div class="fam"><div class="fam-h"><i class="sw sw-' + famTint(cat) + '"></i>' + esc(cat) + '</div><div class="chips">';
       list.forEach(function (s) {
-        h += '<button type="button" class="chip tint-' + famTint(cat) + '" data-svc="' + esc(s.id) + '">' + esc(s.emoji) + ' ' + esc(s.nom.replace(/\s*\(.*\)$/, '')) + '</button>';
+        // Le fournisseur réel de cette app, quand la fiche le dit : « Hébergement
+        // web » seul ne disait pas si le site vit chez GitHub ou chez Cloudflare.
+        var fournisseur = (app.serviceFournisseurs || {})[s.id];
+        h += '<button type="button" class="chip tint-' + famTint(cat) + '" data-svc="' + esc(s.id) + '">' + esc(s.emoji) + ' ' + esc(s.nom.replace(/\s*\(.*\)$/, '')) +
+          (fournisseur ? '<span class="chip-f">' + esc(fournisseur) + '</span>' : '') + '</button>';
       });
       h += '</div></div>';
     });

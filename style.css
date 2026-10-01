@@ -769,6 +769,14 @@ b.ebe-neg, span.ebe-neg { color: var(--ko); }
 
 .btn:disabled { opacity: .45; cursor: default; transform: none; }
 
+/* Nom du fournisseur réel, à droite du nom générique du service. */
+.chip .chip-f {
+    margin-left: 6px; padding: 1px 6px; border-radius: 6px;
+    background: var(--carte); color: var(--texte);
+    font-size: 10px; font-weight: 800; letter-spacing: .01em;
+    display: inline-block; max-width: 100%; overflow-wrap: anywhere;
+}
+
 /* ── Documents ─────────────────────────────────────────────────────────── */
 .ebe-documents td { vertical-align: top; }
 .ebe-documents td:first-child { white-space: nowrap; font-weight: 700; }
@@ -1069,7 +1077,7 @@ html[data-anim="off"] *, html[data-anim="off"] *::before, html[data-anim="off"] 
 #page-dash .chip, .dash-overlay .chip {
   display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border: 0; border-radius: 14px; cursor: default;
   font-size: 12.5px; font-weight: 800; background: var(--d-card); color: var(--d-text); box-shadow: var(--d-clay-sm);
-  white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; transition: transform .18s var(--d-bounce);
+  white-space: normal; text-align: left; flex-wrap: wrap; max-width: 100%; transition: transform .18s var(--d-bounce);
 }
 #page-dash button.chip, #page-dash a.chip, .dash-overlay a.chip { cursor: pointer; font-family: inherit; }
 #page-dash button.chip:hover, #page-dash a.chip:hover, .dash-overlay a.chip:hover { transform: translateY(-2px); opacity: 1; }
