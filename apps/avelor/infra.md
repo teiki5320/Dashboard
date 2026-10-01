@@ -8,7 +8,9 @@
 - **Stack** : Next.js 15.5.20 (App Router) · React 19 · TypeScript · Tailwind 3.4
 - **Hébergement** : Vercel (déploiement automatique depuis la branche `main`)
 - **Domaine** : avelor.vercel.app (sous-domaine Vercel, SSL auto — domaine propre à acheter)
-- **Base de données** : Supabase (PostgreSQL, table `fiches`, RLS)
+- **Base de données** : Supabase (PostgreSQL, table `fiches`, RLS).
+  ⏸️ Vérifié le 1er octobre 2026 : le projet Supabase est **en pause** — le site répond toujours,
+  mais tout ce qui dépend de la base échoue tant qu'il n'est pas réveillé.
 - **E-mail** : Resend (magic links + rappels quotidiens via cron Vercel 7h)
 - **CI** : GitHub Actions (lint → build → 259 tests à chaque push/PR vers `main`)
 

@@ -63,11 +63,12 @@ Généré le 21 août 2026 par un scan du dépôt. Pour mettre à jour : relance
 
 ## Format Recettes — source des données (ajouté)
 
-- **Rôle** : le format 🍲 Recettes lit les fiches du site **Alohash** pour en faire des vidéos
-  verticales. Aucune base de données : tout est lu à la volée sur le site public.
-- **Source** : `RECIPE_SITE_URL` dans `.env` — défaut `https://teiki5320.github.io/alohash`
-  (le domaine `https://www.alohash.fr` est en maintenance et prendra le relais en changeant
-  cette seule variable).
+- **Rôle** : le format 🍲 Recettes lit les fiches du site **Keur Cook** (anciennement Alohash)
+  pour en faire des vidéos verticales. Aucune base de données : tout est lu à la volée sur le
+  site public.
+- **Source** : `RECIPE_SITE_URL` dans `.env` — le site vit désormais sur `https://keurcook.com`.
+  Vérifié le 1er octobre 2026 : les anciennes adresses `teiki5320.github.io/alohash` et
+  `www.alohash.fr` ne répondent plus (404), la variable doit pointer sur le nouveau domaine.
 - **Protocole** : `GET <base>/sitemap.xml` pour lister les URL contenant `/recette/`, puis
   `GET <base>/recette/<slug>/` dont on extrait le bloc `<script type="application/ld+json">`
   de type `schema.org/Recipe` (name, description, image, prepTime, cookTime, recipeYield,
