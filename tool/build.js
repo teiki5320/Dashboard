@@ -342,31 +342,65 @@ function extractListe(lines, re, maxItems) {
 // Relie chaque service de l'app à la section d'infra.md dont le titre
 // contient son nom (ou son id).
 function findServiceAnchors(serviceIds, toc) {
-  const anchors = {};
+  // Chaque section ne peut servir qu'un seul service, et on attribue d'abord
+  // les correspondances les plus franches : sans ça, « Hébergement web »
+  // s'accrochait à la section « GitHub » d'une app hébergée chez Cloudflare.
+  const candidats = [];
   for (const id of serviceIds) {
     const svc = SERVICES.find((s) => s.id === id);
     if (!svc) continue;
-    // Nom sans parenthèses, découpé sur les « / » : "Game Center / Play Games"
-    // → "game center" et "play games".
     const base = svc.nom.replace(/\s*\(.*\)$/, '');
     const needles = [normalize(id)];
     for (const part of base.split('/')) needles.push(normalize(part.trim()));
-    // Les noms entre parenthèses : "Hébergement web (Vercel / Netlify)" → vercel, netlify
     const paren = svc.nom.match(/\(([^)]+)\)/);
     if (paren) for (const alt of paren[1].split(/[/,]/)) needles.push(normalize(alt.trim()));
-    // Alias explicites du catalogue (ex. "API externe" pour api-tierce)
     for (const alt of svc.alias || []) needles.push(normalize(alt));
-    const entry = toc.find((t) => {
+    for (const t of toc) {
       const title = normalize(t.text).replace(/^\s*\d+[.)]\s*/, '').replace(/[^a-z0-9]+/g, ' ').trim();
-      return needles.some((n) => {
+      if (!title) continue;
+      for (const n of needles) {
         const needle = n.replace(/[^a-z0-9]+/g, ' ').trim();
-        if (!needle || needle.length < 3) return false;
-        return title.includes(needle) || (title.length > 3 && needle.includes(title));
-      });
-    });
-    if (entry) anchors[id] = entry.id;
+        if (!needle || needle.length < 3) continue;
+        let score = 0;
+        if (title === needle) score = 100 + needle.length;          // « GitHub » = GitHub
+        else if (title.includes(needle)) score = 50 + needle.length; // « Cloudflare Pages » contient « cloudflare »
+        else if (title.length > 3 && needle.includes(title)) score = 20 + title.length;
+        if (score) candidats.push({ id, ancre: t.id, score });
+      }
+    }
+  }
+  candidats.sort((a, b) => b.score - a.score);
+  const anchors = {};
+  const prises = new Set();
+  for (const c of candidats) {
+    if (anchors[c.id] || prises.has(c.ancre)) continue;
+    anchors[c.id] = c.ancre;
+    prises.add(c.ancre);
   }
   return anchors;
+}
+
+// Le nom réel du fournisseur, lu dans le titre de la section de la fiche :
+// « ### 2. Cloudflare » → « Cloudflare ». Sans ça, la pastille n'affiche que
+// l'étiquette générique du catalogue et l'app semble ne rien utiliser de précis.
+function findServiceProviders(serviceIds, toc, anchors) {
+  const fournisseurs = {};
+  for (const id of serviceIds) {
+    const ancre = anchors[id];
+    if (!ancre) continue;
+    const entry = toc.find((t) => t.id === ancre);
+    if (!entry) continue;
+    const nom = String(entry.text)
+      .replace(/^\s*\d+[.)]\s*/, '')        // « 2. Cloudflare » → « Cloudflare »
+      .replace(/\s*\(.*?\)\s*$/, '')        // parenthèses de fin
+      .trim();
+    const svc = SERVICES.find((x) => x.id === id);
+    const generique = svc ? normalize(svc.nom.replace(/\s*\(.*\)$/, '')) : '';
+    // On n'affiche le nom que s'il apporte quelque chose : « Hébergement web »
+    // répété sous la pastille « Hébergement web » n'apprend rien.
+    if (nom && nom.length <= 32 && normalize(nom) !== generique) fournisseurs[id] = nom;
+  }
+  return fournisseurs;
 }
 
 // ── 2-4. Lecture des apps ────────────────────────────────────────────────────
@@ -480,6 +514,7 @@ function loadApps() {
       catch (e) { console.warn(`⚠️  apps/${id}/status.json invalide (${e.message}) — ignoré`); }
     }
 
+    const ancresServices = findServiceAnchors(services, infra.toc);
     apps.push({
       id,
       order: typeof manifest.order === 'number' ? manifest.order : 999,
@@ -500,7 +535,8 @@ function loadApps() {
       // Même forme que « Vue d'ensemble » de l'infra : mêmes puces, même extracteur.
       publicationEssentiel: publicationMd ? extractInfraEssentiel(publicationMd) : null,
       publicationPlateformes: publicationMd ? extractPublicationPlateformes(publicationMd) : null,
-      serviceAnchors: findServiceAnchors(services, infra.toc),
+      serviceAnchors: ancresServices,
+      serviceFournisseurs: findServiceProviders(services, infra.toc, ancresServices),
       fiches,
       status,
     });
