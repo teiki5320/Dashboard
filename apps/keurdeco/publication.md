@@ -1,6 +1,6 @@
 # PUBLICATION — état de la mise en ligne
 
-> Généré le 30 septembre 2026 d'après le dépôt (côté Dashboard : si le dépôt crée sa propre fiche docs/PUBLICATION.md, elle remplacera celle-ci à la synchro suivante).
+> Généré le 30 septembre 2026, mis à jour le 1er octobre 2026 d'après le dépôt (côté Dashboard : si le dépôt crée sa propre fiche docs/PUBLICATION.md, elle remplacera celle-ci à la synchro suivante).
 >
 > Aucun secret ici — uniquement des références.
 
@@ -30,4 +30,4 @@
 
 1. **Pinterest** — obtenir l'accès à l'API (vidéo de démonstration exigée), recopier le refresh token dans les secrets GitHub ; d'ici là, publier les épingles par l'import CSV.
 2. **Google** — vérifier l'inscription à la Search Console et l'indexation des premières pages.
-3. **Images** — remplacer les illustrations provisoires des trois articles de départ par les images OpenArt.
+3. **Images** — fait côté dépôt : les 37 articles portent une image créée par IA (`image_ia: true`).

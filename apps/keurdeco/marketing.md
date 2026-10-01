@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 30 septembre 2026. Compagnon de INFRA.md (généré côté Dashboard : si le dépôt crée sa propre fiche docs/MARKETING.md, elle remplacera celle-ci à la synchro suivante).
+Mis à jour le 1er octobre 2026. Compagnon de INFRA.md (généré côté Dashboard : si le dépôt crée sa propre fiche docs/MARKETING.md, elle remplacera celle-ci à la synchro suivante).
 
 ## Positionnement
 
@@ -32,7 +32,7 @@ Liens Partenaires Amazon.fr — tag `keurdeco-21`.
 
 ## Calendrier
 
-- Articles et conseils **publiés à leur date** (en-tête `publie_le`, heure de Paris) : le site est reconstruit à chaque push et chaque lundi à 5 h UTC. 10 articles programmés du 14 décembre au 15 février (chambre d'enfant, paniers muraux, indigo, salle de bain, tapis, cuisine, mariage ×2, Saint-Valentin, baptême) ; 12 premiers conseils en place.
+- Articles et conseils **publiés à leur date** (en-tête `publie_le`, heure de Paris) : le site est reconstruit à chaque push et chaque lundi à 5 h UTC. 19 articles en ligne au 1er octobre 2026 (dont Baptême, Noël, mariage en wax et Tabaski, publiés dès maintenant) ; 18 articles programmés, **un par lundi du 5 octobre 2026 au 1er février 2027** (dernier : chambre d'enfant en wax) ; 12 premiers conseils en place.
 - Épingles Pinterest : au fil de l'eau, 5 par jour au plus, jamais deux du même article le même jour.
 
 ## Prochaines actions
