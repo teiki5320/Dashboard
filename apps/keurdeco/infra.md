@@ -1,14 +1,14 @@
 # INFRA — fiche technique
 
-Généré le 30 septembre 2026 par un scan du dépôt (côté Dashboard : le dépôt n'a pas encore de fiche docs/INFRA.md — si elle apparaît, elle remplacera celle-ci à la synchro suivante).
+Généré le 30 septembre 2026, mis à jour le 1er octobre 2026 par un scan du dépôt (côté Dashboard : le dépôt n'a pas encore de fiche docs/INFRA.md — si elle apparaît, elle remplacera celle-ci à la synchro suivante).
 
 ## Vue d'ensemble
 
 - **Plateforme** : site web éditorial en français sur la décoration africaine — statique multipage, mobile d'abord, installable (manifeste + service worker), lisible sans JavaScript
 - **Stack** : Vite + TypeScript (Node ≥ 22.18), aucun backend — articles en Markdown + YAML (`contenu/articles/`, `contenu/conseils/`), données en JSON (`src/data/`), tests Vitest + test de bout en bout Chromium
 - **Distribution** : GitHub Pages via le workflow `pages.yml` — à chaque push sur `main`, chaque lundi à 5 h UTC (publication des articles programmés) et à la demande ; adresse `https://www.keurdeco.com/`
-- **IA** : images d'ambiance et vignettes produits créées avec OpenArt (mention « Image d'ambiance créée par IA » affichée) ; illustrations provisoires dessinées par script en attendant
-- **Particularités** : 3 types d'articles (ambiance avec points cliquables vers les produits, top classé, guide) publiés à leur date ; onglet Conseils (une question par page, données structurées FAQ) ; nuancier des matières (wax, bogolan, kente, indigo…) ; animations signature (porte en arche, visite de la maison, coupons de tissu, rideau de kente) coupées par « Réduire les animations » ; palette « Terre de Dakar », polices Fraunces + Source Sans 3 hébergées avec le site ; rapport de build (articles à venir, produits à vérifier)
+- **IA** : images d'ambiance et vignettes produits créées avec OpenArt (mention « Image d'ambiance créée par IA » affichée) — les 37 articles portent désormais une image créée par IA (`image_ia: true`)
+- **Particularités** : 3 types d'articles (ambiance avec points cliquables vers les produits, top classé, guide) publiés à leur date, rangés sans mélange (une pièce, une matière ou une occasion n'affiche que ses ambiances ; menu « Tops » et « Guides » : `tops.html`, `guides.html`) ; onglet Conseils (une question par page, données structurées FAQ) ; nuancier des matières (wax, bogolan, kente, indigo…) ; carrousels de l'accueil (pièces et tops, 7 au plus, flèches et compteur) ; animations signature (porte en arche, visite de la maison, coupons de tissu, rideau de kente) coupées par « Réduire les animations » ; palette « Terre de Dakar », polices Fraunces + Source Sans 3 hébergées avec le site ; rapport de build (articles à venir, produits à vérifier)
 
 ### 1. GitHub
 
