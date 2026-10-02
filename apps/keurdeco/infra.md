@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Généré le 30 septembre 2026, mis à jour le 1er octobre 2026 par un scan du dépôt (côté Dashboard : le dépôt n'a pas encore de fiche docs/INFRA.md — si elle apparaît, elle remplacera celle-ci à la synchro suivante).
+Généré le 30 septembre 2026, mis à jour le 2 octobre 2026 par un scan du dépôt (côté Dashboard : le dépôt n'a pas encore de fiche docs/INFRA.md — si elle apparaît, elle remplacera celle-ci à la synchro suivante).
 
 ## Vue d'ensemble
 
@@ -12,7 +12,7 @@ Généré le 30 septembre 2026, mis à jour le 1er octobre 2026 par un scan du d
 
 ### 1. GitHub
 
-- **Rôle** : hébergement du code et des deux workflows (`pages.yml` : tests + build + déploiement ; `pinterest.yml` : publication quotidienne des épingles à 7 h 17 UTC). Développement par sessions Claude Code.
+- **Rôle** : hébergement du code et des deux workflows (`pages.yml` : tests + build + déploiement à chaque push et chaque lundi à 5 h UTC, puis, hors push, signalement des pages à Bing par IndexNow — `scripts/indexnow.mjs`, clé publique servie à la racine du site ; `pinterest.yml` : publication quotidienne des épingles à 7 h 17 UTC). Développement par sessions Claude Code.
 - **Console** : https://github.com/teiki5320/Keurdeco
 - **Identifiants publics** : compte `teiki5320`, dépôt public, branche `main`.
 - **Secrets** : secrets Actions `PINTEREST_APP_ID`, `PINTEREST_APP_SECRET`, `PINTEREST_REFRESH_TOKEN` (OAuth Pinterest, jeton renouvelé automatiquement — un ticket GitHub s'ouvre quand le refresh token change). Variables sans secret : `SITE_URL`, `CLOUDFLARE_WEB_ANALYTICS`, `PLAUSIBLE_DOMAIN`, `PINTEREST_VERIFY`, `GOOGLE_VERIFY`.
@@ -44,7 +44,7 @@ Généré le 30 septembre 2026, mis à jour le 1er octobre 2026 par un scan du d
 
 ### 5. Pinterest (réseaux sociaux)
 
-- **Rôle** : canal de trafic principal — le build génère une épingle 1000 × 1500 par titre d'article (4 gabarits alternés, manifeste `epingles.json`), et le workflow quotidien publie au plus 5 épingles par jour via l'API v5 (`POST /v5/pins`), tableau choisi dans `config/tableaux-pinterest.json`, état mémorisé dans `data/pinterest-etat.json`. Rich Pins (Open Graph + données structurées Article), bouton « Épingler » sans script externe. Repli manuel : import en masse du CSV `public/epingles-pinterest.csv` tant que l'accès API n'est pas accordé.
+- **Rôle** : canal de trafic principal — le build génère une épingle 1000 × 1500 par titre d'article (4 gabarits alternés, manifeste `epingles.json`), et le workflow quotidien publie au plus 5 épingles par jour via l'API v5 (`POST /v5/pins`), tableau choisi dans `config/tableaux-pinterest.json`, état mémorisé dans `data/pinterest-etat.json`. Rich Pins (Open Graph + données structurées Article), bouton « Épingler » sans script externe. Repli manuel tant que l'accès API n'est pas accordé : `npm run pinterest:lot` prépare un CSV d'import en masse sur 30 jours (2 épingles par jour au plus), puis `npm run pinterest:lot -- --confirmer` note le lot dans `data/pinterest-etat.json` pour éviter les doublons.
 - **Console** : https://www.pinterest.fr (compte professionnel) ; parcours OAuth local par `npm run pinterest:auth`.
 - **Identifiants publics** : balise `p:domain_verify` (variable `PINTEREST_VERIFY`).
 - **Secrets** : voir GitHub (secrets Actions Pinterest) ; mode bac à sable via `PINTEREST_SANDBOX=1` ; sans secrets, le workflow tourne à blanc.

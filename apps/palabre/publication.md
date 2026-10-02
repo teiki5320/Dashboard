@@ -1,6 +1,6 @@
 # PUBLICATION — état des boutiques
 
-> Généré le 22 septembre 2026 d'après les consoles. Pour mettre à jour : relancer ce même prompt.
+> Généré le 22 septembre 2026 d'après les consoles ; version revérifiée dans le dépôt le 2 octobre 2026. Pour mettre à jour : relancer ce même prompt.
 >
 > Aucun secret ici — uniquement des références.
 
@@ -8,7 +8,7 @@
 
 - **iOS** : la chaîne de construction existe et fonctionne — Xcode Cloud est câblé par `ios/ci_scripts/ci_post_clone.sh`, la signature est déléguée au service, l'équipe et l'identifiant de bundle sont renseignés dans le projet Xcode. Le dépôt ne montre **aucune trace de soumission** : ni version publiée, ni numéro de build TestFlight, ni fiche. État réel de la fiche et des builds : à vérifier dans la console.
 - **Android** : la signature de publication est **câblée et vérifiée**. `android/app/build.gradle.kts` lit `android/key.properties` quand ce fichier existe et signe la variante `release` avec ; sans lui — intégration continue, machine neuve — il retombe sur la clé de debug pour que `flutter run --release` continue de marcher. Vérifié de bout en bout avec un keystore jetable : l'APK produit portait bien le certificat de cette clé, pas celui de debug. Il reste à poser le vrai keystore sur la machine de publication. **Point dur** : le bundle pèse **143,3 Mo** pour une limite de 150 Mo sur le module de base — moins de 5 % de marge.
-- **Version commune** : **0.27.0+1** (`pubspec.yaml`). Les deux plateformes en dépendent : iOS lit `FLUTTER_BUILD_NAME` et `FLUTTER_BUILD_NUMBER`, Android lit `flutter.versionName` et `flutter.versionCode`. Une seule ligne à changer pour les deux.
+- **Version commune** : **0.28.0+1** (`pubspec.yaml`, vérifié le 2 octobre 2026). Les deux plateformes en dépendent : iOS lit `FLUTTER_BUILD_NAME` et `FLUTTER_BUILD_NUMBER`, Android lit `flutter.versionName` et `flutter.versionCode`. Une seule ligne à changer pour les deux.
 - **Identifiant de bundle** : **`sn.palabre.app`**, identique des deux côtés — `PRODUCT_BUNDLE_IDENTIFIER` dans `ios/Runner.xcodeproj/project.pbxproj`, `applicationId` dans `android/app/build.gradle.kts`. Le `namespace` Android, `sn.palabre.president`, est interne au code Kotlin et n'a aucun effet sur la boutique. Nom affiché des deux côtés : **« Palabre »**.
 - **Monétisation** : **aucune**. Ni SDK publicitaire, ni achat intégré, ni abonnement dans `pubspec.yaml` ou dans `lib/`. L'application ne fait aucun appel réseau et ne déclare aucune permission Android. C'est la réponse la plus simple possible aux questionnaires de confidentialité des deux boutiques : aucune donnée collectée.
 - **Chemin critique** : la décision de monétisation — qui conditionne la fiche, la classification et le questionnaire de confidentialité —, puis la première soumission iOS, la seule chaîne déjà câblée. Android suit, une fois le keystore posé et le paquet ramené sous les 150 Mo.
@@ -19,7 +19,7 @@
 |---|---|
 | **État** | Chaîne de construction prête, aucune soumission visible dans le dépôt — à vérifier dans la console |
 | **Console** | https://appstoreconnect.apple.com |
-| **Version dans le dépôt** | 0.27.0+1 (`pubspec.yaml`) |
+| **Version dans le dépôt** | 0.28.0+1 (`pubspec.yaml`) |
 | **Version en ligne** | à vérifier dans la console |
 | **Identifiant de bundle** | `sn.palabre.app` |
 | **Équipe de développement** | `K597U7X3FZ` |
@@ -39,7 +39,7 @@
 |---|---|
 | **État** | Signature câblée et vérifiée ; aucune soumission — à vérifier dans la console |
 | **Console** | https://play.google.com/console |
-| **Version dans le dépôt** | 0.27.0+1 (`pubspec.yaml`) |
+| **Version dans le dépôt** | 0.28.0+1 (`pubspec.yaml`) |
 | **Version en ligne** | à vérifier dans la console |
 | **Identifiant d'application** | `sn.palabre.app` |
 | **Espace de noms** | `sn.palabre.president` |

@@ -47,13 +47,13 @@ Généré le 25 septembre 2026 par un scan du dépôt. Pour mettre à jour : rel
 - **Secrets** : identifiants du compte et informations de paiement, uniquement dans la console Amazon.
 - **Coût** : gratuit.
 
-### 5. Plausible (mesure d'audience, non activée)
+### 5. Cloudflare Web Analytics (mesure d'audience, en attente du jeton)
 
-- **Rôle** : mesure d'audience sans cookie, prévue dans le code (`mesureAudience`, `build/site.ts`). Le script n'est ajouté que si la variable `PLAUSIBLE_DOMAIN` est définie au build ; le workflow ne la définit pas, donc aucune mesure n'est active.
-- **Console** : https://plausible.io (aucun compte relié à ce jour d'après le code).
-- **Identifiants publics** : `PLAUSIBLE_DOMAIN` (nom de domaine, non secret).
+- **Rôle** : mesure d'audience gratuite, sans cookie (`mesureAudience`, `build/site.ts`). Le script n'est ajouté que si la variable de dépôt GitHub `CF_BEACON_TOKEN` est définie (Settings → Secrets and variables → Actions → Variables) ; la phrase des mentions légales suit automatiquement (`<!--#mesure-audience-->`).
+- **Console** : https://dash.cloudflare.com → Analytics & Logs → Web Analytics (site `www.optiled.fr`, sans changer les DNS).
+- **Identifiants publics** : `CF_BEACON_TOKEN` (jeton de 32 caractères, visible dans les pages, non secret).
 - **Secrets** : aucun.
-- **Coût** : abonnement payant si activé — à vérifier sur le site de Plausible.
+- **Coût** : gratuit.
 
 ### 6. Génération d'images (IA)
 

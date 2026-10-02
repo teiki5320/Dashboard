@@ -1,6 +1,6 @@
 # PUBLICATION — état de la mise en ligne
 
-> Généré le 30 septembre 2026, mis à jour le 1er octobre 2026 d'après le dépôt (côté Dashboard : si le dépôt crée sa propre fiche docs/PUBLICATION.md, elle remplacera celle-ci à la synchro suivante).
+> Généré le 30 septembre 2026, mis à jour le 2 octobre 2026 d'après le dépôt (côté Dashboard : si le dépôt crée sa propre fiche docs/PUBLICATION.md, elle remplacera celle-ci à la synchro suivante).
 >
 > Aucun secret ici — uniquement des références.
 
@@ -21,9 +21,9 @@
 
 ## Visibilité
 
-- **Référencement** : `sitemap.xml` limité aux pages indexables (avec `lastmod`), rubriques sans article en `noindex`, `robots.txt`, Open Graph, données structurées Article / ItemList / FAQ. Balise Search Console prête (`GOOGLE_VERIFY`) — inscription à vérifier dans la console.
+- **Référencement** : `sitemap.xml` limité aux pages indexables (avec `lastmod`), rubriques sans article en `noindex`, `robots.txt`, Open Graph, données structurées Article / ItemList / FAQ / fil d'Ariane, nom du site retiré des titres de plus de 65 caractères. Pages signalées à Bing par IndexNow chaque lundi après la publication. Balise Search Console prête (`GOOGLE_VERIFY`) — inscription à vérifier dans la console.
 - **Mesure d'audience** : Cloudflare Web Analytics (sans cookie), en place — chiffres à vérifier dans la console.
-- **Pinterest** : balise `p:domain_verify` prête (`PINTEREST_VERIFY`), Rich Pins via Open Graph + données structurées ; publication automatique quotidienne (7 h 17 UTC) dès que l'accès API est accordé, import CSV manuel en attendant.
+- **Pinterest** : balise `p:domain_verify` prête (`PINTEREST_VERIFY`), Rich Pins via Open Graph + données structurées ; publication automatique quotidienne (7 h 17 UTC) dès que l'accès API est accordé, import CSV manuel par lots de 30 jours (`npm run pinterest:lot`) en attendant.
 - **Pages légales** : mentions légales (ALOHASH SAS, hébergeur GitHub Pages, mention Partenaires, images IA), confidentialité (aucun cookie), paragraphe liens affiliés dans « À propos ».
 
 ## Ce qui reste, dans l'ordre
