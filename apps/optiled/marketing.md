@@ -43,7 +43,7 @@ Mis à jour le 25 septembre 2026. Compagnon de INFRA.md.
 
 | Métrique | Valeur | Objectif |
 |---|---|---|
-| Visiteurs | non mesuré (Plausible prévu dans le code, non activé) | à définir après activation d'une mesure |
+| Visiteurs | non mesuré (Cloudflare Web Analytics prêt, jeton à créer) | à définir après activation d'une mesure |
 | Pages indexées par Google | à vérifier dans la console Search Console | 45 pages indexées (toutes celles du sitemap) |
 | Clics vers Amazon | à vérifier dans la console Partenaires Amazon | à définir |
 | Commissions Amazon | à vérifier dans la console Partenaires Amazon | premier seuil de paiement (25 € d'après la console) |
@@ -63,7 +63,9 @@ Mis à jour le 25 septembre 2026. Compagnon de INFRA.md.
 - ✅ Déclarer le site et configurer le paiement dans Partenaires Amazon
 - ✅ Déclarer le site dans Google Search Console et envoyer le sitemap
 - ⬜ Vérifier que la routine mensuelle arrive à publier ses mises à jour
-- ⬜ Choisir et activer une mesure d'audience (Plausible prévu dans le code), puis mettre à jour la rubrique cookies des mentions légales
+- ⬜ Activer la mesure d'audience : créer le site dans Cloudflare Web Analytics et définir la variable de dépôt `CF_BEACON_TOKEN` (les mentions légales suivent automatiquement)
+- ✅ Flux RSS des conseils (`conseils.xml`) et grandes images autorisées dans Google Discover (`max-image-preview:large`)
+- ✅ Calculateur intégrable sur les blogs (`integrer.html`) : à proposer aux blogs de jardinage avec le lien sous le cadre
 - ⬜ Faire connaître le site dans les communautés de culture en intérieur
 
 ## Pinterest

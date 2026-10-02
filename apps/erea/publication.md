@@ -13,7 +13,8 @@
 - **iOS** : **1.0.2 en ligne depuis le 8 septembre 2026 à 12 h 19**, achat intégré compris — la version d'août est remplacée
 - **Android** : release 1.0.2 **approuvée le 8 septembre à 9 h 38**, disponible pour les testeurs · **12 testeurs inscrits le soir même**, les 14 jours courent jusqu'au **22 septembre**
 - **Chemin critique** : 14 jours avec 12 testeurs inscrits sans interruption — démarré le 8 septembre, demande d'accès à la production possible le 22 septembre
-- **Version commune** : `1.0.3+4` — release Android `4 (1.0.3)` et captures Play légendées **envoyées pour examen le 16 septembre à 10 h 14** (envoi 4) ; côté iOS, la 1.0.3 se construit sur Xcode Cloud (build 153, premier avec `url_launcher`)
+- **Version dans le code** : `1.0.4+5` dans `erea_flutter/pubspec.yaml` depuis le 30 septembre 2026 (corrections de l'audit du 28 septembre) ; son envoi aux boutiques est à vérifier dans la console (constat du 2 octobre 2026)
+- **Version commune précédente** : `1.0.3+4` — release Android `4 (1.0.3)` et captures Play légendées **envoyées pour examen le 16 septembre à 10 h 14** (envoi 4) ; côté iOS, la 1.0.3 se construit sur Xcode Cloud (build 153, premier avec `url_launcher`)
 - **Identifiant** : `com.teiki.erea`, identique sur les deux plateformes
 - **Achat intégré** : `com.teiki.erea.sanspub` « Erea sans publicité », 3,99 €, non consommable — soumis avec la 1.0.2 sur iOS, **actif** sur Google Play
 - **Monétisation** : interstitielle AdMob une partie sur deux, consentement RGPD publié le 3 septembre 2026
