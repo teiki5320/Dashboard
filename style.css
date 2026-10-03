@@ -143,6 +143,8 @@ html[data-anim="off"] *, html[data-anim="off"] *::before, html[data-anim="off"] 
     transition: transform .18s var(--bounce), background .2s;
 }
 .rail-item:hover { background: var(--side-hover); }
+/* Liens vers Drama Studio (Publicité, Autre) : des <a>, pas des boutons. */
+a.rail-item { text-decoration: none; color: inherit; }
 .rail-item:active { transform: scale(.94); }
 .rail-item.active { background: var(--carte); color: var(--texte); box-shadow: var(--clay-sm); }
 .rail-item .ico {
@@ -160,7 +162,7 @@ html[data-anim="off"] *, html[data-anim="off"] *::before, html[data-anim="off"] 
 /* Mode focus « Mes apps » : les entrées métier de Gestion Pro n'ont pas de
    raison de rester pendant qu'on navigue dans le module — seuls Accueil,
    Mes apps et ses sous-entrées subsistent. Tout revient en quittant la page. */
-#gp-rail.dash-mode .rail-item:not(.rail-sub):not([data-page="home"]):not([data-page="dash"]),
+#gp-rail.dash-mode .rail-item:not(.rail-sub):not(.rail-studio):not([data-page="home"]):not([data-page="dash"]),
 #gp-rail.dash-mode .rail-sep { display: none; }
 /* Les sous-entrées héritent exactement de la taille des boutons Accueil /
    Mes apps (.rail-item) — seule la pastille d'état s'ajoute en coin d'icône. */
