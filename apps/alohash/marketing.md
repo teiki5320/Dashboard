@@ -22,7 +22,7 @@ Affiliation Amazon Partenaires : les boutons « Acheter · prix » mènent à Am
 | --- | --- | --- |
 | 1. Lancement | Recettes en ligne (fiches, pays, recherche par ingrédient, favoris) | ✅ |
 | 1. Lancement | Boutique : 91 produits, 8 gammes, boutons « Acheter · prix » vers Amazon.fr | ✅ |
-| 1. Lancement | Rubrique « Conseils », un article chaque lundi | ✅ (67 articles programmés) |
+| 1. Lancement | Rubrique « Conseils », trois articles par semaine | ✅ (67 articles programmés) |
 | 2. Conversion | Bouton d'achat Amazon sur les ingrédients des recettes | ✅ |
 | 2. Conversion | Mise à jour régulière des prix indicatifs | ⬜ (relevé manuel) |
 | 3. Fidélisation | Newsletter « la recette de la semaine » | ⬜ formulaire retiré en attendant le choix d'un outil (Brevo envisagé, non confirmé) |
@@ -30,7 +30,7 @@ Affiliation Amazon Partenaires : les boutons « Acheter · prix » mènent à Am
 ## Canaux
 
 - **Référencement naturel** : sitemap avec les recettes, les pages pays et les articles publiés, données structurées Google « Recipe » (temps, ingrédients, étapes) et « Product ». ✅ dans le code, sur https://keurcook.com (sitemap vide tant que le site est en maintenance).
-- **Contenu régulier** : un article « Conseils » chaque lundi, publié automatiquement. ✅
+- **Contenu régulier** : trois articles « Conseils » par semaine (lundi, mercredi, vendredi), publiés automatiquement. ✅
 - **Partage** : bouton « Partager sur WhatsApp » et version imprimable sur chaque recette. ✅
 - **E-mail** : pas de newsletter pour l'instant (formulaire retiré, outil à choisir). ⬜
 - **Réseaux sociaux** : aucun lien ni intégration dans le code. ⬜

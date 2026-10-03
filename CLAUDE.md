@@ -41,28 +41,37 @@ les données. Ce dernier est **généré** par `node tool/build.js` à partir de
 `apps/<id>/` et de `catalog/services.js` : toujours le régénérer et le
 committer avec les fiches qu'on modifie.
 
-## Mes apps — les 10 cartes
+## Mes apps — les 11 cartes
 
 Le classement se fait sur `platforms` dans `apps/<id>/app.json` : une app dont
-toutes les plateformes sont `Web` est un **site**, sinon c'est une **appli**.
+toutes les plateformes sont `Web` est un **site**, sinon c'est une **appli**. Une
+liste de plateformes **vide** ne fait pas un site : l'app reste une appli.
 
 | Groupe | App | id | dépôt suivi |
 |---|---|---|---|
 | Applis | Kultiva | `kultiva` | `teiki5320/Kultiva` |
 | Applis | Erea | `erea` | `teiki5320/erea` |
 | Applis | Drama-studio | `drama-studio` | `teiki5320/Drama-studio` |
-| Applis | Tama TV | `tama-tv` | — |
-| Applis | D-Sign | `d-sign` | — |
+| Applis | Tama TV | `tama-tv` | `teiki5320/Tama` |
+| Applis | D-Sign | `d-sign` | `teiki5320/D-Sign` |
 | Applis | Palabre | `palabre` | `teiki5320/palabre` |
 | Sites | Avelor | `avelor` | `teiki5320/avelor` |
 | Sites | Keur Cook | `alohash` | `teiki5320/keurcook` |
 | Sites | OptiLED | `optiled` | `teiki5320/optiled` |
 | Sites | Keur Déco | `keurdeco` | `teiki5320/Keurdeco` |
+| Sites | Keurbook | `keurbook` | `teiki5320/keurbook` |
 
 À retenir : **Keur Cook porte l'identifiant `alohash`** — héritage de son
 ancien nom — alors que son dépôt s'appelle `teiki5320/keurcook`, comme son
 domaine `keurcook.com`. **Avelor est en pause** (⏸️), mais son site est encore servi
-par `avelor.vercel.app`.
+par `avelor.vercel.app`. **Drama Studio n'est pas une app mobile** : c'est un
+studio local sur **macOS** (Express + React sur `127.0.0.1:4600`), et sa carte le
+dit depuis le 3 octobre 2026.
+
+⚠️ **Kultiva n'a plus de backend.** Son projet Supabase a été supprimé : son
+adresse ne résout plus (constaté le 3 octobre 2026). L'app n'a donc plus ni
+authentification, ni données, ni stockage de photos. `apps/kultiva/infra.md`
+décrit ce qu'il faudra recréer.
 
 ## La synchro automatique (`.github/workflows/sync.yml`)
 
@@ -96,8 +105,12 @@ retouchée côté Dashboard n'est pas écrasée.
 - `keurdeco` n'a pas de dossier `docs/` : ses fiches ont été générées côté
   Dashboard le 30 septembre 2026 et n'ont donc aucun hachage dans
   `.sync-state.json`. Elles seront remplacées le jour où son dépôt en publie.
-- `tama-tv` et `d-sign` n'ont pas de dépôt suivi (fiches infra et marketing
-  seulement).
+- `d-sign` et `tama-tv` ont été reliés à leurs dépôts le 3 octobre 2026.
+  `teiki5320/D-Sign` publie ses propres `docs/INFRA.md` et `docs/MARKETING.md`,
+  rapatriées par la synchro. `teiki5320/Tama` ne publie que `docs/PUBLICATION.md` :
+  ses fiches infra et marketing restent provisoires jusqu'à ce que son dépôt les
+  génère. D-Sign n'a aucun workflow, donc `ci: null` y est exact ; la dernière CI
+  de Tama est **en échec** depuis le 20 août 2026.
 - **Lexique** : on écrit « Hébergement web (GitHub Pages / Cloudflare Pages) ».
   Des alias invisibles (vercel, netlify) servent uniquement à l'ancrage de la
   recherche — ne pas réintroduire d'outils abandonnés dans les textes visibles.
@@ -105,10 +118,38 @@ retouchée côté Dashboard n'est pas écrasée.
   (soit 1,2 effectif) et à `.9` à partir de 1200 px.
 - **En attente** : secrets Qonto, dépôts de Tama TV et D-Sign.
 
+## Dire vrai, et savoir quand on ne sait pas
+
+`tool/verifier-fiches.js` contrôle trois choses : le dépôt déclaré existe bien
+sous ce nom, chaque adresse citée répond, et chaque service déclaré a une section
+— **ainsi que l'inverse**, une section qui documente un service que `app.json`
+oublie de déclarer.
+
+Deux règles y sont acquises, et valent aussi pour `tool/sync.js` :
+
+1. **Un échec réseau n'est pas un constat.** Une adresse est réessayée une fois
+   avant d'être déclarée morte, et un refus de l'API GitHub (403 de quota, droit
+   manquant) donne « non vérifiable », jamais « introuvable ». Sans cela, un quota
+   épuisé faisait dire au Dashboard que les onze dépôts avaient disparu.
+2. **Ne jamais confondre « il n'y a rien » et « je n'ai pas pu savoir ».** Dans
+   `sync.js`, seul un 404 signifie qu'il n'y a ni release ni run ; tout autre
+   refus conserve les valeurs précédentes de `status.json`. Sans cela, une simple
+   limite d'appels remplaçait une CI verte par « aucune CI ».
+
+Les alias de `catalog/services.js` servent à rapprocher une section de fiche d'un
+service (`ionos` → nom de domaine, `openart` → API d'IA, `plausible` → analytics).
+Ils restent **invisibles** et doivent rester sans ambiguïté : `cloudflare` tout
+court a été retiré, parce qu'il faisait correspondre la section d'analytique à
+celle du nom de domaine.
+
+Un jeton de lecture dans `APPS_READ_TOKEN` ou `GITHUB_TOKEN` lève la limite de
+60 appels par heure.
+
 ## Commandes utiles
 
 ```bash
 node tool/build.js          # régénère assets/dash-data.js
 node --test tool/test-ebe.js # tests du module EBE
 node tool/sync.js           # rapatrie les fiches (ce que fait la CI)
+node tool/verifier-fiches.js # contrôle que les fiches disent vrai
 ```

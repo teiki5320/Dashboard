@@ -28,9 +28,18 @@ Généré le 2026-08-21 par un scan du dépôt. Pour mettre à jour : relancer c
 ### 2. Supabase
 
 - **Rôle** : backend — auth (e-mail + Google + Apple), Postgres sous RLS (`profiles`, `plantations`, `unlocked_badges`, `preferences`, `challenge_posts`, `post_likes`, `post_reports`, `user_xp`, `news_items`, `species`), Storage (`plant-photos`, `news-images`), edge functions `seed-species` et `delete-account` (suppression de compte in-app). Migrations `supabase/migrations/001 → 016`, appliquées manuellement via le SQL Editor.
-- **Console** : <https://supabase.com/dashboard/project/vkiwkeknfzwdvufcqbrp>
-- **Identifiants publics** : URL `https://vkiwkeknfzwdvufcqbrp.supabase.co` + `anonKey`, commitées dans `lib/config/supabase_config.dart` — publiques par design, la sécurité repose sur les policies RLS.
-- **Secrets** : clé `service_role` — dashboard uniquement (Settings → API), jamais dans le code ni le dépôt.
+- ⚠️ **État au 3 octobre 2026 : le projet n'existe plus.** Son adresse ne résout
+  plus du tout (DNS introuvable), ce qui signifie une suppression et non une mise
+  en pause. L'app n'a donc plus de backend : ni authentification, ni données, ni
+  stockage de photos. La description ci-dessus décrit ce qu'il faudra recréer.
+- **Console** : compte Supabase du propriétaire — le projet `vkiwkeknfzwdvufcqbrp`
+  n'y figure plus. Un nouveau projet devra être créé, puis son URL et son
+  `anonKey` remplacés dans `lib/config/supabase_config.dart`.
+- **Identifiants publics** : URL du projet + `anonKey`, commitées dans
+  `lib/config/supabase_config.dart` — publiques par design, la sécurité repose
+  sur les policies RLS.
+- **Secrets** : clé `service_role` — dashboard uniquement (Settings → API),
+  jamais dans le code ni le dépôt.
 - **Coût** : plan gratuit.
 
 ### 3. Google Cloud

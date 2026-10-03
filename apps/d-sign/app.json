@@ -3,8 +3,16 @@
   "emoji": "🎮",
   "visible": true,
   "order": 5,
-  "repo": "",
-  "platforms": [],
-  "tagline": "Jeu mobile.",
-  "services": []
+  "repo": "teiki5320/D-Sign",
+  "platforms": [
+    "iOS"
+  ],
+  "tagline": "À Contre-Jour — jeu narratif hors-ligne, 112 jours et 5 fins.",
+  "services": [
+    "github",
+    "apple-developer",
+    "app-store-connect",
+    "xcode-cloud",
+    "api-ia"
+  ]
 }

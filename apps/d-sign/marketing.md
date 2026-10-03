@@ -1,8 +1,130 @@
-# Plan marketing
+# MARKETING — plan marketing & rémunération
 
-> Fiche provisoire — à générer depuis le dépôt de l'app quand il sera relié.
+> Créé le 3 août 2026, mis à jour le 21 août 2026 après scan du dépôt.
+> **Pour le mettre à jour : relancer le même prompt.** Aucun secret dans ce
+> fichier.
+>
+> État du scan : **rien n'est câblé aujourd'hui** côté marketing — pas de
+> partage in-app, pas de demande d'avis, pas d'achat intégré, pas
+> d'analytics, pas de liens sociaux, pas de newsletter. Le jeu est distribué
+> en bêta TestFlight uniquement. Tout ce qui suit en ⬜ est une proposition.
+
+## Positionnement
+
+**L'angle** : *le drama qui se joue dans un vrai téléphone.* Pas un jeu qui
+raconte une histoire — un téléphone qu'on fouille : les textos, la banque à
+214 €, les photos, la musique. Un thriller romantique français, épisodique
+comme une série, qui se lit en textos comme les siens.
+
+**Une phrase** : « Tu es Shen, 24 ans, livreuse à vélo. Un milliardaire te
+renverse. Il te propose 30 000 €. Ta mère est malade. Réponds. »
+
+**Publics, du cœur vers l'extérieur** :
+1. Lectrices/lecteurs de **romance-drama** 16-35 ans (Wattpad, Webtoon,
+   BookTok) — le public des *chat stories* (Hooked, Yarn) mal servi en
+   français ;
+2. Joueurs de **fiction interactive** (Lifeline, SIMULACRA, Choices) qui
+   cherchent de l'écriture soignée ;
+3. Public **séries françaises** (le ton « Dix pour cent rencontre
+   Plus belle la vie chez les milliardaires ») qui ne se dit pas joueur.
+
+**Différenciateurs** : 100 % français d'origine (pas une traduction),
+réalisme maniaque (photos crédibles, vraie appli bancaire, choix
+chronométrés), gratuit du tracking (« aucune pub, aucun tracker » est un
+argument), épisodes courts sur un rythme de série.
+
+## Modèle de rémunération
+
+| Phase | Modèle | Détail | Statut |
+|---|---|---|---|
+| 0 — Bêta | Gratuit (TestFlight) | Épisode 1 complet, retours qualitatifs | ✅ **actuel** |
+| 1 — Lancement | **Gratuit avec l'épisode 1** | Sortie App Store, l'épisode 1 entier gratuit = produit d'appel | ⬜ à faire |
+| 2 — Saison | **Achat unique « Saison 1 »** (épisodes 2 → fin, ~4,99 €) via StoreKit (`in_app_purchase`) | Un seul achat, pas d'abonnement, pas d'énergie/attente payante — c'est un argument face à Episode/Choices | ⬜ à faire |
+| 3 — Soutien | Pack « Coulisses » optionnel (~1,99 €) : fonds d'écran, planches, générique long, playlist complète | Cosmétique uniquement, ne touche jamais l'histoire | ⬜ à proposer |
+| — | Publicité | **Écartée par design** : une pub dans une messagerie détruit l'illusion | ⛔ jamais |
+| — | Affiliation | Rien de pertinent identifié | ⬜ non prévu |
+
+## ASO (App Store)
+
+- **Nom** : `D-Sign — l'histoire dans tes textos` ⬜ (nom du jeu acté le
+  3 août 2026 : **D-Sign**)
+- **Sous-titre** : `Romance. Argent. Mensonges.` ⬜
+- **Mots-clés FR** ⬜ : histoire interactive, jeu narratif, chat story,
+  roman interactif, romance, drama, textos, thriller romantique, histoire
+  d'amour, milliardaire, fiction, épisode.
+- **Captures** ⬜ (le jeu est nativement vertical, avantage énorme) :
+  1. le fil de Tristan (« On ne se quitte pas comme ça. ») ;
+  2. un choix chronométré avec la barre rouge ;
+  3. l'accueil du téléphone (5 apps) ;
+  4. Ma Banque (le solde à 214,37 €) ;
+  5. une photo plein écran (les pivoines / la tour).
+- **Aperçu vidéo** ⬜ : le générique de fin (la livreuse dans le
+  brouillard) + 3 bulles qui se répondent.
+- **Notes & avis** ⬜ : demander l'avis via `in_app_review` **une seule
+  fois, juste après la carte « FIN DE L'ÉPISODE 1 »** (pic émotionnel), et
+  jamais en cours d'épisode.
+- Déjà en place ✅ : `ITSAppUsesNonExemptEncryption` déclaré (pas de
+  blocage export à la soumission), versionnement TestFlight propre.
+
+## Canaux
+
+| Canal | Détail | Statut |
+|---|---|---|
+| TestFlight (bouche-à-oreille) | Lien d'invitation privé, retours de l'auteur | ✅ câblé |
+| TikTok / BookTok FR | Extraits verticaux : une conversation qui dérape en 30 s, coupée au cliffhanger (« Il m'a proposé 30 000 €. J'ai répondu… ») — le jeu EST déjà au format TikTok | ⬜ prioritaire |
+| Instagram Reels / YouTube Shorts | Republication des mêmes extraits | ⬜ |
+| Wattpad / communautés Webtoon FR | Adapter le jour 1 en « chat story » à lire, avec lien vers l'app | ⬜ |
+| Reddit (r/France, r/jeuxvideofr, r/otomegames en EN plus tard) | Post « J'ai fait un jeu qui se passe entièrement dans une messagerie » + captures | ⬜ |
+| Featuring App Store | Pitch à l'équipe éditoriale Apple France : jeu narratif français original, sans pub ni tracker | ⬜ |
+| Presse FR (jeuxvideo.com, Gamekult, Canard PC) + TouchArcade (EN) | Dossier presse : pitch, captures, accès TestFlight | ⬜ |
+| Discord communautaire | À ouvrir seulement quand il y a >500 joueurs (un Discord vide dessert) | ⬜ plus tard |
+| Partage in-app | Bouton « Partager cette histoire » sur la carte de fin d'épisode (`share_plus`) | ⬜ |
+
+## Calendrier
+
+- **Mi-juillet (fenêtre idéale de lancement)** : l'histoire se déroule du
+  15 au 20 juillet — sortie estivale pour jouer « en même temps » que
+  Shen, jour pour jour (« l'histoire commence aujourd'hui »)
+- **Septembre** : angle rentrée, « la série à lire dans le métro »
+- **14 février** : campagne Saint-Valentin — la romance contractuelle,
+  extraits « pas de baisers »
+- **Nouvel An chinois** : le passé Fujian de la famille (épisodes 3+)
+
+## KPIs
+
+Sources : App Store Connect (natif, **sans SDK**) pour tout sauf TikTok.
+Aucun chiffre encore : le jeu est en bêta privée, rien n'est publié.
+
+| Métrique | Valeur | Objectif |
+|---|---|---|
+| Installations (TestFlight puis App Store) | — (bêta privée) | à définir avant la sortie |
+| Conservation D1 / D7 | — | à définir |
+| Taux de complétion de l'épisode 1 | non mesuré (aucun analytics par design — outil privacy-first opt-in à décider, TelemetryDeck/Aptabase) | à décider |
+| Conversion gratuit → achat Saison 1 | — (achat non câblé) | à définir après la phase 2 |
+| Note moyenne & volume d'avis | — (non publié) | à définir |
+| Vues → installs des vidéos TikTok | — | à définir |
 
 ## Prochaines actions
 
-- Relier le dépôt GitHub de D-Sign au tableau de bord (champ `repo` de app.json)
-- Générer `docs/INFRA.md` et `docs/MARKETING.md` dans le dépôt avec le prompt de mise à jour
+- ⬜ **Finir l'épisode 2** — aucun marketing avant d'avoir la suite : un
+  joueur conquis sans épisode 2 est un joueur perdu.
+- ⬜ Câbler `in_app_review` (après la carte de fin) et `share_plus`
+  (bouton partager) — deux petites briques à fort levier.
+- ⬜ Rédiger la fiche App Store de **D-Sign** (nom, sous-titre, mots-clés
+  ci-dessus) et produire les 5 captures + l'aperçu vidéo.
+- ⬜ Décider du modèle (recommandation : épisode 1 gratuit + Saison 1 en
+  achat unique) et câbler `in_app_purchase`.
+- ⬜ Sortir sur l'App Store et pitcher le featuring Apple France le même
+  jour.
+- ⬜ Produire 5 extraits TikTok (2/semaine) ; ensuite dossier presse FR,
+  puis réévaluer analytics/Discord avec les premiers chiffres App Store
+  Connect.
+
+## À vérifier
+
+- Vérifier la disponibilité de « D-Sign » sur l'App Store FR (et que la
+  proximité avec « design » ne parasite pas la recherche — le sous-titre
+  et les mots-clés doivent porter le champ lexical de l'histoire).
+- Droits musique/images : les assets générés (OpenArt, Suno) doivent être
+  couverts par les CGU commerciales de ces services avant toute
+  monétisation — à confirmer sur les comptes de l'auteur.

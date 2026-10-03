@@ -5,11 +5,12 @@
   "order": 3,
   "repo": "teiki5320/Drama-studio",
   "platforms": [
-    "iOS"
+    "macOS"
   ],
   "tagline": "Production des épisodes de drama.",
   "services": [
     "github",
-    "api-ia"
+    "api-ia",
+    "stockage-cdn"
   ]
 }
