@@ -30,6 +30,11 @@
         <button type="button" class="rail-item" data-page="home" onclick="showPage('home')"><span class="ico">⌂</span><span class="lbl">Accueil</span></button>
         <button type="button" class="rail-item" data-page="dash" onclick="showPage('dash')"><span class="ico">📱</span><span class="lbl">Mes apps</span></button>
         <div id="rail-dash-slot"></div>
+        <!-- Drama Studio : les vidéos (pubs de mes applis, recettes, chaînes).
+             Le studio tourne sur le Mac ; on l'ouvre par son adresse protégée
+             (Cloudflare Access, code par e-mail) : aucun secret ici. -->
+        <a class="rail-item rail-studio" href="https://studio.keurcook.com/#/pub" target="_blank" rel="noopener" title="Drama Studio — pubs de mes applis"><span class="ico">📣</span><span class="lbl">Publicité</span></a>
+        <a class="rail-item rail-studio" href="https://studio.keurcook.com/#/autre" target="_blank" rel="noopener" title="Drama Studio — recettes, chaînes"><span class="ico">✨</span><span class="lbl">Autre</span></a>
         <div class="rail-sep"></div>
         <button type="button" class="rail-item" data-page="bl" onclick="showPage('bl')"><span class="ico">🧾</span><span class="lbl">Commande</span></button>
         <button type="button" class="rail-item" data-page="facture" onclick="showPage('facture')"><span class="ico">📄</span><span class="lbl">Factures</span></button>
