@@ -1,10 +1,10 @@
 {
   "release": null,
   "ci": {
-    "conclusion": "failure",
     "status": "completed",
+    "conclusion": "failure",
     "updatedAt": "2026-08-20T20:37:10Z",
     "url": "https://github.com/teiki5320/Tama/actions/runs/32414942044"
   },
-  "fetchedAt": "2026-10-03T09:00:54.292Z"
+  "fetchedAt": "2026-10-03T11:06:57.025Z"
 }
