@@ -84,6 +84,9 @@ async function fetchFile(repo, filePath) {
   return { status: 200, contenu: await res.text() };
 }
 
+// Marqueur : « je n'ai pas pu savoir », à ne jamais confondre avec « il n'y a rien ».
+const ECHEC = Symbol('échec de la requête GitHub');
+
 async function fetchJson(url) {
   const headers = {
     Accept: 'application/vnd.github+json',
@@ -92,22 +95,48 @@ async function fetchJson(url) {
   };
   if (TOKEN) headers.Authorization = `Bearer ${TOKEN}`;
   const res = await fetch(url, { headers });
-  if (!res.ok) return null; // 404 (pas de release/run), rate-limit, dépôt privé sans jeton… : silencieux
+  // 404 = il n'y a réellement ni release ni run : c'est un état normal, on
+  // renvoie null. Tout autre refus (403 de limite d'appels, dépôt privé sans
+  // jeton, panne) est un ÉCHEC : on ne sait pas, et surtout on ne doit pas
+  // conclure « il n'y a rien ».
+  if (res.status === 404) return null;
+  if (!res.ok) return ECHEC;
   return res.json();
 }
 
 // Indicateurs vivants : aucune erreur ici ne fait échouer la synchro (contrairement
 // aux fiches infra/marketing) — une release ou un run CI absent est un état normal,
 // pas une erreur de configuration.
-async function fetchStatus(repo) {
+//
+// ⚠️ Mais une interrogation qui ÉCHOUE ne vaut pas « il n'y a rien » : sans
+// cette distinction, une simple limite d'appels GitHub remplaçait une CI verte
+// par « aucune CI », et le Dashboard affichait un état faux. En cas d'échec, on
+// garde ce qu'on savait déjà (`precedent`).
+async function fetchStatus(repo, precedent) {
   const [release, runs] = await Promise.all([
     fetchJson(`https://api.github.com/repos/${repo}/releases/latest`),
     fetchJson(`https://api.github.com/repos/${repo}/actions/runs?per_page=1`),
   ]);
-  const run = runs && Array.isArray(runs.workflow_runs) ? runs.workflow_runs[0] : null;
+  const ancien = precedent || {};
+  let releaseOut;
+  if (release === ECHEC) {
+    releaseOut = ancien.release !== undefined ? ancien.release : null;
+  } else {
+    releaseOut = release
+      ? { tag: release.tag_name, name: release.name || release.tag_name, publishedAt: release.published_at, url: release.html_url }
+      : null;
+  }
+  let ciOut;
+  if (runs === ECHEC) {
+    ciOut = ancien.ci !== undefined ? ancien.ci : null;
+  } else {
+    const run = runs && Array.isArray(runs.workflow_runs) ? runs.workflow_runs[0] : null;
+    ciOut = run ? { status: run.status, conclusion: run.conclusion, updatedAt: run.updated_at, url: run.html_url } : null;
+  }
   return {
-    release: release ? { tag: release.tag_name, name: release.name || release.tag_name, publishedAt: release.published_at, url: release.html_url } : null,
-    ci: run ? { status: run.status, conclusion: run.conclusion, updatedAt: run.updated_at, url: run.html_url } : null,
+    release: releaseOut,
+    ci: ciOut,
+    conserve: release === ECHEC || runs === ECHEC,
     fetchedAt: new Date().toISOString(),
   };
 }
@@ -196,9 +225,12 @@ async function main() {
     }
 
     try {
-      const status = await fetchStatus(manifest.repo);
       const statusPath = path.join(APPS_DIR, id, 'status.json');
       const avantStatus = fs.existsSync(statusPath) ? JSON.parse(fs.readFileSync(statusPath, 'utf8')) : null;
+      const { conserve, ...status } = await fetchStatus(manifest.repo, avantStatus);
+      if (conserve) {
+        console.warn(`   ⚠️  status.json : GitHub a refusé de répondre — anciennes valeurs conservées`);
+      }
       if (statusEqual(avantStatus, status)) {
         console.log(`   ✔️  status.json : déjà à jour`);
       } else {

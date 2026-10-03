@@ -4,7 +4,7 @@ Mis à jour le 29 septembre 2026 par un scan du dépôt. Pour mettre à jour : r
 
 ## Vue d'ensemble
 
-- **Plateforme** : site web en français **Keur Cook** (anciennement Alohash) de recettes de plats africains (46 recettes, 16 pays), rubrique « Conseils » (articles Markdown dans `content/conseils/`, un par lundi, publication programmée) et boutique de 91 produits en 8 gammes dont les boutons « Acheter · prix » mènent à Amazon.fr (programme Partenaires). Le site ne vend rien lui-même. Éditeur : ALOHASH (SAS).
+- **Plateforme** : site web en français **Keur Cook** (anciennement Alohash) de recettes de plats africains (46 recettes, 16 pays), rubrique « Conseils » (articles Markdown dans `content/conseils/`, trois par semaine (lundi, mercredi, vendredi), publication programmée) et boutique de 91 produits en 8 gammes dont les boutons « Acheter · prix » mènent à Amazon.fr (programme Partenaires). Le site ne vend rien lui-même. Éditeur : ALOHASH (SAS).
 - **Stack** : Next.js 16 (App Router, `output: "export"`) · React 19 · TypeScript · Tailwind CSS 4 · Three.js (carte de l'Afrique en particules) · Marked (articles Markdown).
 - **Backend** : aucun. Site 100 % statique (dossier `out/`) : pas de serveur, pas de base de données, pas d'espace admin. Recettes et produits dans `src/lib/demo/`, articles dans `content/conseils/`, mode maintenance dans `content/maintenance.json` (lu au build).
 - **Distribution** : une seule version, https://keurcook.com (`www` redirigé), publiée sur Cloudflare Pages par GitHub Actions depuis la branche `main`.
@@ -20,7 +20,8 @@ Mis à jour le 29 septembre 2026 par un scan du dépôt. Pour mettre à jour : r
 ### 1. GitHub
 
 - **Rôle** : dépôt du code et publication automatique.
-  - `.github/workflows/deploy.yml` (« Publier le site ») : lint, types, tests, build, puis `wrangler pages deploy out --project-name=keurcook` ; à chaque push sur `main`, chaque lundi à 0 h 15 (cron, articles programmés), à la main et après la maintenance.
+  - `.github/workflows/deploy.yml` (« Publier le site ») : lint, types, tests, build, puis `wrangler pages deploy out --project-name=keurcook` ; à chaque push sur `main`, chaque lundi, mercredi et vendredi à 0 h 15 (cron, articles programmés), à la main et après la maintenance.
+  - `.github/workflows/indexnow.yml` (« Signaler les pages (IndexNow) ») : chaque lundi à 3 h UTC et à la main, `node scripts/indexnow.mjs` envoie les adresses du sitemap publié à IndexNow (Bing, Yandex, Seznam…). Clé publique dans le script et dans `public/<clé>.txt`.
   - `.github/workflows/maintenance.yml` (« Maintenance ») : choix Oui/Non et message facultatif ; modifie `content/maintenance.json`, l'enregistre sur `main` et relance la publication.
 - **Console** : https://github.com/teiki5320/keurcook (Actions, Settings → Secrets and variables → Actions).
 - **Identifiants publics** : dépôt `teiki5320/keurcook` (anciennement `teiki5320/alohash`).

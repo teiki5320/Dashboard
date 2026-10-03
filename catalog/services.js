@@ -153,7 +153,7 @@ const SERVICES = [
     emoji: '🔌',
     categorie: 'APIs externes',
     badge: 'optionnel',
-    alias: ['API externe', 'APIs externes'],
+    alias: ['API externe', 'APIs externes', 'open-meteo', 'insee', 'sirene', 'google places', 'apis publiques'],
     resume: "Toute API externe qui fournit des données ou un service à l'app.",
     role:
       "Une API tierce fournit à l'app des données qu'on ne produit pas soi-même : météo, taux de " +
@@ -334,6 +334,7 @@ const SERVICES = [
   },
   {
     id: 'nom-de-domaine',
+    alias: ['ionos'],
     nom: 'Nom de domaine',
     emoji: '🏷️',
     categorie: 'Web & domaine',
@@ -459,6 +460,7 @@ const SERVICES = [
   },
   {
     id: 'visuels-store',
+    alias: ['openart'],
     nom: 'Visuels du store (icône, captures)',
     emoji: '🖼️',
     categorie: 'Design & visuels',
@@ -614,6 +616,7 @@ const SERVICES = [
   },
   {
     id: 'affiliation',
+    alias: ['amazon partenaires', 'amazon associates', 'awin', 'effiliation'],
     nom: 'Affiliation',
     emoji: '🤝',
     categorie: 'Rémunération',
@@ -851,6 +854,7 @@ const SERVICES = [
   // ── Analytics ──────────────────────────────────────────────────────────────
   {
     id: 'analytics',
+    alias: ['plausible', 'cloudflare web analytics', 'posthog', 'mesure d audience'],
     nom: "Analytics (mesure d'usage)",
     emoji: '📈',
     categorie: 'Analytics',
@@ -1010,6 +1014,7 @@ const SERVICES = [
   // ── IA ─────────────────────────────────────────────────────────────────────
   {
     id: 'api-ia',
+    alias: ['openart', 'elevenlabs', 'fal.ai', 'claude', 'anthropic', 'generation d images'],
     nom: "API d'IA (Claude / OpenAI / Gemini)",
     emoji: '🤖',
     categorie: 'IA',
@@ -1038,6 +1043,7 @@ const SERVICES = [
   // ── Stockage & médias ──────────────────────────────────────────────────────
   {
     id: 'stockage-cdn',
+    alias: ['icloud', 'icloud drive', 'bunny'],
     nom: 'Stockage & CDN (Supabase Storage / S3 / Cloudinary)',
     emoji: '🗄️',
     categorie: 'Stockage & médias',

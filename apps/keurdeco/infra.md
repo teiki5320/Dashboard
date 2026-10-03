@@ -28,13 +28,21 @@ Généré le 30 septembre 2026, mis à jour le 2 octobre 2026 par un scan du dé
 
 ### 3. Cloudflare (nom de domaine)
 
-- **Rôle** : registrar et DNS du domaine `keurdeco.com` (renouvellement automatique) ; héberge aussi la mesure d'audience sans cookie **Cloudflare Web Analytics** (en place). Proxy **désactivé** (nuage gris) pour laisser GitHub émettre le certificat HTTPS : 4 enregistrements A vers GitHub Pages + CNAME `www` → `teiki5320.github.io`.
+- **Rôle** : registrar et DNS du domaine `keurdeco.com` (renouvellement automatique). La mesure d'audience du même compte fait l'objet de la section 4. Proxy **désactivé** (nuage gris) pour laisser GitHub émettre le certificat HTTPS : 4 enregistrements A vers GitHub Pages + CNAME `www` → `teiki5320.github.io`.
 - **Console** : https://dash.cloudflare.com (compte Google du propriétaire).
 - **Identifiants publics** : zone `keurdeco.com`.
 - **Secrets** : jeton API « Modifier le DNS de zone » limité à keurdeco.com, rangé dans `.env` local (`CLOUDFLARE_API_TOKEN`), jamais commité.
-- **Coût** : prix annuel du domaine — à vérifier dans la console ; Web Analytics gratuit.
+- **Coût** : prix annuel du domaine — à vérifier dans la console.
 
-### 4. Amazon Partenaires (affiliation)
+### 4. Cloudflare Web Analytics (mesure d'audience)
+
+- **Rôle** : mesure d'audience gratuite et sans cookie, servie sur les pages publiées — vérifié en ligne le 3 octobre 2026 sur `https://www.keurdeco.com/`. Aucun consentement requis puisqu'aucun cookie n'est posé ; la phrase correspondante figure dans les mentions légales.
+- **Console** : https://dash.cloudflare.com → Analytics & Logs → Web Analytics (site `www.keurdeco.com`).
+- **Identifiants publics** : jeton de balise, visible dans les pages — non secret.
+- **Secrets** : aucun.
+- **Coût** : gratuit.
+
+### 5. Amazon Partenaires (affiliation)
 
 - **Rôle** : rémunération du site — liens `https://www.amazon.fr/dp/<ASIN>?tag=keurdeco-21` (`src/amazon.ts`, seul endroit du tag). Produits relevés à la main sur Amazon.fr (`src/data/produits.json`), sans API : jamais d'ASIN, de note, d'avis ni de prix inventés ; aucune photo Amazon (icônes par type d'objet) ; mention Partenaires près des liens, en pied de page et dans les mentions légales ; vérification mensuelle de disponibilité signalée par le rapport de build.
 - **Console** : https://partenaires.amazon.fr
@@ -42,7 +50,7 @@ Généré le 30 septembre 2026, mis à jour le 2 octobre 2026 par un scan du dé
 - **Secrets** : aucun (identifiants du compte Partenaires hors dépôt).
 - **Coût** : gratuit — commissions sur les achats.
 
-### 5. Pinterest (réseaux sociaux)
+### 6. Pinterest (réseaux sociaux)
 
 - **Rôle** : canal de trafic principal — le build génère une épingle 1000 × 1500 par titre d'article (4 gabarits alternés, manifeste `epingles.json`), et le workflow quotidien publie au plus 5 épingles par jour via l'API v5 (`POST /v5/pins`), tableau choisi dans `config/tableaux-pinterest.json`, état mémorisé dans `data/pinterest-etat.json`. Rich Pins (Open Graph + données structurées Article), bouton « Épingler » sans script externe. Repli manuel tant que l'accès API n'est pas accordé : `npm run pinterest:lot` prépare un CSV d'import en masse sur 30 jours (2 épingles par jour au plus), puis `npm run pinterest:lot -- --confirmer` note le lot dans `data/pinterest-etat.json` pour éviter les doublons.
 - **Console** : https://www.pinterest.fr (compte professionnel) ; parcours OAuth local par `npm run pinterest:auth`.

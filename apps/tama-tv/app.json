@@ -3,8 +3,12 @@
   "emoji": "📺",
   "visible": true,
   "order": 4,
-  "repo": "",
-  "platforms": [],
+  "repo": "teiki5320/Tama",
+  "platforms": [
+    "iOS",
+    "Android",
+    "Web"
+  ],
   "tagline": "Diffusion des épisodes produits par Drama-studio.",
   "services": []
 }
