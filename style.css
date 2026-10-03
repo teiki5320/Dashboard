@@ -317,7 +317,17 @@ header {
 .home-grid > .home-btn:nth-child(8) .icon { color: var(--peach-ink); }
 .home-grid > .home-btn:nth-child(9) { background: var(--carte-2); }
 .home-grid > .home-btn:nth-child(9) .icon { color: var(--muted); }
+/* Bandeau des apps : Mes Apps (large) + Drama Studio (Publicité, Autre) */
+.home-apps-row { grid-column: span 2; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 16px; }
+a.home-btn { text-decoration: none; color: var(--texte); }
+.home-apps-row .hb-apps { background: var(--peach); }
+.home-apps-row .hb-apps .icon { color: var(--peach-ink); }
+.home-apps-row .hb-pub { background: var(--lilac); }
+.home-apps-row .hb-pub .icon { color: var(--lilac-ink); }
+.home-apps-row .hb-autre { background: var(--sun); }
+.home-apps-row .hb-autre .icon { color: var(--sun-ink); }
 @media (max-width: 620px) {
+    .home-apps-row { grid-column: auto; grid-template-columns: 1fr; }
     .home-grid { grid-template-columns: 1fr; }
     .home-btn.large { grid-column: auto; }
     .home-btn { min-height: 100px; padding: 20px; gap: 12px; }

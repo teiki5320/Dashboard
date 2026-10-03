@@ -70,7 +70,10 @@
 <div id="page-home" class="page active">
     <div id="home-resume" class="home-resume"></div>
     <div class="home-grid">
-        <div class="home-btn large" onclick="showPage('dash')">
+        <!-- Bandeau des apps : Mes Apps, puis Drama Studio (Publicité, Autre),
+             ouvert à son adresse protégée par Cloudflare Access. -->
+        <div class="home-apps-row">
+        <div class="home-btn hb-apps" onclick="showPage('dash')">
             <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="24" cy="24" r="20"/>
                 <circle cx="24" cy="24" r="12"/>
@@ -80,6 +83,23 @@
                 <line x1="7" y1="34" x2="21" y2="26"/>
             </svg>
             <span>Mes Apps</span>
+        </div>
+        <a class="home-btn hb-pub" href="https://studio.keurcook.com/#/pub" target="_blank" rel="noopener">
+            <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 20v8a2 2 0 0 0 2 2h6l16 10V8L14 18H8a2 2 0 0 0-2 2z"/>
+                <path d="M14 30l3 10h5l-2-10"/>
+                <path d="M36 18a8 8 0 0 1 0 12"/>
+                <path d="M40 13a14 14 0 0 1 0 22"/>
+            </svg>
+            <span>Publicité</span>
+        </a>
+        <a class="home-btn hb-autre" href="https://studio.keurcook.com/#/autre" target="_blank" rel="noopener">
+            <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M24 4l4 12 12 4-12 4-4 12-4-12-12-4 12-4z"/>
+                <path d="M38 32l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/>
+            </svg>
+            <span>Autre</span>
+        </a>
         </div>
         <div class="home-btn" onclick="showPage('bl')">
             <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
