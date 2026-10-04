@@ -30,11 +30,11 @@
         <button type="button" class="rail-item" data-page="home" onclick="showPage('home')"><span class="ico">⌂</span><span class="lbl">Accueil</span></button>
         <button type="button" class="rail-item" data-page="dash" onclick="showPage('dash')"><span class="ico">📱</span><span class="lbl">Mes apps</span></button>
         <div id="rail-dash-slot"></div>
-        <!-- Drama Studio : les vidéos (pubs de mes applis, recettes, chaînes).
+        <!-- Studio : les vidéos (pubs de mes applis — recettes dans Keur Cook —, chaînes).
              Le studio tourne sur le Mac ; on l'ouvre par son adresse protégée
              (Cloudflare Access, code par e-mail) : aucun secret ici. -->
-        <a class="rail-item rail-studio" href="https://studio.keurcook.com/#/pub" target="_blank" rel="noopener" title="Drama Studio — pubs de mes applis"><span class="ico">📣</span><span class="lbl">Publicité</span></a>
-        <a class="rail-item rail-studio" href="https://studio.keurcook.com/#/autre" target="_blank" rel="noopener" title="Drama Studio — recettes, chaînes"><span class="ico">✨</span><span class="lbl">Autre</span></a>
+        <a class="rail-item rail-studio" href="https://studio.keurcook.com/#/pub" target="_blank" rel="noopener" title="Studio — pubs de mes applis (et recettes Keur Cook)"><span class="ico">📣</span><span class="lbl">Publicité</span></a>
+        <a class="rail-item rail-studio" href="https://studio.keurcook.com/#/chaine" target="_blank" rel="noopener" title="Studio — mes chaînes"><span class="ico">🎥</span><span class="lbl">Chaîne</span></a>
         <div class="rail-sep"></div>
         <button type="button" class="rail-item" data-page="bl" onclick="showPage('bl')"><span class="ico">🧾</span><span class="lbl">Commande</span></button>
         <button type="button" class="rail-item" data-page="facture" onclick="showPage('facture')"><span class="ico">📄</span><span class="lbl">Factures</span></button>
@@ -70,7 +70,7 @@
 <div id="page-home" class="page active">
     <div id="home-resume" class="home-resume"></div>
     <div class="home-grid">
-        <!-- Bandeau des apps : Mes Apps, puis Drama Studio (Publicité, Autre),
+        <!-- Bandeau des apps : Mes Apps, puis le Studio (Publicité, Chaîne),
              ouvert à son adresse protégée par Cloudflare Access. -->
         <div class="home-apps-row">
         <div class="home-btn hb-apps" onclick="showPage('dash')">
@@ -93,12 +93,14 @@
             </svg>
             <span>Publicité</span>
         </a>
-        <a class="home-btn hb-autre" href="https://studio.keurcook.com/#/autre" target="_blank" rel="noopener">
+        <a class="home-btn hb-autre" href="https://studio.keurcook.com/#/chaine" target="_blank" rel="noopener">
             <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M24 4l4 12 12 4-12 4-4 12-4-12-12-4 12-4z"/>
-                <path d="M38 32l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/>
+                <rect x="4" y="14" width="28" height="22" rx="4"/>
+                <path d="M32 21l12-7v20l-12-7"/>
+                <circle cx="12" cy="9" r="4"/>
+                <circle cx="24" cy="9" r="4"/>
             </svg>
-            <span>Autre</span>
+            <span>Chaîne</span>
         </a>
         </div>
         <div class="home-btn" onclick="showPage('bl')">
