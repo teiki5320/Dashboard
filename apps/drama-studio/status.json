@@ -2,9 +2,9 @@
   "release": null,
   "ci": {
     "status": "completed",
-    "conclusion": "failure",
-    "updatedAt": "2026-10-05T20:00:25Z",
-    "url": "https://github.com/teiki5320/Drama-Studio/actions/runs/37364840609"
+    "conclusion": "success",
+    "updatedAt": "2026-10-07T10:33:37Z",
+    "url": "https://github.com/teiki5320/Studio/actions/runs/37608093885"
   },
-  "fetchedAt": "2026-10-06T12:45:54.179Z"
+  "fetchedAt": "2026-10-07T12:39:59.569Z"
 }
