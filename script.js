@@ -300,7 +300,8 @@ function exportBackup() {
 const FORMES_SAUVEGARDE = {
     v90_clis: 'tableau', v90_prods: 'tableau', v90_ents: 'tableau', v90_hist: 'tableau',
     v90_bls: 'tableau', v90_drafts: 'tableau', v90_mail_categories: 'tableau',
-    v90_prix_cli: 'objet', v90_inv_count: 'nombre'
+    v90_prix_cli: 'objet', v90_inv_count: 'nombre',
+    v90_ebe_documents: 'objet', v90_ebe_agregats: 'objet'
 };
 function valeurSauvegardeValide(cle, brut) {
     const forme = FORMES_SAUVEGARDE[cle];
