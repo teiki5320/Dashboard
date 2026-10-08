@@ -183,7 +183,7 @@ public : c'est son usage normal, elle n'est pas un secret.
 1. **Web** — déployer `landing/` sur Vercel. Tout le reste en dépend.
 2. **iOS** — coller l'URL obtenue dans les trois champs : assistance,
    marketing, et politique de confidentialité (`/privacy.html`).
-3. **Les deux** — activer la redirection de `kultiva.toa@gmail.com`,
+3. **Les deux** — activer la redirection de `kultiva@toakeur.com`,
    adresse de support publiée partout.
 4. **iOS** — saisir les coordonnées de trader dans *Accords → Digital
    Services Act* (boîte postale acceptée), puis le téléphone des

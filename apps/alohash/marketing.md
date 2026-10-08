@@ -4,7 +4,7 @@ Mis à jour le 29 septembre 2026. Compagnon de INFRA.md.
 
 ## Positionnement
 
-- **Site** : **Keur Cook** (anciennement Alohash), https://keurcook.com ; éditeur ALOHASH (SAS), contact contact@keurcook.com.
+- **Site** : **Keur Cook** (anciennement Alohash), https://keurcook.com ; éditeur ALOHASH (SAS), contact keurcook@toakeur.com.
 - **Promesse** : « Recettes africaines & produits rares » (`src/lib/config.ts`). Les grands plats d'Afrique expliqués pas à pas, et les ingrédients introuvables en grande surface pour les réussir chez soi.
 - **Contenu** :
   - 46 recettes de 16 pays (Afrique de l'Ouest, centrale, de l'Est, australe et Madagascar), avec histoire du plat, ingrédients, étapes et astuces ;

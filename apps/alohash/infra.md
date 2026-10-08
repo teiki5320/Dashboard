@@ -30,7 +30,7 @@ Mis à jour le 29 septembre 2026 par un scan du dépôt. Pour mettre à jour : r
 
 ### 2. Cloudflare
 
-- **Rôle** : hébergement du site (Cloudflare Pages, projet `keurcook`, envoi direct depuis GitHub Actions), domaine `keurcook.com` et Cloudflare Email Routing (`contact@keurcook.com` renvoyé vers `contact@alohash.fr`). Sert aussi les en-têtes (`public/_headers`) et les redirections (`public/_redirects`).
+- **Rôle** : hébergement du site (Cloudflare Pages, projet `keurcook`, envoi direct depuis GitHub Actions), domaine `keurcook.com` et Cloudflare Email Routing (`contact@keurcook.com`, ancienne adresse, renvoyée vers teiki5320@gmail.com). Adresse publique : `keurcook@toakeur.com` (domaine toakeur.com, tout renvoyé vers teiki5320@gmail.com). Sert aussi les en-têtes (`public/_headers`) et les redirections (`public/_redirects`).
 - **Console** : https://dash.cloudflare.com (Workers & Pages → keurcook ; keurcook.com → DNS, Email Routing).
 - **Identifiants publics** : https://keurcook.com (domaine principal), `www.keurcook.com` redirigé.
 - **Secrets** : jeton API et identifiant de compte, uniquement dans les secrets GitHub (voir ci-dessus).
@@ -38,7 +38,7 @@ Mis à jour le 29 septembre 2026 par un scan du dépôt. Pour mettre à jour : r
 
 ### 3. IONOS
 
-- **Rôle** : domaine `alohash.fr` et messagerie (boîte `contact@alohash.fr`, qui reçoit aussi les messages envoyés à `contact@keurcook.com`). Le domaine ne sert plus qu'à la messagerie : aucun site n'y est publié (choix du propriétaire, pas de redirection).
+- **Rôle** : domaine `alohash.fr` et messagerie (boîte `contact@alohash.fr`, qui ne sert plus au site). Le domaine ne sert plus qu'à la messagerie : aucun site n'y est publié (choix du propriétaire, pas de redirection).
 - **Console** : IONOS (Domaines & SSL → alohash.fr ; E-mail).
 - **Identifiants publics** : enregistrements de messagerie (MX, SPF, DKIM, DMARC) sur `alohash.fr`, à conserver.
 - **Secrets** : aucun dans le dépôt (accès au compte IONOS hors dépôt).

@@ -28,7 +28,7 @@ Pendant la maintenance : écran « On prépare la marmite », pages en `noindex`
 ## Domaine, e-mail & SSL
 
 - **Domaine** : `keurcook.com` chez Cloudflare, relié au projet Pages `keurcook` (SSL actif) ; `www.keurcook.com` redirigé vers `keurcook.com`.
-- **E-mail** : `contact@keurcook.com`, renvoyé par Cloudflare Email Routing vers `contact@alohash.fr` (boîte IONOS conservée).
+- **E-mail** : `keurcook@toakeur.com` (Cloudflare Email Routing de toakeur.com, renvoyé vers teiki5320@gmail.com). L'ancienne `contact@keurcook.com` est renvoyée au même endroit.
 - **Ancien domaine** : `alohash.fr` reste chez IONOS pour la messagerie (MX, SPF, DKIM, DMARC à ne pas toucher) ; aucun site n'y est plus publié (pas de redirection).
 - **SSL** : certificat HTTPS géré par Cloudflare ; en-têtes de sécurité (CSP, HSTS…) dans `public/_headers`.
 - **Redirections** : `public/_redirects` (`/cgv`, `/categorie/<gamme>` (une règle par gamme), anciennes pages `/panier`, `/commande`, `/admin`…).

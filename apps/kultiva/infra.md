@@ -9,8 +9,7 @@ Généré le 2026-08-21 par un scan du dépôt. Pour mettre à jour : relancer c
 
 - **Plateforme** : iOS + Android (Flutter ≥ 3.38), portrait, iPhone + iPad — app `com.toa.kultiva`, v1.0.0+5
 - **Stack** : Flutter/Dart Material 3, local-first (SharedPreferences + services singletons, `ValueNotifier`, sans framework d'état)
-- **Backend** : Supabase (auth, Postgres RLS, Storage, 2 edge functions) — facultatif, l'app fonctionne hors ligne.
-  ⏸️ Vérifié le 1er octobre 2026 : le projet Supabase est **en pause**, son adresse ne répond plus ; à réveiller depuis la console avant toute reprise.
+- **Backend** : Supabase (auth, Postgres RLS, Storage, 2 edge functions) — facultatif, l'app fonctionne hors ligne
 - **Distribution** : App Store via Xcode Cloud + Play Store (AAB signé) — en pré-publication, textes des fiches prêts (`docs/store-listings.md`)
 - **Marchés** : bi-marché France + 8 pays francophones d'Afrique de l'Ouest, détection du pays et de la sous-zone climatique
 - **Particularités** : météo Open-Meteo sans clé d'API, notifications locales uniquement, tutos et contenu 100 % hors ligne
@@ -28,18 +27,9 @@ Généré le 2026-08-21 par un scan du dépôt. Pour mettre à jour : relancer c
 ### 2. Supabase
 
 - **Rôle** : backend — auth (e-mail + Google + Apple), Postgres sous RLS (`profiles`, `plantations`, `unlocked_badges`, `preferences`, `challenge_posts`, `post_likes`, `post_reports`, `user_xp`, `news_items`, `species`), Storage (`plant-photos`, `news-images`), edge functions `seed-species` et `delete-account` (suppression de compte in-app). Migrations `supabase/migrations/001 → 016`, appliquées manuellement via le SQL Editor.
-- ⚠️ **État au 3 octobre 2026 : le projet n'existe plus.** Son adresse ne résout
-  plus du tout (DNS introuvable), ce qui signifie une suppression et non une mise
-  en pause. L'app n'a donc plus de backend : ni authentification, ni données, ni
-  stockage de photos. La description ci-dessus décrit ce qu'il faudra recréer.
-- **Console** : compte Supabase du propriétaire — le projet `vkiwkeknfzwdvufcqbrp`
-  n'y figure plus. Un nouveau projet devra être créé, puis son URL et son
-  `anonKey` remplacés dans `lib/config/supabase_config.dart`.
-- **Identifiants publics** : URL du projet + `anonKey`, commitées dans
-  `lib/config/supabase_config.dart` — publiques par design, la sécurité repose
-  sur les policies RLS.
-- **Secrets** : clé `service_role` — dashboard uniquement (Settings → API),
-  jamais dans le code ni le dépôt.
+- **Console** : <https://supabase.com/dashboard/project/vkiwkeknfzwdvufcqbrp>
+- **Identifiants publics** : URL `https://vkiwkeknfzwdvufcqbrp.supabase.co` + `anonKey`, commitées dans `lib/config/supabase_config.dart` — publiques par design, la sécurité repose sur les policies RLS.
+- **Secrets** : clé `service_role` — dashboard uniquement (Settings → API), jamais dans le code ni le dépôt.
 - **Coût** : plan gratuit.
 
 ### 3. Google Cloud
@@ -117,5 +107,5 @@ Généré le 2026-08-21 par un scan du dépôt. Pour mettre à jour : relancer c
 ## Notes
 
 - Valeurs **publiques par design** (leur présence dans le code est normale) : URL + `anonKey` Supabase, client IDs Google OAuth, DSN Sentry, tag Amazon.
-- E-mail de support public : `kultiva.toa@gmail.com` (affiché sur la landing et dans la privacy policy).
+- E-mail de support public : `kultiva@toakeur.com` (affiché sur la landing et dans la privacy policy).
 - Reprise sur machine neuve : cloner le dépôt, Flutter ≥ 3.38, `flutter pub get` puis `flutter run` — aucun secret requis côté client ; release Android = keystore + `key.properties` depuis le coffre-fort ; release iOS = accès au compte Apple.

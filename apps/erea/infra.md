@@ -1,17 +1,16 @@
 # INFRA — fiche technique
 
-> Généré le 20 août 2026 par un scan du dépôt ; version, tests et état
-> des boutiques revérifiés le 2 octobre 2026. Pour mettre à jour :
+> Généré le 20 août 2026 par un scan du dépôt. Pour mettre à jour :
 > relancer ce même prompt.
 
 ## Vue d'ensemble
 
-- **Plateforme** : iOS 15+ (1.0.2 en ligne sur l'App Store depuis le 8 septembre 2026) · Android en test fermé sur Google Play
-- **Stack** : Flutter (Dart ≥ 3.6), 167 tests (commit de la 1.0.4, 30 septembre 2026), aucun serveur applicatif
+- **Plateforme** : iOS 15+ (1.0 en cours d'examen App Store) · Android préparé, pas encore publié
+- **Stack** : Flutter (Dart ≥ 3.6), 154 tests, aucun serveur applicatif
 - **Backend** : aucun — tout l'état du joueur vit sur l'appareil (`shared_preferences`)
 - **Distribution** : App Store via Xcode Cloud · Play Store via App Bundle signé localement
 - **Monétisation** : interstitielle AdMob + achat unique 3,99 €, à partir de la 1.1
-- **Particularités** : jeu entièrement hors ligne, aucune clé d'API dans le dépôt, un seul e-mail public (`erea.toa@gmail.com`)
+- **Particularités** : jeu entièrement hors ligne, aucune clé d'API dans le dépôt, un seul e-mail public (`erea@toakeur.com`)
 
 Les deux seuls tiers embarqués sont Google (publicité) et les boutiques
 (achat, classements). Pas de base de données, pas d'analytics, pas de
@@ -80,7 +79,7 @@ sauvegarder, rien à recopier sur une machine neuve.
 
 **Identifiants publics :**
 - App « Erea », bundle `com.teiki.erea`.
-- Version `1.0.4+5` dans `erea_flutter/pubspec.yaml` (vérifié le 2 octobre 2026) — **doit être identique** au numéro saisi dans la console, sinon le build reste non sélectionnable.
+- Version `1.0.0+1` dans `erea_flutter/pubspec.yaml` — **doit être identique** au numéro saisi dans la console, sinon le build reste non sélectionnable.
 - iOS minimum : 15.0 (`IPHONEOS_DEPLOYMENT_TARGET`, `Podfile`).
 - Chiffrement : `ITSAppUsesNonExemptEncryption = false` dans `ios/Runner/Info.plist` — pas de formulaire d'export à chaque build.
 
@@ -288,7 +287,7 @@ Le dépôt peut être public sans risque : il ne contient aucun secret.
 - `ca-app-pub-2680784147246798…` — les quatre identifiants AdMob
 - `com.teiki.erea.sanspub` — ID du produit « Erea sans publicité »
 - `https://teiki5320.github.io/erea/` — URL publique du prototype web
-- `erea.toa@gmail.com` — contact de support et contact public DSA
+- `erea@toakeur.com` — contact de support et contact public DSA
 
 ## Checklist « reprise du projet sur une machine neuve »
 
