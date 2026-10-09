@@ -101,7 +101,7 @@ statut **trader** du DSA — coordonnées publiques sur la fiche UE.
 | Partage de grille (bouche-à-oreille) | Grille emoji sans spoiler + série 🔥, feuille de partage iOS native, lien App Store dans le texte (`lib/ui/game_screen.dart`) | ✅ |
 | Défi du jour + rappel | Mêmes questions pour tous, une tentative/jour, rappel local 18 h 30 (`lib/core/rappels.dart`) — le moteur de rétention qui alimente le partage | ✅ |
 | Classements mondiaux | Game Center : défi, série, Classique ×3, Chrono (`lib/core/classement.dart`) — actifs et attachés à la version 1.0.0 | ✅ |
-| Vitrine web | `teiki5320.github.io/erea` : page de présentation dédiée, le jeu jouable sur `/jeu.html`. Smart App Banner posé sur les quatre pages le 17 août | ✅ |
+| Vitrine web | `erea.toakeur.com` : page de présentation dédiée, le jeu jouable sur `/jeu.html`. Smart App Banner posé sur les quatre pages le 17 août | ✅ |
 | Bandeau « Disponible sur l'App Store » | À rendre visible sur la vitrine le jour de la publication (le Smart App Banner est déjà posé, inerte jusque-là) | ⬜ |
 | Enseignants & parents | Dossier d'une page « Erea en classe » (repères du brevet couverts, mode Facile, zéro collecte) à envoyer aux profs d'histoire-géo, groupes Facebook de profs, La Salle des Maîtres | ⬜ |
 | Afrique de l'Ouest | Mise en avant du pack Afrique auprès des communautés éducatives francophones (Sénégal, Côte d'Ivoire…) ; presse tech locale ; créateurs de contenu éducation | ⬜ |

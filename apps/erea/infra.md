@@ -31,7 +31,7 @@ appartient à la 1.0.
 | Coût | gratuit |
 
 **Identifiants publics :**
-- URL publique : `https://teiki5320.github.io/erea/` — la vitrine de l'app.
+- URL publique : `https://erea.toakeur.com/` — la vitrine de l'app.
 - Le jeu web jouable est sur `/erea/jeu.html`, copie déployée de `index-v8.html`.
 - `/erea/support.html` et `/erea/confidentialite.html` : les deux URL exigées par l'App Store, saisies dans la fiche.
 - Site servi depuis la racine du dépôt (fichier `.nojekyll` présent).
@@ -193,7 +193,7 @@ input app ID`. Aucune annonce n'aurait été servie en Europe. Le message
 « Erea — consentement RGPD » couvre les deux applications, s'affiche en
 français (anglais en secours), offre les trois boutons *Refuser*,
 *Autoriser* et *Gérer les options*, et renvoie à
-`https://teiki5320.github.io/erea/confidentialite.html`. Côté code il
+`https://erea.toakeur.com/confidentialite.html`. Côté code il
 n'y avait rien à faire : `lib/core/pub.dart` appelait déjà le SDK UMP au
 démarrage et exposait « Options de confidentialité ». Seule la console
 manquait.
@@ -286,7 +286,7 @@ Le dépôt peut être public sans risque : il ne contient aucun secret.
 - `erea.daily`, `erea.streak`, `erea.classic.*`, `erea.chrono` — ID de classements
 - `ca-app-pub-2680784147246798…` — les quatre identifiants AdMob
 - `com.teiki.erea.sanspub` — ID du produit « Erea sans publicité »
-- `https://teiki5320.github.io/erea/` — URL publique du prototype web
+- `https://erea.toakeur.com/` — URL publique du prototype web
 - `erea@toakeur.com` — contact de support et contact public DSA
 
 ## Checklist « reprise du projet sur une machine neuve »
