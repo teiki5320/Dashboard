@@ -28,11 +28,20 @@ function slugify(text) {
 // Rendu des éléments "inline" (le texte est déjà échappé HTML).
 function renderInline(text) {
   const codes = [];
+  // Met un fragment de HTML à l'abri des transformations suivantes.
+  const garde = (html) => { codes.push(html); return '\u0000' + (codes.length - 1) + '\u0000'; };
   let out = text
     // code inline — protégé du reste des transformations
-    .replace(/`([^`]+)`/g, (_, c) => {
-      codes.push('<code>' + c + '</code>');
-      return '\u0000' + (codes.length - 1) + '\u0000';
+    .replace(/`([^`]+)`/g, (_, c) => garde('<code>' + c + '</code>'))
+    // Adresses cliquables : <https://…> puis URL nues. Sans ça, une console
+    // citée dans une fiche restait du texte mort — rien ne menait au
+    // fournisseur. On met le lien à l'abri aussitôt pour que les règles
+    // Markdown qui suivent ne le reprennent pas, et on exclut tout ce qui
+    // suit une parenthèse ouvrante : c'est la cible d'un lien [texte](url).
+    .replace(/&lt;(https?:\/\/[^\s]+?)&gt;/g, (_, u) => garde('<a href="' + u + '">' + u + '</a>'))
+    .replace(/(^|[\s«'])(https?:\/\/[^\s<>«»']+)/g, (_, avant, url) => {
+      const lien = url.replace(/[.,;:!?)\]]+$/, ''); // la ponctuation finale reste dehors
+      return avant + garde('<a href="' + lien + '">' + lien + '</a>') + url.slice(lien.length);
     })
     // images → simple lien (pas d'images distantes dans un site file://)
     .replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, '<a href="$2">🖼️ $1</a>')

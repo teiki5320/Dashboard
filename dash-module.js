@@ -318,9 +318,18 @@
       list.forEach(function (s) {
         // Le fournisseur réel de cette app, quand la fiche le dit : « Hébergement
         // web » seul ne disait pas si le site vit chez GitHub ou chez Cloudflare.
+        // Ce qui compte d'un coup d'œil, c'est « Cloudflare Pages », pas
+        // « Hébergement web » : le fournisseur passe donc devant, l'étiquette
+        // générique derrière — et l'inverse quand la fiche ne le nomme pas.
         var fournisseur = (app.serviceFournisseurs || {})[s.id];
-        h += '<button type="button" class="chip tint-' + famTint(cat) + '" data-svc="' + esc(s.id) + '">' + esc(s.emoji) + ' ' + esc(s.nom.replace(/\s*\(.*\)$/, '')) +
-          (fournisseur ? '<span class="chip-f">' + esc(fournisseur) + '</span>' : '') + '</button>';
+        var generique = nomCourt(s);
+        // « Apple Developer » sous « Apple Developer Program » n'apprend rien :
+        // la seconde étiquette ne s'affiche que si elle dit autre chose.
+        var a = norm(fournisseur || ''), b = norm(generique);
+        var redondant = !!fournisseur && (a.indexOf(b) !== -1 || b.indexOf(a) !== -1);
+        h += '<button type="button" class="chip tint-' + famTint(cat) + '" data-svc="' + esc(s.id) + '">' +
+          esc(s.emoji) + ' ' + esc(fournisseur || generique) +
+          (fournisseur && !redondant ? '<span class="chip-f">' + esc(generique) + '</span>' : '') + '</button>';
       });
       h += '</div></div>';
     });
@@ -448,18 +457,62 @@
   }
 
   // ── Fiche service ──────────────────────────────────────────────────────────
-  function serviceSheetHtml(svc, appCtx) {
-    var sibs = DATA.services.filter(function (s) { return s.categorie === svc.categorie; });
-    var pos = sibs.indexOf(svc);
-    var nav = '';
-    if (sibs.length > 1) {
-      nav = '<div class="sheet-nav"><button type="button" class="clay-btn sm" data-nav="prev" aria-label="Fiche précédente">‹</button>' +
-        '<span class="pos">' + (pos + 1) + ' / ' + sibs.length + '</span>' +
-        '<button type="button" class="clay-btn sm" data-nav="next" aria-label="Fiche suivante">›</button></div>';
+  // Ouverte depuis une app, la fiche doit parler de CETTE app, pas du Lexique :
+  // on relit la section d'infra.md qui décrit le service — elle est déjà en
+  // mémoire dans app.infraHtml, donc rien n'est dupliqué dans dash-data.js. On
+  // garde du titre porteur de l'ancre jusqu'au titre suivant de niveau égal ou
+  // supérieur : les sous-sections restent donc dedans.
+  var sectionsCache = {};
+  function sectionDeService(app, svcId) {
+    var ancre = (app.serviceAnchors || {})[svcId];
+    if (!ancre) return null;
+    var cle = app.id + '/' + svcId;
+    if (cle in sectionsCache) return sectionsCache[cle];
+    var hote = document.createElement('div');
+    hote.innerHTML = app.infraHtml || '';
+    var h = hote.querySelector('[id="' + ancre + '"]');
+    if (!h || !/^H[1-6]$/.test(h.tagName)) return (sectionsCache[cle] = null);
+    var niveau = parseInt(h.tagName.slice(1), 10);
+    var corps = '', n = h.nextElementSibling;
+    while (n) {
+      if (/^H[1-6]$/.test(n.tagName) && parseInt(n.tagName.slice(1), 10) <= niveau) break;
+      corps += n.outerHTML;
+      n = n.nextElementSibling;
     }
-    var h = '<div class="close-row">' + nav + '<span class="grow"></span><button type="button" class="clay-btn sm" data-close aria-label="Fermer">✕</button></div>';
-    h += '<div class="sheet-head"><span class="row-ico big tint-' + famTint(svc.categorie) + '">' + esc(svc.emoji) + '</span><div><h2>' + esc(svc.nom) + '</h2><div class="svc-cat">' + esc(svc.categorie) + ' · ' + badgeHtml(svc.badge) + '</div></div></div>';
-    h += '<h3>Rôle</h3><p>' + esc(svc.role) + '</p>';
+    // Les adresses citées dans la section : c'est par là qu'on rejoint la
+    // console du fournisseur, ce qu'aucune fiche ne proposait jusqu'ici.
+    var liens = [], vus = {}, tmp = document.createElement('div');
+    tmp.innerHTML = corps;
+    Array.prototype.forEach.call(tmp.querySelectorAll('a[href^="http"]'), function (a) {
+      var u = a.getAttribute('href');
+      if (!u || vus[u]) return;
+      vus[u] = 1;
+      liens.push({ url: u, label: u.replace(/^https?:\/\//, '').replace(/\/+$/, '') });
+    });
+    return (sectionsCache[cle] = {
+      ancre: ancre,
+      titre: String(h.textContent || '').replace(/#\s*$/, '').replace(/^\s*\d+[.)]\s*/, '').trim(),
+      html: corps,
+      liens: liens.slice(0, 4)
+    });
+  }
+
+  // Voisins des flèches ‹ › : les services de l'app quand on vient d'une app
+  // (elles sautaient jusqu'ici sur des services que l'app n'utilise même pas),
+  // ceux de la même famille quand on vient du Lexique.
+  function sheetVoisins(svc, appCtx) {
+    if (appCtx) {
+      var siens = appCtx.services.map(serviceById).filter(Boolean);
+      if (siens.length > 1 && siens.indexOf(svc) !== -1) return siens;
+    }
+    return DATA.services.filter(function (s) { return s.categorie === svc.categorie; });
+  }
+
+  function nomCourt(svc) { return svc.nom.replace(/\s*\(.*\)$/, ''); }
+
+  // L'article du Lexique : ce que le service est en général, quelle que soit l'app.
+  function sheetLexique(svc) {
+    var h = '<h3>Rôle</h3><p>' + esc(svc.role) + '</p>';
     if (svc.concepts && svc.concepts.length) {
       h += '<h3>Concepts clés</h3><dl>';
       svc.concepts.forEach(function (c) { h += '<dt>' + esc(c.terme) + '</dt><dd>' + esc(c.def) + '</dd>'; });
@@ -473,18 +526,59 @@
       svc.consigner.forEach(function (c) { h += '<li>' + esc(c) + '</li>'; });
       h += '</ul>';
     }
-    var users = appsUsingService(svc.id);
+    return h;
+  }
+
+  function serviceSheetHtml(svc, appCtx) {
+    var sibs = sheetVoisins(svc, appCtx);
+    var pos = sibs.indexOf(svc);
+    var nav = '';
+    if (sibs.length > 1) {
+      nav = '<div class="sheet-nav"><button type="button" class="clay-btn sm" data-nav="prev" aria-label="Fiche précédente">‹</button>' +
+        '<span class="pos">' + (pos + 1) + ' / ' + sibs.length + '</span>' +
+        '<button type="button" class="clay-btn sm" data-nav="next" aria-label="Fiche suivante">›</button></div>';
+    }
+    var h = '<div class="close-row">' + nav + '<span class="grow"></span><button type="button" class="clay-btn sm" data-close aria-label="Fermer">✕</button></div>';
+    h += '<div class="sheet-head"><span class="row-ico big tint-' + famTint(svc.categorie) + '">' + esc(svc.emoji) + '</span><div><h2>' + esc(svc.nom) + '</h2><div class="svc-cat">' +
+      esc(svc.categorie) + ' · ' + badgeHtml(svc.badge) + (appCtx ? ' · chez ' + esc(appCtx.name) : '') + '</div></div></div>';
+
+    var sec = appCtx ? sectionDeService(appCtx, svc.id) : null;
+    if (appCtx && sec) {
+      h += '<div class="sheet-app"><div class="sheet-app-h"><b>' + esc(sec.titre) + '</b><small>Chez ' + esc(appCtx.name) + ' · infra.md</small></div>' +
+        '<div class="md">' + sec.html + '</div>';
+      if (sec.liens.length) {
+        h += '<div class="sheet-liens">';
+        sec.liens.forEach(function (l) {
+          h += '<a class="chip" href="' + esc(l.url) + '" target="_blank" rel="noopener">↗ ' + esc(l.label) + '</a>';
+        });
+        h += '</div>';
+      }
+      h += '<a class="sheet-vers-fiche" href="#' + esc(sec.ancre) + '" data-close>Voir cette section dans la fiche complète →</a></div>';
+    } else if (appCtx) {
+      h += '<div class="sheet-app manque"><b>' + esc(appCtx.name) + ' déclare ce service mais ne le documente pas.</b>' +
+        '<p>Aucune section ne parle de ' + esc(nomCourt(svc)) + ' dans sa fiche technique' +
+        (appCtx.repo ? ' — à ajouter dans l’infra.md de ' + esc(appCtx.repo) : '') + '.</p></div>';
+    }
+
+    // Le Lexique passe au second plan quand l'app a sa propre section ; il
+    // s'ouvre d'emblée quand elle n'en a pas, puisque c'est tout ce qu'on a.
+    if (appCtx) {
+      h += '<div class="sheet-gen' + (sec ? '' : ' open') + '">' +
+        '<button type="button" class="sheet-gen-t"><span class="fiche-t"><b>' + esc(nomCourt(svc)) + ' en général</b>' +
+        '<small>Lexique · rôle, coût, alternatives</small></span><span class="chev">Déplier</span></button>' +
+        '<div class="gen-body">' + sheetLexique(svc) + '</div></div>';
+    } else {
+      h += sheetLexique(svc);
+    }
+
+    // L'app courante n'a rien à faire dans « utilisé par » : on la retire.
+    var users = appsUsingService(svc.id).filter(function (a) { return !appCtx || a.id !== appCtx.id; });
     if (users.length) {
-      h += '<h3>Utilisé par</h3><div class="chips">';
+      h += '<h3>' + (appCtx ? 'Aussi utilisé par' : 'Utilisé par') + '</h3><div class="chips">';
       users.forEach(function (a) { h += '<a class="chip tint-' + appTint(a) + '" data-dash-go="app/' + esc(a.id) + '">' + esc(a.emoji) + ' ' + esc(a.name) + '</a>'; });
       h += '</div>';
     }
-    h += '<div class="sheet-actions">';
-    if (appCtx) {
-      var anchor = appCtx.serviceAnchors[svc.id];
-      if (anchor) h += '<a class="cta ghost" href="#' + esc(anchor) + '" data-close>Voir la section infra</a>';
-    }
-    h += '<a class="cta" data-dash-go="catalogue/' + esc(svc.id) + '">Ouvrir dans le catalogue</a></div>';
+    h += '<div class="sheet-actions"><a class="cta" data-dash-go="catalogue/' + esc(svc.id) + '">Ouvrir dans le catalogue</a></div>';
     return h;
   }
 
@@ -496,7 +590,7 @@
   }
   function sheetStep(dir) {
     if (!sheetSvc) return;
-    var sibs = DATA.services.filter(function (s) { return s.categorie === sheetSvc.categorie; });
+    var sibs = sheetVoisins(sheetSvc, sheetCtx);
     if (sibs.length < 2) return;
     openSheet(sibs[(sibs.indexOf(sheetSvc) + dir + sibs.length) % sibs.length], sheetCtx);
   }
@@ -514,6 +608,8 @@
     overlayEl.addEventListener('click', function (e) {
       var nav = e.target.closest && e.target.closest('[data-nav]');
       if (nav) { sheetStep(nav.getAttribute('data-nav') === 'prev' ? -1 : 1); return; }
+      var gen = e.target.closest && e.target.closest('.sheet-gen-t');
+      if (gen) { gen.parentElement.classList.toggle('open'); return; }
       var go = e.target.closest && e.target.closest('[data-dash-go]');
       if (go) { e.preventDefault(); var p = go.getAttribute('data-dash-go').split('/'); closeSheet(); dashGo(p[0], p[1], p[2]); return; }
       if (e.target === overlayEl || (e.target.closest && e.target.closest('[data-close]'))) {
@@ -538,6 +634,20 @@
     window.scrollTo({ top: top, behavior: 'smooth' });
   }
 
+  // Dans la fiche technique dépliée, le titre d'une section rattachée à un
+  // service ouvre sa fiche : jusqu'ici rien ne reliait le texte au service.
+  function marqueTitresServices(app) {
+    var ancres = app.serviceAnchors || {};
+    Object.keys(ancres).forEach(function (id) {
+      var svc = serviceById(id);
+      var t = document.querySelector('#page-dash .fiche .md [id="' + ancres[id] + '"]');
+      if (!svc || !t || !/^H[1-6]$/.test(t.tagName)) return;
+      t.setAttribute('data-svc', id);
+      t.classList.add('h-svc');
+      t.setAttribute('title', 'Ouvrir la fiche « ' + svc.nom + ' » pour ' + app.name);
+    });
+  }
+
   // ── Rendu dans la page « Mes apps » de Gestion Pro ────────────────────────
   function dashRender() {
     var route = vue;
@@ -553,6 +663,7 @@
     else if (app) h += renderAppHead(app, route.volet) + renderApp(app, route.volet);
     else h += renderAccueil();
     corps.innerHTML = h + '</div>';
+    if (app && route.volet === 'technique') marqueTitresServices(app);
     if (route.page === 'catalogue' && route.service) {
       var svc = serviceById(route.service);
       if (svc) openSheet(svc, null);
