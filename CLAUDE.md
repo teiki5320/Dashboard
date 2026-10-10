@@ -51,7 +51,7 @@ liste de plateformes **vide** ne fait pas un site : l'app reste une appli.
 |---|---|---|---|
 | Applis | Kultiva | `kultiva` | `teiki5320/Kultiva` |
 | Applis | Erea | `erea` | `teiki5320/erea` |
-| Applis | Drama-studio | `drama-studio` | `teiki5320/Drama-studio` |
+| Applis | Drama-studio | `drama-studio` | `teiki5320/Studio` |
 | Applis | Tama TV | `tama-tv` | `teiki5320/Tama` |
 | Applis | D-Sign | `d-sign` | `teiki5320/D-Sign` |
 | Applis | Palabre | `palabre` | `teiki5320/palabre` |
@@ -66,7 +66,9 @@ ancien nom — alors que son dépôt s'appelle `teiki5320/keurcook`, comme son
 domaine `keurcook.com`. **Avelor est en pause** (⏸️), mais son site est encore servi
 par `avelor.vercel.app`. **Drama Studio n'est pas une app mobile** : c'est un
 studio local sur **macOS** (Express + React sur `127.0.0.1:4600`), et sa carte le
-dit depuis le 3 octobre 2026.
+dit depuis le 3 octobre 2026. Son dépôt a été renommé deux fois —
+`bd`, puis `Drama-Studio`, puis **`teiki5320/Studio`** depuis le 10 octobre 2026 ;
+ses propres fiches citent encore l'ancien nom (les redirections GitHub tiennent).
 
 ⚠️ **Kultiva n'a plus de backend.** Son projet Supabase a été supprimé : son
 adresse ne résout plus (constaté le 3 octobre 2026). L'app n'a donc plus ni
@@ -144,6 +146,19 @@ celle du nom de domaine.
 
 Un jeton de lecture dans `APPS_READ_TOKEN` ou `GITHUB_TOKEN` lève la limite de
 60 appels par heure.
+
+## La fiche d'un service parle de l'app d'où on l'ouvre
+
+Depuis une app, cliquer un service n'ouvre plus l'article du Lexique mais **la
+section de son `infra.md` qui le décrit** — le fournisseur réel, ce que l'app en
+fait, les adresses qu'elle cite. L'article général passe dessous, replié ; il
+s'ouvre d'emblée quand l'app ne documente pas le service, et la fiche le dit
+alors franchement au lieu de laisser un trou silencieux.
+
+Le lien app → section existe depuis `findServiceAnchors` dans `tool/build.js`
+(56 couples sur 63) ; `dash-module.js` relit la section dans `app.infraHtml`,
+déjà en mémoire, plutôt que de la dupliquer dans `dash-data.js`. Depuis le
+Lexique, rien ne change : c'est bien l'article général qu'on veut.
 
 ## Commandes utiles
 

@@ -781,7 +781,8 @@ b.ebe-neg, span.ebe-neg { color: var(--ko); }
 
 .btn:disabled { opacity: .45; cursor: default; transform: none; }
 
-/* Nom du fournisseur réel, à droite du nom générique du service. */
+/* Étiquette secondaire d'une puce de service : la famille générique
+   (« Hébergement web ») à droite du fournisseur réel (« Cloudflare Pages »). */
 .chip .chip-f {
     margin-left: 6px; padding: 1px 6px; border-radius: 6px;
     background: var(--carte); color: var(--texte);
@@ -1175,6 +1176,12 @@ html[data-anim="off"] *, html[data-anim="off"] *::before, html[data-anim="off"] 
 #page-dash .md th { font-size: 11.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--d-muted); }
 #page-dash .md a { text-decoration: underline; text-underline-offset: 2px; }
 #page-dash .md .anchor { opacity: 0; margin-left: 6px; font-size: .8em; text-decoration: none; }
+/* Un titre rattaché à un service ouvre sa fiche : on le dit par le curseur. */
+#page-dash .md .h-svc { cursor: pointer; }
+#page-dash .md .h-svc:hover { color: var(--d-accent); }
+#page-dash .md .h-svc::after {
+  content: " ⓘ"; font-size: .72em; font-weight: 800; opacity: .45; vertical-align: middle;
+}
 #page-dash .md h1:hover .anchor, #page-dash .md h2:hover .anchor, #page-dash .md h3:hover .anchor, #page-dash .md h4:hover .anchor { opacity: .6; }
 
 /* ── Catalogue ────────────────────────────────────────────────────────────── */
@@ -1234,6 +1241,53 @@ html[data-anim="off"] *, html[data-anim="off"] *::before, html[data-anim="off"] 
 .dash-sheet dd { padding: 2px 14px 10px; border-radius: 0 0 16px 16px; background: var(--d-card); color: var(--d-muted); }
 .dash-sheet .sheet-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
 .dash-sheet a { color: inherit; text-decoration: none; }
+
+/* ── Fiche service : ce que CETTE app en fait, avant le Lexique ───────────── */
+.dash-sheet .sheet-app { margin-top: 18px; padding: 16px 18px; border-radius: 24px; background: var(--d-card); box-shadow: var(--d-clay-sm); }
+.dash-sheet .sheet-app-h { display: flex; flex-direction: column; gap: 2px; margin-bottom: 4px; }
+.dash-sheet .sheet-app-h b { font-size: 16px; font-weight: 800; }
+.dash-sheet .sheet-app-h small { font-size: 12px; font-weight: 700; color: var(--d-muted); }
+.dash-sheet .sheet-app.manque { background: var(--d-card2); }
+.dash-sheet .sheet-app.manque b { display: block; font-size: 14.5px; }
+.dash-sheet .sheet-app.manque p { margin-top: 6px; color: var(--d-muted); }
+.dash-sheet .sheet-liens { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.dash-sheet .sheet-liens .chip { font-size: 12px; background: var(--d-card2); }
+.dash-sheet .sheet-vers-fiche { display: inline-block; margin-top: 12px; font-size: 13px; font-weight: 800; color: var(--d-accent); cursor: pointer; }
+
+/* Le Markdown de la section, hors de #page-dash : l'overlay vit sur <body>. */
+.dash-sheet .md { overflow-wrap: anywhere; }
+.dash-sheet .md h1, .dash-sheet .md h2, .dash-sheet .md h3, .dash-sheet .md h4 {
+  margin: 16px 0 6px; font-size: 14.5px; font-weight: 800;
+  text-transform: none; letter-spacing: normal; color: var(--d-text);
+}
+.dash-sheet .md p { margin: 8px 0; }
+.dash-sheet .md ul, .dash-sheet .md ol { margin: 8px 0; padding-left: 20px; }
+.dash-sheet .md code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; background: var(--d-card2); padding: 1px 6px; border-radius: 6px; }
+.dash-sheet .md pre { background: var(--d-card2); border-radius: 14px; padding: 12px 14px; overflow: auto; }
+.dash-sheet .md pre code { background: none; padding: 0; }
+.dash-sheet .md blockquote { margin: 12px 0; padding: 8px 14px; border-radius: 14px; background: var(--d-card2); color: var(--d-muted); }
+.dash-sheet .md table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+.dash-sheet .md th, .dash-sheet .md td { border-bottom: 1px solid var(--d-line); padding: 6px 8px; text-align: left; vertical-align: top; }
+.dash-sheet .md th { font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--d-muted); }
+.dash-sheet .md a { text-decoration: underline; text-underline-offset: 2px; }
+.dash-sheet .md .anchor { display: none; }
+
+/* L'article du Lexique, replié tant que l'app a sa propre section. */
+.dash-sheet .sheet-gen { margin-top: 18px; border-radius: 24px; background: var(--d-card2); overflow: hidden; }
+.dash-sheet .sheet-gen-t {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 14px 18px; border: 0; background: transparent; color: inherit;
+  font-family: inherit; text-align: left; cursor: pointer;
+}
+.dash-sheet .sheet-gen-t .fiche-t { display: flex; flex-direction: column; gap: 2px; }
+.dash-sheet .sheet-gen-t .fiche-t b { font-size: 15px; font-weight: 800; }
+.dash-sheet .sheet-gen-t .fiche-t small { font-size: 12.5px; font-weight: 700; color: var(--d-muted); }
+.dash-sheet .sheet-gen-t .chev { font-size: 12px; font-weight: 800; color: var(--d-muted); white-space: nowrap; }
+.dash-sheet .sheet-gen:not(.open) .gen-body { display: none; }
+.dash-sheet .sheet-gen .gen-body { padding: 0 18px 18px; }
+.dash-sheet .sheet-gen .gen-body h3:first-child { margin-top: 0; }
+.dash-sheet .sheet-gen .chev::after { content: " \25BE"; }
+.dash-sheet .sheet-gen.open .chev::after { content: " \25B4"; }
 
 /* ── Réactif (tablette portrait / téléphone) ──────────────────────────────── */
 @media (max-width: 1180px) {
