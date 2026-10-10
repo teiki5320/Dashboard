@@ -1,16 +1,14 @@
 # INFRA — fiche technique
 
-> Généré le 5 septembre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
+> Généré le 20/07/2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
 > Aucun secret dans cette fiche — uniquement des références (noms de variables, consoles).
 
 ## Vue d'ensemble
 
 - **Stack** : Next.js 15.5.20 (App Router) · React 19 · TypeScript · Tailwind 3.4
 - **Hébergement** : Vercel (déploiement automatique depuis la branche `main`)
-- **Domaine** : avelor.vercel.app (sous-domaine Vercel, SSL auto — domaine propre à acheter)
-- **Base de données** : Supabase (PostgreSQL, table `fiches`, RLS).
-  ⏸️ Vérifié le 1er octobre 2026 : le projet Supabase est **en pause** — le site répond toujours,
-  mais tout ce qui dépend de la base échoue tant qu'il n'est pas réveillé.
+- **Domaine** : solelis.com (sous-domaine Vercel, SSL auto — domaine propre à acheter)
+- **Base de données** : Supabase (PostgreSQL, table `fiches`, RLS)
 - **E-mail** : Resend (magic links + rappels quotidiens via cron Vercel 7h)
 - **CI** : GitHub Actions (lint → build → 259 tests à chaque push/PR vers `main`)
 
@@ -18,14 +16,14 @@
 
 - **Rôle** : hébergement du site, déploiement auto à chaque commit sur `main`, cron quotidien des rappels (`vercel.json` → `GET /api/cron/rappels` à 7h UTC)
 - **Console** : https://vercel.com/dashboard
-- **Identifiants publics** : URL de production `https://avelor.vercel.app`
+- **Identifiants publics** : URL de production `https://solelis.com`
 - **Secrets** : toutes les variables d'environnement de production vivent dans Vercel → Settings → Environment Variables (`SUPABASE_URL`, `SUPABASE_ANON_KEY`, `RESEND_API_KEY`, `RESEND_FROM`, `NEXT_PUBLIC_BASE_URL`, `CRON_SECRET`, `INSEE_API_KEY`, `GOOGLE_PLACES_API_KEY`, `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`)
 - **Coût** : plan Hobby gratuit (à vérifier dans la console selon l'usage)
 
 ### 2. GitHub
 
-- **Rôle** : hébergement du code (`teiki5320/Solelis`, ancien nom `avelor` — dépôt renommé, constaté le 10 octobre 2026) + CI GitHub Actions (`.github/workflows/ci.yml` : lint, build, tests — sans aucun secret CI)
-- **Console** : https://github.com/teiki5320/Solelis
+- **Rôle** : hébergement du code (`teiki5320/solelis`) + CI GitHub Actions (`.github/workflows/ci.yml` : lint, build, tests — sans aucun secret CI)
+- **Console** : https://github.com/teiki5320/solelis
 - **Identifiants publics** : nom du dépôt
 - **Secrets** : aucun secret CI configuré (le build fonctionne sans variable)
 - **Coût** : gratuit
@@ -42,7 +40,7 @@
 
 - **Rôle** : envoi des magic links (retrouver sa fiche) et des rappels du cron — `lib/resend.ts`, `app/api/cron/rappels/route.ts`
 - **Console** : https://resend.com/overview
-- **Identifiants publics** : `RESEND_FROM` (expéditeur ; défaut code : `AVELOR <onboarding@resend.dev>` — à passer sur le futur domaine après vérification DNS)
+- **Identifiants publics** : `RESEND_FROM` (expéditeur ; défaut code : `Solelis <onboarding@resend.dev>` — à passer sur le futur domaine après vérification DNS)
 - **Secrets** : `RESEND_API_KEY` dans Vercel (env prod) + `.env.local`
 - **Coût** : free tier 3 000 e-mails/mois (à vérifier dans la console)
 
