@@ -27,8 +27,9 @@ Généré le 2026-08-21 par un scan du dépôt. Pour mettre à jour : relancer c
 ### 2. Supabase
 
 - **Rôle** : backend — auth (e-mail + Google + Apple), Postgres sous RLS (`profiles`, `plantations`, `unlocked_badges`, `preferences`, `challenge_posts`, `post_likes`, `post_reports`, `user_xp`, `news_items`, `species`), Storage (`plant-photos`, `news-images`), edge functions `seed-species` et `delete-account` (suppression de compte in-app). Migrations `supabase/migrations/001 → 016`, appliquées manuellement via le SQL Editor.
-- **Console** : <https://supabase.com/dashboard/project/vkiwkeknfzwdvufcqbrp>
-- **Identifiants publics** : URL `https://vkiwkeknfzwdvufcqbrp.supabase.co` + `anonKey`, commitées dans `lib/config/supabase_config.dart` — publiques par design, la sécurité repose sur les policies RLS.
+- **État** : ⚠️ projet supprimé — son adresse ne résout plus (constaté le 3 octobre 2026, revérifié le 10 octobre 2026). L'app n'a donc plus ni authentification, ni données, ni stockage de photos : tout ce qui est listé ci-dessus est à recréer dans un nouveau projet.
+- **Console** : à recréer (l'ancien projet `vkiwkeknfzwdvufcqbrp` n'existe plus)
+- **Identifiants publics** : `lib/config/supabase_config.dart` pointe encore vers l'ancien projet `vkiwkeknfzwdvufcqbrp` + `anonKey` — à remplacer par ceux du nouveau projet. Publics par design, la sécurité repose sur les policies RLS.
 - **Secrets** : clé `service_role` — dashboard uniquement (Settings → API), jamais dans le code ni le dépôt.
 - **Coût** : plan gratuit.
 
