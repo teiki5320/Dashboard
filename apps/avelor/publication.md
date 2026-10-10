@@ -14,13 +14,13 @@
 ### 1. Web · Production
 
 - **URL** : https://avelor.vercel.app
-- **Hébergeur** : Vercel, projet connecté au dépôt GitHub `teiki5320/avelor`
+- **Hébergeur** : Vercel, projet connecté au dépôt GitHub `teiki5320/Solelis` (ancien nom `avelor`, renommé — constaté le 10 octobre 2026)
 - **Déploiement** : automatique — tout commit mergé sur `main` déclenche build + mise en ligne (~2 min). Aucune action manuelle. Preview deployments sur les PR (comportement Vercel par défaut, à vérifier dans la console)
 - **Dernière mise en prod** : 28/05/2026 (`7d99443`)
 - **Ce qui bloque** :
-  - la PR #3 (`claude/blissful-clarke-ycvXl` → `main`, 30 commits : 44 corrections juridiques, 18 secteurs, 3 thèmes, Next 15) est **ouverte, en attente de merge** → https://github.com/teiki5320/avelor/pull/3
+  - la PR #3 (`claude/blissful-clarke-ycvXl` → `main`, 30 commits : 44 corrections juridiques, 18 secteurs, 3 thèmes, Next 15) est **ouverte, en attente de merge** → https://github.com/teiki5320/Solelis/pull/3
   - variables d'environnement de production à vérifier dans la console Vercel (indispensables : `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `RESEND_API_KEY`, `RESEND_FROM` ; voir `docs/INFRA.md`)
-  - l'e-mail de contact des pages légales (`contact@avelor.vercel.app`) ne peut pas recevoir de messages — à corriger avec le domaine propre
+  - l'adresse de contact des pages légales est `avelor@toakeur.com` depuis le 7 octobre 2026 (l'ancienne, `contact@avelor.vercel.app`, ne recevait rien) — vérifié dans le code le 10 octobre 2026
 
 ### 2. Domaine & SSL
 

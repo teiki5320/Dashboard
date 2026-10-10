@@ -24,8 +24,8 @@
 
 ### 2. GitHub
 
-- **Rôle** : hébergement du code (`teiki5320/avelor`) + CI GitHub Actions (`.github/workflows/ci.yml` : lint, build, tests — sans aucun secret CI)
-- **Console** : https://github.com/teiki5320/avelor
+- **Rôle** : hébergement du code (`teiki5320/Solelis`, ancien nom `avelor` — dépôt renommé, constaté le 10 octobre 2026) + CI GitHub Actions (`.github/workflows/ci.yml` : lint, build, tests — sans aucun secret CI)
+- **Console** : https://github.com/teiki5320/Solelis
 - **Identifiants publics** : nom du dépôt
 - **Secrets** : aucun secret CI configuré (le build fonctionne sans variable)
 - **Coût** : gratuit

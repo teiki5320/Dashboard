@@ -1,6 +1,6 @@
 # PUBLICATION — état des boutiques
 
-> Généré le 22 septembre 2026 d'après les consoles ; version revérifiée dans le dépôt le 2 octobre 2026. Pour mettre à jour : relancer ce même prompt.
+> Généré le 22 septembre 2026 d'après les consoles ; version revérifiée dans le dépôt le 2 octobre 2026, politique de confidentialité revérifiée en ligne le 10 octobre 2026. Pour mettre à jour : relancer ce même prompt.
 >
 > Aucun secret ici — uniquement des références.
 
@@ -29,7 +29,7 @@
 | **Numéro de build** | fourni par Xcode Cloud (`CI_BUILD_NUMBER`), pas figé dans le dépôt |
 | **Signature** | déléguée à Xcode Cloud ; aucun certificat ni profil dans le dépôt |
 | **Classification** | 17+ visée, à cause des scènes de chambre — questionnaire à remplir, à vérifier dans la console |
-| **Confidentialité** | aucune donnée collectée ; politique rédigée, `docs/confidentialite.html` |
+| **Confidentialité** | aucune donnée collectée ; politique `docs/confidentialite.html`, en ligne à https://palabre.toakeur.com/confidentialite.html (GitHub Pages sur `docs/`) |
 | **TestFlight** | à vérifier dans la console |
 | **Fiche (titre, description, captures)** | rédigée dans `docs/BOUTIQUE.md`, captures dans `docs/captures/` |
 
@@ -53,17 +53,17 @@
 | **Poids du bundle** | 143,3 Mo mesurés — limite de 150 Mo, marge sous 5 % |
 | **Poids de l'APK** | 144,7 Mo mesurés |
 | **Classification** | 18 visée — questionnaire à remplir, à vérifier dans la console |
-| **Confidentialité** | « aucune donnée collectée » ; politique rédigée, `docs/confidentialite.html` |
+| **Confidentialité** | « aucune donnée collectée » ; politique `docs/confidentialite.html`, en ligne à https://palabre.toakeur.com/confidentialite.html (GitHub Pages sur `docs/`) |
 | **Fiche (titre, description, captures)** | rédigée dans `docs/BOUTIQUE.md`, captures dans `docs/captures/` |
 
 ## Ce qui reste, dans l'ordre
 
 Le contenu est fini et relu, les fiches de boutique sont écrites, les
-captures sont prises, la politique de confidentialité est rédigée et la
+captures sont prises, la politique de confidentialité est rédigée et en ligne, et la
 signature Android est câblée. Ce qui suit est tout ce qui reste.
 
 1. **Trancher le modèle de rémunération.** Il décide de la fiche, de la classification IARC et du questionnaire de confidentialité : le faire après la soumission obligerait à tout reprendre.
-2. **Héberger la politique de confidentialité.** Elle est écrite (`docs/confidentialite.html`) ; il lui faut une adresse publique stable. Le plus court : activer GitHub Pages sur `main / docs`.
+2. ~~Héberger la politique de confidentialité.~~ Fait : elle répond à https://palabre.toakeur.com/confidentialite.html (vérifié le 10 octobre 2026). C'est cette adresse qu'on colle dans les deux consoles.
 3. **Remplir les questionnaires** de classification et de confidentialité des deux côtés. Les réponses sont préparées dans `docs/BOUTIQUE.md` et vérifiables dans le code.
 4. **Soumettre une première build iOS à TestFlight** par Xcode Cloud, et la faire tourner sur appareil réel avant toute ouverture publique.
 5. **Poser le vrai keystore Android.** Le câblage est fait et vérifié ; il ne manque que `android/key.properties` sur la machine de publication, sur le modèle de `android/key.properties.exemple`.
