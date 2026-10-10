@@ -34,7 +34,7 @@
   function famTint(cat) { var i = DATA.categories.indexOf(cat); return TINTS[(i >= 0 ? i : 0) % TINTS.length]; }
   function appTint(app) { return TINTS[DATA.apps.indexOf(app) % TINTS.length]; }
   // Un « site internet » est une app dont la seule plateforme est le Web
-  // (Avelor, Alohash, OptiLED, Keur Déco…) ; tout le reste est une appli.
+  // (Solelis, Keur Cook, OptiLED, Keur Déco…) ; tout le reste est une appli.
   function estSite(a) { var p = a.platforms || []; return p.length > 0 && p.every(function (x) { return x === 'Web'; }); }
   function lesApplis() { return DATA.apps.filter(function (a) { return !estSite(a); }); }
   function lesSites() { return DATA.apps.filter(estSite); }

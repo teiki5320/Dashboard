@@ -55,7 +55,7 @@ liste de plateformes **vide** ne fait pas un site : l'app reste une appli.
 | Applis | Tama TV | `tama-tv` | `teiki5320/Tama` |
 | Applis | D-Sign | `d-sign` | `teiki5320/D-Sign` |
 | Applis | Palabre | `palabre` | `teiki5320/palabre` |
-| Sites | Avelor | `avelor` | `teiki5320/avelor` |
+| Sites | Solelis | `solelis` | `teiki5320/Solelis` |
 | Sites | Keur Cook | `alohash` | `teiki5320/keurcook` |
 | Sites | OptiLED | `optiled` | `teiki5320/optiled` |
 | Sites | Keur Déco | `keurdeco` | `teiki5320/Keurdeco` |
@@ -63,8 +63,11 @@ liste de plateformes **vide** ne fait pas un site : l'app reste une appli.
 
 À retenir : **Keur Cook porte l'identifiant `alohash`** — héritage de son
 ancien nom — alors que son dépôt s'appelle `teiki5320/keurcook`, comme son
-domaine `keurcook.com`. **Avelor est en pause** (⏸️), mais son site est encore servi
-par `avelor.vercel.app`. **Drama Studio n'est pas une app mobile** : c'est un
+domaine `keurcook.com`. **Avelor s'appelle Solelis** depuis le 10 octobre 2026 —
+dépôt, dossier et identifiant renommés en même temps, pour ne pas refaire le
+coup de `alohash`. Le site déployé, lui, affiche encore « AVELOR » et vit
+toujours sur `avelor.vercel.app` : c'est son dépôt qui changera ça, pas le
+Dashboard. **Solelis est en pause** (⏸️), mais son site répond. **Drama Studio n'est pas une app mobile** : c'est un
 studio local sur **macOS** (Express + React sur `127.0.0.1:4600`), et sa carte le
 dit depuis le 3 octobre 2026. Son dépôt a été renommé deux fois —
 `bd`, puis `Drama-Studio`, puis **`teiki5320/Studio`** depuis le 10 octobre 2026 ;
