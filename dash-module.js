@@ -64,6 +64,25 @@
       else localStorage.setItem(TODO_KEY, JSON.stringify(todos));
     } catch (e) {}
   }
+  // Les cases cochées sont mémorisées sous « <id>:<n> ». Quand une app change
+  // d'identifiant, elles seraient perdues en silence : on les reporte une fois,
+  // au chargement. Une entrée peut être retirée d'ici une fois le renommage
+  // digéré — garder la table courte.
+  var RENOMMAGES = { avelor: 'solelis' };
+  (function reporteLesCases() {
+    var bouge = false;
+    Object.keys(RENOMMAGES).forEach(function (ancien) {
+      Object.keys(todos).forEach(function (cle) {
+        if (cle.indexOf(ancien + ':') !== 0) return;
+        var neuf = RENOMMAGES[ancien] + ':' + cle.slice(ancien.length + 1);
+        if (!(neuf in todos)) todos[neuf] = todos[cle];
+        delete todos[cle];
+        bouge = true;
+      });
+    });
+    if (bouge) saveTodos();
+  })();
+
   function todoHtml(key, texte, sous) {
     var on = !!todos[key];
     return '<label class="todo' + (on ? ' done' : '') + '"><input type="checkbox" data-todo="' + esc(key) + '"' + (on ? ' checked' : '') + '>' +
