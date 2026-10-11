@@ -21,20 +21,35 @@ projet : à lire avant toute intervention.
   `--ok`, `--ko`, `--run`…), jamais de valeur écrite en dur : le thème clair et
   le thème sombre en dépendent.
 
+## Aucun serveur, aucune donnée en ligne
+
+Depuis le 11 octobre 2026, l'app n'appelle plus aucun service distant. La
+couche Supabase a été retirée (le projet avait été supprimé, et il ne sera pas
+remplacé) et **le module Mail a été supprimé en entier** : Gmail, l'API Claude,
+le tri, les brouillons, l'extraction de factures et les « dépenses détectées
+par mail » de la page Compta. La page Compta n'affiche donc plus que des
+recettes, et sa trésorerie est devenue « Encaissements par mois ».
+
+Conséquences à garder en tête :
+
+- **Les données ne vivent que dans le localStorage de l'appareil.** La
+  sauvegarde par fichier (Paramètres → Données) est la seule copie.
+- **Les numéros de facture ne sont plus réservés de façon atomique.** Facturer
+  depuis deux appareils à la fois donnerait deux fois le même numéro.
+- La politique de sécurité d'`index.html` n'autorise plus que le CDN SheetJS :
+  ne pas y réintroduire de domaine sans raison.
+
 ## Les modules
 
 **Gestion Pro** — bons de livraison → factures (il n'y a **pas** de devis),
-stock, TVA, Mail. Tout est dans `script.js` (~2 500 lignes) et `index.html`.
+stock, TVA. Tout est dans `script.js` (~1 700 lignes) et `index.html`.
 Pages : `home`, `dash`, `bl`, `facture`, `stock`, `historique`, `tva`, `compta`,
-`mail`, `parametres`.
+`parametres`.
 
 **Compta → Analyse EBE** — `ebe.js` fait les calculs (sans DOM, testable),
 `ebe-module.js` l'affichage. Tests : `node --test tool/test-ebe.js`.
-Les montants et l'index des PDF vivent dans Supabase sous les clés
-`v90_ebe_*`, **jamais** dans le dépôt.
-⚠️ Au 30 septembre 2026, le projet Supabase de l'app a été supprimé : la
-synchronisation est donc hors service jusqu'à ce qu'un nouveau projet soit
-créé et rebranché dans `script.js`.
+Les montants et l'index des PDF vivent sous les clés `v90_ebe_*` du
+localStorage, **jamais** dans le dépôt.
 
 **Mes apps** — `dash-module.js` pour l'affichage, `assets/dash-data.js` pour
 les données. Ce dernier est **généré** par `node tool/build.js` à partir de

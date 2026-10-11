@@ -14,14 +14,14 @@
 // reste : icônes, images, CDN SheetJS — des fichiers qui ne changent
 // pratiquement jamais et qu'on veut instantanés.
 //
-// JAMAIS mis en cache : Supabase (données vivantes), l'API Claude et Google
-// Identity (auth) — toute requête hors liste part directement sur le réseau.
+// JAMAIS mis en cache : toute requête vers un autre domaine que celui du site
+// et le CDN SheetJS part directement sur le réseau.
 'use strict';
 
 // ⚠️ Incrémenter à chaque changement de stratégie : « activate » supprime
 // alors tous les anciens caches, ce qui force un rechargement complet chez
 // les visiteurs qui avaient encore l'ancienne version en réserve.
-const CACHE = 'gestion-pro-v6';
+const CACHE = 'gestion-pro-v7';
 
 // Fichiers dont une version périmée se remarque tout de suite.
 const VIVANTS = /(?:^|\/)(?:index\.html|script\.js|style\.css|dash-module\.js|dash-data\.js|ebe\.js|ebe-module\.js)$|\/$/;
