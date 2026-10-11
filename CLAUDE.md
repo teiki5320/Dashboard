@@ -11,50 +11,44 @@ projet : à lire avant toute intervention.
   une fois ne se retire plus de l'historique. Dans les fiches, on cite des
   *noms* de variables et de consoles, jamais des valeurs.
 - **100 % statique, vanilla.** HTML, CSS et JavaScript à la main, aucun
-  framework, aucune étape de compilation pour l'app elle-même. Deux scripts
-  externes existent déjà dans `index.html` (SheetJS via jsDelivr pour les
-  imports/exports Excel, Google Identity pour le module Mail) : ne pas en
-  ajouter d'autres.
+  framework, aucune étape de compilation pour l'app elle-même. **Aucun script
+  externe** : depuis le 11 octobre 2026 la politique de sécurité n'autorise
+  plus que le site lui-même (`default-src 'self'`). Ne pas y rouvrir de
+  domaine.
 - **Français sobre** dans l'interface, les commentaires et les commits. Pas de
   jargon, pas de majuscules décoratives.
 - **Couleurs par variables CSS** (`--fond`, `--carte`, `--texte`, `--muted`,
   `--ok`, `--ko`, `--run`…), jamais de valeur écrite en dur : le thème clair et
   le thème sombre en dépendent.
 
-## Aucun serveur, aucune donnée en ligne
+## Ce que fait cette application
 
-Depuis le 11 octobre 2026, l'app n'appelle plus aucun service distant. La
-couche Supabase a été retirée (le projet avait été supprimé, et il ne sera pas
-remplacé) et **le module Mail a été supprimé en entier** : Gmail, l'API Claude,
-le tri, les brouillons, l'extraction de factures et les « dépenses détectées
-par mail » de la page Compta. La page Compta n'affiche donc plus que des
-recettes, et sa trésorerie est devenue « Encaissements par mois ».
+**Un seul module : « Mes apps ».** Le tableau de bord ne sert plus qu'aux
+projets numériques de Teiki — l'état de ses onze applis et sites, leurs
+fiches, leurs services. Le rail n'a que trois entrées : **Mes apps**, et deux
+raccourcis vers le Studio (**Publicité**, **Chaîne**), qui ouvrent
+`studio.toakeur.com` dans un onglet.
 
-Conséquences à garder en tête :
+`dash-module.js` pour l'affichage, `assets/dash-data.js` pour les données. Ce
+dernier est **généré** par `node tool/build.js` à partir de `apps/<id>/` et de
+`catalog/services.js` : toujours le régénérer et le committer avec les fiches
+qu'on modifie. `script.js` n'est plus qu'une coquille (~150 lignes) : thème,
+animations, horloge, messages, flèche retour.
 
-- **Les données ne vivent que dans le localStorage de l'appareil.** La
-  sauvegarde par fichier (Paramètres → Données) est la seule copie.
-- **Les numéros de facture ne sont plus réservés de façon atomique.** Facturer
-  depuis deux appareils à la fois donnerait deux fois le même numéro.
-- La politique de sécurité d'`index.html` n'autorise plus que le CDN SheetJS :
-  ne pas y réintroduire de domaine sans raison.
+### Ce qui a été retiré le 11 octobre 2026
 
-## Les modules
+Toute la gestion commerciale : bons de livraison, facturation, stock, TVA,
+comptabilité, analyse EBE, réglages (produits, clients, émetteurs), sauvegarde
+par fichier. Avec elle sont partis `ebe.js`, `ebe-module.js`,
+`tool/test-ebe.js`, SheetJS et neuf des dix pages. « On verra plus tard pour
+le reste » — c'est donc une mise en sommeil, pas un abandon : tout reste dans
+l'historique git, au commit qui précède ce retrait.
 
-**Gestion Pro** — bons de livraison → factures (il n'y a **pas** de devis),
-stock, TVA. Tout est dans `script.js` (~1 700 lignes) et `index.html`.
-Pages : `home`, `dash`, `bl`, `facture`, `stock`, `historique`, `tva`, `compta`,
-`parametres`.
-
-**Compta → Analyse EBE** — `ebe.js` fait les calculs (sans DOM, testable),
-`ebe-module.js` l'affichage. Tests : `node --test tool/test-ebe.js`.
-Les montants et l'index des PDF vivent sous les clés `v90_ebe_*` du
-localStorage, **jamais** dans le dépôt.
-
-**Mes apps** — `dash-module.js` pour l'affichage, `assets/dash-data.js` pour
-les données. Ce dernier est **généré** par `node tool/build.js` à partir de
-`apps/<id>/` et de `catalog/services.js` : toujours le régénérer et le
-committer avec les fiches qu'on modifie.
+⚠️ **Les données de l'ancienne application dorment toujours dans le
+navigateur**, sous les clés `v90_*` du localStorage. Un bandeau en haut de la
+page permet de les télécharger puis de les effacer, et disparaît une fois
+qu'il n'en reste plus (voir `renderRecuperation` dans `script.js`). Ne pas le
+supprimer tant que Teiki ne l'a pas vidé.
 
 ## Mes apps — les 11 cartes
 
@@ -92,31 +86,6 @@ ses propres fiches citent encore l'ancien nom (les redirections GitHub tiennent)
 adresse ne résout plus (constaté le 3 octobre 2026). L'app n'a donc plus ni
 authentification, ni données, ni stockage de photos. `apps/kultiva/infra.md`
 décrit ce qu'il faudra recréer.
-
-## Ce que l'audit du 11 octobre 2026 a changé
-
-- **La sauvegarde est automatique.** Paramètres → Données : on désigne un
-  dossier une fois (l'identifiant vit dans IndexedDB, pas dans localStorage) et
-  l'app y écrit `Sauvegarde_GestionPro.json` à chaque changement, plus une copie
-  datée par jour. Le navigateur redemande parfois l'autorisation après un
-  redémarrage : le statut le dit, ça n'échoue jamais en silence. Une
-  restauration exporte l'état courant avant d'écraser.
-- **`ech()` s'applique à toute donnée insérée dans un gabarit.** Un nom de
-  produit contenant une balise s'exécutait dans la liste des réglages.
-  Exception : les corps de `mailto:` et les messages de `toast()`, qui ne sont
-  pas du HTML — y échapper afficherait des `&amp;`.
-- **L'import de sauvegarde refuse tout fichier contenant du balisage**, pas
-  seulement les mauvaises formes.
-- **`tvaLitMontant()` lit les montants bancaires** : le séparateur décimal est
-  le dernier rencontré. L'ancien code lisait `1.234` comme 1,234 et
-  `1.234.567,89` comme 1,234 — mille fois trop petit, sans rien dire. Le cas
-  qu'aucune règle ne tranche (un séparateur suivi de trois chiffres) est
-  tranché *et* signalé : ligne en jaune et bandeau au-dessus du tableau.
-- **Mes apps se charge à la demande** (`chargerMesApps()` dans `showPage`) :
-  ses 490 Ko ne sont plus payés par la page de facturation.
-- Les 31 étiquettes de formulaire sont reliées à leur champ, les boutons à
-  icône ont un `aria-label`, et la couleur de thème est la même dans
-  `manifest.json` et `index.html`.
 
 ## La synchro automatique (`.github/workflows/sync.yml`)
 
@@ -161,7 +130,10 @@ retouchée côté Dashboard n'est pas écrasée.
   recherche — ne pas réintroduire d'outils abandonnés dans les textes visibles.
 - **Zoom** : le corps de l'app est à `1.6` ; le module Mes apps repasse à `.75`
   (soit 1,2 effectif) et à `.9` à partir de 1200 px.
-- **En attente** : secrets Qonto, dépôts de Tama TV et D-Sign.
+- **Nom** : l'app s'appelle encore « Gestion Pro v9.0 » dans `index.html` et
+  dans `manifest.json`, alors qu'elle ne fait plus de gestion. Renommer change
+  l'identité de la PWA installée sur le téléphone : à décider avec Teiki, pas
+  tout seul.
 
 ## Dire vrai, et savoir quand on ne sait pas
 
@@ -206,8 +178,8 @@ Lexique, rien ne change : c'est bien l'article général qu'on veut.
 ## Commandes utiles
 
 ```bash
-node tool/build.js          # régénère assets/dash-data.js
-node --test tool/test-ebe.js # tests du module EBE
-node tool/sync.js           # rapatrie les fiches (ce que fait la CI)
-node tool/verifier-fiches.js # contrôle que les fiches disent vrai
+node tool/build.js               # régénère assets/dash-data.js
+node --test tool/test-markdown.js # tests du convertisseur Markdown
+node tool/sync.js                # rapatrie les fiches (ce que fait la CI)
+node tool/verifier-fiches.js     # contrôle que les fiches disent vrai
 ```

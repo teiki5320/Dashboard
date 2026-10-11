@@ -36,7 +36,7 @@ jobs:
         run: node tool/build.js
 
       - name: Tests
-        run: node --test tool/test-ebe.js
+        run: node --test tool/test-markdown.js
 
       - name: Commiter assets/ si les données ont changé
         if: github.event_name != 'pull_request'
