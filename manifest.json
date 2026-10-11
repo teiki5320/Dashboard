@@ -1,7 +1,7 @@
 {
-  "name": "Gestion Pro",
-  "short_name": "Gestion Pro",
-  "description": "Gestion commerciale : bons de livraison, facturation, stock, TVA, compta",
+  "name": "Dash",
+  "short_name": "Dash",
+  "description": "Mes applis et mes sites : état du code, fiches techniques, marketing et publication.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

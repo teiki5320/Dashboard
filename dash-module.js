@@ -1,5 +1,5 @@
 // =============================================================================
-// Module « Mes apps » — moteur Dash porté dans Gestion Pro.
+// Module « Mes apps » — le cœur de Dash.
 // Chargé par index.html après assets/dash-data.js.
 // Aucune dépendance, aucun fetch : données dans window.DASH_DATA. Fonctionne en file://.
 // Thème « Clay » : barre latérale + tuiles en relief, clair / sombre (bouton 🌙 / ☀️).
@@ -119,7 +119,7 @@
     return h + '</div>';
   }
 
-  // ── État de vue (pas de hash : Gestion Pro pilote sa propre navigation) ────
+  // ── État de vue (pas de hash : la coquille pilote sa propre navigation) ───
   var vue = { page: 'accueil', id: null, volet: 'technique' };
   function dashGo(page, id, volet) {
     var v = (volet === 'marketing' || volet === 'publication') ? volet : 'technique';
@@ -661,7 +661,7 @@
     });
   }
 
-  // ── Rendu dans la page « Mes apps » de Gestion Pro ────────────────────────
+  // ── Rendu dans la page « Mes apps » ───────────────────────────────────────
   function dashRender() {
     var route = vue;
     closeSheet();
