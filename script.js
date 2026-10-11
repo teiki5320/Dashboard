@@ -41,8 +41,6 @@ function majBoutonRetour() {
     if (!b) return;
     const dansUneFiche = !!document.querySelector('#page-dash .app-head, #page-dash .cat-section');
     b.style.display = dansUneFiche ? 'flex' : 'none';
-    const titre = $('hd-page-name');
-    if (titre) titre.innerText = document.querySelector('#page-dash .tb-title h2')?.innerText || 'Mes apps';
 }
 
 // --- NOTIFICATIONS (message non bloquant) ---

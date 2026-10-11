@@ -137,16 +137,12 @@
   };
 
   // ── Navigation du module, fusionnée dans le rail global de gauche ──────────
-  // Plus de barre latérale interne : les entrées (Vue d'ensemble, apps,
-  // Catalogue) s'insèrent sous « Mes apps » dans #gp-rail, et s'effacent en
-  // quittant la page (voir l'accroche showPage en bas de fichier).
+  // Plus de barre latérale interne : les entrées (apps, Lexique) s'insèrent
+  // sous « Mes apps » dans #gp-rail, et s'effacent en quittant la page (voir
+  // l'accroche showPage en bas de fichier).
   function renderRailNav(route) {
     var slot = document.getElementById('rail-dash-slot');
     if (!slot) return;
-    // Mode focus : dans Mes apps, le rail se consacre au module — les entrées
-    // métier (Commande, Factures…) sont masquées par CSS via cette classe.
-    var rail = document.getElementById('gp-rail');
-    if (rail) rail.classList.add('dash-mode');
     // Pas d'entrée « Vue d'ensemble » : cliquer « Mes apps » dans le rail y
     // mène toujours (voir l'accroche showPage plus bas), c'est le même geste.
     var h = '';
@@ -168,8 +164,6 @@
   function clearRailNav() {
     var slot = document.getElementById('rail-dash-slot');
     if (slot) slot.innerHTML = '';
-    var rail = document.getElementById('gp-rail');
-    if (rail) rail.classList.remove('dash-mode');
   }
 
   // ── Barre haute ────────────────────────────────────────────────────────────
@@ -671,11 +665,10 @@
   function dashRender() {
     var route = vue;
     closeSheet();
-    var side = $('#dash-titre'), corps = $('#dash-contenu');
+    var corps = $('#dash-contenu');
     if (!corps) return;
     var app = route.page === 'app' ? DATA.apps.filter(function (a) { return a.id === route.id; })[0] : null;
     if (route.page === 'app' && !app) { vue = { page: 'accueil', id: null, volet: 'technique' }; return dashRender(); }
-    if (side) side.innerHTML = '';
     renderRailNav(route);
     var h = renderTopbar(route, app) + '<div class="dash-body">';
     if (route.page === 'catalogue') h += renderCatalogue();

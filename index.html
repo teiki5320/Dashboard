@@ -39,9 +39,11 @@
 <div id="gp-main">
 
 <header>
+    <!-- Pas de titre ici : le module affiche le sien, avec son sous-titre, son
+         champ de recherche et sa cloche. Deux titres identiques l'un au-dessus
+         de l'autre, c'était du bruit. -->
     <div class="hd-left">
         <button id="global-back" class="global-back-btn" onclick="goBack()" title="Retour" aria-label="Retour">←</button>
-        <div class="hd-title" id="hd-page-name">Mes apps</div>
     </div>
     <div class="hd-clock">
         <button id="gp-theme" class="hd-btn" onclick="gpToggleTheme()" title="Clair / sombre" aria-label="Basculer le thème clair ou sombre">☀️</button>
@@ -60,7 +62,6 @@
 <div id="recup-anciennes" style="display:none"></div>
 
 <div id="page-dash" class="page active">
-    <div id="dash-titre"></div>
     <div id="dash-contenu"></div>
 </div>
 
