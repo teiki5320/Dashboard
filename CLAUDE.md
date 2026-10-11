@@ -1,8 +1,11 @@
-# Gestion Pro — Dashboard
+# Dash
 
-Application de gestion personnelle de Teiki, publiée sur GitHub Pages depuis
-`teiki5320/Dashboard` (dépôt **public**). Ce fichier est la mémoire durable du
-projet : à lire avant toute intervention.
+Tableau de bord des projets numériques de Teiki, publié sur GitHub Pages
+depuis `teiki5320/Dashboard` (dépôt **public**). Ce fichier est la mémoire
+durable du projet : à lire avant toute intervention.
+
+L'app s'appelait « Gestion Pro » jusqu'au 11 octobre 2026, quand la partie
+gestion commerciale a été mise en sommeil. Le dépôt, lui, garde son nom.
 
 ## Règles absolues
 
@@ -130,10 +133,11 @@ retouchée côté Dashboard n'est pas écrasée.
   recherche — ne pas réintroduire d'outils abandonnés dans les textes visibles.
 - **Zoom** : le corps de l'app est à `1.6` ; le module Mes apps repasse à `.75`
   (soit 1,2 effectif) et à `.9` à partir de 1200 px.
-- **Nom** : l'app s'appelle encore « Gestion Pro v9.0 » dans `index.html` et
-  dans `manifest.json`, alors qu'elle ne fait plus de gestion. Renommer change
-  l'identité de la PWA installée sur le téléphone : à décider avec Teiki, pas
-  tout seul.
+- **Nom** : l'app s'appelle **Dash** (titre, manifeste, cache du service
+  worker). Les clés de stockage gardent leurs anciens préfixes — `gp-theme`,
+  `dash-anim`, `v90_dash_todos` — et les identifiants internes du HTML aussi
+  (`#gp-shell`, `#gp-rail`). Les renommer effacerait les préférences et les
+  cases cochées pour rien.
 
 ## Dire vrai, et savoir quand on ne sait pas
 

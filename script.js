@@ -1,5 +1,5 @@
 /**
- * Dashboard — la coquille.
+ * Dash — la coquille.
  *
  * Depuis le 11 octobre 2026, ce tableau de bord ne sert plus qu'aux projets
  * numériques : le module « Mes apps », et deux raccourcis vers le Studio
