@@ -51,12 +51,12 @@
 
 <header>
     <div class="hd-left">
-        <button id="global-back" class="global-back-btn" onclick="goBack()" title="Page précédente">←</button>
+        <button id="global-back" class="global-back-btn" onclick="goBack()" title="Page précédente" aria-label="Page précédente">←</button>
         <div class="hd-title" id="hd-page-name">Tableau de Bord</div>
     </div>
     <div class="hd-clock">
-        <button id="gp-theme" class="hd-btn" onclick="gpToggleTheme()" title="Clair / sombre">☀️</button>
-        <button id="hd-anim-toggle" class="hd-anim-btn" onclick="toggleGlobalAnim()" title="Activer / couper les animations">⚡</button>
+        <button id="gp-theme" class="hd-btn" onclick="gpToggleTheme()" title="Clair / sombre" aria-label="Basculer le thème clair ou sombre">☀️</button>
+        <button id="hd-anim-toggle" class="hd-anim-btn" onclick="toggleGlobalAnim()" title="Activer / couper les animations" aria-label="Activer ou couper les animations">⚡</button>
         <div class="hd-clock-text">
             <div id="hd-date">...</div>
             <div id="hd-time" style="font-size: 16px; color: var(--gold)">00:00</div>
@@ -175,16 +175,16 @@
         <div class="sub-tab" id="tab-bl-charge" onclick="toggleBLTab('charge')">Chargement</div>
     </div>
     <div id="view-bl-prise">
-        <div class="field" style="margin-bottom:10px"><label>Date</label><input type="date" id="bl-date"></div>
-        <label>Entreprise émettrice</label><select id="bl-ent-select" style="margin-bottom:10px"></select>
-        <label>Sélection Client</label><select id="bl-cli-select" onchange="renderBLGrid()"></select>
+        <div class="field" style="margin-bottom:10px"><label for="bl-date">Date</label><input type="date" id="bl-date"></div>
+        <label for="bl-ent-select">Entreprise émettrice</label><select id="bl-ent-select" style="margin-bottom:10px"></select>
+        <label for="bl-cli-select">Sélection Client</label><select id="bl-cli-select" onchange="renderBLGrid()"></select>
         <div id="bl-prod-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px"></div>
         <button class="btn btn-gold" style="margin-top:20px; height:50px" onclick="saveBL()">📦 ENREGISTRER LE BON</button>
     </div>
     <div id="view-bl-suivi" style="display:none"><div id="list-bl-encours"></div></div>
     <div id="view-bl-charge" style="display:none">
         <div class="field" style="margin-bottom:14px">
-            <label>Date de tournée</label>
+            <label for="charge-date">Date de tournée</label>
             <input type="date" id="charge-date" onchange="renderChargement()">
         </div>
         <div id="charge-content"></div>
@@ -200,18 +200,18 @@
     <div id="f-view-libre">
         <div class="card" style="flex-direction: column; align-items: stretch">
             <div class="r2">
-                <div class="field"><label>Émetteur</label><select id="f-ent"></select></div>
-                <div class="field"><label>Client</label><select id="f-cli"></select></div>
+                <div class="field"><label for="f-ent">Émetteur</label><select id="f-ent"></select></div>
+                <div class="field"><label for="f-cli">Client</label><select id="f-cli"></select></div>
             </div>
             <div class="r2">
-                <div class="field"><label>N° Facture</label><input type="text" id="f-num" readonly style="background:#f0f0f0"></div>
-                <div class="field"><label>Date</label><input type="text" id="f-date"></div>
+                <div class="field"><label for="f-num">N° Facture</label><input type="text" id="f-num" readonly style="background:#f0f0f0"></div>
+                <div class="field"><label for="f-date">Date</label><input type="text" id="f-date"></div>
             </div>
         </div>
         <div id="f-lines"></div>
         <div style="display: flex; gap: 10px; margin-bottom: 15px">
             <select id="f-prod-picker" style="margin-bottom:0"></select>
-            <button class="btn btn-gold" style="width: 60px; background:var(--header); color:var(--gold)" onclick="addLine()">＋</button>
+            <button class="btn btn-gold" style="width: 60px; background:var(--header); color:var(--gold)" onclick="addLine()" title="Ajouter une ligne" aria-label="Ajouter une ligne">＋</button>
         </div>
         <div class="card" style="background: var(--header); color: var(--gold); display: flex; justify-content: space-between;">
             <span style="font-weight: 700">TOTAL TTC</span>
@@ -281,6 +281,16 @@
             </div>
             <input type="file" id="backup-file-input" accept=".json,application/json" style="display:none" onchange="importBackup(event)">
         </div>
+
+        <div class="section-title" style="margin-top: 25px">📂 Sauvegarde automatique</div>
+        <div class="card" style="flex-direction:column; gap:12px; align-items:stretch">
+            <p style="font-size:13px; color:var(--text-muted); margin:0">Désigne un dossier une seule fois (iCloud Drive, par exemple) : l'app y écrira tes données toute seule à chaque changement, plus une copie datée par jour. C'est ta vraie sécurité maintenant qu'il n'y a plus de serveur.</p>
+            <p id="auto-backup-status" style="font-size:13px; margin:0"></p>
+            <div class="r2">
+                <button class="btn" style="background:var(--carte-2); font-size:12px" onclick="choisirDossierSauvegarde()">📂 Choisir le dossier</button>
+                <button class="btn" style="background:var(--carte-2); font-size:12px" onclick="oublierDossierSauvegarde()">✖️ Ne plus sauvegarder</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -290,7 +300,7 @@
         <div class="sub-tab" id="tab-hist-impayees" onclick="toggleHistFilter('impayees')">Impayées</div>
     </div>
     <div style="display:flex; gap:10px; align-items:center; margin-bottom:14px; flex-wrap:wrap">
-        <label style="margin:0">Entreprise</label>
+        <label style="margin:0" for="hist-ent-filter">Entreprise</label>
         <select id="hist-ent-filter" onchange="renderHistorique()" style="width:auto; min-width:200px"></select>
     </div>
     <div class="section-title">Archives</div>
@@ -312,6 +322,7 @@
     <div id="tva-stats-bar" style="display:none"></div>
     <div id="tva-toolbar" style="display:none"></div>
     <div id="tva-table-wrap" style="display:none; overflow-x:auto; margin-top:10px"></div>
+    <div id="tva-doute" style="display:none; margin-top:10px; padding:10px 14px; border-radius:12px; background:rgba(251,191,36,.12); color:var(--run); font-size:13px; font-weight:600"></div>
     <div id="tva-info" style="display:none; margin-top:8px; font-size:12px; opacity:.5; line-height:1.7; text-align:center; padding:0 10px">
         <b>ℹ️ Logique rejets :</b> Toute ligne avec "REJET" dans le libellé est classée en Rejet à 20% TVA — sa TVA annule celle du débit initial. À valider avec les factures avant dépôt CA3.
     </div>
@@ -327,9 +338,9 @@
     <div class="section-title">Comptabilité</div>
     <div id="compta-stats" style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:20px"></div>
     <div class="card" style="flex-direction:column; align-items:stretch">
-        <label>Entreprise</label>
+        <label for="compta-ent">Entreprise</label>
         <select id="compta-ent" style="margin-bottom:14px"></select>
-        <label>Période</label>
+        <label for="mp-icon">Période</label>
         <div class="r2" style="margin-bottom:14px">
             <input type="month" id="compta-debut">
             <input type="month" id="compta-fin">
@@ -346,19 +357,19 @@
     <div class="section-title" id="mp-title">Produit</div>
     <input type="hidden" id="mp-id">
     <div class="r2">
-        <div class="field"><label>Emoji</label><input type="text" id="mp-icon" placeholder="🥕"></div>
-        <div class="field"><label>Nom *</label><input type="text" id="mp-nom"></div>
+        <div class="field"><label for="mp-icon">Emoji</label><input type="text" id="mp-icon" placeholder="🥕"></div>
+        <div class="field"><label for="mp-nom">Nom *</label><input type="text" id="mp-nom"></div>
     </div>
-    <div class="field"><label>Description</label><textarea id="mp-desc"></textarea></div>
+    <div class="field"><label for="mp-desc">Description</label><textarea id="mp-desc"></textarea></div>
     <div class="r2">
-        <div class="field"><label>Prix HT</label><input type="number" id="mp-prix" step="0.01"></div>
-        <div class="field"><label>Unité</label><select id="mp-unite"><option value="kg">kg</option><option value="unité">unité</option><option value="colis">colis</option></select></div>
+        <div class="field"><label for="mp-prix">Prix HT</label><input type="number" id="mp-prix" step="0.01"></div>
+        <div class="field"><label for="mp-unite">Unité</label><select id="mp-unite"><option value="kg">kg</option><option value="unité">unité</option><option value="colis">colis</option></select></div>
     </div>
     <div class="r2">
-        <div class="field"><label>TVA (%)</label><select id="mp-tva"><option value="20">20%</option><option value="10">10%</option><option value="5.5">5.5%</option><option value="0">0%</option></select></div>
-        <div class="field"><label>Poids unitaire (kg, optionnel)</label><input type="number" id="mp-poids" step="0.01" placeholder="ex : 0.5"></div>
+        <div class="field"><label for="mp-tva">TVA (%)</label><select id="mp-tva"><option value="20">20%</option><option value="10">10%</option><option value="5.5">5.5%</option><option value="0">0%</option></select></div>
+        <div class="field"><label for="mp-poids">Poids unitaire (kg, optionnel)</label><input type="number" id="mp-poids" step="0.01" placeholder="ex : 0.5"></div>
     </div>
-    <div class="field"><label>Seuil d'alerte stock (optionnel)</label><input type="number" id="mp-seuil" placeholder="ex : 5"></div>
+    <div class="field"><label for="mp-seuil">Seuil d'alerte stock (optionnel)</label><input type="number" id="mp-seuil" placeholder="ex : 5"></div>
     <button class="btn btn-gold" onclick="saveProd()">SAUVER</button>
     <button class="btn" id="mp-archive" style="margin-top:10px; background:var(--carte-2); display:none" onclick="toggleArchive('prods', $('mp-id').value)">🗂 Archiver</button>
     <button class="btn btn-red" onclick="closeModals()" style="margin-top:10px">ANNULER</button>
@@ -375,15 +386,15 @@
 <div id="mod-cli" class="modal-overlay"><div class="modal">
     <div class="section-title" id="mc-title">Fiche Client</div>
     <input type="hidden" id="mc-id">
-    <div class="field"><label>Nom / Société *</label><input type="text" id="mc-nom"></div>
-    <div class="field"><label>Adresse complète</label><input type="text" id="mc-adr"></div>
+    <div class="field"><label for="mc-nom">Nom / Société *</label><input type="text" id="mc-nom"></div>
+    <div class="field"><label for="mc-adr">Adresse complète</label><input type="text" id="mc-adr"></div>
     <div class="r2">
-        <div class="field"><label>CP / Ville</label><input type="text" id="mc-ville"></div>
-        <div class="field"><label>SIRET / TVA Intra</label><input type="text" id="mc-siret"></div>
+        <div class="field"><label for="mc-ville">CP / Ville</label><input type="text" id="mc-ville"></div>
+        <div class="field"><label for="mc-siret">SIRET / TVA Intra</label><input type="text" id="mc-siret"></div>
     </div>
     <div class="r2">
-        <div class="field"><label>Email</label><input type="email" id="mc-email"></div>
-        <div class="field"><label>Délai de paiement (jours)</label><input type="number" id="mc-echeance" placeholder="30"></div>
+        <div class="field"><label for="mc-email">Email</label><input type="email" id="mc-email"></div>
+        <div class="field"><label for="mc-echeance">Délai de paiement (jours)</label><input type="number" id="mc-echeance" placeholder="30"></div>
     </div>
     <button class="btn btn-gold" onclick="saveCli()">SAUVER</button>
     <button class="btn" id="mc-archive" style="margin-top:10px; background:var(--carte-2); display:none" onclick="toggleArchive('clis', $('mc-id').value)">🗂 Archiver</button>
@@ -393,14 +404,14 @@
 <div id="mod-ent" class="modal-overlay"><div class="modal">
     <div class="section-title" id="me-title">Mon Entreprise</div>
     <input type="hidden" id="me-id">
-    <div class="field"><label>Nom Commercial *</label><input type="text" id="me-nom"></div>
-    <div class="field"><label>Adresse Siège</label><input type="text" id="me-adr"></div>
+    <div class="field"><label for="me-nom">Nom Commercial *</label><input type="text" id="me-nom"></div>
+    <div class="field"><label for="me-adr">Adresse Siège</label><input type="text" id="me-adr"></div>
     <div class="r2">
-        <div class="field"><label>SIRET</label><input type="text" id="me-siret"></div>
-        <div class="field"><label>Ville / CP</label><input type="text" id="me-ville"></div>
+        <div class="field"><label for="me-siret">SIRET</label><input type="text" id="me-siret"></div>
+        <div class="field"><label for="me-ville">Ville / CP</label><input type="text" id="me-ville"></div>
     </div>
-    <div class="field"><label>RIB / IBAN</label><input type="text" id="me-iban"></div>
-    <div class="field"><label>Mentions Pied de Facture</label><textarea id="me-mentions"></textarea></div>
+    <div class="field"><label for="me-iban">RIB / IBAN</label><input type="text" id="me-iban"></div>
+    <div class="field"><label for="me-mentions">Mentions Pied de Facture</label><textarea id="me-mentions"></textarea></div>
     <button class="btn btn-gold" onclick="saveEnt()">SAUVER</button>
     <button class="btn btn-red" onclick="closeModals()" style="margin-top:10px">ANNULER</button>
 </div></div>
@@ -413,7 +424,7 @@
 
 <div id="preview-wrap">
     <div class="prev-actions" style="max-width:210mm; margin:10px auto; display:flex; gap:10px">
-        <button class="btn btn-gold" style="width:100px; background:#888; color:#fff" onclick="closePreview()">←</button>
+        <button class="btn btn-gold" style="width:100px; background:#888; color:#fff" onclick="closePreview()" title="Fermer l'aperçu" aria-label="Fermer l'aperçu">←</button>
         <button id="btn-finalize-inv" class="btn btn-gold" style="flex:1" onclick="finalizeInvoice()">🖨 IMPRIMER & VALIDER</button>
         <button id="btn-print-bl" class="btn btn-gold" style="flex:1; display:none" onclick="window.print()">🖨 IMPRIMER LE BON</button>
     </div>
@@ -429,8 +440,9 @@
 </div>
 
 <script src="script.js"></script>
-<script src="assets/dash-data.js"></script>
-<script src="dash-module.js"></script>
+<!-- Mes apps (dash-data.js + dash-module.js, ~490 Ko) n'est plus chargé au
+     démarrage : chargerMesApps() s'en occupe à la première ouverture du
+     module. Une facture ne paie plus le poids du catalogue d'applications. -->
 <script src="ebe.js"></script>
 <script src="ebe-module.js"></script>
 <script>

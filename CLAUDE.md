@@ -93,6 +93,31 @@ adresse ne résout plus (constaté le 3 octobre 2026). L'app n'a donc plus ni
 authentification, ni données, ni stockage de photos. `apps/kultiva/infra.md`
 décrit ce qu'il faudra recréer.
 
+## Ce que l'audit du 11 octobre 2026 a changé
+
+- **La sauvegarde est automatique.** Paramètres → Données : on désigne un
+  dossier une fois (l'identifiant vit dans IndexedDB, pas dans localStorage) et
+  l'app y écrit `Sauvegarde_GestionPro.json` à chaque changement, plus une copie
+  datée par jour. Le navigateur redemande parfois l'autorisation après un
+  redémarrage : le statut le dit, ça n'échoue jamais en silence. Une
+  restauration exporte l'état courant avant d'écraser.
+- **`ech()` s'applique à toute donnée insérée dans un gabarit.** Un nom de
+  produit contenant une balise s'exécutait dans la liste des réglages.
+  Exception : les corps de `mailto:` et les messages de `toast()`, qui ne sont
+  pas du HTML — y échapper afficherait des `&amp;`.
+- **L'import de sauvegarde refuse tout fichier contenant du balisage**, pas
+  seulement les mauvaises formes.
+- **`tvaLitMontant()` lit les montants bancaires** : le séparateur décimal est
+  le dernier rencontré. L'ancien code lisait `1.234` comme 1,234 et
+  `1.234.567,89` comme 1,234 — mille fois trop petit, sans rien dire. Le cas
+  qu'aucune règle ne tranche (un séparateur suivi de trois chiffres) est
+  tranché *et* signalé : ligne en jaune et bandeau au-dessus du tableau.
+- **Mes apps se charge à la demande** (`chargerMesApps()` dans `showPage`) :
+  ses 490 Ko ne sont plus payés par la page de facturation.
+- Les 31 étiquettes de formulaire sont reliées à leur champ, les boutons à
+  icône ont un `aria-label`, et la couleur de thème est la même dans
+  `manifest.json` et `index.html`.
+
 ## La synchro automatique (`.github/workflows/sync.yml`)
 
 Tourne toute seule chaque jour à 6 h UTC. **Ne jamais la modifier.** Elle

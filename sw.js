@@ -79,7 +79,13 @@ self.addEventListener('fetch', (e) => {
           }
           return res;
         })
-        .catch(() => caches.match(req))
+        // Hors ligne : le cache fait office de filet. S'il est vide lui aussi
+        // (fichier jamais visité), on répond une erreur lisible — respondWith
+        // recevait sinon « undefined », ce qui échoue sans rien expliquer.
+        .catch(() => caches.match(req).then((cache) => cache || new Response(
+          'Hors ligne et ce fichier n\'a jamais été mis en cache.',
+          { status: 503, statusText: 'Hors ligne', headers: { 'Content-Type': 'text/plain; charset=utf-8' } }
+        )))
     );
     return;
   }
@@ -92,7 +98,9 @@ self.addEventListener('fetch', (e) => {
           caches.open(CACHE).then((c) => c.put(req, copy));
         }
         return res;
-      }).catch(() => cached);
+      }).catch(() => cached || new Response('Hors ligne.', {
+        status: 503, statusText: 'Hors ligne', headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+      }));
       return cached || refresh;
     })
   );

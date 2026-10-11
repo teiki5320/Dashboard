@@ -11,10 +11,13 @@ function ech(s) {
     return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
+// Sauvegarde automatique : état courant (voir la section dédiée plus bas).
+const sauvegardeAuto = { dossier: null, dernier: null, erreur: null, minuteur: null };
+
 // Gestion du LocalStorage
 const G = {
     get: (k) => JSON.parse(localStorage.getItem(k) || '[]'),
-    set: (k, v) => { localStorage.setItem(k, JSON.stringify(v)); },
+    set: (k, v) => { localStorage.setItem(k, JSON.stringify(v)); planifierSauvegardeAuto(); },
     val: (k) => localStorage.getItem(k) || '0'
 };
 
@@ -63,6 +66,11 @@ function showPage(id, _sansHistorique) {
     $('global-back').style.display = (id === 'home') ? 'none' : 'flex';
 
     if (id === 'facture') $('f-num').value = genNum(); // aperçu ; le numéro définitif est réservé à l'aperçu facture
+    if (id === 'dash') {
+        chargerMesApps()
+            .then(() => window.dashInit && window.dashInit())
+            .catch(() => toast('❌ Mes apps n\'a pas pu être chargé — vérifie ta connexion.', 'error'));
+    }
 
     window.scrollTo(0, 0);
     renderAll();
@@ -95,6 +103,29 @@ function chargerXLSX() {
         document.head.appendChild(b);
     });
     return _xlsxEnCours;
+}
+
+// Le module « Mes apps » pèse à lui seul 490 Ko (dont 450 pour ses données) et
+// ne sert qu'à lui-même : on ne le charge qu'à sa première ouverture, au lieu
+// de le faire payer à chaque page. L'ordre compte — dash-module lit
+// window.DASH_DATA dès son exécution.
+let _mesAppsEnCours = null;
+function chargerScript(src) {
+    return new Promise((resoudre, rejeter) => {
+        const b = document.createElement('script');
+        b.src = src;
+        b.onload = () => resoudre();
+        b.onerror = () => rejeter(new Error(src + ' indisponible'));
+        document.head.appendChild(b);
+    });
+}
+function chargerMesApps() {
+    if (typeof window.dashInit === 'function') return Promise.resolve();
+    if (_mesAppsEnCours) return _mesAppsEnCours;
+    _mesAppsEnCours = chargerScript('assets/dash-data.js')
+        .then(() => chargerScript('dash-module.js'))
+        .catch((e) => { _mesAppsEnCours = null; throw e; });
+    return _mesAppsEnCours;
 }
 
 // Valeur glissée dans un gestionnaire onclick : échappée d'abord pour
@@ -141,7 +172,7 @@ function reserveInvoiceNumber() {
 }
 
 // --- SAUVEGARDE DE SECOURS (export/import fichier, indépendant du cloud) ---
-function exportBackup() {
+function exportBackup(opts) {
     const data = {};
     for (let i = 0; i < localStorage.length; i++) {
         const k = localStorage.key(i);
@@ -154,7 +185,7 @@ function exportBackup() {
     a.download = 'Sauvegarde_GestionPro_' + new Date().toISOString().split('T')[0] + '.json';
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 5000);
-    toast(`✅ Sauvegarde téléchargée (${Object.keys(data).length} collection(s)).`, 'success');
+    if (!(opts && opts.silencieux)) toast(`✅ Sauvegarde téléchargée (${Object.keys(data).length} collection(s)).`, 'success');
 }
 
 // Une sauvegarde circule par mail ou par clé USB : on ne réécrit que des clés
@@ -167,6 +198,17 @@ const FORMES_SAUVEGARDE = {
     v90_prix_cli: 'objet', v90_inv_count: 'nombre',
     v90_ebe_documents: 'objet', v90_ebe_agregats: 'objet'
 };
+// Une balise dans une valeur n'a aucune raison d'être : les champs de l'app
+// sont des noms, des adresses, des montants. Un fichier qui en contient a été
+// fabriqué, pas exporté — on le refuse en entier plutôt qu'à moitié.
+const BALISE = /<[a-zA-Z/!]/;
+function contientDuBalisage(v) {
+    if (typeof v === 'string') return BALISE.test(v);
+    if (Array.isArray(v)) return v.some(contientDuBalisage);
+    if (v && typeof v === 'object') return Object.values(v).some(contientDuBalisage);
+    return false;
+}
+
 function valeurSauvegardeValide(cle, brut) {
     const forme = FORMES_SAUVEGARDE[cle];
     if (!forme) return false;
@@ -174,6 +216,7 @@ function valeurSauvegardeValide(cle, brut) {
     if (forme === 'nombre') return /^\d+$/.test(brut.trim());
     let v;
     try { v = JSON.parse(brut); } catch (e) { return false; }
+    if (contientDuBalisage(v)) return false;
     if (forme === 'tableau') return Array.isArray(v);
     return v !== null && typeof v === 'object' && !Array.isArray(v);
 }
@@ -193,7 +236,10 @@ function importBackup(ev) {
         const ignorees = Object.keys(payload.data).length - entrees.length;
         if (!entrees.length) return toast('❌ Sauvegarde inutilisable : aucune collection reconnue.', 'error');
         const n = entrees.length;
-        if (!confirm(`Restaurer cette sauvegarde du ${new Date(payload.exportedAt).toLocaleDateString('fr-FR')} ?\n${n} collection(s) — les données actuelles de cet appareil seront remplacées.`)) return;
+        if (!confirm(`Restaurer cette sauvegarde du ${new Date(payload.exportedAt).toLocaleDateString('fr-FR')} ?\n${n} collection(s) — les données actuelles de cet appareil seront remplacées.\n\nUne copie de l'état actuel sera téléchargée avant.`)) return;
+        // Filet : l'état actuel part dans les téléchargements AVANT d'être
+        // écrasé. Sans serveur, une restauration par erreur serait définitive.
+        exportBackup({ silencieux: true });
         entrees.forEach(([k, v]) => localStorage.setItem(k, v));
         db.clis   = G.get('v90_clis');
         db.prods  = G.get('v90_prods');
@@ -207,6 +253,155 @@ function importBackup(ev) {
     };
     reader.readAsText(file);
 }
+
+// --- SAUVEGARDE AUTOMATIQUE DANS UN DOSSIER ---
+//
+// Il n'y a plus de serveur : la seule copie des données est un fichier. Pour
+// ne pas dépendre d'un geste quotidien, l'app écrit elle-même ce fichier dans
+// un dossier désigné une fois (iCloud Drive, par exemple) — un fichier
+// courant réécrit à chaque changement, plus une copie datée par jour, pour
+// qu'une donnée abîmée n'écrase pas la seule version saine.
+//
+// Le navigateur conserve l'autorisation mais la redemande parfois après un
+// redémarrage : le statut dans Paramètres le dit, il n'échoue pas en silence.
+// L'identifiant du dossier ne tient pas dans localStorage — il vit dans
+// IndexedDB, seul endroit qui sait stocker ce type d'objet.
+const DOSSIER_BASE = 'gestion-pro-sauvegarde';
+const DOSSIER_CLE = 'dossier';
+
+function sauvegardeAutoPossible() { return typeof window.showDirectoryPicker === 'function'; }
+
+function dossierBase() {
+    return new Promise((ok, ko) => {
+        const r = indexedDB.open(DOSSIER_BASE, 1);
+        r.onupgradeneeded = () => r.result.createObjectStore('handles');
+        r.onsuccess = () => ok(r.result);
+        r.onerror = () => ko(r.error);
+    });
+}
+async function dossierLire() {
+    try {
+        const base = await dossierBase();
+        return await new Promise((ok) => {
+            const t = base.transaction('handles', 'readonly').objectStore('handles').get(DOSSIER_CLE);
+            t.onsuccess = () => ok(t.result || null);
+            t.onerror = () => ok(null);
+        });
+    } catch (e) { return null; }
+}
+async function dossierRetenir(handle) {
+    const base = await dossierBase();
+    await new Promise((ok, ko) => {
+        const m = base.transaction('handles', 'readwrite').objectStore('handles');
+        const t = handle ? m.put(handle, DOSSIER_CLE) : m.delete(DOSSIER_CLE);
+        t.onsuccess = () => ok(); t.onerror = () => ko(t.error);
+    });
+}
+async function dossierAutorise(demander) {
+    const d = sauvegardeAuto.dossier;
+    if (!d) return 'aucun';
+    const opts = { mode: 'readwrite' };
+    let p = await d.queryPermission(opts);
+    if (p !== 'granted' && demander) p = await d.requestPermission(opts);
+    return p;
+}
+
+function contenuSauvegarde() {
+    const data = {};
+    for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith('v90_')) data[k] = localStorage.getItem(k);
+    }
+    return { app: 'gestion-pro', version: 1, exportedAt: new Date().toISOString(), data };
+}
+
+async function ecrireDansDossier(nom, texte) {
+    const f = await sauvegardeAuto.dossier.getFileHandle(nom, { create: true });
+    const w = await f.createWritable();
+    await w.write(texte);
+    await w.close();
+}
+
+async function ecrireSauvegardeAuto() {
+    if (!sauvegardeAuto.dossier) return;
+    try {
+        if (await dossierAutorise(false) !== 'granted') {
+            sauvegardeAuto.erreur = 'autorisation à renouveler';
+            return renderSauvegardeAuto();
+        }
+        const texte = JSON.stringify(contenuSauvegarde(), null, 2);
+        await ecrireDansDossier('Sauvegarde_GestionPro.json', texte);
+        await ecrireDansDossier('Sauvegarde_GestionPro_' + new Date().toISOString().split('T')[0] + '.json', texte);
+        sauvegardeAuto.dernier = Date.now();
+        sauvegardeAuto.erreur = null;
+    } catch (e) {
+        sauvegardeAuto.erreur = e.message || 'écriture impossible';
+    }
+    renderSauvegardeAuto();
+}
+
+// Regroupe les écritures : enregistrer un bon touche plusieurs collections,
+// ça ne doit faire qu'un seul fichier.
+function planifierSauvegardeAuto() {
+    if (!sauvegardeAuto.dossier) return;
+    clearTimeout(sauvegardeAuto.minuteur);
+    sauvegardeAuto.minuteur = setTimeout(ecrireSauvegardeAuto, 3000);
+}
+
+async function choisirDossierSauvegarde() {
+    if (!sauvegardeAutoPossible()) {
+        return toast("Ce navigateur ne sait pas écrire dans un dossier. Utilise « Télécharger la sauvegarde ».", 'error');
+    }
+    try {
+        const d = await window.showDirectoryPicker({ mode: 'readwrite', id: 'gestion-pro-sauvegarde' });
+        sauvegardeAuto.dossier = d;
+        sauvegardeAuto.erreur = null;
+        await dossierRetenir(d);
+        await ecrireSauvegardeAuto();
+        if (!sauvegardeAuto.erreur) toast('✅ Dossier choisi — tes données y sont écrites à chaque changement.', 'success');
+    } catch (e) {
+        if (e && e.name !== 'AbortError') toast('❌ Dossier inutilisable : ' + e.message, 'error');
+    }
+}
+
+async function oublierDossierSauvegarde() {
+    if (!sauvegardeAuto.dossier) return;
+    if (!confirm("Arrêter la sauvegarde automatique ?\n\nLes fichiers déjà écrits restent dans le dossier ; l'app n'en écrira simplement plus.")) return;
+    sauvegardeAuto.dossier = null; sauvegardeAuto.dernier = null; sauvegardeAuto.erreur = null;
+    clearTimeout(sauvegardeAuto.minuteur);
+    try { await dossierRetenir(null); } catch (e) {}
+    renderSauvegardeAuto();
+    toast('Sauvegarde automatique arrêtée.', 'info');
+}
+
+function renderSauvegardeAuto() {
+    const el = $('auto-backup-status');
+    if (!el) return;
+    const heure = (t) => new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    if (!sauvegardeAutoPossible()) {
+        el.innerHTML = '<span style="opacity:.6">Ce navigateur ne sait pas écrire dans un dossier — garde le téléchargement manuel.</span>';
+    } else if (!sauvegardeAuto.dossier) {
+        el.innerHTML = '<span style="color:var(--run)">⚠️ Aucune sauvegarde automatique : tes données n\'existent que dans ce navigateur.</span>';
+    } else if (sauvegardeAuto.erreur === 'autorisation à renouveler') {
+        el.innerHTML = '<span style="color:var(--run)">⚠️ Le navigateur a oublié l\'autorisation — clique « Choisir le dossier » pour la redonner.</span>';
+    } else if (sauvegardeAuto.erreur) {
+        el.innerHTML = '<span style="color:var(--danger)">❌ Dernière écriture en échec (' + ech(sauvegardeAuto.erreur) + ')</span>';
+    } else if (sauvegardeAuto.dernier) {
+        el.innerHTML = '<span style="color:#4ADE80">✅ Dossier « ' + ech(sauvegardeAuto.dossier.name) + ' »</span> <span style="opacity:.6">· écrit à ' + heure(sauvegardeAuto.dernier) + '</span>';
+    } else {
+        el.innerHTML = '<span style="opacity:.6">Dossier « ' + ech(sauvegardeAuto.dossier.name) + ' » — rien encore écrit.</span>';
+    }
+}
+
+// Au démarrage : on retrouve le dossier et on écrit, si l'autorisation tient.
+(async function reprendreSauvegardeAuto() {
+    if (!sauvegardeAutoPossible()) return renderSauvegardeAuto();
+    const d = await dossierLire();
+    if (!d) return renderSauvegardeAuto();
+    sauvegardeAuto.dossier = d;
+    if (await dossierAutorise(false) === 'granted') ecrireSauvegardeAuto();
+    else { sauvegardeAuto.erreur = 'autorisation à renouveler'; renderSauvegardeAuto(); }
+})();
 
 // --- NOTIFICATIONS (remplace alert() par un message non bloquant) ---
 function toast(msg, kind = 'info') {
@@ -292,10 +487,10 @@ function openCliPrixModal(cliId) {
     if (!cli) return;
     let prices = db.prixCli[cliId] || {};
     $('mcp-cli-id').value = cliId;
-    $('mcp-title').innerText = `💰 Prix pour ${cli.nom}`;
+    $('mcp-title').innerText = `💰 Prix pour ${ech(cli.nom)}`;
     $('mcp-list').innerHTML = actifs(db.prods).map(p => `
         <div class="field">
-            <label>${p.icon} ${ech(p.nom)} <small style="opacity:.5; font-weight:400">(base : ${eur(p.prix)} / ${p.unite})</small></label>
+            <label>${ech(p.icon)} ${ech(p.nom)} <small style="opacity:.5; font-weight:400">(base : ${eur(p.prix)} / ${ech(p.unite)})</small></label>
             <input type="number" id="cprix-${p.id}" step="0.01" value="${prices[p.id] !== undefined ? prices[p.id] : p.prix}">
         </div>`).join('');
     openModal('mod-cli-prix');
@@ -391,7 +586,7 @@ function renderChargement() {
         <div class="section-title">À charger (${bls.length} livraison${bls.length > 1 ? 's' : ''})</div>
         ${totaux.map(t => `
             <div class="card" style="gap:10px; align-items:center">
-                <b style="flex:2">${t.icon} ${ech(t.nom)}</b>
+                <b style="flex:2">${ech(t.icon)} ${ech(t.nom)}</b>
                 <span style="flex:1; text-align:center; font-size:20px; font-weight:700; color:var(--sage)">${t.qte} ${ech(t.unite)}</span>
                 <span style="flex:1; text-align:right; color:var(--text-muted)">${t.poids ? t.poids.toFixed(1) + ' kg' : '—'}</span>
             </div>`).join('')}
@@ -405,7 +600,7 @@ function renderChargement() {
                 <b style="font-size:16px; color:var(--gold)">👤 ${ech(b.cliNom)}</b>
                 ${b.items.map(i => `
                     <div style="display:flex; justify-content:space-between; font-size:14px; padding:4px 0; border-bottom:1px dashed var(--border)">
-                        <span>${i.icon} ${ech(i.nom)}</span>
+                        <span>${ech(i.icon)} ${ech(i.nom)}</span>
                         <span style="font-weight:600">${i.qte} ${ech(i.unite)}</span>
                     </div>`).join('')}
             </div>`).join('')}`;
@@ -423,7 +618,7 @@ function printChargement() {
             <table class="inv-table">
                 <thead><tr><th>Produit</th><th style="text-align:center">Quantité totale</th><th style="text-align:right">Poids</th></tr></thead>
                 <tbody>
-                    ${totaux.map(t => `<tr><td>${t.icon} ${ech(t.nom)}</td><td style="text-align:center"><b>${t.qte} ${ech(t.unite)}</b></td><td style="text-align:right">${t.poids ? t.poids.toFixed(1) + ' kg' : '—'}</td></tr>`).join('')}
+                    ${totaux.map(t => `<tr><td>${ech(t.icon)} ${ech(t.nom)}</td><td style="text-align:center"><b>${t.qte} ${ech(t.unite)}</b></td><td style="text-align:right">${t.poids ? t.poids.toFixed(1) + ' kg' : '—'}</td></tr>`).join('')}
                 </tbody>
             </table>
             <div class="inv-totals">
@@ -485,9 +680,9 @@ function renderSuiviBL() {
         // Création de la liste détaillée des articles de la commande
         let itemsDetail = b.items.map(i => `
             <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--border); font-size: 20px; color: var(--text-main); padding-left: 45px;">
-                <span style="flex: 2;"><b>${i.icon} ${i.nom}</b></span>
-                <span style="flex: 1; text-align: center; color: var(--sage); font-weight: 700;">${i.qte} ${i.unite}</span>
-                <span style="flex: 1; text-align: right; opacity:.7">${eur(i.prix)} / ${i.unite}</span>
+                <span style="flex: 2;"><b>${ech(i.icon)} ${ech(i.nom)}</b></span>
+                <span style="flex: 1; text-align: center; color: var(--sage); font-weight: 700;">${i.qte} ${ech(i.unite)}</span>
+                <span style="flex: 1; text-align: right; opacity:.7">${eur(i.prix)} / ${ech(i.unite)}</span>
                 <span style="flex: 1; text-align: right; font-weight: 600; color: var(--accent)">${eur(i.qte * i.prix)} HT</span>
             </div>
         `).join('');
@@ -500,7 +695,7 @@ function renderSuiviBL() {
                 <div style="display: flex; align-items: center; gap: 15px;">
                     <input type="checkbox" style="width: 28px; height: 28px; cursor: pointer; accent-color: var(--gold);" ${isChecked} onchange="toggleBLSel(${b.id}, this.checked)">
                     <div>
-                        <b style="font-size: 26px; color: var(--gold);">${b.cliNom}</b><br>
+                        <b style="font-size: 26px; color: var(--gold);">${ech(b.cliNom)}</b><br>
                         <small style="font-size: 16px; color: var(--sage); font-weight: 600;">📅 Date : ${b.date}</small>
                     </div>
                 </div>
@@ -579,9 +774,9 @@ function renderDrafts() {
         // Création d'une vraie liste détaillée au lieu des mini-tags
         let itemsDetail = d.items.map(i => `
             <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--border); font-size: 20px; color: var(--text-main);">
-                <span style="flex: 2;"><b>${i.icon} ${i.nom}</b></span>
-                <span style="flex: 1; text-align: center;">${i.qte} ${i.unite}</span>
-                <span style="flex: 1; text-align: right;">${eur(i.prix)} / ${i.unite}</span>
+                <span style="flex: 2;"><b>${ech(i.icon)} ${ech(i.nom)}</b></span>
+                <span style="flex: 1; text-align: center;">${i.qte} ${ech(i.unite)}</span>
+                <span style="flex: 1; text-align: right;">${eur(i.prix)} / ${ech(i.unite)}</span>
                 <span style="flex: 1; text-align: right; font-weight: 700; color: var(--text-main);">${eur(i.qte * i.prix)} HT</span>
             </div>
         `).join('');
@@ -593,7 +788,7 @@ function renderDrafts() {
         <div class="card draft-card" style="padding: 20px;">
             <div style="display: flex; justify-content: space-between; border-bottom: 2px solid var(--border); padding-bottom: 15px; margin-bottom: 15px;">
                 <div>
-                    <b style="font-size: 26px;">${d.cliNom}</b>
+                    <b style="font-size: 26px;">${ech(d.cliNom)}</b>
                     ${blRefs}
                 </div>
                 <div style="text-align: right;">
@@ -633,7 +828,7 @@ function addLine() {
 function renderLines() {
     $('f-lines').innerHTML = curLines.map((l, i) => `
         <div class="card" style="flex-direction:column;align-items:stretch">
-            <b>${l.icon} ${l.nom}</b>
+            <b>${ech(l.icon)} ${ech(l.nom)}</b>
             <div class="r2" style="margin-top:5px">
                 <input type="number" step="0.01" value="${l.qte}" oninput="curLines[${i}].qte=parseFloat(this.value)||0;calcFact()">
                 <input type="number" step="0.01" value="${l.prix}" oninput="curLines[${i}].prix=parseFloat(this.value)||0;calcFact()">
@@ -650,13 +845,15 @@ function calcFact() {
 
 // --- STOCK ---
 function adjustStock() {
-    let p = db.prods.find(x => x.id == $('adj-prod').value), q = parseFloat($('adj-qty').value);
-    if (p && q) {
-        p.stock += q;
-        G.set('v90_prods', db.prods);
-        $('adj-qty').value = '';
-        renderAll();
-    }
+    const p = db.prods.find(x => x.id == $('adj-prod').value);
+    const q = parseFloat($('adj-qty').value);
+    if (!p) return toast('Choisis d\'abord un produit.', 'error');
+    if (!isFinite(q) || q === 0) return toast('Indique une quantité (positive pour entrer du stock, négative pour en sortir).', 'error');
+    p.stock = (Number(p.stock) || 0) + q;
+    G.set('v90_prods', db.prods);
+    $('adj-qty').value = '';
+    renderAll();
+    toast(`${q > 0 ? '➕' : '➖'} ${p.nom} : ${Math.abs(q)} ${p.unite || ''} — stock ${p.stock}.`, 'success');
 }
 
 // Helper : poids unitaire d'un item BL
@@ -670,11 +867,11 @@ function renderBLGrid() {
     let cliId = $('bl-cli-select').value;
     let prixCli = (cliId && db.prixCli[cliId]) ? db.prixCli[cliId] : {};
     $('bl-prod-grid').innerHTML = actifs(db.prods).map(p => {
-        let poidsLabel = p.poids ? `<span style="opacity:.6;font-size:13px">${p.poids} kg / ${p.unite}</span>` : '';
+        let poidsLabel = p.poids ? `<span style="opacity:.6;font-size:13px">${p.poids} kg / ${ech(p.unite)}</span>` : '';
         let prix = prixCli[p.id] !== undefined ? prixCli[p.id] : p.prix;
         return `
         <div class="card" style="flex-direction:column; padding: 20px; align-items: center;">
-            <div style="font-size: 18px; margin-bottom: 6px;">${p.icon} <b>${ech(p.nom)}</b></div>
+            <div style="font-size: 18px; margin-bottom: 6px;">${ech(p.icon)} <b>${ech(p.nom)}</b></div>
             ${poidsLabel ? `<div style="margin-bottom: 12px;">${poidsLabel}</div>` : ''}
             <div style="display:flex; gap:12px; align-items:center; justify-content: center;">
                 <button class="btn btn-gold" style="width: 60px; height: 60px; padding: 0; font-size: 35px; border-radius: 12px; display: flex; align-items: center; justify-content: center; line-height: 1;" onclick="changeQty('${p.id}',-1)">−</button>
@@ -684,7 +881,7 @@ function renderBLGrid() {
             <div style="display:flex; gap:8px; align-items:center; justify-content: center; margin-top: 12px;">
                 <label style="font-size: 13px; color: var(--text-muted); font-weight: 600;">Prix :</label>
                 <input type="number" id="prix-${p.id}" step="0.01" value="${prix}" style="width: 100px; height: 40px; text-align:center; font-size: 16px; font-weight: 600; border-radius: 8px; margin: 0; padding: 0 8px;">
-                <span style="font-size: 13px; color: var(--text-muted);">€ / ${p.unite}</span>
+                <span style="font-size: 13px; color: var(--text-muted);">€ / ${ech(p.unite)}</span>
             </div>
         </div>`; }).join('');
 }
@@ -777,12 +974,12 @@ function renderAll() {
     renderBLGrid();
 
     // 3. Listes dans les paramètres
-    $('list-prods-settings').innerHTML = actifs(db.prods).map(p => `<div class="card card-link" onclick="openProdModal(${p.id})"><div><b>${p.icon} ${p.nom}</b></div><span>✏️</span></div>`).join('');
+    $('list-prods-settings').innerHTML = actifs(db.prods).map(p => `<div class="card card-link" onclick="openProdModal(${p.id})"><div><b>${ech(p.icon)} ${ech(p.nom)}</b></div><span>✏️</span></div>`).join('');
     const prodsArch = db.prods.filter(p => p.archived);
     $('title-prods-archives').style.display = prodsArch.length ? 'block' : 'none';
     $('list-prods-archives').innerHTML = prodsArch.map(p => `
         <div class="card" style="gap:8px; align-items:center; opacity:.65">
-            <b style="flex:1">${p.icon} ${ech(p.nom)}</b>
+            <b style="flex:1">${ech(p.icon)} ${ech(p.nom)}</b>
             <button class="btn" style="width:auto;padding:6px 12px;font-size:12px;background:var(--ligne)" onclick="toggleArchive('prods', ${p.id})">↩️ Restaurer</button>
         </div>`).join('');
     $('list-clis-settings').innerHTML = actifs(db.clis).map(c => `
@@ -798,7 +995,7 @@ function renderAll() {
             <b style="flex:1">👤 ${ech(c.nom)}</b>
             <button class="btn" style="width:auto;padding:6px 12px;font-size:12px;background:var(--ligne)" onclick="toggleArchive('clis', ${c.id})">↩️ Restaurer</button>
         </div>`).join('');
-    $('list-ents-settings').innerHTML = db.ents.map(e => `<div class="card card-link" onclick="openEntModal(${e.id})"><b>🏢 ${e.nom}</b><span>✏️</span></div>`).join('');
+    $('list-ents-settings').innerHTML = db.ents.map(e => `<div class="card card-link" onclick="openEntModal(${e.id})"><b>🏢 ${ech(e.nom)}</b><span>✏️</span></div>`).join('');
     
     // 4. Sélecteurs pour la facturation libre + filtres par entreprise
     // (les filtres utilisent le NOM car l'historique stocke h.ent en nom ;
@@ -819,8 +1016,8 @@ function renderAll() {
     $('list-stock').innerHTML = actifs(db.prods).map(p => {
         const bas = p.seuil > 0 && p.stock <= p.seuil;
         return `<div class="card${bas ? ' stock-low' : ''}" style="flex-direction:column">
-            <b>${p.icon} ${ech(p.nom)}</b>
-            <div style="font-size:20px;color:${bas ? 'var(--danger)' : 'var(--sage)'};font-weight:700">${p.stock} ${p.unite}</div>
+            <b>${ech(p.icon)} ${ech(p.nom)}</b>
+            <div style="font-size:20px;color:${bas ? 'var(--danger)' : 'var(--sage)'};font-weight:700">${p.stock} ${ech(p.unite)}</div>
             ${bas ? `<span class="badge-statut badge-retard" style="margin-top:6px">⚠️ Stock bas (seuil : ${p.seuil})</span>` : ''}
         </div>`;
     }).join('');
@@ -914,7 +1111,7 @@ function renderHistorique() {
         : visibles.slice().reverse().map(h => {
             const itemsHtml = (h.items || []).map(i =>
                 `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--carte-2); font-size:13px">
-                    <span>${i.icon || ''} ${ech(i.nom)}</span>
+                    <span>${ech(i.icon || '')} ${ech(i.nom)}</span>
                     <span style="opacity:.6">${i.qte} ${ech(i.unite)} × ${eur(i.prix)}</span>
                     <span style="font-weight:600">${eur(i.qte * i.prix * (1 + (i.tva || 20) / 100))}</span>
                 </div>`
@@ -1106,14 +1303,14 @@ function printBL(id) {
         let pu = getPoids(i);
         let lpoids = i.qte * pu;
         poidsTotal += lpoids;
-        rows += `<tr><td>${i.icon || ''} ${i.nom}</td><td style="text-align:center">${i.qte}</td><td style="text-align:center">${i.unite}</td><td style="text-align:right">${pu ? pu + ' kg' : '—'}</td><td style="text-align:right">${lpoids ? lpoids.toFixed(2) + ' kg' : '—'}</td></tr>`;
+        rows += `<tr><td>${ech(i.icon || '')} ${ech(i.nom)}</td><td style="text-align:center">${i.qte}</td><td style="text-align:center">${ech(i.unite)}</td><td style="text-align:right">${pu ? pu + ' kg' : '—'}</td><td style="text-align:right">${lpoids ? lpoids.toFixed(2) + ' kg' : '—'}</td></tr>`;
     });
     $('sheet-holder').innerHTML = `
         <div class="inv-wrap" style="background:#fff">
             <h1>Bon de Livraison</h1>
             <div class="inv-header-grid">
-                <div>${ent ? `<b>Émetteur</b>${ent.nom}<br>${ent.adr}<br>${ent.ville}${ent.siret ? '<br>SIRET : ' + ent.siret : ''}` : ''}</div>
-                <div style="text-align:right"><b>Destinataire</b>${cli ? cli.nom + '<br>' + (cli.adr || '') + '<br>' + (cli.ville || '') : b.cliNom}</div>
+                <div>${ent ? `<b>Émetteur</b>${ech(ent.nom)}<br>${ech(ent.adr)}<br>${ech(ent.ville)}${ent.siret ? '<br>SIRET : ' + ech(ent.siret) : ''}` : ''}</div>
+                <div style="text-align:right"><b>Destinataire</b>${cli ? ech(cli.nom) + '<br>' + ech(cli.adr || '') + '<br>' + ech(cli.ville || '') : ech(b.cliNom)}</div>
             </div>
             <div style="margin-bottom:20px"><b>DATE :</b> ${b.date}</div>
             <table class="inv-table">
@@ -1155,14 +1352,47 @@ function tvaDetectTaux(label, isDebit) {
     return isDebit ? '20%' : '5.5%';
 }
 
-function tvaParseAmount(val) {
+// Un montant tel que l'export bancaire l'écrit. Règle : le séparateur décimal
+// est le DERNIER rencontré, les autres sont des milliers. L'ancien code ne
+// reconnaissait qu'un seul groupe de milliers et lisait « 1.234 » comme 1,234
+// et « 1.234.567,89 » comme 1,234 — mille fois trop petit, sans rien dire.
+//
+// Reste un cas qu'aucune règle ne tranche : un seul séparateur suivi de trois
+// chiffres. « 1.234 » vaut 1 234 ou 1,234 selon la banque. On choisit le plus
+// probable et on marque la ligne comme douteuse, au lieu de deviner en
+// silence (voir tvaRenderTable et le bandeau d'avertissement).
+function tvaLitMontant(val) {
     if (val === null || val === undefined || val === '') return null;
-    if (typeof val === 'number') return val;
-    let s = String(val).replace(/[\u00a0\u202f\u2009\s]/g, '').replace('€', '');
-    if (s.match(/^-?\d+\.\d{3},\d+$/)) s = s.replace('.', '').replace(',', '.');
-    else s = s.replace(',', '.');
-    const n = parseFloat(s);
-    return isNaN(n) ? null : n;
+    if (typeof val === 'number') return { valeur: val, douteux: false };
+    let s = String(val).replace(/[\u00a0\u202f\u2009\s]/g, '').replace(/€/g, '').trim();
+    if (!s) return null;
+    const signe = s.startsWith('-') ? -1 : 1;
+    s = s.replace(/^[+-]/, '');
+    if (!/^[\d.,]+$/.test(s)) return null;
+
+    const pt = s.lastIndexOf('.'), vg = s.lastIndexOf(',');
+    let entier = s, decimales = '', douteux = false;
+    if (pt >= 0 && vg >= 0) {
+        const i = Math.max(pt, vg);                 // le dernier est le décimal
+        entier = s.slice(0, i).replace(/[.,]/g, '');
+        decimales = s.slice(i + 1);
+    } else if (pt >= 0 || vg >= 0) {
+        const sep = pt >= 0 ? '.' : ',';
+        const morceaux = s.split(sep);
+        const queue = morceaux[morceaux.length - 1];
+        const milliers = morceaux.length > 2 ||
+            (sep === '.' && queue.length === 3 && /^\d{1,3}$/.test(morceaux[0]));
+        if (milliers) entier = morceaux.join('');
+        else { entier = morceaux.slice(0, -1).join(''); decimales = queue; }
+        douteux = morceaux.length === 2 && queue.length === 3;
+    }
+    const n = parseFloat(entier + (decimales ? '.' + decimales : ''));
+    return isFinite(n) ? { valeur: signe * n, douteux } : null;
+}
+
+function tvaParseAmount(val) {
+    const r = tvaLitMontant(val);
+    return r ? r.valeur : null;
 }
 
 async function tvaParseExcel(buffer, bankName) {
@@ -1196,12 +1426,14 @@ async function tvaParseExcel(buffer, bankName) {
         if (!r || r.every(c => c === null || c === '' || c === undefined)) continue;
         const label = String(r[colLabel] || '').replace(/\n/g, ' ').trim();
         if (!label) continue;
-        let debit = null, credit = null;
+        let debit = null, credit = null, douteux = false;
         if (colDebit >= 0 && colCredit >= 0) {
-            debit = tvaParseAmount(r[colDebit]); credit = tvaParseAmount(r[colCredit]);
+            const d = tvaLitMontant(r[colDebit]), c = tvaLitMontant(r[colCredit]);
+            debit = d ? d.valeur : null; credit = c ? c.valeur : null;
+            douteux = !!((d && d.douteux) || (c && c.douteux));
         } else if (colMontant >= 0) {
-            const m = tvaParseAmount(r[colMontant]);
-            if (m !== null) { if (m < 0) debit = Math.abs(m); else credit = m; }
+            const m = tvaLitMontant(r[colMontant]);
+            if (m !== null) { if (m.valeur < 0) debit = Math.abs(m.valeur); else credit = m.valeur; douteux = m.douteux; }
         }
         if (debit === null && credit === null) continue;
         const dateRaw = r[colDate];
@@ -1221,7 +1453,7 @@ async function tvaParseExcel(buffer, bankName) {
             date: dateStr, label, montant: isDebit ? debit : credit,
             type: isDebit ? 'achat' : (isRejet ? 'rejet' : 'vente'),
             taux: tvaDetectTaux(label, isDebit),
-            source: bankName, isRejet
+            source: bankName, isRejet, douteux
         });
     }
     return result;
@@ -1360,6 +1592,17 @@ function tvaRenderTable() {
     const filtered = tvaFilteredRows();
     const tot = tvaCalcTotaux();
 
+    // Montants que le fichier écrit de façon ambiguë : on ne les corrige pas
+    // tout seul, on les montre. Un chiffre faux dans une CA3 ne se rattrape pas.
+    const doutes = tvaState.rows.filter(r => r.douteux).length;
+    const zoneDoute = $('tva-doute');
+    if (zoneDoute) {
+        zoneDoute.style.display = doutes ? 'block' : 'none';
+        zoneDoute.textContent = doutes
+            ? `⚠️ ${doutes} montant${doutes > 1 ? 's' : ''} ambigu${doutes > 1 ? 's' : ''} dans le fichier : un séparateur suivi de trois chiffres (« 1.234 » vaut 1 234 ou 1,234 selon la banque). Ces lignes sont marquées en jaune — vérifie-les avant de déclarer.`
+            : '';
+    }
+
     const rowsHtml = filtered.map((r, i) => {
         const t = parseFloat(r.taux) / 100;
         const ttc = r.montant || 0;
@@ -1387,7 +1630,7 @@ function tvaRenderTable() {
                     <option value="rejet"${r.type === 'rejet' ? ' selected' : ''}>Rejet</option>
                 </select>
             </td>
-            <td style="padding:9px 12px;background:${bg};text-align:right;font-weight:600;white-space:nowrap">${tvaFmt(ttc)}</td>
+            <td style="padding:9px 12px;background:${bg};text-align:right;font-weight:600;white-space:nowrap${r.douteux ? ';color:var(--run)' : ''}"${r.douteux ? ' title="Montant ambigu dans le fichier : un séparateur suivi de trois chiffres. Vérifie-le."' : ''}>${r.douteux ? '⚠️ ' : ''}${tvaFmt(ttc)}</td>
             <td style="padding:9px 12px;background:${bg};text-align:center">
                 <select class="tva-sel tva-taux-${tc}" onchange="tvaUpdate(${jsArg(rid)},'taux',this.value)">
                     ${TAUX.map(tx => `<option${tx === r.taux ? ' selected' : ''}>${tx}</option>`).join('')}
