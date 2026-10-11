@@ -11,28 +11,26 @@
 // deux fois.
 //
 // « Cache d'abord, rafraîchi en fond » (stale-while-revalidate) pour le
-// reste : icônes, images, CDN SheetJS — des fichiers qui ne changent
-// pratiquement jamais et qu'on veut instantanés.
+// reste : icônes et images — des fichiers qui ne changent pratiquement
+// jamais et qu'on veut instantanés.
 //
-// JAMAIS mis en cache : toute requête vers un autre domaine que celui du site
-// et le CDN SheetJS part directement sur le réseau.
+// JAMAIS mis en cache : toute requête vers un autre domaine que celui du
+// site part directement sur le réseau.
 'use strict';
 
 // ⚠️ Incrémenter à chaque changement de stratégie : « activate » supprime
 // alors tous les anciens caches, ce qui force un rechargement complet chez
 // les visiteurs qui avaient encore l'ancienne version en réserve.
-const CACHE = 'gestion-pro-v7';
+const CACHE = 'gestion-pro-v8';
 
 // Fichiers dont une version périmée se remarque tout de suite.
-const VIVANTS = /(?:^|\/)(?:index\.html|script\.js|style\.css|dash-module\.js|dash-data\.js|ebe\.js|ebe-module\.js)$|\/$/;
+const VIVANTS = /(?:^|\/)(?:index\.html|script\.js|style\.css|dash-module\.js|dash-data\.js)$|\/$/;
 const SHELL = [
   './',
   './index.html',
   './style.css',
   './script.js',
   './dash-module.js',
-  './ebe.js',
-  './ebe-module.js',
   './assets/dash-data.js',
   './manifest.json',
   './assets/icon-192.png',
@@ -62,7 +60,8 @@ self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-  const cacheable = url.origin === self.location.origin || url.hostname === 'cdn.jsdelivr.net';
+  // Tout vient du site lui-même depuis le retrait de la partie gestion.
+  const cacheable = url.origin === self.location.origin;
   if (!cacheable) return;
 
   if (url.origin === self.location.origin && VIVANTS.test(url.pathname)) {

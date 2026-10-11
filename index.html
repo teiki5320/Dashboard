@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <!-- Ce que la page a le droit de charger et de contacter. Tout le reste est
-         refusé par le navigateur, y compris si du code était injecté. -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://cdn.jsdelivr.net; object-src 'none'; base-uri 'self'; form-action 'none'">
+    <!-- Ce que la page a le droit de charger et de contacter. Tout vient du
+         site lui-même : plus aucun domaine tiers depuis le retrait de la
+         partie gestion (SheetJS ne servait qu'aux exports Excel). -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
     <title>Gestion Pro v9.0</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f0f10">
@@ -17,9 +18,8 @@
     </script>
 
     <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body>
 
@@ -27,32 +27,23 @@
 <aside id="gp-rail">
     <img class="rail-logo" src="assets/dash-logo.png" alt="" onerror="this.onerror=null;this.src='assets/icon-192.png'">
     <nav>
-        <button type="button" class="rail-item" data-page="home" onclick="showPage('home')"><span class="ico">⌂</span><span class="lbl">Accueil</span></button>
-        <button type="button" class="rail-item" data-page="dash" onclick="showPage('dash')"><span class="ico">📱</span><span class="lbl">Mes apps</span></button>
+        <button type="button" class="rail-item active" data-page="dash" onclick="showPage('dash')"><span class="ico">📱</span><span class="lbl">Mes apps</span></button>
         <div id="rail-dash-slot"></div>
         <!-- Studio : les vidéos (pubs de mes applis — recettes dans Keur Cook —, chaînes).
              Le studio tourne sur le Mac ; on l'ouvre par son adresse protégée
              (Cloudflare Access, code par e-mail) : aucun secret ici. -->
         <a class="rail-item rail-studio" href="https://studio.toakeur.com/#/pub" target="_blank" rel="noopener" title="Studio — pubs de mes applis (et recettes Keur Cook)"><span class="ico">📣</span><span class="lbl">Publicité</span></a>
         <a class="rail-item rail-studio" href="https://studio.toakeur.com/#/chaine" target="_blank" rel="noopener" title="Studio — mes chaînes"><span class="ico">🎥</span><span class="lbl">Chaîne</span></a>
-        <div class="rail-sep"></div>
-        <button type="button" class="rail-item" data-page="bl" onclick="showPage('bl')"><span class="ico">🧾</span><span class="lbl">Commande</span></button>
-        <button type="button" class="rail-item" data-page="facture" onclick="showPage('facture')"><span class="ico">📄</span><span class="lbl">Factures</span></button>
-        <button type="button" class="rail-item" data-page="stock" onclick="showPage('stock')"><span class="ico">📦</span><span class="lbl">Stock</span></button>
-        <button type="button" class="rail-item" data-page="historique" onclick="showPage('historique')"><span class="ico">🕘</span><span class="lbl">Historique</span></button>
-        <div class="rail-sep"></div>
-        <button type="button" class="rail-item" data-page="tva" onclick="showPage('tva')"><span class="ico">📊</span><span class="lbl">TVA</span></button>
-        <button type="button" class="rail-item" data-page="compta" onclick="showPage('compta')"><span class="ico">💼</span><span class="lbl">Compta</span></button>
-        <div class="rail-sep"></div>
-        <button type="button" class="rail-item" data-page="parametres" onclick="showPage('parametres')"><span class="ico">⚙️</span><span class="lbl">Réglages</span></button>
     </nav>
 </aside>
 <div id="gp-main">
 
 <header>
+    <!-- Pas de titre ici : le module affiche le sien, avec son sous-titre, son
+         champ de recherche et sa cloche. Deux titres identiques l'un au-dessus
+         de l'autre, c'était du bruit. -->
     <div class="hd-left">
-        <button id="global-back" class="global-back-btn" onclick="goBack()" title="Page précédente" aria-label="Page précédente">←</button>
-        <div class="hd-title" id="hd-page-name">Tableau de Bord</div>
+        <button id="global-back" class="global-back-btn" onclick="goBack()" title="Retour" aria-label="Retour">←</button>
     </div>
     <div class="hd-clock">
         <button id="gp-theme" class="hd-btn" onclick="gpToggleTheme()" title="Clair / sombre" aria-label="Basculer le thème clair ou sombre">☀️</button>
@@ -66,373 +57,11 @@
 
 <div id="toast-holder"></div>
 
-<div id="page-home" class="page active">
-    <div id="home-resume" class="home-resume"></div>
-    <div class="home-grid">
-        <!-- Bandeau des apps : Mes Apps, puis le Studio (Publicité, Chaîne),
-             ouvert à son adresse protégée par Cloudflare Access. -->
-        <div class="home-apps-row">
-        <div class="home-btn hb-apps" onclick="showPage('dash')">
-            <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="24" cy="24" r="20"/>
-                <circle cx="24" cy="24" r="12"/>
-                <circle cx="24" cy="24" r="4"/>
-                <line x1="24" y1="4" x2="24" y2="20"/>
-                <line x1="41" y1="34" x2="27" y2="26"/>
-                <line x1="7" y1="34" x2="21" y2="26"/>
-            </svg>
-            <span>Mes Apps</span>
-        </div>
-        <a class="home-btn hb-pub" href="https://studio.toakeur.com/#/pub" target="_blank" rel="noopener">
-            <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M6 20v8a2 2 0 0 0 2 2h6l16 10V8L14 18H8a2 2 0 0 0-2 2z"/>
-                <path d="M14 30l3 10h5l-2-10"/>
-                <path d="M36 18a8 8 0 0 1 0 12"/>
-                <path d="M40 13a14 14 0 0 1 0 22"/>
-            </svg>
-            <span>Publicité</span>
-        </a>
-        <a class="home-btn hb-autre" href="https://studio.toakeur.com/#/chaine" target="_blank" rel="noopener">
-            <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="4" y="14" width="28" height="22" rx="4"/>
-                <path d="M32 21l12-7v20l-12-7"/>
-                <circle cx="12" cy="9" r="4"/>
-                <circle cx="24" cy="9" r="4"/>
-            </svg>
-            <span>Chaîne</span>
-        </a>
-        </div>
-        <div class="home-btn" onclick="showPage('bl')">
-            <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="14" width="28" height="22" rx="3"/>
-                <path d="M30 20h8l6 8v8h-14V20z"/>
-                <circle cx="11" cy="38" r="4"/>
-                <circle cx="37" cy="38" r="4"/>
-                <line x1="2" y1="22" x2="30" y2="22"/>
-            </svg>
-            <span>Prise de Commande</span>
-        </div>
-        <div class="home-btn" onclick="showPage('facture')">
-            <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="10" y="4" width="28" height="40" rx="3"/>
-                <line x1="16" y1="14" x2="32" y2="14"/>
-                <line x1="16" y1="20" x2="32" y2="20"/>
-                <line x1="16" y1="26" x2="26" y2="26"/>
-                <path d="M26 34l3 3 6-6" stroke-width="2.5"/>
-            </svg>
-            <span>Facturation</span>
-        </div>
-        <div class="home-btn" onclick="showPage('stock')" style="position:relative">
-            <span id="stock-alert-badge" class="alert-badge" style="display:none">0</span>
-            <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M6 14l18-10 18 10v20L24 44 6 34V14z"/>
-                <path d="M6 14l18 10 18-10"/>
-                <line x1="24" y1="24" x2="24" y2="44"/>
-                <path d="M15 9l18 10"/>
-            </svg>
-            <span>Stock</span>
-        </div>
-        <div class="home-btn" onclick="showPage('historique')">
-            <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="24" cy="24" r="18"/>
-                <polyline points="24,12 24,24 32,30"/>
-                <path d="M6 24H2M10 10L7 7" stroke-width="2"/>
-            </svg>
-            <span>Historique</span>
-        </div>
-        <div class="home-btn" onclick="showPage('tva')">
-            <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="4" y="4" width="40" height="40" rx="3"/>
-                <line x1="4" y1="36" x2="44" y2="36"/>
-                <polyline points="10,36 10,28 18,18 26,26 34,14 44,20"/>
-            </svg>
-            <span>TVA</span>
-        </div>
-        <div class="home-btn" onclick="showPage('compta')">
-            <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="6" y="18" width="36" height="26" rx="3"/>
-                <path d="M16 18V14a8 8 0 0116 0v4"/>
-                <circle cx="24" cy="31" r="4"/>
-                <line x1="24" y1="35" x2="24" y2="38"/>
-            </svg>
-            <span>Compta</span>
-        </div>
-        <div class="home-btn large" onclick="showPage('parametres')">
-            <svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="24" cy="24" r="6"/>
-                <path d="M24 4v4M24 40v4M4 24h4M40 24h4M8.7 8.7l2.8 2.8M36.5 36.5l2.8 2.8M8.7 39.3l2.8-2.8M36.5 11.5l2.8-2.8"/>
-                <circle cx="24" cy="24" r="11" stroke-dasharray="3 3"/>
-            </svg>
-            <span>Paramètres Système</span>
-        </div>
-    </div>
-</div>
+<!-- Récupération des données de l'ancienne Gestion Pro : rempli par script.js
+     seulement s'il en reste dans ce navigateur, et disparaît une fois vidé. -->
+<div id="recup-anciennes" style="display:none"></div>
 
-<div id="page-bl" class="page">
-    <div class="sub-tabs">
-        <div class="sub-tab active" id="tab-bl-prise" onclick="toggleBLTab('prise')">Nouveau Bon</div>
-        <div class="sub-tab" id="tab-bl-suivi" onclick="toggleBLTab('suivi')">En cours</div>
-        <div class="sub-tab" id="tab-bl-charge" onclick="toggleBLTab('charge')">Chargement</div>
-    </div>
-    <div id="view-bl-prise">
-        <div class="field" style="margin-bottom:10px"><label for="bl-date">Date</label><input type="date" id="bl-date"></div>
-        <label for="bl-ent-select">Entreprise émettrice</label><select id="bl-ent-select" style="margin-bottom:10px"></select>
-        <label for="bl-cli-select">Sélection Client</label><select id="bl-cli-select" onchange="renderBLGrid()"></select>
-        <div id="bl-prod-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px"></div>
-        <button class="btn btn-gold" style="margin-top:20px; height:50px" onclick="saveBL()">📦 ENREGISTRER LE BON</button>
-    </div>
-    <div id="view-bl-suivi" style="display:none"><div id="list-bl-encours"></div></div>
-    <div id="view-bl-charge" style="display:none">
-        <div class="field" style="margin-bottom:14px">
-            <label for="charge-date">Date de tournée</label>
-            <input type="date" id="charge-date" onchange="renderChargement()">
-        </div>
-        <div id="charge-content"></div>
-        <button class="btn btn-gold" style="margin-top:16px" id="btn-print-charge" onclick="printChargement()">🖨 IMPRIMER LA FEUILLE DE CHARGEMENT</button>
-    </div>
-</div>
-
-<div id="page-facture" class="page">
-    <div class="sub-tabs">
-        <div class="sub-tab active" id="tab-f-libre" onclick="toggleFactTab('libre')">Facture Libre</div>
-        <div class="sub-tab" id="tab-f-draft" onclick="toggleFactTab('draft')">En attente (BL)</div>
-    </div>
-    <div id="f-view-libre">
-        <div class="card" style="flex-direction: column; align-items: stretch">
-            <div class="r2">
-                <div class="field"><label for="f-ent">Émetteur</label><select id="f-ent"></select></div>
-                <div class="field"><label for="f-cli">Client</label><select id="f-cli"></select></div>
-            </div>
-            <div class="r2">
-                <div class="field"><label for="f-num">N° Facture</label><input type="text" id="f-num" readonly style="background:#f0f0f0"></div>
-                <div class="field"><label for="f-date">Date</label><input type="text" id="f-date"></div>
-            </div>
-        </div>
-        <div id="f-lines"></div>
-        <div style="display: flex; gap: 10px; margin-bottom: 15px">
-            <select id="f-prod-picker" style="margin-bottom:0"></select>
-            <button class="btn btn-gold" style="width: 60px; background:var(--header); color:var(--gold)" onclick="addLine()" title="Ajouter une ligne" aria-label="Ajouter une ligne">＋</button>
-        </div>
-        <div class="card" style="background: var(--header); color: var(--gold); display: flex; justify-content: space-between;">
-            <span style="font-weight: 700">TOTAL TTC</span>
-            <b id="f-tot-ttc" style="font-size: 24px">0,00 €</b>
-        </div>
-        <button class="btn btn-gold" style="margin-top: 15px" onclick="previewInvoice()">👁 APERÇU FACTURE</button>
-    </div>
-    <div id="f-view-draft" style="display:none"><div id="list-drafts"></div></div>
-</div>
-
-<div id="page-stock" class="page">
-    <div class="section-title">État du Stock</div>
-    <div id="list-stock" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px"></div>
-    <div class="section-title" style="margin-top:20px">Ajustement Manuel</div>
-    <div class="card" style="flex-direction:column; align-items:stretch">
-        <select id="adj-prod" style="margin-bottom:10px"></select>
-        <div class="r2">
-            <input type="number" id="adj-qty" placeholder="Quantité (+/-)">
-            <button class="btn btn-gold" onclick="adjustStock()">OK</button>
-        </div>
-    </div>
-</div>
-
-<div id="page-parametres" class="page">
-    <div class="sub-tabs">
-        <div class="sub-tab active" id="tab-param-produits" onclick="toggleParamTab('produits')">Produits</div>
-        <div class="sub-tab" id="tab-param-clients" onclick="toggleParamTab('clients')">Clients</div>
-        <div class="sub-tab" id="tab-param-entreprises" onclick="toggleParamTab('entreprises')">Entreprises</div>
-        <div class="sub-tab" id="tab-param-donnees" onclick="toggleParamTab('donnees')">Données</div>
-    </div>
-
-    <div id="view-param-produits">
-        <div class="section-title">Produits / Services</div>
-        <div id="list-prods-settings"></div>
-        <button class="btn btn-gold" onclick="openProdModal()">＋ AJOUTER PRODUIT</button>
-        <div class="section-title" style="margin-top: 25px" id="title-prods-archives">🗂 Archivés</div>
-        <div id="list-prods-archives"></div>
-    </div>
-
-    <div id="view-param-clients" style="display:none">
-        <div class="section-title">Base Clients</div>
-        <div id="list-clis-settings"></div>
-        <button class="btn btn-gold" onclick="openCliModal()">＋ AJOUTER CLIENT</button>
-        <div class="section-title" style="margin-top: 25px" id="title-clis-archives">🗂 Archivés</div>
-        <div id="list-clis-archives"></div>
-    </div>
-
-    <div id="view-param-entreprises" style="display:none">
-        <div class="section-title">Mes Entreprises</div>
-        <div id="list-ents-settings"></div>
-        <button class="btn btn-gold" onclick="openEntModal()">＋ AJOUTER ÉMETTEUR</button>
-    </div>
-
-    <div id="view-param-donnees" style="display:none">
-        <div class="section-title">ℹ️ Cette application</div>
-        <div class="card" style="flex-direction:column; gap:12px; align-items:stretch">
-            <p id="site-version" style="font-size:12px; color:var(--text-muted); margin:0; opacity:.8"></p>
-            <p style="font-size:13px; color:var(--text-muted); margin:0">Tes données vivent sur cet appareil, dans ce navigateur. Il n'y a plus de synchronisation en ligne : la sauvegarde ci-dessous est ta seule copie.</p>
-        </div>
-
-        <div class="section-title" style="margin-top: 25px">💾 Sauvegarde de secours</div>
-        <div class="card" style="flex-direction:column; gap:12px; align-items:stretch">
-            <p style="font-size:13px; color:var(--text-muted); margin:0">Télécharge une copie complète de tes données (clients, produits, BL, factures…) dans un fichier, indépendante du cloud. Garde-la précieusement : elle permet de tout restaurer.</p>
-            <div class="r2">
-                <button class="btn" style="background:var(--carte-2); font-size:12px" onclick="exportBackup()">📥 Télécharger la sauvegarde</button>
-                <button class="btn" style="background:var(--carte-2); font-size:12px" onclick="document.getElementById('backup-file-input').click()">📤 Restaurer un fichier</button>
-            </div>
-            <input type="file" id="backup-file-input" accept=".json,application/json" style="display:none" onchange="importBackup(event)">
-        </div>
-
-        <div class="section-title" style="margin-top: 25px">📂 Sauvegarde automatique</div>
-        <div class="card" style="flex-direction:column; gap:12px; align-items:stretch">
-            <p style="font-size:13px; color:var(--text-muted); margin:0">Désigne un dossier une seule fois (iCloud Drive, par exemple) : l'app y écrira tes données toute seule à chaque changement, plus une copie datée par jour. C'est ta vraie sécurité maintenant qu'il n'y a plus de serveur.</p>
-            <p id="auto-backup-status" style="font-size:13px; margin:0"></p>
-            <div class="r2">
-                <button class="btn" style="background:var(--carte-2); font-size:12px" onclick="choisirDossierSauvegarde()">📂 Choisir le dossier</button>
-                <button class="btn" style="background:var(--carte-2); font-size:12px" onclick="oublierDossierSauvegarde()">✖️ Ne plus sauvegarder</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="page-historique" class="page">
-    <div class="sub-tabs">
-        <div class="sub-tab active" id="tab-hist-toutes" onclick="toggleHistFilter('toutes')">Toutes</div>
-        <div class="sub-tab" id="tab-hist-impayees" onclick="toggleHistFilter('impayees')">Impayées</div>
-    </div>
-    <div style="display:flex; gap:10px; align-items:center; margin-bottom:14px; flex-wrap:wrap">
-        <label style="margin:0" for="hist-ent-filter">Entreprise</label>
-        <select id="hist-ent-filter" onchange="renderHistorique()" style="width:auto; min-width:200px"></select>
-    </div>
-    <div class="section-title">Archives</div>
-    <div id="list-hist"></div>
-</div>
-
-<div id="page-tva" class="page">
-    <div id="tva-drop-zone" class="tva-drop"
-         ondragover="tvaDragOver(event)"
-         ondragleave="tvaDragLeave(event)"
-         ondrop="tvaDrop(event)">
-        <div style="font-size:36px; margin-bottom:10px">📂</div>
-        <div style="font-size:15px; font-weight:600; margin-bottom:6px">Glisse tes fichiers Excel ici</div>
-        <div style="font-size:12px; opacity:.5; margin-bottom:18px">Colonnes Débit/Crédit séparées ou montant unique (±)</div>
-        <button class="btn btn-gold" onclick="document.getElementById('tva-file-input').click()">+ Ajouter un fichier</button>
-        <input type="file" id="tva-file-input" accept=".xlsx,.xls" style="display:none" onchange="tvaFileChange(event)">
-        <div id="tva-banks-list" style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center"></div>
-    </div>
-    <div id="tva-stats-bar" style="display:none"></div>
-    <div id="tva-toolbar" style="display:none"></div>
-    <div id="tva-table-wrap" style="display:none; overflow-x:auto; margin-top:10px"></div>
-    <div id="tva-doute" style="display:none; margin-top:10px; padding:10px 14px; border-radius:12px; background:rgba(251,191,36,.12); color:var(--run); font-size:13px; font-weight:600"></div>
-    <div id="tva-info" style="display:none; margin-top:8px; font-size:12px; opacity:.5; line-height:1.7; text-align:center; padding:0 10px">
-        <b>ℹ️ Logique rejets :</b> Toute ligne avec "REJET" dans le libellé est classée en Rejet à 20% TVA — sa TVA annule celle du débit initial. À valider avec les factures avant dépôt CA3.
-    </div>
-</div>
-
-<div id="page-compta" class="page">
-    <div class="sub-tabs">
-        <div class="sub-tab active" id="tab-compta-bilan" onclick="toggleComptaTab('bilan')">Bilan</div>
-        <div class="sub-tab" id="tab-compta-ebe" onclick="toggleComptaTab('ebe')">Analyse EBE</div>
-    </div>
-    <div id="view-compta-ebe" style="display:none"><div id="ebe-contenu"></div></div>
-    <div id="view-compta-bilan">
-    <div class="section-title">Comptabilité</div>
-    <div id="compta-stats" style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:20px"></div>
-    <div class="card" style="flex-direction:column; align-items:stretch">
-        <label for="compta-ent">Entreprise</label>
-        <select id="compta-ent" style="margin-bottom:14px"></select>
-        <label for="mp-icon">Période</label>
-        <div class="r2" style="margin-bottom:14px">
-            <input type="month" id="compta-debut">
-            <input type="month" id="compta-fin">
-        </div>
-        <button class="btn btn-gold" onclick="calcCompta()">💼 VOIR LE BILAN</button>
-        <button class="btn" style="margin-top:10px; background:var(--carte-2)" onclick="comptaExport()">📊 EXPORT EXCEL</button>
-    </div>
-    <div id="compta-result" style="margin-top:20px"></div>
-    </div>
-</div>
-
-
-<div id="mod-prod" class="modal-overlay"><div class="modal">
-    <div class="section-title" id="mp-title">Produit</div>
-    <input type="hidden" id="mp-id">
-    <div class="r2">
-        <div class="field"><label for="mp-icon">Emoji</label><input type="text" id="mp-icon" placeholder="🥕"></div>
-        <div class="field"><label for="mp-nom">Nom *</label><input type="text" id="mp-nom"></div>
-    </div>
-    <div class="field"><label for="mp-desc">Description</label><textarea id="mp-desc"></textarea></div>
-    <div class="r2">
-        <div class="field"><label for="mp-prix">Prix HT</label><input type="number" id="mp-prix" step="0.01"></div>
-        <div class="field"><label for="mp-unite">Unité</label><select id="mp-unite"><option value="kg">kg</option><option value="unité">unité</option><option value="colis">colis</option></select></div>
-    </div>
-    <div class="r2">
-        <div class="field"><label for="mp-tva">TVA (%)</label><select id="mp-tva"><option value="20">20%</option><option value="10">10%</option><option value="5.5">5.5%</option><option value="0">0%</option></select></div>
-        <div class="field"><label for="mp-poids">Poids unitaire (kg, optionnel)</label><input type="number" id="mp-poids" step="0.01" placeholder="ex : 0.5"></div>
-    </div>
-    <div class="field"><label for="mp-seuil">Seuil d'alerte stock (optionnel)</label><input type="number" id="mp-seuil" placeholder="ex : 5"></div>
-    <button class="btn btn-gold" onclick="saveProd()">SAUVER</button>
-    <button class="btn" id="mp-archive" style="margin-top:10px; background:var(--carte-2); display:none" onclick="toggleArchive('prods', $('mp-id').value)">🗂 Archiver</button>
-    <button class="btn btn-red" onclick="closeModals()" style="margin-top:10px">ANNULER</button>
-</div></div>
-
-<div id="mod-cli-prix" class="modal-overlay"><div class="modal">
-    <div class="section-title" id="mcp-title">💰 Prix spécifiques</div>
-    <input type="hidden" id="mcp-cli-id">
-    <div id="mcp-list"></div>
-    <button class="btn btn-gold" style="margin-top:10px" onclick="saveCliPrix()">SAUVER</button>
-    <button class="btn btn-red" onclick="closeModals()" style="margin-top:10px">ANNULER</button>
-</div></div>
-
-<div id="mod-cli" class="modal-overlay"><div class="modal">
-    <div class="section-title" id="mc-title">Fiche Client</div>
-    <input type="hidden" id="mc-id">
-    <div class="field"><label for="mc-nom">Nom / Société *</label><input type="text" id="mc-nom"></div>
-    <div class="field"><label for="mc-adr">Adresse complète</label><input type="text" id="mc-adr"></div>
-    <div class="r2">
-        <div class="field"><label for="mc-ville">CP / Ville</label><input type="text" id="mc-ville"></div>
-        <div class="field"><label for="mc-siret">SIRET / TVA Intra</label><input type="text" id="mc-siret"></div>
-    </div>
-    <div class="r2">
-        <div class="field"><label for="mc-email">Email</label><input type="email" id="mc-email"></div>
-        <div class="field"><label for="mc-echeance">Délai de paiement (jours)</label><input type="number" id="mc-echeance" placeholder="30"></div>
-    </div>
-    <button class="btn btn-gold" onclick="saveCli()">SAUVER</button>
-    <button class="btn" id="mc-archive" style="margin-top:10px; background:var(--carte-2); display:none" onclick="toggleArchive('clis', $('mc-id').value)">🗂 Archiver</button>
-    <button class="btn btn-red" onclick="closeModals()" style="margin-top:10px">ANNULER</button>
-</div></div>
-
-<div id="mod-ent" class="modal-overlay"><div class="modal">
-    <div class="section-title" id="me-title">Mon Entreprise</div>
-    <input type="hidden" id="me-id">
-    <div class="field"><label for="me-nom">Nom Commercial *</label><input type="text" id="me-nom"></div>
-    <div class="field"><label for="me-adr">Adresse Siège</label><input type="text" id="me-adr"></div>
-    <div class="r2">
-        <div class="field"><label for="me-siret">SIRET</label><input type="text" id="me-siret"></div>
-        <div class="field"><label for="me-ville">Ville / CP</label><input type="text" id="me-ville"></div>
-    </div>
-    <div class="field"><label for="me-iban">RIB / IBAN</label><input type="text" id="me-iban"></div>
-    <div class="field"><label for="me-mentions">Mentions Pied de Facture</label><textarea id="me-mentions"></textarea></div>
-    <button class="btn btn-gold" onclick="saveEnt()">SAUVER</button>
-    <button class="btn btn-red" onclick="closeModals()" style="margin-top:10px">ANNULER</button>
-</div></div>
-
-
-<div class="action-bar" id="bl-bar" style="position:fixed; bottom:20px; left:15px; right:15px; background:var(--header); color:var(--gold); padding:15px; border-radius:15px; display:none; justify-content:space-between; align-items:center; z-index:8000;">
-    <div id="bl-count">0 sélectionné(s)</div>
-    <button class="btn btn-gold" style="width:auto; padding:10px 20px; background:#fff" onclick="processBLToDraft()">FACTURER LA SÉLECTION</button>
-</div>
-
-<div id="preview-wrap">
-    <div class="prev-actions" style="max-width:210mm; margin:10px auto; display:flex; gap:10px">
-        <button class="btn btn-gold" style="width:100px; background:#888; color:#fff" onclick="closePreview()" title="Fermer l'aperçu" aria-label="Fermer l'aperçu">←</button>
-        <button id="btn-finalize-inv" class="btn btn-gold" style="flex:1" onclick="finalizeInvoice()">🖨 IMPRIMER & VALIDER</button>
-        <button id="btn-print-bl" class="btn btn-gold" style="flex:1; display:none" onclick="window.print()">🖨 IMPRIMER LE BON</button>
-    </div>
-    <div id="sheet-holder"></div>
-</div>
-
-<div id="page-dash" class="page">
-    <div id="dash-titre"></div>
+<div id="page-dash" class="page active">
     <div id="dash-contenu"></div>
 </div>
 
@@ -440,11 +69,8 @@
 </div>
 
 <script src="script.js"></script>
-<!-- Mes apps (dash-data.js + dash-module.js, ~490 Ko) n'est plus chargé au
-     démarrage : chargerMesApps() s'en occupe à la première ouverture du
-     module. Une facture ne paie plus le poids du catalogue d'applications. -->
-<script src="ebe.js"></script>
-<script src="ebe-module.js"></script>
+<script src="assets/dash-data.js"></script>
+<script src="dash-module.js"></script>
 <script>
 // ── Thème clair / sombre (sombre par défaut, mémorisé) ──────────────────────
 function gpTheme() {
@@ -462,28 +88,8 @@ function gpApplyTheme(t) {
 function gpToggleTheme() { gpApplyTheme(gpTheme() === 'clair' ? 'sombre' : 'clair'); }
 gpApplyTheme(gpTheme());
 
-// ── Barre latérale : suit la page affichée ─────────────────────────────────
-(function () {
-    var TITRES = {
-        home: 'Tableau de bord', dash: 'Mes apps', bl: 'Prise de commande', facture: 'Facturation',
-        stock: 'Stock', historique: 'Historique', tva: 'Assistant TVA', compta: 'Comptabilité',
-        parametres: 'Réglages'
-    };
-    function marquer(id) {
-        var t = document.getElementById('hd-page-name');
-        if (t && TITRES[id]) t.innerText = TITRES[id];
-        var items = document.querySelectorAll('#gp-rail .rail-item');
-        for (var i = 0; i < items.length; i++) {
-            items[i].classList.toggle('active', items[i].getAttribute('data-page') === id);
-        }
-    }
-    var original = window.showPage;
-    window.showPage = function (id) {
-        original.apply(this, arguments);
-        marquer(id);
-    };
-    marquer('home');
-})();
+// Le module s'initialise de lui-même au premier showPage('dash').
+showPage('dash');
 
 // Mode hors-ligne (PWA) : inactif en file:// et sur les très vieux navigateurs.
 if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
