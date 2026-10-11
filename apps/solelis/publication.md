@@ -1,37 +1,33 @@
 # PUBLICATION — état de la mise en ligne
 
-> Généré le 20/07/2026. Pour mettre à jour : relancer ce même prompt.
+> Mise à jour le 10/10/2026 (hébergement Cloudflare).
 
 ## Vue d'ensemble
 
 - **URL publique** : https://solelis.com
-- **État** : en ligne (version du 28/05/2026 — la mise à niveau complète attend le merge de la PR #3)
-- **Hébergeur** : Vercel
-- **Domaine + SSL** : sous-domaine `*.vercel.app` avec SSL automatique ; domaine propre non acheté
-- **Dernière mise en production** : commit `7d99443` du 28/05/2026 sur `main` (heure exacte du déploiement : à vérifier dans la console Vercel)
+- **Hébergeur** : Cloudflare Workers (Worker « solelis », adaptateur OpenNext)
+- **Base** : Cloudflare D1 « solelis » (UE)
+- **Domaine + SSL** : solelis.com déclaré comme domaine personnalisé du Worker (`wrangler.jsonc`) ; certificat géré automatiquement par Cloudflare
+- **Dernière mise en production** : à lire dans la console Cloudflare (Worker → Déploiements)
 
 ### 1. Web · Production
 
-- **URL** : https://solelis.com
-- **Hébergeur** : Vercel, projet connecté au dépôt GitHub `teiki5320/solelis`
-- **Déploiement** : automatique — tout commit mergé sur `main` déclenche build + mise en ligne (~2 min). Aucune action manuelle. Preview deployments sur les PR (comportement Vercel par défaut, à vérifier dans la console)
-- **Dernière mise en prod** : 28/05/2026 (`7d99443`)
-- **Ce qui bloque** :
-  - la PR #3 (`claude/blissful-clarke-ycvXl` → `main`, 30 commits : 44 corrections juridiques, 18 secteurs, 3 thèmes, Next 15) est **ouverte, en attente de merge** → https://github.com/teiki5320/solelis/pull/3
-  - variables d'environnement de production à vérifier dans la console Vercel (indispensables : `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `RESEND_API_KEY`, `RESEND_FROM` ; voir `docs/INFRA.md`)
-  - l'e-mail de contact des pages légales (`solelis@toakeur.com`) ne peut pas recevoir de messages — à corriger avec le domaine propre
+- **Déploiement** : depuis la branche `main` (build Cloudflare), ou à la main avec `npm run cf:deploy`
+- **Avant de fusionner une PR** : la CI GitHub Actions vérifie lint, TypeScript, build Next.js, tests Vitest et build OpenNext (`npx opennextjs-cloudflare build`)
+- **Vérifier en local comme en production** : `npm run cf:preview` (simulateur Cloudflare, port 8787)
+- **Variables de production** : console Cloudflare → Worker « solelis » → Paramètres → Variables et secrets (liste dans `docs/INFRA.md`) ; ne jamais les écrire dans le dépôt
+- **Schéma de base** : appliquer les nouvelles migrations avec `npx wrangler d1 migrations apply DB --remote`
 
 ### 2. Domaine & SSL
 
-- **Registrar** : aucun — le site vit sur le sous-domaine gratuit `solelis.com`
-- **SSL** : certificat automatique fourni et renouvelé par Vercel (rien à gérer)
-- **Échéance de renouvellement** : sans objet tant qu'aucun domaine n'est acheté
-- **DNS** : gérés par Vercel (sous-domaine)
-- **Prévu** : achat d'un domaine propre (idéalement `solelis.com`, de préférence via Vercel Domains pour un DNS pilotable en CLI) + adresse e-mail de contact + vérification du domaine dans Resend (SPF/DKIM). Plan détaillé : `_plans/roadmap.md` § MISE EN LIGNE. Le code référence `solelis.com` dans ~30 fichiers à remplacer au changement
+- **Domaines servis** : `solelis.com` et `www.solelis.com` (redirection permanente vers `solelis.com` dans `worker.ts`)
+- **SSL** : automatique (Cloudflare)
+- **Registrar / échéance** : à vérifier dans la console Cloudflare
+- **E-mail** : vérifier le domaine d'envoi dans Resend (SPF/DKIM) et régler `RESEND_FROM` en conséquence
 
 ### 3. Visibilité
 
-- **Indexation Google** : `sitemap.ts` et `robots.ts` en place (sitemap servi sur `/sitemap.xml`) ; site non déclaré dans Google Search Console (à faire après le domaine définitif) ; pages effectivement indexées : à vérifier dans la console
-- **Balises de partage** : Open Graph + Twitter Card sur 48 pages, image OG générée dynamiquement (`/api/og`, Edge runtime), JSON-LD (site + FAQPage)
-- **Analytics** : aucun actif — Plausible est câblé dans le code (`app/layout.tsx`, conditionné à `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`) mais aucun compte souscrit ; alternative possible : Vercel Analytics (activation en 1 clic dans la console)
-- **PWA** : `manifest.json` + icônes 512/192/favicon — installable sur mobile, non publiée sur les stores
+- **Indexation** : `app/sitemap.ts` (servi sur `/sitemap.xml`, avec les 17 modèles de courriers) et `app/robots.ts` (bloque `/api/` et `/fiche/`, autorise `/api/og`) ; déclarer le site dans Google Search Console
+- **Balises de partage** : Open Graph + Twitter Card par page (titre et description propres à chaque page), image générée dynamiquement par `/api/og` (runtime Node), URL canonique sur les pages qui la déclarent (`ogMeta({ chemin })`), JSON-LD Organization + WebSite (+ FAQPage, fil d'Ariane)
+- **Mesure d'audience** : Plausible, activée seulement si `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` est définie
+- **PWA** : `manifest.json` + icônes 512/192/favicon — installable sur mobile
