@@ -21,20 +21,35 @@ projet : à lire avant toute intervention.
   `--ok`, `--ko`, `--run`…), jamais de valeur écrite en dur : le thème clair et
   le thème sombre en dépendent.
 
+## Aucun serveur, aucune donnée en ligne
+
+Depuis le 11 octobre 2026, l'app n'appelle plus aucun service distant. La
+couche Supabase a été retirée (le projet avait été supprimé, et il ne sera pas
+remplacé) et **le module Mail a été supprimé en entier** : Gmail, l'API Claude,
+le tri, les brouillons, l'extraction de factures et les « dépenses détectées
+par mail » de la page Compta. La page Compta n'affiche donc plus que des
+recettes, et sa trésorerie est devenue « Encaissements par mois ».
+
+Conséquences à garder en tête :
+
+- **Les données ne vivent que dans le localStorage de l'appareil.** La
+  sauvegarde par fichier (Paramètres → Données) est la seule copie.
+- **Les numéros de facture ne sont plus réservés de façon atomique.** Facturer
+  depuis deux appareils à la fois donnerait deux fois le même numéro.
+- La politique de sécurité d'`index.html` n'autorise plus que le CDN SheetJS :
+  ne pas y réintroduire de domaine sans raison.
+
 ## Les modules
 
 **Gestion Pro** — bons de livraison → factures (il n'y a **pas** de devis),
-stock, TVA, Mail. Tout est dans `script.js` (~2 500 lignes) et `index.html`.
+stock, TVA. Tout est dans `script.js` (~1 700 lignes) et `index.html`.
 Pages : `home`, `dash`, `bl`, `facture`, `stock`, `historique`, `tva`, `compta`,
-`mail`, `parametres`.
+`parametres`.
 
 **Compta → Analyse EBE** — `ebe.js` fait les calculs (sans DOM, testable),
 `ebe-module.js` l'affichage. Tests : `node --test tool/test-ebe.js`.
-Les montants et l'index des PDF vivent dans Supabase sous les clés
-`v90_ebe_*`, **jamais** dans le dépôt.
-⚠️ Au 30 septembre 2026, le projet Supabase de l'app a été supprimé : la
-synchronisation est donc hors service jusqu'à ce qu'un nouveau projet soit
-créé et rebranché dans `script.js`.
+Les montants et l'index des PDF vivent sous les clés `v90_ebe_*` du
+localStorage, **jamais** dans le dépôt.
 
 **Mes apps** — `dash-module.js` pour l'affichage, `assets/dash-data.js` pour
 les données. Ce dernier est **généré** par `node tool/build.js` à partir de
@@ -77,6 +92,31 @@ ses propres fiches citent encore l'ancien nom (les redirections GitHub tiennent)
 adresse ne résout plus (constaté le 3 octobre 2026). L'app n'a donc plus ni
 authentification, ni données, ni stockage de photos. `apps/kultiva/infra.md`
 décrit ce qu'il faudra recréer.
+
+## Ce que l'audit du 11 octobre 2026 a changé
+
+- **La sauvegarde est automatique.** Paramètres → Données : on désigne un
+  dossier une fois (l'identifiant vit dans IndexedDB, pas dans localStorage) et
+  l'app y écrit `Sauvegarde_GestionPro.json` à chaque changement, plus une copie
+  datée par jour. Le navigateur redemande parfois l'autorisation après un
+  redémarrage : le statut le dit, ça n'échoue jamais en silence. Une
+  restauration exporte l'état courant avant d'écraser.
+- **`ech()` s'applique à toute donnée insérée dans un gabarit.** Un nom de
+  produit contenant une balise s'exécutait dans la liste des réglages.
+  Exception : les corps de `mailto:` et les messages de `toast()`, qui ne sont
+  pas du HTML — y échapper afficherait des `&amp;`.
+- **L'import de sauvegarde refuse tout fichier contenant du balisage**, pas
+  seulement les mauvaises formes.
+- **`tvaLitMontant()` lit les montants bancaires** : le séparateur décimal est
+  le dernier rencontré. L'ancien code lisait `1.234` comme 1,234 et
+  `1.234.567,89` comme 1,234 — mille fois trop petit, sans rien dire. Le cas
+  qu'aucune règle ne tranche (un séparateur suivi de trois chiffres) est
+  tranché *et* signalé : ligne en jaune et bandeau au-dessus du tableau.
+- **Mes apps se charge à la demande** (`chargerMesApps()` dans `showPage`) :
+  ses 490 Ko ne sont plus payés par la page de facturation.
+- Les 31 étiquettes de formulaire sont reliées à leur champ, les boutons à
+  icône ont un `aria-label`, et la couleur de thème est la même dans
+  `manifest.json` et `index.html`.
 
 ## La synchro automatique (`.github/workflows/sync.yml`)
 

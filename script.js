@@ -4,143 +4,32 @@
 
 const $ = (id) => document.getElementById(id);
 
+// Échappement HTML. À appliquer à TOUTE donnée insérée dans un gabarit : un
+// nom de produit contenant une balise s'exécutait sinon dans la liste des
+// réglages. Court exprès — pour qu'il n'y ait aucune raison de s'en passer.
+function ech(s) {
+    return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+// Sauvegarde automatique : état courant (voir la section dédiée plus bas).
+const sauvegardeAuto = { dossier: null, dernier: null, erreur: null, minuteur: null };
+
 // Gestion du LocalStorage
 const G = {
     get: (k) => JSON.parse(localStorage.getItem(k) || '[]'),
-    set: (k, v) => { localStorage.setItem(k, JSON.stringify(v)); Supa.push(k, v); },
+    set: (k, v) => { localStorage.setItem(k, JSON.stringify(v)); planifierSauvegardeAuto(); },
     val: (k) => localStorage.getItem(k) || '0'
 };
 
-// Synchronisation Supabase
-const SUPA_URL = 'https://kigaejkyzpehkoujzlyf.supabase.co';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpZ2Flamt5enBlaGtvdWp6bHlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxMjczNjEsImV4cCI6MjEwNDcwMzM2MX0.C46rOWypT0mu2U8b8zGGGzvmRZBkhymqDRUoyrCi2h0';
-
-// Réparation recommandée côté Supabase (SQL à exécuter une fois dans l'éditeur
-// SQL) — l'ancien push accumulait des lignes en double dans app_data, ce qui
-// faisait revenir d'anciennes données au hasard à chaque ouverture de l'app :
-//
-//   -- 1. Supprimer les doublons en gardant la ligne la plus récente par clé
-//   delete from app_data a using app_data b
-//     where a.key = b.key and a.ctid < b.ctid;
-//   -- 2. Empêcher leur retour
-//   alter table app_data add constraint app_data_key_unique unique (key);
-//
-// Le nouveau push ci-dessous fonctionne même sans cette réparation : il purge
-// lui-même les doublons de chaque clé au fil des sauvegardes.
-const Supa = {
-    _h: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' },
-    state: { lastPushOk: null, lastPushErr: null, pushFails: 0, lastPullOk: null },
-    _q: Promise.resolve(), // file d'attente : les écritures partent une par une, jamais entrelacées
-
-    push(key, value) {
-        Supa._q = Supa._q.then(async () => {
-            try {
-                // DELETE puis INSERT : convergent quel que soit le schéma de la table
-                // (pas besoin de contrainte unique), et purge les doublons existants.
-                const del = await fetch(`${SUPA_URL}/rest/v1/app_data?key=eq.${encodeURIComponent(key)}`, {
-                    method: 'DELETE', headers: Supa._h
-                });
-                const ins = await fetch(`${SUPA_URL}/rest/v1/app_data`, {
-                    method: 'POST', headers: Supa._h,
-                    body: JSON.stringify({ key, value })
-                });
-                if (!del.ok || !ins.ok) throw new Error(`HTTP ${del.ok ? ins.status : del.status}`);
-                Supa.state.lastPushOk = Date.now();
-                Supa.state.pushFails = 0;
-                Supa.state.lastPushErr = null;
-            } catch (e) {
-                Supa.state.pushFails++;
-                Supa.state.lastPushErr = e.message;
-                // Une seule alerte (au 3e échec consécutif), pas une par sauvegarde
-                if (Supa.state.pushFails === 3) {
-                    toast('⚠️ Synchronisation cloud en échec — tes données restent enregistrées sur cet appareil. Vois Paramètres → Synchronisation.', 'warn');
-                }
-            }
-            renderSyncStatus();
-        });
-        return Supa._q;
-    },
-
-    async pullAll(manual = false) {
-        try {
-            const base = `${SUPA_URL}/rest/v1/app_data?select=key,value`;
-            const h = { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}` };
-            // Tri par id croissant : la ligne insérée en dernier (la plus récente)
-            // gagne la déduplication. Repli sans tri si la colonne id n'existe pas.
-            let res = await fetch(base + '&order=id.asc', { headers: h });
-            if (!res.ok) res = await fetch(base, { headers: h });
-            if (!res.ok) {
-                if (manual) toast(`❌ Lecture cloud impossible (HTTP ${res.status})`, 'error');
-                return;
-            }
-            const rows = await res.json();
-            Supa.state.lastPullOk = Date.now();
-            if (rows.length) {
-                const latest = {};
-                rows.forEach(r => { latest[r.key] = r.value; }); // dédup : dernière occurrence gagne
-                Object.entries(latest).forEach(([k, v]) => {
-                    localStorage.setItem(k, (v !== null && typeof v === 'object') ? JSON.stringify(v) : String(v ?? ''));
-                });
-                db.clis   = G.get('v90_clis');
-                db.prods  = G.get('v90_prods');
-                db.ents   = G.get('v90_ents');
-                db.hist   = G.get('v90_hist');
-                db.bls    = G.get('v90_bls');
-                db.drafts = G.get('v90_drafts');
-                db.prixCli = JSON.parse(localStorage.getItem('v90_prix_cli') || '{}');
-                db.mailCategories = G.get('v90_mail_categories');
-                // Ne pas écraser une saisie en cours : si des quantités sont déjà
-                // tapées dans la grille BL, on garde l'affichage tel quel (les
-                // données db sont à jour, le rendu suivra à la prochaine navigation).
-                const saisieEnCours = Array.from(document.querySelectorAll('[id^="qty-"]'))
-                    .some(i => parseFloat(i.value) > 0);
-                if (!saisieEnCours) renderAll();
-            }
-            renderSyncStatus();
-            if (manual) toast('✅ Données récupérées du cloud.', 'success');
-        } catch (e) {
-            if (manual) toast('❌ Synchronisation impossible : ' + e.message, 'error');
-        }
-    },
-
-    // Renvoie toutes les données locales vers le cloud (outil de récupération :
-    // à utiliser si le statut indique des échecs d'envoi passés).
-    async forcePushAll() {
-        const keys = [];
-        for (let i = 0; i < localStorage.length; i++) {
-            const k = localStorage.key(i);
-            if (k && k.startsWith('v90_') && k !== 'v90_claude_key') keys.push(k);
-        }
-        for (const k of keys) {
-            const raw = localStorage.getItem(k);
-            let v; try { v = JSON.parse(raw); } catch (e) { v = raw; }
-            Supa.push(k, v);
-        }
-        await Supa._q;
-        toast(Supa.state.lastPushErr
-            ? '❌ Échec de l\'envoi : ' + Supa.state.lastPushErr
-            : `✅ ${keys.length} collection(s) envoyée(s) vers le cloud.`,
-            Supa.state.lastPushErr ? 'error' : 'success');
-    }
-};
-
-// Statut de synchronisation affiché dans Paramètres (honnête : basé sur les
-// vrais succès/échecs, pas un "✅ actif" décoratif).
-function renderSyncStatus() {
-    const el = $('sync-status');
-    if (!el) return;
-    const fmt = (t) => t ? new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : '—';
-    if (Supa.state.lastPushErr) {
-        el.innerHTML = `<span style="color:var(--danger)">⚠️ Dernier envoi échoué (${mailEsc(Supa.state.lastPushErr)})</span> — les données restent sur cet appareil. Réessaie avec « Forcer l'envoi ».`;
-    } else if (Supa.state.lastPushOk || Supa.state.lastPullOk) {
-        el.innerHTML = `<span style="color:#4ADE80">✅ Synchronisé</span> <span style="opacity:.6">· reçu ${fmt(Supa.state.lastPullOk)} · envoyé ${fmt(Supa.state.lastPushOk)}</span>`;
-    } else {
-        el.innerHTML = `<span style="opacity:.6">Aucune synchronisation effectuée pour l'instant.</span>`;
-    }
-}
-
 // Formatage devise
 const eur = (n) => new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(n);
+
+// Le module Mail a été retiré : ses clés n'ont plus de lecteur. On les efface
+// une fois — v90_claude_key est un identifiant d'API, il n'a aucune raison de
+// traîner dans le navigateur une fois la fonction partie.
+['v90_claude_key', 'v90_gmail_token', 'v90_mail_categories'].forEach((k) => {
+    try { localStorage.removeItem(k); } catch (e) {}
+});
 
 // Base de données locale
 let db = {
@@ -177,7 +66,11 @@ function showPage(id, _sansHistorique) {
     $('global-back').style.display = (id === 'home') ? 'none' : 'flex';
 
     if (id === 'facture') $('f-num').value = genNum(); // aperçu ; le numéro définitif est réservé à l'aperçu facture
-    if (id === 'mail') renderMailConnexion();
+    if (id === 'dash') {
+        chargerMesApps()
+            .then(() => window.dashInit && window.dashInit())
+            .catch(() => toast('❌ Mes apps n\'a pas pu être chargé — vérifie ta connexion.', 'error'));
+    }
 
     window.scrollTo(0, 0);
     renderAll();
@@ -212,10 +105,33 @@ function chargerXLSX() {
     return _xlsxEnCours;
 }
 
+// Le module « Mes apps » pèse à lui seul 490 Ko (dont 450 pour ses données) et
+// ne sert qu'à lui-même : on ne le charge qu'à sa première ouverture, au lieu
+// de le faire payer à chaque page. L'ordre compte — dash-module lit
+// window.DASH_DATA dès son exécution.
+let _mesAppsEnCours = null;
+function chargerScript(src) {
+    return new Promise((resoudre, rejeter) => {
+        const b = document.createElement('script');
+        b.src = src;
+        b.onload = () => resoudre();
+        b.onerror = () => rejeter(new Error(src + ' indisponible'));
+        document.head.appendChild(b);
+    });
+}
+function chargerMesApps() {
+    if (typeof window.dashInit === 'function') return Promise.resolve();
+    if (_mesAppsEnCours) return _mesAppsEnCours;
+    _mesAppsEnCours = chargerScript('assets/dash-data.js')
+        .then(() => chargerScript('dash-module.js'))
+        .catch((e) => { _mesAppsEnCours = null; throw e; });
+    return _mesAppsEnCours;
+}
+
 // Valeur glissée dans un gestionnaire onclick : échappée d'abord pour
 // JavaScript, puis pour l'attribut HTML. Sans ça, un guillemet dans un
 // numéro de facture ou un nom de fichier suffit à sortir de l'attribut.
-function jsArg(v) { return mailEsc(JSON.stringify(String(v == null ? '' : v))); }
+function jsArg(v) { return ech(JSON.stringify(String(v == null ? '' : v))); }
 
 function genNum() {
     let c = (parseInt(G.val('v90_inv_count')) || 0) + 1;
@@ -245,43 +161,22 @@ function histMontants(h) {
     return { ht: ttc / 1.2, tva: ttc - ttc / 1.2, ttc: ttc };
 }
 
-// Réservation atomique du numéro de facture via une fonction Postgres
-// (voir le SQL en commentaire au-dessus de finalizeInvoice) : évite que deux
-// appareils facturant au même moment obtiennent le même numéro. Repli sur le
-// compteur local si Supabase est injoignable (mode hors-ligne).
-async function reserveInvoiceNumber() {
-    try {
-        const res = await fetch(`${SUPA_URL}/rest/v1/rpc/next_invoice_number`, {
-            method: 'POST', headers: Supa._h, body: '{}'
-        });
-        if (!res.ok) throw new Error('rpc indisponible');
-        const n = await res.json();
-        localStorage.setItem('v90_inv_count', n);
-        return new Date().getFullYear() + "-" + String(n).padStart(3, '0');
-    } catch (e) {
-        let c = (parseInt(G.val('v90_inv_count')) || 0) + 1;
-        localStorage.setItem('v90_inv_count', c);
-        Supa.push('v90_inv_count', c);
-        // Avertir UNE fois par session, pas à chaque facture : tant que la
-        // fonction SQL next_invoice_number n'est pas installée dans Supabase,
-        // ce repli est le fonctionnement normal, pas une anomalie.
-        if (!reserveInvoiceNumber._warned) {
-            reserveInvoiceNumber._warned = true;
-            toast("ℹ️ Numérotation locale (compteur de cet appareil). Si tu factures depuis plusieurs appareils, installe la fonction SQL next_invoice_number (voir Paramètres).", 'info');
-        }
-        return new Date().getFullYear() + "-" + String(c).padStart(3, '0');
-    }
+// Numéro de facture : compteur local de cet appareil. La réservation
+// atomique passait par une fonction Postgres ; il n'y a plus de serveur, donc
+// plus de garantie entre appareils — facturer depuis deux appareils à la fois
+// donnerait deux fois le même numéro.
+function reserveInvoiceNumber() {
+    const c = (parseInt(G.val('v90_inv_count')) || 0) + 1;
+    localStorage.setItem('v90_inv_count', c);
+    return new Date().getFullYear() + "-" + String(c).padStart(3, '0');
 }
 
 // --- SAUVEGARDE DE SECOURS (export/import fichier, indépendant du cloud) ---
-// La clé API Claude (v90_claude_key) est volontairement exclue : c'est un
-// secret, pas une donnée — un fichier de sauvegarde peut circuler (mail,
-// clé USB), il ne doit jamais contenir de credential.
-function exportBackup() {
+function exportBackup(opts) {
     const data = {};
     for (let i = 0; i < localStorage.length; i++) {
         const k = localStorage.key(i);
-        if (k && k.startsWith('v90_') && k !== 'v90_claude_key') data[k] = localStorage.getItem(k);
+        if (k && k.startsWith('v90_')) data[k] = localStorage.getItem(k);
     }
     const payload = { app: 'gestion-pro', version: 1, exportedAt: new Date().toISOString(), data };
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
@@ -290,7 +185,7 @@ function exportBackup() {
     a.download = 'Sauvegarde_GestionPro_' + new Date().toISOString().split('T')[0] + '.json';
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 5000);
-    toast(`✅ Sauvegarde téléchargée (${Object.keys(data).length} collection(s)).`, 'success');
+    if (!(opts && opts.silencieux)) toast(`✅ Sauvegarde téléchargée (${Object.keys(data).length} collection(s)).`, 'success');
 }
 
 // Une sauvegarde circule par mail ou par clé USB : on ne réécrit que des clés
@@ -299,10 +194,21 @@ function exportBackup() {
 // propager au cloud et aux autres appareils.
 const FORMES_SAUVEGARDE = {
     v90_clis: 'tableau', v90_prods: 'tableau', v90_ents: 'tableau', v90_hist: 'tableau',
-    v90_bls: 'tableau', v90_drafts: 'tableau', v90_mail_categories: 'tableau',
+    v90_bls: 'tableau', v90_drafts: 'tableau',
     v90_prix_cli: 'objet', v90_inv_count: 'nombre',
     v90_ebe_documents: 'objet', v90_ebe_agregats: 'objet'
 };
+// Une balise dans une valeur n'a aucune raison d'être : les champs de l'app
+// sont des noms, des adresses, des montants. Un fichier qui en contient a été
+// fabriqué, pas exporté — on le refuse en entier plutôt qu'à moitié.
+const BALISE = /<[a-zA-Z/!]/;
+function contientDuBalisage(v) {
+    if (typeof v === 'string') return BALISE.test(v);
+    if (Array.isArray(v)) return v.some(contientDuBalisage);
+    if (v && typeof v === 'object') return Object.values(v).some(contientDuBalisage);
+    return false;
+}
+
 function valeurSauvegardeValide(cle, brut) {
     const forme = FORMES_SAUVEGARDE[cle];
     if (!forme) return false;
@@ -310,6 +216,7 @@ function valeurSauvegardeValide(cle, brut) {
     if (forme === 'nombre') return /^\d+$/.test(brut.trim());
     let v;
     try { v = JSON.parse(brut); } catch (e) { return false; }
+    if (contientDuBalisage(v)) return false;
     if (forme === 'tableau') return Array.isArray(v);
     return v !== null && typeof v === 'object' && !Array.isArray(v);
 }
@@ -329,7 +236,10 @@ function importBackup(ev) {
         const ignorees = Object.keys(payload.data).length - entrees.length;
         if (!entrees.length) return toast('❌ Sauvegarde inutilisable : aucune collection reconnue.', 'error');
         const n = entrees.length;
-        if (!confirm(`Restaurer cette sauvegarde du ${new Date(payload.exportedAt).toLocaleDateString('fr-FR')} ?\n${n} collection(s) — les données actuelles de cet appareil seront remplacées.`)) return;
+        if (!confirm(`Restaurer cette sauvegarde du ${new Date(payload.exportedAt).toLocaleDateString('fr-FR')} ?\n${n} collection(s) — les données actuelles de cet appareil seront remplacées.\n\nUne copie de l'état actuel sera téléchargée avant.`)) return;
+        // Filet : l'état actuel part dans les téléchargements AVANT d'être
+        // écrasé. Sans serveur, une restauration par erreur serait définitive.
+        exportBackup({ silencieux: true });
         entrees.forEach(([k, v]) => localStorage.setItem(k, v));
         db.clis   = G.get('v90_clis');
         db.prods  = G.get('v90_prods');
@@ -338,13 +248,160 @@ function importBackup(ev) {
         db.bls    = G.get('v90_bls');
         db.drafts = G.get('v90_drafts');
         db.prixCli = JSON.parse(localStorage.getItem('v90_prix_cli') || '{}');
-        db.mailCategories = G.get('v90_mail_categories');
         renderAll();
-        toast(`✅ Sauvegarde restaurée (${n} collection(s)${ignorees ? `, ${ignorees} ignorée(s) car non reconnue(s)` : ''}). Envoi vers le cloud…`, 'success');
-        Supa.forcePushAll();
+        toast(`✅ Sauvegarde restaurée (${n} collection(s)${ignorees ? `, ${ignorees} ignorée(s) car non reconnue(s)` : ''}).`, 'success');
     };
     reader.readAsText(file);
 }
+
+// --- SAUVEGARDE AUTOMATIQUE DANS UN DOSSIER ---
+//
+// Il n'y a plus de serveur : la seule copie des données est un fichier. Pour
+// ne pas dépendre d'un geste quotidien, l'app écrit elle-même ce fichier dans
+// un dossier désigné une fois (iCloud Drive, par exemple) — un fichier
+// courant réécrit à chaque changement, plus une copie datée par jour, pour
+// qu'une donnée abîmée n'écrase pas la seule version saine.
+//
+// Le navigateur conserve l'autorisation mais la redemande parfois après un
+// redémarrage : le statut dans Paramètres le dit, il n'échoue pas en silence.
+// L'identifiant du dossier ne tient pas dans localStorage — il vit dans
+// IndexedDB, seul endroit qui sait stocker ce type d'objet.
+const DOSSIER_BASE = 'gestion-pro-sauvegarde';
+const DOSSIER_CLE = 'dossier';
+
+function sauvegardeAutoPossible() { return typeof window.showDirectoryPicker === 'function'; }
+
+function dossierBase() {
+    return new Promise((ok, ko) => {
+        const r = indexedDB.open(DOSSIER_BASE, 1);
+        r.onupgradeneeded = () => r.result.createObjectStore('handles');
+        r.onsuccess = () => ok(r.result);
+        r.onerror = () => ko(r.error);
+    });
+}
+async function dossierLire() {
+    try {
+        const base = await dossierBase();
+        return await new Promise((ok) => {
+            const t = base.transaction('handles', 'readonly').objectStore('handles').get(DOSSIER_CLE);
+            t.onsuccess = () => ok(t.result || null);
+            t.onerror = () => ok(null);
+        });
+    } catch (e) { return null; }
+}
+async function dossierRetenir(handle) {
+    const base = await dossierBase();
+    await new Promise((ok, ko) => {
+        const m = base.transaction('handles', 'readwrite').objectStore('handles');
+        const t = handle ? m.put(handle, DOSSIER_CLE) : m.delete(DOSSIER_CLE);
+        t.onsuccess = () => ok(); t.onerror = () => ko(t.error);
+    });
+}
+async function dossierAutorise(demander) {
+    const d = sauvegardeAuto.dossier;
+    if (!d) return 'aucun';
+    const opts = { mode: 'readwrite' };
+    let p = await d.queryPermission(opts);
+    if (p !== 'granted' && demander) p = await d.requestPermission(opts);
+    return p;
+}
+
+function contenuSauvegarde() {
+    const data = {};
+    for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith('v90_')) data[k] = localStorage.getItem(k);
+    }
+    return { app: 'gestion-pro', version: 1, exportedAt: new Date().toISOString(), data };
+}
+
+async function ecrireDansDossier(nom, texte) {
+    const f = await sauvegardeAuto.dossier.getFileHandle(nom, { create: true });
+    const w = await f.createWritable();
+    await w.write(texte);
+    await w.close();
+}
+
+async function ecrireSauvegardeAuto() {
+    if (!sauvegardeAuto.dossier) return;
+    try {
+        if (await dossierAutorise(false) !== 'granted') {
+            sauvegardeAuto.erreur = 'autorisation à renouveler';
+            return renderSauvegardeAuto();
+        }
+        const texte = JSON.stringify(contenuSauvegarde(), null, 2);
+        await ecrireDansDossier('Sauvegarde_GestionPro.json', texte);
+        await ecrireDansDossier('Sauvegarde_GestionPro_' + new Date().toISOString().split('T')[0] + '.json', texte);
+        sauvegardeAuto.dernier = Date.now();
+        sauvegardeAuto.erreur = null;
+    } catch (e) {
+        sauvegardeAuto.erreur = e.message || 'écriture impossible';
+    }
+    renderSauvegardeAuto();
+}
+
+// Regroupe les écritures : enregistrer un bon touche plusieurs collections,
+// ça ne doit faire qu'un seul fichier.
+function planifierSauvegardeAuto() {
+    if (!sauvegardeAuto.dossier) return;
+    clearTimeout(sauvegardeAuto.minuteur);
+    sauvegardeAuto.minuteur = setTimeout(ecrireSauvegardeAuto, 3000);
+}
+
+async function choisirDossierSauvegarde() {
+    if (!sauvegardeAutoPossible()) {
+        return toast("Ce navigateur ne sait pas écrire dans un dossier. Utilise « Télécharger la sauvegarde ».", 'error');
+    }
+    try {
+        const d = await window.showDirectoryPicker({ mode: 'readwrite', id: 'gestion-pro-sauvegarde' });
+        sauvegardeAuto.dossier = d;
+        sauvegardeAuto.erreur = null;
+        await dossierRetenir(d);
+        await ecrireSauvegardeAuto();
+        if (!sauvegardeAuto.erreur) toast('✅ Dossier choisi — tes données y sont écrites à chaque changement.', 'success');
+    } catch (e) {
+        if (e && e.name !== 'AbortError') toast('❌ Dossier inutilisable : ' + e.message, 'error');
+    }
+}
+
+async function oublierDossierSauvegarde() {
+    if (!sauvegardeAuto.dossier) return;
+    if (!confirm("Arrêter la sauvegarde automatique ?\n\nLes fichiers déjà écrits restent dans le dossier ; l'app n'en écrira simplement plus.")) return;
+    sauvegardeAuto.dossier = null; sauvegardeAuto.dernier = null; sauvegardeAuto.erreur = null;
+    clearTimeout(sauvegardeAuto.minuteur);
+    try { await dossierRetenir(null); } catch (e) {}
+    renderSauvegardeAuto();
+    toast('Sauvegarde automatique arrêtée.', 'info');
+}
+
+function renderSauvegardeAuto() {
+    const el = $('auto-backup-status');
+    if (!el) return;
+    const heure = (t) => new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    if (!sauvegardeAutoPossible()) {
+        el.innerHTML = '<span style="opacity:.6">Ce navigateur ne sait pas écrire dans un dossier — garde le téléchargement manuel.</span>';
+    } else if (!sauvegardeAuto.dossier) {
+        el.innerHTML = '<span style="color:var(--run)">⚠️ Aucune sauvegarde automatique : tes données n\'existent que dans ce navigateur.</span>';
+    } else if (sauvegardeAuto.erreur === 'autorisation à renouveler') {
+        el.innerHTML = '<span style="color:var(--run)">⚠️ Le navigateur a oublié l\'autorisation — clique « Choisir le dossier » pour la redonner.</span>';
+    } else if (sauvegardeAuto.erreur) {
+        el.innerHTML = '<span style="color:var(--danger)">❌ Dernière écriture en échec (' + ech(sauvegardeAuto.erreur) + ')</span>';
+    } else if (sauvegardeAuto.dernier) {
+        el.innerHTML = '<span style="color:#4ADE80">✅ Dossier « ' + ech(sauvegardeAuto.dossier.name) + ' »</span> <span style="opacity:.6">· écrit à ' + heure(sauvegardeAuto.dernier) + '</span>';
+    } else {
+        el.innerHTML = '<span style="opacity:.6">Dossier « ' + ech(sauvegardeAuto.dossier.name) + ' » — rien encore écrit.</span>';
+    }
+}
+
+// Au démarrage : on retrouve le dossier et on écrit, si l'autorisation tient.
+(async function reprendreSauvegardeAuto() {
+    if (!sauvegardeAutoPossible()) return renderSauvegardeAuto();
+    const d = await dossierLire();
+    if (!d) return renderSauvegardeAuto();
+    sauvegardeAuto.dossier = d;
+    if (await dossierAutorise(false) === 'granted') ecrireSauvegardeAuto();
+    else { sauvegardeAuto.erreur = 'autorisation à renouveler'; renderSauvegardeAuto(); }
+})();
 
 // --- NOTIFICATIONS (remplace alert() par un message non bloquant) ---
 function toast(msg, kind = 'info') {
@@ -430,10 +487,10 @@ function openCliPrixModal(cliId) {
     if (!cli) return;
     let prices = db.prixCli[cliId] || {};
     $('mcp-cli-id').value = cliId;
-    $('mcp-title').innerText = `💰 Prix pour ${cli.nom}`;
+    $('mcp-title').innerText = `💰 Prix pour ${ech(cli.nom)}`;
     $('mcp-list').innerHTML = actifs(db.prods).map(p => `
         <div class="field">
-            <label>${p.icon} ${mailEsc(p.nom)} <small style="opacity:.5; font-weight:400">(base : ${eur(p.prix)} / ${p.unite})</small></label>
+            <label>${ech(p.icon)} ${ech(p.nom)} <small style="opacity:.5; font-weight:400">(base : ${eur(p.prix)} / ${ech(p.unite)})</small></label>
             <input type="number" id="cprix-${p.id}" step="0.01" value="${prices[p.id] !== undefined ? prices[p.id] : p.prix}">
         </div>`).join('');
     openModal('mod-cli-prix');
@@ -447,7 +504,6 @@ function saveCliPrix() {
         if (!isNaN(v)) db.prixCli[cliId][p.id] = v;
     });
     localStorage.setItem('v90_prix_cli', JSON.stringify(db.prixCli));
-    Supa.push('v90_prix_cli', db.prixCli);
     closeModals();
     renderBLGrid();
     toast('✅ Prix spécifiques sauvegardés !', 'success');
@@ -530,8 +586,8 @@ function renderChargement() {
         <div class="section-title">À charger (${bls.length} livraison${bls.length > 1 ? 's' : ''})</div>
         ${totaux.map(t => `
             <div class="card" style="gap:10px; align-items:center">
-                <b style="flex:2">${t.icon} ${mailEsc(t.nom)}</b>
-                <span style="flex:1; text-align:center; font-size:20px; font-weight:700; color:var(--sage)">${t.qte} ${mailEsc(t.unite)}</span>
+                <b style="flex:2">${ech(t.icon)} ${ech(t.nom)}</b>
+                <span style="flex:1; text-align:center; font-size:20px; font-weight:700; color:var(--sage)">${t.qte} ${ech(t.unite)}</span>
                 <span style="flex:1; text-align:right; color:var(--text-muted)">${t.poids ? t.poids.toFixed(1) + ' kg' : '—'}</span>
             </div>`).join('')}
         <div class="card" style="background:var(--bg-elev-2)">
@@ -541,11 +597,11 @@ function renderChargement() {
         <div class="section-title" style="margin-top:24px">Détail par client</div>
         ${bls.map(b => `
             <div class="card" style="flex-direction:column; align-items:stretch; gap:6px">
-                <b style="font-size:16px; color:var(--gold)">👤 ${mailEsc(b.cliNom)}</b>
+                <b style="font-size:16px; color:var(--gold)">👤 ${ech(b.cliNom)}</b>
                 ${b.items.map(i => `
                     <div style="display:flex; justify-content:space-between; font-size:14px; padding:4px 0; border-bottom:1px dashed var(--border)">
-                        <span>${i.icon} ${mailEsc(i.nom)}</span>
-                        <span style="font-weight:600">${i.qte} ${mailEsc(i.unite)}</span>
+                        <span>${ech(i.icon)} ${ech(i.nom)}</span>
+                        <span style="font-weight:600">${i.qte} ${ech(i.unite)}</span>
                     </div>`).join('')}
             </div>`).join('')}`;
 }
@@ -562,7 +618,7 @@ function printChargement() {
             <table class="inv-table">
                 <thead><tr><th>Produit</th><th style="text-align:center">Quantité totale</th><th style="text-align:right">Poids</th></tr></thead>
                 <tbody>
-                    ${totaux.map(t => `<tr><td>${t.icon} ${mailEsc(t.nom)}</td><td style="text-align:center"><b>${t.qte} ${mailEsc(t.unite)}</b></td><td style="text-align:right">${t.poids ? t.poids.toFixed(1) + ' kg' : '—'}</td></tr>`).join('')}
+                    ${totaux.map(t => `<tr><td>${ech(t.icon)} ${ech(t.nom)}</td><td style="text-align:center"><b>${t.qte} ${ech(t.unite)}</b></td><td style="text-align:right">${t.poids ? t.poids.toFixed(1) + ' kg' : '—'}</td></tr>`).join('')}
                 </tbody>
             </table>
             <div class="inv-totals">
@@ -572,8 +628,8 @@ function printChargement() {
                 <thead><tr><th>Client</th><th>Détail</th><th style="text-align:center">Livré ☐</th></tr></thead>
                 <tbody>
                     ${bls.map(b => `<tr>
-                        <td style="font-weight:700">${mailEsc(b.cliNom)}</td>
-                        <td>${b.items.map(i => `${i.qte} ${mailEsc(i.unite)} ${mailEsc(i.nom)}`).join(' · ')}</td>
+                        <td style="font-weight:700">${ech(b.cliNom)}</td>
+                        <td>${b.items.map(i => `${i.qte} ${ech(i.unite)} ${ech(i.nom)}`).join(' · ')}</td>
                         <td style="text-align:center; font-size:20px">☐</td>
                     </tr>`).join('')}
                 </tbody>
@@ -624,9 +680,9 @@ function renderSuiviBL() {
         // Création de la liste détaillée des articles de la commande
         let itemsDetail = b.items.map(i => `
             <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--border); font-size: 20px; color: var(--text-main); padding-left: 45px;">
-                <span style="flex: 2;"><b>${i.icon} ${i.nom}</b></span>
-                <span style="flex: 1; text-align: center; color: var(--sage); font-weight: 700;">${i.qte} ${i.unite}</span>
-                <span style="flex: 1; text-align: right; opacity:.7">${eur(i.prix)} / ${i.unite}</span>
+                <span style="flex: 2;"><b>${ech(i.icon)} ${ech(i.nom)}</b></span>
+                <span style="flex: 1; text-align: center; color: var(--sage); font-weight: 700;">${i.qte} ${ech(i.unite)}</span>
+                <span style="flex: 1; text-align: right; opacity:.7">${eur(i.prix)} / ${ech(i.unite)}</span>
                 <span style="flex: 1; text-align: right; font-weight: 600; color: var(--accent)">${eur(i.qte * i.prix)} HT</span>
             </div>
         `).join('');
@@ -639,7 +695,7 @@ function renderSuiviBL() {
                 <div style="display: flex; align-items: center; gap: 15px;">
                     <input type="checkbox" style="width: 28px; height: 28px; cursor: pointer; accent-color: var(--gold);" ${isChecked} onchange="toggleBLSel(${b.id}, this.checked)">
                     <div>
-                        <b style="font-size: 26px; color: var(--gold);">${b.cliNom}</b><br>
+                        <b style="font-size: 26px; color: var(--gold);">${ech(b.cliNom)}</b><br>
                         <small style="font-size: 16px; color: var(--sage); font-weight: 600;">📅 Date : ${b.date}</small>
                     </div>
                 </div>
@@ -718,9 +774,9 @@ function renderDrafts() {
         // Création d'une vraie liste détaillée au lieu des mini-tags
         let itemsDetail = d.items.map(i => `
             <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--border); font-size: 20px; color: var(--text-main);">
-                <span style="flex: 2;"><b>${i.icon} ${i.nom}</b></span>
-                <span style="flex: 1; text-align: center;">${i.qte} ${i.unite}</span>
-                <span style="flex: 1; text-align: right;">${eur(i.prix)} / ${i.unite}</span>
+                <span style="flex: 2;"><b>${ech(i.icon)} ${ech(i.nom)}</b></span>
+                <span style="flex: 1; text-align: center;">${i.qte} ${ech(i.unite)}</span>
+                <span style="flex: 1; text-align: right;">${eur(i.prix)} / ${ech(i.unite)}</span>
                 <span style="flex: 1; text-align: right; font-weight: 700; color: var(--text-main);">${eur(i.qte * i.prix)} HT</span>
             </div>
         `).join('');
@@ -732,7 +788,7 @@ function renderDrafts() {
         <div class="card draft-card" style="padding: 20px;">
             <div style="display: flex; justify-content: space-between; border-bottom: 2px solid var(--border); padding-bottom: 15px; margin-bottom: 15px;">
                 <div>
-                    <b style="font-size: 26px;">${d.cliNom}</b>
+                    <b style="font-size: 26px;">${ech(d.cliNom)}</b>
                     ${blRefs}
                 </div>
                 <div style="text-align: right;">
@@ -772,7 +828,7 @@ function addLine() {
 function renderLines() {
     $('f-lines').innerHTML = curLines.map((l, i) => `
         <div class="card" style="flex-direction:column;align-items:stretch">
-            <b>${l.icon} ${l.nom}</b>
+            <b>${ech(l.icon)} ${ech(l.nom)}</b>
             <div class="r2" style="margin-top:5px">
                 <input type="number" step="0.01" value="${l.qte}" oninput="curLines[${i}].qte=parseFloat(this.value)||0;calcFact()">
                 <input type="number" step="0.01" value="${l.prix}" oninput="curLines[${i}].prix=parseFloat(this.value)||0;calcFact()">
@@ -789,13 +845,15 @@ function calcFact() {
 
 // --- STOCK ---
 function adjustStock() {
-    let p = db.prods.find(x => x.id == $('adj-prod').value), q = parseFloat($('adj-qty').value);
-    if (p && q) {
-        p.stock += q;
-        G.set('v90_prods', db.prods);
-        $('adj-qty').value = '';
-        renderAll();
-    }
+    const p = db.prods.find(x => x.id == $('adj-prod').value);
+    const q = parseFloat($('adj-qty').value);
+    if (!p) return toast('Choisis d\'abord un produit.', 'error');
+    if (!isFinite(q) || q === 0) return toast('Indique une quantité (positive pour entrer du stock, négative pour en sortir).', 'error');
+    p.stock = (Number(p.stock) || 0) + q;
+    G.set('v90_prods', db.prods);
+    $('adj-qty').value = '';
+    renderAll();
+    toast(`${q > 0 ? '➕' : '➖'} ${p.nom} : ${Math.abs(q)} ${p.unite || ''} — stock ${p.stock}.`, 'success');
 }
 
 // Helper : poids unitaire d'un item BL
@@ -809,11 +867,11 @@ function renderBLGrid() {
     let cliId = $('bl-cli-select').value;
     let prixCli = (cliId && db.prixCli[cliId]) ? db.prixCli[cliId] : {};
     $('bl-prod-grid').innerHTML = actifs(db.prods).map(p => {
-        let poidsLabel = p.poids ? `<span style="opacity:.6;font-size:13px">${p.poids} kg / ${p.unite}</span>` : '';
+        let poidsLabel = p.poids ? `<span style="opacity:.6;font-size:13px">${p.poids} kg / ${ech(p.unite)}</span>` : '';
         let prix = prixCli[p.id] !== undefined ? prixCli[p.id] : p.prix;
         return `
         <div class="card" style="flex-direction:column; padding: 20px; align-items: center;">
-            <div style="font-size: 18px; margin-bottom: 6px;">${p.icon} <b>${mailEsc(p.nom)}</b></div>
+            <div style="font-size: 18px; margin-bottom: 6px;">${ech(p.icon)} <b>${ech(p.nom)}</b></div>
             ${poidsLabel ? `<div style="margin-bottom: 12px;">${poidsLabel}</div>` : ''}
             <div style="display:flex; gap:12px; align-items:center; justify-content: center;">
                 <button class="btn btn-gold" style="width: 60px; height: 60px; padding: 0; font-size: 35px; border-radius: 12px; display: flex; align-items: center; justify-content: center; line-height: 1;" onclick="changeQty('${p.id}',-1)">−</button>
@@ -823,7 +881,7 @@ function renderBLGrid() {
             <div style="display:flex; gap:8px; align-items:center; justify-content: center; margin-top: 12px;">
                 <label style="font-size: 13px; color: var(--text-muted); font-weight: 600;">Prix :</label>
                 <input type="number" id="prix-${p.id}" step="0.01" value="${prix}" style="width: 100px; height: 40px; text-align:center; font-size: 16px; font-weight: 600; border-radius: 8px; margin: 0; padding: 0 8px;">
-                <span style="font-size: 13px; color: var(--text-muted);">€ / ${p.unite}</span>
+                <span style="font-size: 13px; color: var(--text-muted);">€ / ${ech(p.unite)}</span>
             </div>
         </div>`; }).join('');
 }
@@ -880,7 +938,7 @@ function renderHomeResume() {
         </div>
         <div class="hr-card hr-sun" onclick="showPage('stock')">
             <b>${bas.length}</b><span>Stock bas</span>
-            <small>${bas.length ? mailEsc(bas.slice(0, 2).map(p => p.nom).join(', ')) + (bas.length > 2 ? '…' : '') : 'niveaux OK'}</small>
+            <small>${bas.length ? ech(bas.slice(0, 2).map(p => p.nom).join(', ')) + (bas.length > 2 ? '…' : '') : 'niveaux OK'}</small>
         </div>
         <div class="hr-card hr-sky" onclick="goResumeCompta()">
             <b>${eur(caMois)}</b><span>CA HT du mois</span>
@@ -909,24 +967,24 @@ function renderAll() {
     renderHomeResume();
     // 1. Sélecteur client + entreprise pour le BL
     $('bl-date').value = new Date().toISOString().split('T')[0];
-    $('bl-ent-select').innerHTML = db.ents.map(e => `<option value="${e.id}">${mailEsc(e.nom)}</option>`).join('');
-    $('bl-cli-select').innerHTML = actifs(db.clis).map(c => `<option value="${c.id}">${mailEsc(c.nom)}</option>`).join('');
+    $('bl-ent-select').innerHTML = db.ents.map(e => `<option value="${e.id}">${ech(e.nom)}</option>`).join('');
+    $('bl-cli-select').innerHTML = actifs(db.clis).map(c => `<option value="${c.id}">${ech(c.nom)}</option>`).join('');
 
     // 2. Grille des produits pour le BL
     renderBLGrid();
 
     // 3. Listes dans les paramètres
-    $('list-prods-settings').innerHTML = actifs(db.prods).map(p => `<div class="card card-link" onclick="openProdModal(${p.id})"><div><b>${p.icon} ${p.nom}</b></div><span>✏️</span></div>`).join('');
+    $('list-prods-settings').innerHTML = actifs(db.prods).map(p => `<div class="card card-link" onclick="openProdModal(${p.id})"><div><b>${ech(p.icon)} ${ech(p.nom)}</b></div><span>✏️</span></div>`).join('');
     const prodsArch = db.prods.filter(p => p.archived);
     $('title-prods-archives').style.display = prodsArch.length ? 'block' : 'none';
     $('list-prods-archives').innerHTML = prodsArch.map(p => `
         <div class="card" style="gap:8px; align-items:center; opacity:.65">
-            <b style="flex:1">${p.icon} ${mailEsc(p.nom)}</b>
+            <b style="flex:1">${ech(p.icon)} ${ech(p.nom)}</b>
             <button class="btn" style="width:auto;padding:6px 12px;font-size:12px;background:var(--ligne)" onclick="toggleArchive('prods', ${p.id})">↩️ Restaurer</button>
         </div>`).join('');
     $('list-clis-settings').innerHTML = actifs(db.clis).map(c => `
         <div class="card" style="gap:8px; align-items:center">
-            <b style="flex:1; cursor:pointer" onclick="openCliModal(${c.id})">👤 ${mailEsc(c.nom)}</b>
+            <b style="flex:1; cursor:pointer" onclick="openCliModal(${c.id})">👤 ${ech(c.nom)}</b>
             <button class="btn" style="width:auto;padding:6px 12px;font-size:12px;background:var(--ligne)" onclick="openCliPrixModal(${c.id})">💰 Prix</button>
             <span style="cursor:pointer" onclick="openCliModal(${c.id})">✏️</span>
         </div>`).join('');
@@ -934,10 +992,10 @@ function renderAll() {
     $('title-clis-archives').style.display = clisArch.length ? 'block' : 'none';
     $('list-clis-archives').innerHTML = clisArch.map(c => `
         <div class="card" style="gap:8px; align-items:center; opacity:.65">
-            <b style="flex:1">👤 ${mailEsc(c.nom)}</b>
+            <b style="flex:1">👤 ${ech(c.nom)}</b>
             <button class="btn" style="width:auto;padding:6px 12px;font-size:12px;background:var(--ligne)" onclick="toggleArchive('clis', ${c.id})">↩️ Restaurer</button>
         </div>`).join('');
-    $('list-ents-settings').innerHTML = db.ents.map(e => `<div class="card card-link" onclick="openEntModal(${e.id})"><b>🏢 ${e.nom}</b><span>✏️</span></div>`).join('');
+    $('list-ents-settings').innerHTML = db.ents.map(e => `<div class="card card-link" onclick="openEntModal(${e.id})"><b>🏢 ${ech(e.nom)}</b><span>✏️</span></div>`).join('');
     
     // 4. Sélecteurs pour la facturation libre + filtres par entreprise
     // (les filtres utilisent le NOM car l'historique stocke h.ent en nom ;
@@ -947,23 +1005,23 @@ function renderAll() {
     ['hist-ent-filter', 'compta-ent'].forEach(selId => {
         const sel = $(selId); if (!sel) return;
         const cur = sel.value || 'Toutes';
-        sel.innerHTML = ['Toutes', ...entNames].map(n => `<option${n === cur ? ' selected' : ''}>${mailEsc(n)}</option>`).join('');
+        sel.innerHTML = ['Toutes', ...entNames].map(n => `<option${n === cur ? ' selected' : ''}>${ech(n)}</option>`).join('');
     });
-    $('f-ent').innerHTML = db.ents.map(e => `<option value="${e.id}">${mailEsc(e.nom)}</option>`).join('');
-    $('f-cli').innerHTML = actifs(db.clis).map(c => `<option value="${c.id}">${mailEsc(c.nom)}</option>`).join('');
-    $('f-prod-picker').innerHTML = actifs(db.prods).map(p => `<option value="${p.id}">${mailEsc(p.nom)}</option>`).join('');
+    $('f-ent').innerHTML = db.ents.map(e => `<option value="${e.id}">${ech(e.nom)}</option>`).join('');
+    $('f-cli').innerHTML = actifs(db.clis).map(c => `<option value="${c.id}">${ech(c.nom)}</option>`).join('');
+    $('f-prod-picker').innerHTML = actifs(db.prods).map(p => `<option value="${p.id}">${ech(p.nom)}</option>`).join('');
     
     // 5. Affichage du stock actuel et ajustement (avec alerte seuil bas)
     const lowStock = actifs(db.prods).filter(p => p.seuil > 0 && p.stock <= p.seuil);
     $('list-stock').innerHTML = actifs(db.prods).map(p => {
         const bas = p.seuil > 0 && p.stock <= p.seuil;
         return `<div class="card${bas ? ' stock-low' : ''}" style="flex-direction:column">
-            <b>${p.icon} ${mailEsc(p.nom)}</b>
-            <div style="font-size:20px;color:${bas ? 'var(--danger)' : 'var(--sage)'};font-weight:700">${p.stock} ${p.unite}</div>
+            <b>${ech(p.icon)} ${ech(p.nom)}</b>
+            <div style="font-size:20px;color:${bas ? 'var(--danger)' : 'var(--sage)'};font-weight:700">${p.stock} ${ech(p.unite)}</div>
             ${bas ? `<span class="badge-statut badge-retard" style="margin-top:6px">⚠️ Stock bas (seuil : ${p.seuil})</span>` : ''}
         </div>`;
     }).join('');
-    $('adj-prod').innerHTML = actifs(db.prods).map(p => `<option value="${p.id}">${mailEsc(p.nom)}</option>`).join('');
+    $('adj-prod').innerHTML = actifs(db.prods).map(p => `<option value="${p.id}">${ech(p.nom)}</option>`).join('');
     const stockBadge = $('stock-alert-badge');
     if (stockBadge) {
         stockBadge.style.display = lowStock.length ? 'flex' : 'none';
@@ -1053,8 +1111,8 @@ function renderHistorique() {
         : visibles.slice().reverse().map(h => {
             const itemsHtml = (h.items || []).map(i =>
                 `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--carte-2); font-size:13px">
-                    <span>${i.icon || ''} ${mailEsc(i.nom)}</span>
-                    <span style="opacity:.6">${i.qte} ${mailEsc(i.unite)} × ${eur(i.prix)}</span>
+                    <span>${ech(i.icon || '')} ${ech(i.nom)}</span>
+                    <span style="opacity:.6">${i.qte} ${ech(i.unite)} × ${eur(i.prix)}</span>
                     <span style="font-weight:600">${eur(i.qte * i.prix * (1 + (i.tva || 20) / 100))}</span>
                 </div>`
             ).join('');
@@ -1065,15 +1123,15 @@ function renderHistorique() {
             <div class="card" style="flex-direction:column; align-items:stretch; gap:0; padding:0; overflow:hidden">
                 <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border-bottom:1px solid var(--carte-2)">
                     <div>
-                        <b style="font-size:16px; color:var(--gold)">🧾 ${mailEsc(h.num)}</b>
-                        ${h.date ? `<span style="font-size:12px; opacity:.5; margin-left:10px">📅 ${mailEsc(h.date)}</span>` : ''}
+                        <b style="font-size:16px; color:var(--gold)">🧾 ${ech(h.num)}</b>
+                        ${h.date ? `<span style="font-size:12px; opacity:.5; margin-left:10px">📅 ${ech(h.date)}</span>` : ''}
                     </div>
                     <button class="btn btn-red" style="width:34px; height:34px; padding:0; font-size:14px; border-radius:8px; flex-shrink:0" onclick="deleteHist(${h.id || 0}, ${jsArg(h.num)})">✕</button>
                 </div>
                 <div style="padding:12px 16px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; border-bottom:1px solid var(--carte-2)">
-                    ${h.ent ? `<span style="font-size:12px; opacity:.6">🏢 <b>${mailEsc(h.ent)}</b></span><span style="opacity:.3">→</span>` : ''}
-                    <span style="font-size:13px; font-weight:600">👤 ${mailEsc(h.cli)}</span>
-                    ${h.echeance && statut !== 'payee' ? `<span style="font-size:11px; opacity:.5; margin-left:auto">échéance ${mailEsc(h.echeance)}</span><span class="badge-statut ${badgeCls}">${badgeLbl}</span>` : `<span class="badge-statut ${badgeCls}" style="margin-left:auto">${badgeLbl}</span>`}
+                    ${h.ent ? `<span style="font-size:12px; opacity:.6">🏢 <b>${ech(h.ent)}</b></span><span style="opacity:.3">→</span>` : ''}
+                    <span style="font-size:13px; font-weight:600">👤 ${ech(h.cli)}</span>
+                    ${h.echeance && statut !== 'payee' ? `<span style="font-size:11px; opacity:.5; margin-left:auto">échéance ${ech(h.echeance)}</span><span class="badge-statut ${badgeCls}">${badgeLbl}</span>` : `<span class="badge-statut ${badgeCls}" style="margin-left:auto">${badgeLbl}</span>`}
                 </div>
                 ${(h.blIds && h.blIds.length) ? `
                 <div style="padding:8px 16px; border-bottom:1px solid var(--carte-2)">
@@ -1082,15 +1140,15 @@ function renderHistorique() {
                         ${h.blIds.map(bid => {
                             const b = db.bls.find(x => x.id == bid);
                             return b
-                                ? `<div style="font-size:12px; padding:4px 0; opacity:.8">📅 ${mailEsc(b.date)} — ${b.items.map(i => `${i.qte} ${mailEsc(i.unite)} ${mailEsc(i.nom)}`).join(' · ')}</div>`
+                                ? `<div style="font-size:12px; padding:4px 0; opacity:.8">📅 ${ech(b.date)} — ${b.items.map(i => `${i.qte} ${ech(i.unite)} ${ech(i.nom)}`).join(' · ')}</div>`
                                 : `<div style="font-size:12px; padding:4px 0; opacity:.5">bon supprimé (réf. ${bid})</div>`;
                         }).join('')}
                     </div>
                 </div>` : ''}
                 ${itemsHtml ? `<div style="padding:8px 16px">${itemsHtml}</div>` : ''}
                 <div style="display:flex; justify-content:space-between; padding:12px 16px; background:var(--carte-2)">
-                    ${h.ht ? `<span style="font-size:12px; opacity:.5">HT : ${mailEsc(h.ht)}</span>` : '<span></span>'}
-                    <b style="font-size:18px; color:var(--gold)">TTC : ${mailEsc(h.total)}</b>
+                    ${h.ht ? `<span style="font-size:12px; opacity:.5">HT : ${ech(h.ht)}</span>` : '<span></span>'}
+                    <b style="font-size:18px; color:var(--gold)">TTC : ${ech(h.total)}</b>
                 </div>
                 <div style="display:flex; gap:8px; padding:0 16px 14px; flex-wrap:wrap">
                     <button class="btn" style="flex:1; min-width:120px; font-size:11px; padding:8px; background:var(--carte-2)" onclick="toggleInvoicePaid(${h.id})">${statut === 'payee' ? '↩️ Marquer non payée' : '✅ Marquer payée'}</button>
@@ -1103,25 +1161,6 @@ function renderHistorique() {
 
 // --- IMPRESSION & FINALISATION ---
 //
-// Numérotation séquentielle des factures (SQL à exécuter une seule fois,
-// manuellement, dans l'éditeur SQL Supabase) :
-//
-//   create table if not exists invoice_counter (
-//     id int primary key default 1,
-//     count int not null default 0,
-//     constraint invoice_counter_single_row check (id = 1)
-//   );
-//   insert into invoice_counter (id, count) values (1, 0) on conflict (id) do nothing;
-//
-//   create or replace function next_invoice_number()
-//   returns int language sql as $$
-//     update invoice_counter set count = count + 1 where id = 1 returning count;
-//   $$;
-//
-// L'UPDATE ... RETURNING est atomique côté Postgres : deux appels concurrents
-// (deux appareils qui facturent au même moment) ne peuvent jamais recevoir le
-// même numéro. Sans cette table, l'app repli sur un compteur local (voir
-// reserveInvoiceNumber) qui peut se dupliquer entre appareils.
 // Date d'échéance : date de facture + délai de paiement du client (30 j par défaut).
 function calcEcheance(dateFr, jours) {
     const p = (dateFr || '').split('/');
@@ -1153,7 +1192,7 @@ async function previewInvoice() {
         let ltva = lht * taux / 100;
         ht += lht; ttc += lht + ltva;
         parTaux[taux] = (parTaux[taux] || 0) + ltva;
-        rows += `<tr><td>${mailEsc(l.nom)}</td><td style="text-align:center">${l.qte}</td><td>${eur(l.prix)}</td><td style="text-align:center">${taux} %</td><td style="text-align:right">${eur(lht)}</td></tr>`;
+        rows += `<tr><td>${ech(l.nom)}</td><td style="text-align:center">${l.qte}</td><td>${eur(l.prix)}</td><td style="text-align:center">${taux} %</td><td style="text-align:right">${eur(lht)}</td></tr>`;
     });
     const lignesTva = Object.entries(parTaux)
         .sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]))
@@ -1165,12 +1204,12 @@ async function previewInvoice() {
         <div class="inv-wrap">
             <h1>Facture</h1>
             <div class="inv-header-grid">
-                <div><b>Émetteur</b>${mailEsc(ent.nom)}<br>${mailEsc(ent.adr)}<br>${mailEsc(ent.ville)}<br>SIRET: ${mailEsc(ent.siret)}</div>
-                <div style="text-align:right"><b>Client</b>${mailEsc(cli.nom)}<br>${mailEsc(cli.adr)}<br>${mailEsc(cli.ville)}</div>
+                <div><b>Émetteur</b>${ech(ent.nom)}<br>${ech(ent.adr)}<br>${ech(ent.ville)}<br>SIRET: ${ech(ent.siret)}</div>
+                <div style="text-align:right"><b>Client</b>${ech(cli.nom)}<br>${ech(cli.adr)}<br>${ech(cli.ville)}</div>
             </div>
             <div style="margin-bottom:20px">
-                <b>N° FACTURE :</b> ${mailEsc($('f-num').value)}<br>
-                <b>DATE :</b> ${mailEsc($('f-date').value)}
+                <b>N° FACTURE :</b> ${ech($('f-num').value)}<br>
+                <b>DATE :</b> ${ech($('f-date').value)}
                 ${echeance ? `<br><b>DATE D'ÉCHÉANCE :</b> ${echeance}` : ''}
             </div>
             <table class="inv-table">
@@ -1184,8 +1223,8 @@ async function previewInvoice() {
                 <div class="inv-total-final"><span>TOTAL TTC</span><span>${eur(ttc)}</span></div>
             </div>
             <div class="payment-box">
-                <div><h3>Coordonnées Bancaires</h3>IBAN: ${mailEsc(ent.iban)}</div>
-                <div class="payment-mentions">${mailEsc(ent.mentions).replace(/\n/g, '<br>')}${ent.mentions ? '<br>' : ''}${MENTIONS_LEGALES}</div>
+                <div><h3>Coordonnées Bancaires</h3>IBAN: ${ech(ent.iban)}</div>
+                <div class="payment-mentions">${ech(ent.mentions).replace(/\n/g, '<br>')}${ent.mentions ? '<br>' : ''}${MENTIONS_LEGALES}</div>
             </div>
         </div>`;
     $('preview-wrap').style.display = 'block';
@@ -1264,14 +1303,14 @@ function printBL(id) {
         let pu = getPoids(i);
         let lpoids = i.qte * pu;
         poidsTotal += lpoids;
-        rows += `<tr><td>${i.icon || ''} ${i.nom}</td><td style="text-align:center">${i.qte}</td><td style="text-align:center">${i.unite}</td><td style="text-align:right">${pu ? pu + ' kg' : '—'}</td><td style="text-align:right">${lpoids ? lpoids.toFixed(2) + ' kg' : '—'}</td></tr>`;
+        rows += `<tr><td>${ech(i.icon || '')} ${ech(i.nom)}</td><td style="text-align:center">${i.qte}</td><td style="text-align:center">${ech(i.unite)}</td><td style="text-align:right">${pu ? pu + ' kg' : '—'}</td><td style="text-align:right">${lpoids ? lpoids.toFixed(2) + ' kg' : '—'}</td></tr>`;
     });
     $('sheet-holder').innerHTML = `
         <div class="inv-wrap" style="background:#fff">
             <h1>Bon de Livraison</h1>
             <div class="inv-header-grid">
-                <div>${ent ? `<b>Émetteur</b>${ent.nom}<br>${ent.adr}<br>${ent.ville}${ent.siret ? '<br>SIRET : ' + ent.siret : ''}` : ''}</div>
-                <div style="text-align:right"><b>Destinataire</b>${cli ? cli.nom + '<br>' + (cli.adr || '') + '<br>' + (cli.ville || '') : b.cliNom}</div>
+                <div>${ent ? `<b>Émetteur</b>${ech(ent.nom)}<br>${ech(ent.adr)}<br>${ech(ent.ville)}${ent.siret ? '<br>SIRET : ' + ech(ent.siret) : ''}` : ''}</div>
+                <div style="text-align:right"><b>Destinataire</b>${cli ? ech(cli.nom) + '<br>' + ech(cli.adr || '') + '<br>' + ech(cli.ville || '') : ech(b.cliNom)}</div>
             </div>
             <div style="margin-bottom:20px"><b>DATE :</b> ${b.date}</div>
             <table class="inv-table">
@@ -1313,14 +1352,47 @@ function tvaDetectTaux(label, isDebit) {
     return isDebit ? '20%' : '5.5%';
 }
 
-function tvaParseAmount(val) {
+// Un montant tel que l'export bancaire l'écrit. Règle : le séparateur décimal
+// est le DERNIER rencontré, les autres sont des milliers. L'ancien code ne
+// reconnaissait qu'un seul groupe de milliers et lisait « 1.234 » comme 1,234
+// et « 1.234.567,89 » comme 1,234 — mille fois trop petit, sans rien dire.
+//
+// Reste un cas qu'aucune règle ne tranche : un seul séparateur suivi de trois
+// chiffres. « 1.234 » vaut 1 234 ou 1,234 selon la banque. On choisit le plus
+// probable et on marque la ligne comme douteuse, au lieu de deviner en
+// silence (voir tvaRenderTable et le bandeau d'avertissement).
+function tvaLitMontant(val) {
     if (val === null || val === undefined || val === '') return null;
-    if (typeof val === 'number') return val;
-    let s = String(val).replace(/[\u00a0\u202f\u2009\s]/g, '').replace('€', '');
-    if (s.match(/^-?\d+\.\d{3},\d+$/)) s = s.replace('.', '').replace(',', '.');
-    else s = s.replace(',', '.');
-    const n = parseFloat(s);
-    return isNaN(n) ? null : n;
+    if (typeof val === 'number') return { valeur: val, douteux: false };
+    let s = String(val).replace(/[\u00a0\u202f\u2009\s]/g, '').replace(/€/g, '').trim();
+    if (!s) return null;
+    const signe = s.startsWith('-') ? -1 : 1;
+    s = s.replace(/^[+-]/, '');
+    if (!/^[\d.,]+$/.test(s)) return null;
+
+    const pt = s.lastIndexOf('.'), vg = s.lastIndexOf(',');
+    let entier = s, decimales = '', douteux = false;
+    if (pt >= 0 && vg >= 0) {
+        const i = Math.max(pt, vg);                 // le dernier est le décimal
+        entier = s.slice(0, i).replace(/[.,]/g, '');
+        decimales = s.slice(i + 1);
+    } else if (pt >= 0 || vg >= 0) {
+        const sep = pt >= 0 ? '.' : ',';
+        const morceaux = s.split(sep);
+        const queue = morceaux[morceaux.length - 1];
+        const milliers = morceaux.length > 2 ||
+            (sep === '.' && queue.length === 3 && /^\d{1,3}$/.test(morceaux[0]));
+        if (milliers) entier = morceaux.join('');
+        else { entier = morceaux.slice(0, -1).join(''); decimales = queue; }
+        douteux = morceaux.length === 2 && queue.length === 3;
+    }
+    const n = parseFloat(entier + (decimales ? '.' + decimales : ''));
+    return isFinite(n) ? { valeur: signe * n, douteux } : null;
+}
+
+function tvaParseAmount(val) {
+    const r = tvaLitMontant(val);
+    return r ? r.valeur : null;
 }
 
 async function tvaParseExcel(buffer, bankName) {
@@ -1354,12 +1426,14 @@ async function tvaParseExcel(buffer, bankName) {
         if (!r || r.every(c => c === null || c === '' || c === undefined)) continue;
         const label = String(r[colLabel] || '').replace(/\n/g, ' ').trim();
         if (!label) continue;
-        let debit = null, credit = null;
+        let debit = null, credit = null, douteux = false;
         if (colDebit >= 0 && colCredit >= 0) {
-            debit = tvaParseAmount(r[colDebit]); credit = tvaParseAmount(r[colCredit]);
+            const d = tvaLitMontant(r[colDebit]), c = tvaLitMontant(r[colCredit]);
+            debit = d ? d.valeur : null; credit = c ? c.valeur : null;
+            douteux = !!((d && d.douteux) || (c && c.douteux));
         } else if (colMontant >= 0) {
-            const m = tvaParseAmount(r[colMontant]);
-            if (m !== null) { if (m < 0) debit = Math.abs(m); else credit = m; }
+            const m = tvaLitMontant(r[colMontant]);
+            if (m !== null) { if (m.valeur < 0) debit = Math.abs(m.valeur); else credit = m.valeur; douteux = m.douteux; }
         }
         if (debit === null && credit === null) continue;
         const dateRaw = r[colDate];
@@ -1379,7 +1453,7 @@ async function tvaParseExcel(buffer, bankName) {
             date: dateStr, label, montant: isDebit ? debit : credit,
             type: isDebit ? 'achat' : (isRejet ? 'rejet' : 'vente'),
             taux: tvaDetectTaux(label, isDebit),
-            source: bankName, isRejet
+            source: bankName, isRejet, douteux
         });
     }
     return result;
@@ -1465,7 +1539,7 @@ function tvaRenderBanksList() {
     const el = $('tva-banks-list'); if (!el) return;
     el.innerHTML = tvaState.banks.map(b => {
         const count = tvaState.rows.filter(r => r.source === b).length;
-        return `<span class="tva-bank-tag">✓ ${mailEsc(b)} <span style="opacity:.7">(${count})</span> <span onclick="tvaRemoveBank(${jsArg(b)})" style="cursor:pointer; margin-left:4px; opacity:.6">×</span></span>`;
+        return `<span class="tva-bank-tag">✓ ${ech(b)} <span style="opacity:.7">(${count})</span> <span onclick="tvaRemoveBank(${jsArg(b)})" style="cursor:pointer; margin-left:4px; opacity:.6">×</span></span>`;
     }).join('');
 }
 
@@ -1518,6 +1592,17 @@ function tvaRenderTable() {
     const filtered = tvaFilteredRows();
     const tot = tvaCalcTotaux();
 
+    // Montants que le fichier écrit de façon ambiguë : on ne les corrige pas
+    // tout seul, on les montre. Un chiffre faux dans une CA3 ne se rattrape pas.
+    const doutes = tvaState.rows.filter(r => r.douteux).length;
+    const zoneDoute = $('tva-doute');
+    if (zoneDoute) {
+        zoneDoute.style.display = doutes ? 'block' : 'none';
+        zoneDoute.textContent = doutes
+            ? `⚠️ ${doutes} montant${doutes > 1 ? 's' : ''} ambigu${doutes > 1 ? 's' : ''} dans le fichier : un séparateur suivi de trois chiffres (« 1.234 » vaut 1 234 ou 1,234 selon la banque). Ces lignes sont marquées en jaune — vérifie-les avant de déclarer.`
+            : '';
+    }
+
     const rowsHtml = filtered.map((r, i) => {
         const t = parseFloat(r.taux) / 100;
         const ttc = r.montant || 0;
@@ -1531,13 +1616,13 @@ function tvaRenderTable() {
         const tc = r.taux === '0%' ? 'zero' : r.taux === '5.5%' ? 'low' : r.taux === '10%' ? 'mid' : 'high';
         const rid = r.id.replace(/'/g, "\\'");
         return `<tr style="border-bottom:1px solid var(--carte-2)">
-            <td style="padding:9px 12px;background:${bg};font-size:11px;opacity:.7;white-space:nowrap">${mailEsc(r.date)}</td>
+            <td style="padding:9px 12px;background:${bg};font-size:11px;opacity:.7;white-space:nowrap">${ech(r.date)}</td>
             <td style="padding:9px 12px;background:${bg};max-width:220px">
                 <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;color:${r.isRejet ? 'var(--lilac-ink)' : 'inherit'}" title="${r.label.replace(/"/g,'&quot;')}">
-                    ${r.isRejet ? '<span style="font-size:10px;margin-right:4px;opacity:.7">⊘</span>' : ''}${mailEsc(r.label)}
+                    ${r.isRejet ? '<span style="font-size:10px;margin-right:4px;opacity:.7">⊘</span>' : ''}${ech(r.label)}
                 </div>
             </td>
-            <td style="padding:9px 12px;background:${bg}"><span style="background:var(--carte-2);border-radius:6px;padding:2px 8px;font-size:11px;opacity:.7">${mailEsc(r.source)}</span></td>
+            <td style="padding:9px 12px;background:${bg}"><span style="background:var(--carte-2);border-radius:6px;padding:2px 8px;font-size:11px;opacity:.7">${ech(r.source)}</span></td>
             <td style="padding:9px 12px;background:${bg}">
                 <select onchange="tvaUpdate(${jsArg(rid)},'type',this.value)" style="background:${typeBg};color:${typeColor};border:1px solid ${typeBd};border-radius:20px;padding:3px 8px;font-size:12px;font-weight:600;cursor:pointer;outline:none;font-family:inherit">
                     <option value="vente"${r.type === 'vente' ? ' selected' : ''}>Vente</option>
@@ -1545,7 +1630,7 @@ function tvaRenderTable() {
                     <option value="rejet"${r.type === 'rejet' ? ' selected' : ''}>Rejet</option>
                 </select>
             </td>
-            <td style="padding:9px 12px;background:${bg};text-align:right;font-weight:600;white-space:nowrap">${tvaFmt(ttc)}</td>
+            <td style="padding:9px 12px;background:${bg};text-align:right;font-weight:600;white-space:nowrap${r.douteux ? ';color:var(--run)' : ''}"${r.douteux ? ' title="Montant ambigu dans le fichier : un séparateur suivi de trois chiffres. Vérifie-le."' : ''}>${r.douteux ? '⚠️ ' : ''}${tvaFmt(ttc)}</td>
             <td style="padding:9px 12px;background:${bg};text-align:center">
                 <select class="tva-sel tva-taux-${tc}" onchange="tvaUpdate(${jsArg(rid)},'taux',this.value)">
                     ${TAUX.map(tx => `<option${tx === r.taux ? ' selected' : ''}>${tx}</option>`).join('')}
@@ -1665,7 +1750,7 @@ function histMonthKey(dateStr) {
     return p.length === 3 ? `${p[2]}-${p[1]}` : null;
 }
 
-const comptaState = { filtered: [], mailInvoices: [] };
+const comptaState = { filtered: [] };
 
 // Comptabilité : filtre par période (les champs "Période" existaient déjà côté
 // UI mais n'étaient jusqu'ici jamais utilisés dans le calcul) + fait remonter
@@ -1691,35 +1776,6 @@ async function calcCompta() {
         tvaCol += m.tva;
     });
 
-    let depensesHtml = '';
-    comptaState.mailInvoices = [];
-    try {
-        const invoices = await MailSupa.listInvoices();
-        const filteredMail = invoices.filter(i => {
-            if (entFilter && entFilter !== 'Toutes' && (i.entity || '') !== entFilter) return false;
-            if (!i.invoice_date) return !debut && !fin;
-            const mk = i.invoice_date.slice(0, 7);
-            if (debut && mk < debut) return false;
-            if (fin && mk > fin) return false;
-            return true;
-        });
-        comptaState.mailInvoices = filteredMail;
-        if (filteredMail.length) {
-            const totalDepenses = filteredMail.reduce((s, i) => s + (i.amount || 0), 0);
-            depensesHtml = `
-                <div class="section-title" style="margin-top:24px">📥 Dépenses détectées par mail (${filteredMail.length})</div>
-                ${filteredMail.map(i => `
-                    <div class="card" style="gap:10px; align-items:center">
-                        <div style="flex:1; min-width:0">
-                            <b>${mailEsc(i.vendor || 'Fournisseur inconnu')}</b>
-                            <div style="font-size:12px; opacity:.6">${mailEsc(i.invoice_date || '—')} · ${mailEsc(i.entity || '—')} · ${i.status === 'valide' ? '✅ vérifiée' : '⏳ à vérifier'}</div>
-                        </div>
-                        <b>${i.amount != null ? eur(i.amount) : '—'}</b>
-                        ${i.status !== 'valide' ? `<button class="btn" style="width:auto; padding:6px 12px; font-size:11px; background:var(--carte-2)" onclick="comptaValiderDepense('${(i.gmail_message_id||'').replace(/'/g,"\\'")}')">✅ Vérifier</button>` : ''}
-                    </div>`).join('')}
-                <div class="card" style="background:var(--bg-elev-2)"><span style="font-weight:700">Total dépenses (période)</span><b style="color:var(--danger)">${eur(totalDepenses)}</b></div>`;
-        }
-    } catch (e) { /* passerelle mail indisponible (pas encore configurée) : on ignore silencieusement */ }
 
     $('compta-stats').innerHTML = `
         <div class="card" style="flex-direction:column; align-items:center; gap:6px">
@@ -1733,62 +1789,49 @@ async function calcCompta() {
     $('compta-result').innerHTML = `
         <div class="section-title" style="margin-top:10px">Factures (${filtered.length})</div>
         ${filtered.slice().reverse().map(h => `
-            <div class="card"><b>${mailEsc(h.num)}</b> — ${mailEsc(h.cli)}<b style="float:right">${mailEsc(h.total)}</b></div>
+            <div class="card"><b>${ech(h.num)}</b> — ${ech(h.cli)}<b style="float:right">${ech(h.total)}</b></div>
         `).join('') || '<div style="color:var(--text-muted); text-align:center">Aucune facture sur cette période</div>'}
-        ${depensesHtml}
         ${comptaTresoHtml(filtered)}
         ${comptaStatsHtml(filtered)}`;
 }
 
-// --- TRÉSORERIE (entrées encaissées vs dépenses, mois par mois) ---
-// Entrées = factures MARQUÉES PAYÉES (comptées à leur date de facture, la date
-// d'encaissement exacte n'étant pas saisie) ; sorties = dépenses détectées par
-// le module Mail. Vue de pilotage, pas un relevé bancaire.
+// --- ENCAISSEMENTS (mois par mois) ---
+// Factures MARQUÉES PAYÉES, comptées à leur date de facture : la date
+// d'encaissement exacte n'est pas saisie. Les dépenses venaient du module Mail,
+// retiré — il n'y a donc plus de colonne « dépensé » ni de solde.
 function comptaTresoHtml(filtered) {
-    const entrees = {}, sorties = {};
+    const entrees = {};
     filtered.filter(h => h.statut === 'payee').forEach(h => {
         const mk = histMonthKey(h.date);
         if (!mk) return;
         entrees[mk] = (entrees[mk] || 0) + histMontants(h).ttc;
     });
-    (comptaState.mailInvoices || []).forEach(i => {
-        if (!i.invoice_date || i.amount == null) return;
-        const mk = i.invoice_date.slice(0, 7);
-        sorties[mk] = (sorties[mk] || 0) + i.amount;
-    });
-    const mois = [...new Set([...Object.keys(entrees), ...Object.keys(sorties)])].sort();
+    const mois = Object.keys(entrees).sort();
     if (!mois.length) return '';
-    let totalIn = 0, totalOut = 0;
+    let total = 0;
     const lignes = mois.map(mk => {
         const [y, m] = mk.split('-');
-        const ein = entrees[mk] || 0, out = sorties[mk] || 0, net = ein - out;
-        totalIn += ein; totalOut += out;
+        const ein = entrees[mk];
+        total += ein;
         return `
         <div style="display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px dashed var(--border); font-size:13px">
             <b style="flex:0 0 70px">${m}/${y}</b>
             <span style="flex:1; text-align:right; color:var(--sage)">+ ${eur(ein)}</span>
-            <span style="flex:1; text-align:right; color:var(--danger)">− ${eur(out)}</span>
-            <b style="flex:1; text-align:right; color:${net >= 0 ? 'var(--sage)' : 'var(--danger)'}">${net >= 0 ? '+' : '−'} ${eur(Math.abs(net))}</b>
         </div>`;
     }).join('');
-    const net = totalIn - totalOut;
     return `
-        <div class="section-title" style="margin-top:28px">💶 Trésorerie (encaissé vs dépensé)</div>
+        <div class="section-title" style="margin-top:28px">💶 Encaissements par mois</div>
         <div class="card" style="flex-direction:column; align-items:stretch">
             <div style="display:flex; gap:10px; font-size:11px; color:var(--text-muted); text-transform:uppercase; padding-bottom:6px">
                 <span style="flex:0 0 70px">Mois</span>
-                <span style="flex:1; text-align:right">Encaissé</span>
-                <span style="flex:1; text-align:right">Dépensé</span>
-                <span style="flex:1; text-align:right">Solde</span>
+                <span style="flex:1; text-align:right">Encaissé TTC</span>
             </div>
             ${lignes}
             <div style="display:flex; align-items:center; gap:10px; padding-top:10px; font-size:14px">
                 <b style="flex:0 0 70px">Total</b>
-                <b style="flex:1; text-align:right; color:var(--sage)">+ ${eur(totalIn)}</b>
-                <b style="flex:1; text-align:right; color:var(--danger)">− ${eur(totalOut)}</b>
-                <b style="flex:1; text-align:right; font-size:16px; color:${net >= 0 ? 'var(--sage)' : 'var(--danger)'}">${net >= 0 ? '+' : '−'} ${eur(Math.abs(net))}</b>
+                <b style="flex:1; text-align:right; font-size:16px; color:var(--sage)">+ ${eur(total)}</b>
             </div>
-            <div style="font-size:11px; opacity:.5; margin-top:8px">Entrées = factures marquées payées (à leur date de facture) · Sorties = dépenses détectées par mail</div>
+            <div style="font-size:11px; opacity:.5; margin-top:8px">Factures marquées payées, comptées à leur date de facture.</div>
         </div>`;
 }
 
@@ -1804,7 +1847,7 @@ function comptaBarList(entries, color) {
     const max = Math.max(...entries.map(e => e[1]), 1);
     return entries.map(([label, val]) => `
         <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px">
-            <span style="flex:0 0 110px; font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap" title="${mailEsc(label)}">${mailEsc(label)}</span>
+            <span style="flex:0 0 110px; font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap" title="${ech(label)}">${ech(label)}</span>
             <div style="flex:1; height:18px; background:var(--carte-2); border-radius:4px; overflow:hidden">
                 <div style="width:${(val / max * 100).toFixed(1)}%; height:100%; background:${color}; border-radius:4px"></div>
             </div>
@@ -1838,23 +1881,10 @@ function comptaStatsHtml(filtered) {
         <div class="card" style="flex-direction:column; align-items:stretch">${comptaBarList(topClients, 'var(--ambre)')}</div>`;
 }
 
-async function comptaValiderDepense(gmailMessageId) {
-    try {
-        const res = await fetch(`${SUPA_URL}/rest/v1/mail_invoices?gmail_message_id=eq.${encodeURIComponent(gmailMessageId)}`, {
-            method: 'PATCH', headers: Supa._h, body: JSON.stringify({ status: 'valide' })
-        });
-        if (!res.ok) throw new Error('échec de la mise à jour');
-        toast('✅ Dépense marquée comme vérifiée.', 'success');
-        calcCompta();
-    } catch (e) {
-        toast('❌ Impossible de mettre à jour cette dépense.', 'error');
-    }
-}
-
 async function comptaExport() {
     try { await chargerXLSX(); } catch (e) { return toast("📊 Outil Excel indisponible : vérifie ta connexion, puis réessaie.", 'error'); }
     if (!window.XLSX) return toast('SheetJS non chargé', 'error');
-    if (!comptaState.filtered.length && !comptaState.mailInvoices.length) return toast('Aucune donnée à exporter pour cette période (clique d\'abord sur "Voir le bilan").', 'error');
+    if (!comptaState.filtered.length) return toast('Aucune donnée à exporter pour cette période (clique d\'abord sur "Voir le bilan").', 'error');
 
     const wb = XLSX.utils.book_new();
 
@@ -1869,25 +1899,13 @@ async function comptaExport() {
         const m = histMontants(h);
         ca += m.ht; tvaCol += m.tva;
     });
-    const totalDepenses = comptaState.mailInvoices.reduce((s, i) => s + (i.amount || 0), 0);
     const ws2 = XLSX.utils.aoa_to_sheet([
         ['RÉCAPITULATIF', ''], ['', ''],
         ["Chiffre d'affaires HT", parseFloat(ca.toFixed(2))],
         ['TVA collectée', parseFloat(tvaCol.toFixed(2))],
-        ['Dépenses détectées (mail)', parseFloat(totalDepenses.toFixed(2))],
-        ['', ''],
-        ['Solde net (CA HT − dépenses)', parseFloat((ca - totalDepenses).toFixed(2))],
     ]);
     ws2['!cols'] = [{ wch: 32 }, { wch: 16 }];
     XLSX.utils.book_append_sheet(wb, ws2, 'Récapitulatif');
-
-    if (comptaState.mailInvoices.length) {
-        const headers3 = ['Date', 'Entité', 'Fournisseur', 'Montant', 'Catégorie', 'Statut'];
-        const rows3 = comptaState.mailInvoices.map(i => [i.invoice_date || '', i.entity || '', i.vendor || '', i.amount ?? '', i.category || '', i.status || '']);
-        const ws3 = XLSX.utils.aoa_to_sheet([headers3, ...rows3]);
-        ws3['!cols'] = [{ wch: 12 }, { wch: 20 }, { wch: 26 }, { wch: 12 }, { wch: 18 }, { wch: 12 }];
-        XLSX.utils.book_append_sheet(wb, ws3, 'Dépenses (Mail)');
-    }
 
     XLSX.writeFile(wb, 'Compta_' + new Date().toLocaleDateString('fr-FR').replace(/\//g, '-') + '.xlsx');
 }
@@ -1932,7 +1950,6 @@ document.addEventListener('keydown', e => {
 // Initialisation
 $('f-date').value = new Date().toLocaleDateString('fr-FR');
 showPage('home');
-Supa.pullAll();
 appliquerAccessibilite();
 
 // « Suis-je à jour ? » — date de publication du fichier réellement chargé
@@ -1946,740 +1963,3 @@ try {
             lm.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
     }
 } catch (e) {}
-
-// --- MAIL INTEGRATION ---
-//
-// SETUP GOOGLE CLOUD (à faire une seule fois, manuellement, avant utilisation) :
-//   1. Créer un projet sur https://console.cloud.google.com
-//   2. Activer l'API Gmail (API et services > Bibliothèque > "Gmail API")
-//   3. Créer des identifiants OAuth : "Créer des identifiants" > "ID client OAuth" > type "Application Web"
-//      Origine JavaScript autorisée : https://teiki5320.github.io
-//   4. Scopes nécessaires : gmail.readonly, gmail.modify, gmail.compose
-//   5. Laisser l'app en mode "Test" (comptes personnels autorisés) — aucune validation Google requise
-//   6. Copier le Client ID obtenu et le coller ci-dessous à la place de GMAIL_CLIENT_ID
-//
-// SETUP SUPABASE (à exécuter une seule fois, manuellement, dans l'éditeur SQL Supabase) :
-//
-//   create table mail_invoices (
-//     id uuid primary key default gen_random_uuid(),
-//     created_at timestamptz default now(),
-//     gmail_message_id text unique,
-//     entity text,
-//     vendor text,
-//     amount numeric,
-//     currency text default 'EUR',
-//     invoice_date date,
-//     category text,
-//     status text default 'a_verifier',
-//     raw_extract jsonb
-//   );
-//
-//   create table mail_state (
-//     gmail_message_id text primary key,
-//     category text,
-//     processed_at timestamptz default now(),
-//     draft_created boolean default false
-//   );
-//
-// Aucune clé n'est en dur dans ce fichier : le Client ID Gmail ci-dessous est un identifiant
-// public (pas un secret), le jeton OAuth reste en mémoire (+ sessionStorage pour survivre à un
-// rafraîchissement de page), et la clé API Claude est saisie par l'utilisateur dans l'onglet
-// Connexion puis stockée en localStorage, exactement comme le reste de la configuration de l'app.
-//
-// Limite connue : l'extraction de factures lit le corps texte des mails mais ne fait pas d'OCR/
-// parsing des pièces jointes PDF (aucune lib PDF n'est chargée) — les noms de pièces jointes sont
-// transmis à Claude comme contexte, mais leur contenu doit être vérifié manuellement.
-
-const GMAIL_CLIENT_ID = 'GMAIL_CLIENT_ID'; // <-- remplacer par le Client ID OAuth Google Cloud
-const GMAIL_SCOPES = 'https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/gmail.compose';
-const GMAIL_API = 'https://gmail.googleapis.com/gmail/v1/users/me';
-const MAIL_CLAUDE_MODEL = 'claude-sonnet-5'; // Modèle Claude utilisé pour le tri / résumé / extraction
-
-const DEFAULT_MAIL_CATEGORIES = [
-    { id: 'cat-scea',    nom: 'SCEA Terres et Vie', label: 'SCEA Terres et Vie', draft: false, prompt: '' },
-    { id: 'cat-matevie', nom: 'SARL Matevie',       label: 'SARL Matevie',       draft: false, prompt: '' },
-    { id: 'cat-aloha',   nom: 'ALOHASH',            label: 'ALOHASH',            draft: false, prompt: '' },
-    { id: 'cat-perso',   nom: 'Personnel',          label: 'Personnel',          draft: false, prompt: '' },
-    { id: 'cat-fact',    nom: 'Factures / Compta',  label: 'Factures-Compta',    draft: false, prompt: '' },
-    { id: 'cat-urgent',  nom: 'Urgent',             label: 'Urgent',             draft: true,  prompt: "Réponds brièvement pour accuser réception et indiquer qu'un retour complet suivra rapidement." },
-    { id: 'cat-spam',    nom: 'Spam / Promo',       label: 'Spam-Promo',         draft: false, prompt: '' },
-    { id: 'cat-autre',   nom: 'Autre',              label: 'Autre',              draft: false, prompt: '' }
-];
-
-const mailState = {
-    token: null, tokenExpiry: 0, email: null, tokenClient: null,
-    resume: [], triage: [], draftsGenerated: [], invoices: [],
-    busy: { resume: false, tri: false, drafts: false, extraction: false }
-};
-
-// --- Init / persistance des catégories ---
-function initMailCategories() {
-    let stored = G.get('v90_mail_categories');
-    db.mailCategories = stored.length ? stored : DEFAULT_MAIL_CATEGORIES.slice();
-    if (!stored.length) G.set('v90_mail_categories', db.mailCategories);
-    renderMailConnexion();
-}
-
-// --- Helpers génériques ---
-function mailEsc(s) {
-    return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-}
-
-function mailSetStatus(elId, msg, kind = 'info') {
-    const el = $(elId); if (!el) return;
-    const colors = { info: 'var(--text-muted)', error: 'var(--danger)', success: '#4ADE80', loading: 'var(--accent)' };
-    el.style.color = colors[kind] || colors.info;
-    el.innerText = msg;
-}
-
-function mailIsReady() { return !!mailState.token && !!getMailClaudeKey(); }
-
-function mailGuard(tabName) {
-    if (mailIsReady()) return true;
-    mailSetStatus(`mail-${tabName}-status`, "⚠️ Connecte Gmail et renseigne ta clé API Claude dans l'onglet Connexion avant d'utiliser cette fonction.", 'error');
-    return false;
-}
-
-function mailParseJson(text) {
-    try {
-        const match = text.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
-        return JSON.parse(match ? match[0] : text);
-    } catch (e) { return null; }
-}
-
-// --- Clé API Claude (stockée localement, jamais commitée) ---
-function getMailClaudeKey() { return localStorage.getItem('v90_claude_key') || ''; }
-
-function saveMailClaudeKey() {
-    let v = $('mail-claude-key').value.trim();
-    if (!v) return toast('Merci de renseigner une clé.', 'error');
-    localStorage.setItem('v90_claude_key', v);
-    $('mail-claude-key').value = '';
-    renderMailConnexion();
-    toast('✅ Clé API Claude sauvegardée.', 'success');
-}
-
-function clearMailClaudeKey() {
-    if (!confirm('Supprimer la clé API Claude ?')) return;
-    localStorage.removeItem('v90_claude_key');
-    renderMailConnexion();
-}
-
-// --- OAuth Gmail (Google Identity Services) ---
-// Chargé seulement quand on connecte Gmail : dans l'en-tête, ce script tiers
-// prenait deux à trois secondes de réseau à chaque ouverture de l'app, y
-// compris pour quelqu'un qui n'utilise jamais le module Mail.
-let _gsiEnCours = null;
-function chargerGSI() {
-    if (window.google && google.accounts && google.accounts.oauth2) return Promise.resolve();
-    if (_gsiEnCours) return _gsiEnCours;
-    _gsiEnCours = new Promise((resoudre, rejeter) => {
-        const b = document.createElement('script');
-        b.src = 'https://accounts.google.com/gsi/client';
-        b.async = true;
-        b.onload = () => resoudre();
-        b.onerror = () => { _gsiEnCours = null; rejeter(new Error('Google Identity indisponible')); };
-        document.head.appendChild(b);
-    });
-    return _gsiEnCours;
-}
-
-function mailInitTokenClient() {
-    if (!window.google || !google.accounts || !google.accounts.oauth2) return null;
-    if (mailState.tokenClient) return mailState.tokenClient;
-    mailState.tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: GMAIL_CLIENT_ID,
-        scope: GMAIL_SCOPES,
-        callback: (resp) => {
-            if (resp.error) { mailSetStatus('mail-gmail-status', "Connexion Gmail refusée : " + resp.error, 'error'); return; }
-            mailState.token = resp.access_token;
-            mailState.tokenExpiry = Date.now() + (resp.expires_in * 1000);
-            sessionStorage.setItem('v90_gmail_token', JSON.stringify({ token: mailState.token, expiry: mailState.tokenExpiry }));
-            mailFetchProfile();
-        }
-    });
-    return mailState.tokenClient;
-}
-
-async function mailConnectGmail() {
-    if (GMAIL_CLIENT_ID === 'GMAIL_CLIENT_ID') {
-        toast("⚠️ Configuration requise : remplace GMAIL_CLIENT_ID dans script.js par ton Client ID Google Cloud (voir le commentaire en tête de la section Mail).", 'warn');
-        return;
-    }
-    try { await chargerGSI(); }
-    catch (e) { toast("Connexion à Google impossible : vérifie ta connexion internet, puis réessaie.", 'error'); return; }
-    const client = mailInitTokenClient();
-    if (!client) { toast("Connexion à Google impossible pour le moment. Réessaie dans un instant.", 'error'); return; }
-    client.requestAccessToken({ prompt: mailState.token ? '' : 'consent' });
-}
-
-function mailDisconnectGmail() {
-    if (mailState.token && window.google?.accounts?.oauth2) {
-        google.accounts.oauth2.revoke(mailState.token, () => {});
-    }
-    mailState.token = null; mailState.email = null;
-    sessionStorage.removeItem('v90_gmail_token');
-    renderMailConnexion();
-}
-
-function mailRestoreSession() {
-    try {
-        const raw = sessionStorage.getItem('v90_gmail_token');
-        if (!raw) return;
-        const { token, expiry } = JSON.parse(raw);
-        if (token && expiry > Date.now()) {
-            mailState.token = token; mailState.tokenExpiry = expiry;
-            mailFetchProfile();
-        } else {
-            sessionStorage.removeItem('v90_gmail_token');
-        }
-    } catch (e) {}
-}
-
-async function mailFetchProfile() {
-    try {
-        const res = await mailGmailFetch(`${GMAIL_API}/profile`);
-        mailState.email = res.emailAddress;
-    } catch (e) {
-        mailState.email = null;
-        console.error('Mail: impossible de récupérer le profil Gmail', e);
-    }
-    renderMailConnexion();
-}
-
-async function mailGmailFetch(url, opts = {}) {
-    if (!mailState.token) throw new Error("Gmail non connecté");
-    const res = await fetch(url, { ...opts, headers: { ...(opts.headers || {}), 'Authorization': `Bearer ${mailState.token}` } });
-    if (res.status === 401) {
-        mailState.token = null;
-        sessionStorage.removeItem('v90_gmail_token');
-        throw new Error("Session Gmail expirée, merci de te reconnecter.");
-    }
-    if (!res.ok) {
-        const txt = await res.text().catch(() => '');
-        throw new Error(`Erreur Gmail API (${res.status}) : ${txt.slice(0, 200)}`);
-    }
-    return res.status === 204 ? null : res.json();
-}
-
-// --- Appel Claude API (direct navigateur) ---
-async function mailClaudeCall(system, userContent, maxTokens = 2000) {
-    const key = getMailClaudeKey();
-    if (!key) throw new Error("Clé API Claude manquante (onglet Connexion).");
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': key,
-            'anthropic-version': '2023-06-01',
-            'anthropic-dangerous-direct-browser-access': 'true'
-        },
-        body: JSON.stringify({ model: MAIL_CLAUDE_MODEL, max_tokens: maxTokens, system, messages: [{ role: 'user', content: userContent }] })
-    });
-    if (!res.ok) {
-        const txt = await res.text().catch(() => '');
-        throw new Error(`Erreur Claude API (${res.status}) : ${txt.slice(0, 300)}`);
-    }
-    const data = await res.json();
-    return (data.content || []).map(b => b.text || '').join('');
-}
-
-// --- Décodage MIME / extraction du corps des mails ---
-function mailB64UrlDecode(str) {
-    try {
-        let s = str.replace(/-/g, '+').replace(/_/g, '/');
-        while (s.length % 4) s += '=';
-        return decodeURIComponent(escape(atob(s)));
-    } catch (e) { return ''; }
-}
-
-function mailExtractBody(payload) {
-    if (!payload) return { text: '', attachments: [] };
-    let text = '', attachments = [];
-    function walk(part) {
-        if (!part) return;
-        if (part.filename) attachments.push(part.filename);
-        if (part.body && part.body.data && part.mimeType === 'text/plain' && !text) {
-            text += mailB64UrlDecode(part.body.data);
-        } else if (part.body && part.body.data && part.mimeType === 'text/html' && !text) {
-            text += mailB64UrlDecode(part.body.data).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
-        }
-        (part.parts || []).forEach(walk);
-    }
-    walk(payload);
-    return { text: text.slice(0, 4000), attachments };
-}
-
-function mailHeader(headers, name) {
-    const h = (headers || []).find(x => x.name.toLowerCase() === name.toLowerCase());
-    return h ? h.value : '';
-}
-
-function mailBuildMime(to, subject, body) {
-    const mime = `To: ${to}\r\nSubject: ${mailMimeEncodeSubject(subject)}\r\nContent-Type: text/plain; charset="UTF-8"\r\n\r\n${body}`;
-    return btoa(unescape(encodeURIComponent(mime))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-}
-function mailMimeEncodeSubject(s) { return '=?UTF-8?B?' + btoa(unescape(encodeURIComponent(s))) + '?='; }
-
-async function mailFetchMessagesMeta(ids) {
-    const out = [];
-    for (const id of ids) {
-        try {
-            const m = await mailGmailFetch(`${GMAIL_API}/messages/${id}?format=metadata&metadataHeaders=From&metadataHeaders=Subject&metadataHeaders=Date`);
-            out.push({
-                id: m.id, threadId: m.threadId,
-                from: mailHeader(m.payload?.headers, 'From'),
-                subject: mailHeader(m.payload?.headers, 'Subject'),
-                date: mailHeader(m.payload?.headers, 'Date'),
-                snippet: m.snippet || '', labelIds: m.labelIds || []
-            });
-        } catch (e) { /* mail inaccessible, on l'ignore et on continue le lot */ }
-    }
-    return out;
-}
-
-async function mailEnsureLabels() {
-    const existing = await mailGmailFetch(`${GMAIL_API}/labels`);
-    const map = {};
-    (existing?.labels || []).forEach(l => { map[l.name] = l.id; });
-    for (const cat of db.mailCategories) {
-        const name = cat.label || cat.nom;
-        if (!map[name]) {
-            try {
-                const created = await mailGmailFetch(`${GMAIL_API}/labels`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, labelListVisibility: 'labelShow', messageListVisibility: 'show' })
-                });
-                if (created?.id) map[name] = created.id;
-            } catch (e) { /* création du label impossible, cette catégorie ne sera pas labellisée */ }
-        }
-    }
-    return map;
-}
-
-// --- Rendu onglet Connexion ---
-function renderMailConnexion() {
-    const statusEl = $('mail-gmail-status'), actionsEl = $('mail-gmail-actions');
-    if (statusEl) {
-        statusEl.innerHTML = mailState.token
-            ? `<div style="display:flex;align-items:center;gap:10px"><span style="font-size:20px">✅</span><div><b>${mailEsc(mailState.email || 'Connecté')}</b><br><small style="color:var(--text-muted)">Compte Gmail actif</small></div></div>`
-            : `<div style="display:flex;align-items:center;gap:10px"><span style="font-size:20px">⚪</span><div><b>Non connecté</b><br><small style="color:var(--text-muted)">Connecte ton compte Gmail pour activer le tri, le résumé et l'extraction</small></div></div>`;
-    }
-    if (actionsEl) {
-        actionsEl.innerHTML = mailState.token
-            ? `<button class="btn btn-red" onclick="mailDisconnectGmail()">DÉCONNECTER</button>`
-            : `<button class="btn btn-gold" onclick="mailConnectGmail()">CONNECTER GMAIL</button>`;
-    }
-    const keyEl = $('mail-claude-status');
-    if (keyEl) {
-        keyEl.innerHTML = getMailClaudeKey()
-            ? `<span style="color:#4ADE80">✅ Clé API enregistrée</span> — <a href="#" onclick="clearMailClaudeKey();return false" style="color:var(--danger)">supprimer</a>`
-            : `<span style="color:var(--text-muted)">Aucune clé enregistrée</span>`;
-    }
-    renderMailCatList();
-    mailApplyLockState();
-}
-
-function mailApplyLockState() {
-    const ready = mailIsReady();
-    ['resume', 'tri', 'brouillons', 'extraction'].forEach(k => {
-        const tab = $('tab-mail-' + k);
-        if (tab) { tab.style.opacity = ready ? '1' : '0.4'; tab.style.pointerEvents = ready ? 'auto' : 'none'; }
-    });
-}
-
-function renderMailCatList() {
-    const el = $('mail-cat-list'); if (!el || !db.mailCategories) return;
-    el.innerHTML = db.mailCategories.map(c => `
-        <div class="card" style="gap:8px; align-items:center">
-            <div style="flex:1">
-                <b>${mailEsc(c.nom)}</b>
-                ${c.draft ? '<span class="mini-tag" style="margin-left:8px">✍️ Brouillon auto</span>' : ''}
-            </div>
-            <span style="cursor:pointer" onclick="openMailCatModal('${c.id}')">✏️</span>
-            <span style="cursor:pointer; color:var(--danger)" onclick="deleteMailCat('${c.id}')">🗑️</span>
-        </div>`).join('');
-}
-
-function openMailCatModal(id = null) {
-    if (id) {
-        let c = db.mailCategories.find(x => x.id === id);
-        $('mcat-title').innerText = "Modifier Catégorie"; $('mcat-id').value = c.id;
-        $('mcat-nom').value = c.nom; $('mcat-label').value = c.label || '';
-        $('mcat-draft').value = c.draft ? '1' : '0'; $('mcat-prompt').value = c.prompt || '';
-    } else {
-        $('mcat-title').innerText = "Nouvelle Catégorie"; $('mcat-id').value = '';
-        $('mcat-nom').value = ''; $('mcat-label').value = ''; $('mcat-draft').value = '0'; $('mcat-prompt').value = '';
-    }
-    mailToggleCatPromptField();
-    openModal('mod-mail-cat');
-}
-
-function mailToggleCatPromptField() {
-    $('mcat-prompt-field').style.display = $('mcat-draft').value === '1' ? 'block' : 'none';
-}
-
-function saveMailCat() {
-    let nom = $('mcat-nom').value.trim();
-    if (!nom) return toast("Le nom est obligatoire.", 'error');
-    let id = $('mcat-id').value || ('cat-' + Date.now());
-    let o = {
-        id, nom,
-        label: ($('mcat-label').value.trim() || nom).replace(/\//g, '-'),
-        draft: $('mcat-draft').value === '1',
-        prompt: $('mcat-prompt').value
-    };
-    db.mailCategories = db.mailCategories.filter(c => c.id !== id);
-    db.mailCategories.push(o);
-    G.set('v90_mail_categories', db.mailCategories);
-    closeModals();
-    renderMailCatList();
-}
-
-function deleteMailCat(id) {
-    if (!confirm("Supprimer cette catégorie ?")) return;
-    db.mailCategories = db.mailCategories.filter(c => c.id !== id);
-    G.set('v90_mail_categories', db.mailCategories);
-    renderMailCatList();
-}
-
-// --- Navigation sous-onglets Mail ---
-function toggleMailTab(t) {
-    ['connexion', 'resume', 'tri', 'brouillons', 'extraction'].forEach(k => {
-        $('tab-mail-' + k).classList.toggle('active', k === t);
-        $('view-mail-' + k).style.display = k === t ? 'block' : 'none';
-    });
-    if (t === 'connexion') renderMailConnexion();
-    if (t === 'resume') renderMailResumeList();
-    if (t === 'tri') renderMailTriList();
-    if (t === 'brouillons') renderMailDraftsList();
-    if (t === 'extraction') renderMailInvoicesTable();
-}
-
-// --- Persistance Supabase dédiée (tables mail_state / mail_invoices) ---
-const MailSupa = {
-    async listStates() {
-        try {
-            const res = await fetch(`${SUPA_URL}/rest/v1/mail_state?select=*`, { headers: Supa._h });
-            if (!res.ok) return [];
-            return await res.json();
-        } catch (e) { return []; }
-    },
-    async upsertState(row) {
-        try {
-            await fetch(`${SUPA_URL}/rest/v1/mail_state?on_conflict=gmail_message_id`, { method: 'POST', headers: Supa._h, body: JSON.stringify(row) });
-        } catch (e) {}
-    },
-    async listInvoices() {
-        try {
-            const res = await fetch(`${SUPA_URL}/rest/v1/mail_invoices?select=*&order=invoice_date.desc`, { headers: Supa._h });
-            if (!res.ok) return [];
-            return await res.json();
-        } catch (e) { return []; }
-    },
-    async upsertInvoice(row) {
-        try {
-            await fetch(`${SUPA_URL}/rest/v1/mail_invoices?on_conflict=gmail_message_id`, { method: 'POST', headers: Supa._h, body: JSON.stringify(row) });
-        } catch (e) {}
-    }
-};
-
-// --- Onglet Résumé ---
-async function mailGenerateSummary() {
-    if (!mailGuard('resume')) return;
-    mailState.busy.resume = true;
-    mailSetStatus('mail-resume-status', "⏳ Récupération des mails des dernières 24h...", 'loading');
-    try {
-        const listRes = await mailGmailFetch(`${GMAIL_API}/messages?q=${encodeURIComponent('newer_than:1d')}&maxResults=30`);
-        const ids = (listRes?.messages || []).map(m => m.id);
-        if (!ids.length) { mailSetStatus('mail-resume-status', "Aucun mail reçu dans les dernières 24h.", 'info'); return; }
-        mailSetStatus('mail-resume-status', `⏳ Analyse de ${ids.length} mail(s)...`, 'loading');
-        const meta = await mailFetchMessagesMeta(ids);
-        const catNames = db.mailCategories.map(c => c.nom).join(', ');
-        const prompt = `Voici une liste de mails reçus dans les dernières 24h, au format JSON. Pour CHAQUE mail (même index), retourne un objet avec : "resume" (une phrase courte en français résumant le contenu), "categorie" (choisie strictement parmi : ${catNames}). Réponds UNIQUEMENT avec un tableau JSON de même longueur et même ordre que la liste fournie, sans texte autour.\n\nMails :\n${JSON.stringify(meta.map(m => ({ from: m.from, subject: m.subject, snippet: m.snippet })))}`;
-        const raw = await mailClaudeCall("Tu es un assistant de tri de boîte mail professionnelle. Réponds uniquement en JSON valide, sans markdown.", prompt, 3000);
-        const parsed = mailParseJson(raw) || [];
-        mailState.resume = meta.map((m, i) => ({ ...m, resume: parsed[i]?.resume || m.snippet, categorie: parsed[i]?.categorie || 'Autre' }));
-        renderMailResumeList();
-        mailSetStatus('mail-resume-status', `✅ ${meta.length} mail(s) analysé(s)${meta.length < ids.length ? ` (${ids.length - meta.length} inaccessible(s))` : ''}.`, 'success');
-    } catch (e) {
-        mailSetStatus('mail-resume-status', "❌ " + e.message, 'error');
-    } finally {
-        mailState.busy.resume = false;
-    }
-}
-
-function renderMailResumeList() {
-    const el = $('mail-resume-list'); if (!el) return;
-    el.innerHTML = mailState.resume.map(m => `
-        <div class="card" style="flex-direction:column; align-items:stretch; gap:6px">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px">
-                <div>
-                    <b>${mailEsc(m.subject || '(sans objet)')}</b><br>
-                    <small style="color:var(--text-muted)">${mailEsc(m.from)}</small>
-                </div>
-                <span class="mini-tag">${mailEsc(m.categorie)}</span>
-            </div>
-            <div style="font-size:14px; color:var(--text-main); opacity:.85">${mailEsc(m.resume)}</div>
-            <a href="https://mail.google.com/mail/u/0/#inbox/${m.threadId}" target="_blank" rel="noopener" style="font-size:12px; color:var(--accent)">Ouvrir dans Gmail →</a>
-        </div>`).join('') || '<div style="text-align:center; padding:30px; opacity:.5">Aucun résumé pour cette session. Clique sur "Générer le résumé du jour".</div>';
-}
-
-// --- Onglet Tri ---
-async function mailScanInbox() {
-    if (!mailGuard('tri')) return;
-    mailState.busy.tri = true;
-    mailSetStatus('mail-tri-status', "⏳ Recherche des mails non traités...", 'loading');
-    try {
-        const states = await MailSupa.listStates();
-        const processedIds = new Set(states.map(s => s.gmail_message_id));
-        const listRes = await mailGmailFetch(`${GMAIL_API}/messages?q=${encodeURIComponent('in:inbox newer_than:14d')}&maxResults=40`);
-        const allIds = (listRes?.messages || []).map(m => m.id);
-        const newIds = allIds.filter(id => !processedIds.has(id));
-        if (!newIds.length) { mailSetStatus('mail-tri-status', "Aucun nouveau mail à trier.", 'info'); return; }
-        mailSetStatus('mail-tri-status', `⏳ Classement de ${newIds.length} mail(s)...`, 'loading');
-        const meta = await mailFetchMessagesMeta(newIds);
-        const labelMap = await mailEnsureLabels();
-        const catNames = db.mailCategories.map(c => c.nom).join(', ');
-        const prompt = `Classe chacun des mails suivants dans UNE seule catégorie parmi : ${catNames}. Réponds UNIQUEMENT avec un tableau JSON (même ordre que la liste) d'objets {"categorie": "..."}, sans texte autour.\n\nMails :\n${JSON.stringify(meta.map(m => ({ from: m.from, subject: m.subject, snippet: m.snippet })))}`;
-        const raw = await mailClaudeCall("Tu es un assistant de classement d'emails professionnels. Réponds uniquement en JSON valide.", prompt, 3000);
-        const parsed = mailParseJson(raw) || [];
-        let warnings = 0;
-        for (let i = 0; i < meta.length; i++) {
-            const m = meta[i];
-            const catNom = parsed[i]?.categorie || 'Autre';
-            const cat = db.mailCategories.find(c => c.nom === catNom) || db.mailCategories.find(c => c.nom === 'Autre');
-            try {
-                const labelId = labelMap[cat?.label || catNom];
-                if (labelId) {
-                    await mailGmailFetch(`${GMAIL_API}/messages/${m.id}/modify`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ addLabelIds: [labelId] })
-                    });
-                }
-            } catch (e) { warnings++; }
-            await MailSupa.upsertState({ gmail_message_id: m.id, category: cat?.nom || catNom, draft_created: false });
-            mailState.triage.unshift({ ...m, categorie: cat?.nom || catNom });
-        }
-        renderMailTriList();
-        mailSetStatus('mail-tri-status', `✅ ${meta.length} mail(s) classé(s)${warnings ? ` (${warnings} label(s) non appliqué(s))` : ''}.`, 'success');
-    } catch (e) {
-        mailSetStatus('mail-tri-status', "❌ " + e.message, 'error');
-    } finally {
-        mailState.busy.tri = false;
-    }
-}
-
-function renderMailTriList() {
-    const el = $('mail-tri-list'); if (!el) return;
-    if (!mailState.triage.length) {
-        el.innerHTML = '<div style="text-align:center; padding:30px; opacity:.5">Aucun mail trié dans cette session. Clique sur "Scanner l\'inbox".</div>';
-        return;
-    }
-    el.innerHTML = mailState.triage.map((m, i) => `
-        <div class="card" style="gap:10px; align-items:center">
-            <div style="flex:1; min-width:0">
-                <b style="display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">${mailEsc(m.subject || '(sans objet)')}</b>
-                <small style="color:var(--text-muted)">${mailEsc(m.from)}</small>
-            </div>
-            <select onchange="mailOverrideCategory(${i}, this.value)">
-                ${db.mailCategories.map(c => `<option value="${mailEsc(c.nom)}"${c.nom === m.categorie ? ' selected' : ''}>${mailEsc(c.nom)}</option>`).join('')}
-            </select>
-            <a href="https://mail.google.com/mail/u/0/#inbox/${m.threadId}" target="_blank" rel="noopener" style="font-size:12px; color:var(--accent); white-space:nowrap">Ouvrir →</a>
-        </div>`).join('');
-}
-
-async function mailOverrideCategory(i, catNom) {
-    const m = mailState.triage[i]; if (!m) return;
-    const oldCat = m.categorie;
-    m.categorie = catNom;
-    const cat = db.mailCategories.find(c => c.nom === catNom);
-    try {
-        const labelMap = await mailEnsureLabels();
-        const oldCatObj = db.mailCategories.find(c => c.nom === oldCat);
-        if (oldCatObj && labelMap[oldCatObj.label || oldCatObj.nom]) {
-            await mailGmailFetch(`${GMAIL_API}/messages/${m.id}/modify`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ removeLabelIds: [labelMap[oldCatObj.label || oldCatObj.nom]] })
-            });
-        }
-        if (cat && labelMap[cat.label || cat.nom]) {
-            await mailGmailFetch(`${GMAIL_API}/messages/${m.id}/modify`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ addLabelIds: [labelMap[cat.label || cat.nom]] })
-            });
-        }
-        await MailSupa.upsertState({ gmail_message_id: m.id, category: catNom, draft_created: false });
-    } catch (e) {
-        mailSetStatus('mail-tri-status', "❌ Erreur lors de la correction : " + e.message, 'error');
-    }
-}
-
-// --- Onglet Brouillons ---
-async function mailGenerateDrafts() {
-    if (!mailGuard('brouillons')) return;
-    const draftCats = db.mailCategories.filter(c => c.draft);
-    if (!draftCats.length) {
-        mailSetStatus('mail-drafts-status', "Aucune catégorie n'est configurée pour générer des brouillons (onglet Connexion → catégorie → 'Génère un brouillon ?').", 'info');
-        return;
-    }
-    mailState.busy.drafts = true;
-    mailSetStatus('mail-drafts-status', "⏳ Recherche des mails concernés...", 'loading');
-    try {
-        const states = await MailSupa.listStates();
-        const draftCatNames = new Set(draftCats.map(c => c.nom));
-        const candidates = states.filter(s => draftCatNames.has(s.category) && !s.draft_created);
-        if (!candidates.length) {
-            mailSetStatus('mail-drafts-status', "Aucun nouveau mail éligible à un brouillon (trie d'abord ta boîte dans l'onglet Tri).", 'info');
-            return;
-        }
-        mailSetStatus('mail-drafts-status', `⏳ Génération de ${candidates.length} brouillon(s)...`, 'loading');
-        let created = 0, failed = 0;
-        for (const s of candidates) {
-            try {
-                const full = await mailGmailFetch(`${GMAIL_API}/messages/${s.gmail_message_id}?format=full`);
-                const from = mailHeader(full.payload?.headers, 'From');
-                const subject = mailHeader(full.payload?.headers, 'Subject');
-                const { text } = mailExtractBody(full.payload);
-                const cat = draftCats.find(c => c.nom === s.category);
-                const prompt = `Voici un mail reçu :\nDe : ${from}\nObjet : ${subject}\nContenu : ${text || full.snippet}\n\nRédige une réponse en français à ce mail. Instructions de ton/style : ${cat.prompt || 'Réponds de façon courtoise et professionnelle.'}\n\nRéponds UNIQUEMENT avec le corps du mail de réponse, sans objet ni signature d'en-tête.`;
-                const replyBody = await mailClaudeCall("Tu rédiges des brouillons de réponse email professionnels en français. Ne signe jamais à la place de l'utilisateur, laisse la validation finale à l'humain.", prompt, 1000);
-                const toAddr = (from.match(/<(.+)>/) || [, from])[1];
-                const rawMime = mailBuildMime(toAddr, 'Re: ' + subject.replace(/^Re:\s*/i, ''), replyBody);
-                const draftRes = await mailGmailFetch(`${GMAIL_API}/drafts`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: { raw: rawMime, threadId: full.threadId } })
-                });
-                mailState.draftsGenerated.unshift({ id: draftRes.id, to: toAddr, subject, snippet: replyBody.slice(0, 140), threadId: full.threadId });
-                await MailSupa.upsertState({ gmail_message_id: s.gmail_message_id, category: s.category, draft_created: true });
-                created++;
-            } catch (e) { failed++; }
-        }
-        renderMailDraftsList();
-        mailSetStatus('mail-drafts-status', `✅ ${created} brouillon(s) créé(s)${failed ? `, ${failed} échec(s)` : ''}.`, failed ? 'error' : 'success');
-    } catch (e) {
-        mailSetStatus('mail-drafts-status', "❌ " + e.message, 'error');
-    } finally {
-        mailState.busy.drafts = false;
-    }
-}
-
-function renderMailDraftsList() {
-    const el = $('mail-drafts-list'); if (!el) return;
-    el.innerHTML = mailState.draftsGenerated.map(d => `
-        <div class="card" style="flex-direction:column; align-items:stretch; gap:6px">
-            <b>${mailEsc(d.subject || '(sans objet)')}</b>
-            <small style="color:var(--text-muted)">À : ${mailEsc(d.to)}</small>
-            <div style="font-size:13px; opacity:.8">${mailEsc(d.snippet)}…</div>
-            <a href="https://mail.google.com/mail/u/0/#inbox/${d.threadId}" target="_blank" rel="noopener" style="font-size:12px; color:var(--accent)">Valider dans Gmail →</a>
-        </div>`).join('') || '<div style="text-align:center; padding:30px; opacity:.5">Aucun brouillon généré dans cette session</div>';
-}
-
-// --- Onglet Extraction (factures) ---
-async function mailScanInvoices() {
-    if (!mailGuard('extraction')) return;
-    const factCat = db.mailCategories.find(c => c.nom.toLowerCase().includes('facture'));
-    if (!factCat) { mailSetStatus('mail-extraction-status', "Aucune catégorie 'Factures / Compta' configurée.", 'error'); return; }
-    mailState.busy.extraction = true;
-    mailSetStatus('mail-extraction-status', "⏳ Recherche des mails de facturation...", 'loading');
-    try {
-        const states = await MailSupa.listStates();
-        const existingInvoices = await MailSupa.listInvoices();
-        mailState.invoices = existingInvoices;
-        const alreadyExtracted = new Set(existingInvoices.map(i => i.gmail_message_id));
-        const candidates = states.filter(s => s.category === factCat.nom && !alreadyExtracted.has(s.gmail_message_id));
-        if (!candidates.length) {
-            mailSetStatus('mail-extraction-status', "Aucun nouveau mail de facturation à extraire (trie d'abord ta boîte dans l'onglet Tri).", 'info');
-            renderMailInvoicesTable();
-            return;
-        }
-        mailSetStatus('mail-extraction-status', `⏳ Extraction de ${candidates.length} facture(s)...`, 'loading');
-        let ok = 0, failed = 0;
-        for (const s of candidates) {
-            try {
-                const full = await mailGmailFetch(`${GMAIL_API}/messages/${s.gmail_message_id}?format=full`);
-                const from = mailHeader(full.payload?.headers, 'From');
-                const subject = mailHeader(full.payload?.headers, 'Subject');
-                const date = mailHeader(full.payload?.headers, 'Date');
-                const { text, attachments } = mailExtractBody(full.payload);
-                const entities = db.ents.map(e => e.nom).concat(['SCEA Terres et Vie', 'SARL Matevie', 'ALOHASH', 'Personnel']);
-                const prompt = `Voici un mail de facturation :\nDe : ${from}\nObjet : ${subject}\nDate : ${date}\nPièces jointes : ${attachments.join(', ') || 'aucune'}\nContenu :\n${text || full.snippet}\n\nExtrait les informations de facturation et réponds UNIQUEMENT avec un objet JSON strict de cette forme (utilise null si une info est introuvable) :\n{"entite": "l'une de [${entities.join(', ')}] ou null", "fournisseur": "...", "montant": nombre ou null, "devise": "EUR", "date_facture": "YYYY-MM-DD ou null", "categorie": "..."}\nSi le contenu du mail ne permet pas de déterminer le montant avec certitude (ex : facture en pièce jointe PDF non lisible), mets "montant": null plutôt que d'inventer un chiffre.`;
-                const raw = await mailClaudeCall("Tu extrais des données de facturation depuis des emails pour la comptabilité. Ne jamais inventer un montant : utilise null si l'info n'est pas explicitement présente dans le texte fourni. Réponds uniquement en JSON valide.", prompt, 800);
-                const parsed = mailParseJson(raw) || {};
-                const invoice = {
-                    gmail_message_id: s.gmail_message_id,
-                    entity: parsed.entite || null,
-                    vendor: parsed.fournisseur || from,
-                    amount: typeof parsed.montant === 'number' ? parsed.montant : null,
-                    currency: parsed.devise || 'EUR',
-                    invoice_date: parsed.date_facture || null,
-                    category: factCat.nom,
-                    status: 'a_verifier',
-                    raw_extract: parsed
-                };
-                await MailSupa.upsertInvoice(invoice);
-                mailState.invoices.unshift(invoice);
-                ok++;
-            } catch (e) { failed++; }
-        }
-        renderMailInvoicesTable();
-        mailSetStatus('mail-extraction-status', `✅ ${ok} facture(s) extraite(s)${failed ? `, ${failed} échec(s)` : ''}.`, failed ? 'error' : 'success');
-    } catch (e) {
-        mailSetStatus('mail-extraction-status', "❌ " + e.message, 'error');
-    } finally {
-        mailState.busy.extraction = false;
-    }
-}
-
-async function renderMailInvoicesTable() {
-    const wrap = $('mail-invoices-table-wrap'); if (!wrap) return;
-    if (!mailState.invoices.length) mailState.invoices = await MailSupa.listInvoices();
-
-    const filterEl = $('mail-inv-entity-filter');
-    if (filterEl) {
-        const entities = [...new Set(mailState.invoices.map(i => i.entity).filter(Boolean))];
-        const cur = filterEl.value || 'Toutes';
-        filterEl.innerHTML = ['Toutes', ...entities].map(e => `<option${e === cur ? ' selected' : ''}>${mailEsc(e)}</option>`).join('');
-    }
-    const filterVal = filterEl ? filterEl.value : 'Toutes';
-    const list = (filterVal && filterVal !== 'Toutes') ? mailState.invoices.filter(i => i.entity === filterVal) : mailState.invoices;
-
-    if (!list.length) {
-        wrap.innerHTML = '<div style="text-align:center; padding:30px; opacity:.5">Aucune facture extraite pour le moment</div>';
-        return;
-    }
-    wrap.innerHTML = `
-        <table class="tva-table">
-            <thead><tr>
-                ${['Date', 'Entité', 'Fournisseur', 'Montant', 'Catégorie', 'Statut'].map(h => `<th style="padding:10px 12px; text-align:left; font-size:11px; opacity:.5; text-transform:uppercase">${h}</th>`).join('')}
-            </tr></thead>
-            <tbody>${list.map(i => `
-                <tr style="border-bottom:1px solid var(--carte-2)">
-                    <td style="padding:9px 12px; font-size:12px">${mailEsc(i.invoice_date || '—')}</td>
-                    <td style="padding:9px 12px; font-size:12px">${mailEsc(i.entity || '—')}</td>
-                    <td style="padding:9px 12px; font-size:13px">${mailEsc(i.vendor || '—')}</td>
-                    <td style="padding:9px 12px; text-align:right; font-weight:600">${i.amount != null ? eur(i.amount) : '—'}</td>
-                    <td style="padding:9px 12px; font-size:12px">${mailEsc(i.category || '—')}</td>
-                    <td style="padding:9px 12px; font-size:12px">${mailEsc(i.status || '—')}</td>
-                </tr>`).join('')}
-            </tbody>
-        </table>`;
-}
-
-async function mailExportInvoices() {
-    try { await chargerXLSX(); } catch (e) { return toast("📊 Outil Excel indisponible : vérifie ta connexion, puis réessaie.", 'error'); }
-    if (!window.XLSX) return toast('SheetJS non chargé', 'error');
-    if (!mailState.invoices.length) return toast('Aucune facture à exporter.', 'error');
-    const headers = ['Date facture', 'Entité', 'Fournisseur', 'Montant', 'Devise', 'Catégorie', 'Statut'];
-    const rows = mailState.invoices.map(i => [i.invoice_date || '', i.entity || '', i.vendor || '', i.amount ?? '', i.currency || 'EUR', i.category || '', i.status || '']);
-    const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
-    ws['!cols'] = [{ wch: 14 }, { wch: 22 }, { wch: 28 }, { wch: 12 }, { wch: 8 }, { wch: 20 }, { wch: 14 }];
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Factures Mail');
-    XLSX.writeFile(wb, 'Factures_Mail_' + new Date().toLocaleDateString('fr-FR').replace(/\//g, '-') + '.xlsx');
-}
-
-// Initialisation Mail (toujours après le reste : mailState et db.mailCategories doivent
-// être prêts avant qu'un rendu ne les lise, ce qui est garanti par l'ordre du fichier).
-initMailCategories();
-mailRestoreSession();

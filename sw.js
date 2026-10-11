@@ -14,14 +14,14 @@
 // reste : icônes, images, CDN SheetJS — des fichiers qui ne changent
 // pratiquement jamais et qu'on veut instantanés.
 //
-// JAMAIS mis en cache : Supabase (données vivantes), l'API Claude et Google
-// Identity (auth) — toute requête hors liste part directement sur le réseau.
+// JAMAIS mis en cache : toute requête vers un autre domaine que celui du site
+// et le CDN SheetJS part directement sur le réseau.
 'use strict';
 
 // ⚠️ Incrémenter à chaque changement de stratégie : « activate » supprime
 // alors tous les anciens caches, ce qui force un rechargement complet chez
 // les visiteurs qui avaient encore l'ancienne version en réserve.
-const CACHE = 'gestion-pro-v6';
+const CACHE = 'gestion-pro-v7';
 
 // Fichiers dont une version périmée se remarque tout de suite.
 const VIVANTS = /(?:^|\/)(?:index\.html|script\.js|style\.css|dash-module\.js|dash-data\.js|ebe\.js|ebe-module\.js)$|\/$/;
@@ -79,7 +79,13 @@ self.addEventListener('fetch', (e) => {
           }
           return res;
         })
-        .catch(() => caches.match(req))
+        // Hors ligne : le cache fait office de filet. S'il est vide lui aussi
+        // (fichier jamais visité), on répond une erreur lisible — respondWith
+        // recevait sinon « undefined », ce qui échoue sans rien expliquer.
+        .catch(() => caches.match(req).then((cache) => cache || new Response(
+          'Hors ligne et ce fichier n\'a jamais été mis en cache.',
+          { status: 503, statusText: 'Hors ligne', headers: { 'Content-Type': 'text/plain; charset=utf-8' } }
+        )))
     );
     return;
   }
@@ -92,7 +98,9 @@ self.addEventListener('fetch', (e) => {
           caches.open(CACHE).then((c) => c.put(req, copy));
         }
         return res;
-      }).catch(() => cached);
+      }).catch(() => cached || new Response('Hors ligne.', {
+        status: 503, statusText: 'Hors ligne', headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+      }));
       return cached || refresh;
     })
   );
