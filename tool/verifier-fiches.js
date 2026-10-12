@@ -115,7 +115,7 @@ async function teste(url, { redirections = true } = {}) {
 // d'API (qui répond 401 ou 404 sans clé, ce qui ne prouve rien).
 function adressesDe(md) {
   const brut = md.match(/https?:\/\/[^\s)>"'`\]]+/g) || [];
-  const ignorees = /(console|dashboard|admin|supabase\.com|vercel\.com\/dashboard|cloudflare\.com|appstoreconnect|play\.google\.com\/console|github\.com\/[^/]+\/[^/]+\/(actions|settings)|example\.|localhost|127\.0\.0\.1)/i;
+  const ignorees = /(console|dashboard|admin|supabase\.com|cloudflare\.com|appstoreconnect|play\.google\.com\/console|github\.com\/[^/]+\/[^/]+\/(actions|settings)|example\.|localhost|127\.0\.0\.1)/i;
   const gabarit = /[<>{}]|\bASIN\b|VOTRE|XXXX/i;
   const pointApi = /^https?:\/\/(api|mcp)\.|googleapis\.com|\/api\//i;
   return [...new Set(brut.map((u) => u.replace(/[.,;:]+$/, '')))]
