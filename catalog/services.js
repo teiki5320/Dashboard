@@ -348,7 +348,7 @@ const SERVICES = [
     cout: "Gratuit pour un usage personnel (quotas très larges).",
     quand: "Dès la préparation de la sortie : page support + politique de confidentialité sont demandées à la soumission.",
     alternatives: "OVH mutualisé, serveur perso.",
-    alias: ['vercel', 'netlify', 'cloudflare workers', 'workers', 'opennext'],
+    alias: ['cloudflare workers', 'workers', 'opennext'],
     consigner: [
       "Plateforme utilisée et dépôt source du site",
       "URLs : vitrine, support, politique de confidentialité",

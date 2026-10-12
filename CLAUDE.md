@@ -114,9 +114,13 @@ liste de plateformes **vide** ne fait pas un site : l'app reste une appli.
 ancien nom — alors que son dépôt s'appelle `teiki5320/keurcook`, comme son
 domaine `keurcook.com`. **Avelor s'appelle Solelis** depuis le 10 octobre 2026 —
 dépôt, dossier et identifiant renommés en même temps, pour ne pas refaire le
-coup de `alohash`. Le site déployé, lui, affiche encore « AVELOR » et vit
-toujours sur `avelor.vercel.app` : c'est son dépôt qui changera ça, pas le
-Dashboard. **Solelis est en pause** (⏸️), mais son site répond.
+coup de `alohash`. Le site vit sur `solelis.com` (Cloudflare Workers) ; sa
+refonte (logo, design, nom partout) se fait dans son dépôt, pas ici.
+**Solelis est en pause** (⏸️), mais son site répond.
+
+**Vercel n'est plus utilisé nulle part** (décision de Jean, 12 octobre 2026) :
+`avelor.vercel.app` affiche aujourd'hui un autre site, sans rapport. Ne jamais
+citer Vercel comme hébergement, ni le remettre dans les alias du catalogue.
 
 **Trois cartes ont été retirées le 12 octobre 2026**, sur décision de Jean :
 `d-sign` et `tama-tv`, deux projets en pause, et `drama-studio` — c'est le
@@ -162,8 +166,9 @@ retouchée côté Dashboard n'est pas écrasée.
   Dashboard le 30 septembre 2026 et n'ont donc aucun hachage dans
   `.sync-state.json`. Elles seront remplacées le jour où son dépôt en publie.
 - **Lexique** : on écrit « Hébergement web (GitHub Pages / Cloudflare Pages) ».
-  Des alias invisibles (vercel, netlify) servent uniquement à l'ancrage de la
-  recherche — ne pas réintroduire d'outils abandonnés dans les textes visibles.
+  Des alias invisibles servent uniquement à l'ancrage de la recherche — ne pas
+  y réintroduire d'outils abandonnés (vercel et netlify en ont été retirés le
+  12 octobre 2026), ni dans les textes visibles.
 - **Zoom** : le corps de l'app est à `1.6` ; le module Mes apps repasse à `.75`
   (soit 1,2 effectif) et à `.9` à partir de 1200 px.
 - **Nom** : l'app s'appelle **Dash** (titre, manifeste, cache du service
