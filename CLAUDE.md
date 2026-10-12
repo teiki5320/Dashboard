@@ -13,6 +13,25 @@ gestion commerciale a été mise en sommeil. Le dépôt, lui, garde son nom.
 l'a salué « Bonjour Teiki » pendant des mois ; il l'a corrigé le 12 octobre
 2026. On écrit **Jean**.
 
+## Ce dépôt sera vidé
+
+Décision de Jean, le 12 octobre 2026 : **tout déménage dans le Studio**
+(`teiki5320/Studio`), qui devient la seule application. Le Studio ne lira pas
+`dash-data.js` à distance — il devient propriétaire des données. À la fin, ce
+dépôt-ci est vidé et archivé.
+
+Ce qui part : `apps/` (les huit fiches et `.sync-state.json`), `catalog/`,
+`tool/build.js`, `tool/sync.js`, `tool/verifier-fiches.js`, `tool/markdown.js`
+et ses tests, `assets/logos/`, et la synchro quotidienne.
+
+Trois pièges du déménagement : `apps/.sync-state.json` se **copie** et ne se
+recalcule jamais ; la synchro tourne aujourd'hui sur GitHub Actions et non sur
+le Mac, donc la garder là-bas est plus sûr que d'en faire une routine locale ;
+et le secret `APPS_READ_TOKEN` ne suit pas git, il faut le recréer côté Studio.
+
+Tant que le Studio n'affiche pas correctement les huit apps, **ce dépôt reste
+en ligne et vivant** : on ne retire rien ici par avance.
+
 ## Règles absolues
 
 - **Aucun secret dans le dépôt.** Ni clé, ni jeton, ni mot de passe, ni SIREN,
