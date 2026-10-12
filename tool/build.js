@@ -520,6 +520,9 @@ function loadApps() {
       order: typeof manifest.order === 'number' ? manifest.order : 999,
       name: manifest.name,
       emoji: manifest.emoji || '📱',
+      // Le vrai logo de l'app, quand il a été déposé dans assets/logos/ (une
+      // image de 160 px tirée du dépôt de l'app). Sinon l'emoji fait l'affaire.
+      logo: fs.existsSync(path.join(ASSETS_DIR, 'logos', id + '.webp')) ? 'assets/logos/' + id + '.webp' : null,
       tagline: manifest.tagline || '',
       repo: manifest.repo || '',
       platforms: manifest.platforms || [],
