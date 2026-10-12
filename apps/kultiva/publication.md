@@ -1,6 +1,7 @@
 # PUBLICATION — état des boutiques
 
-> Généré le 6 septembre 2026 d'après les consoles. Pour mettre à jour :
+> Généré le 6 septembre 2026 d'après les consoles, mis à jour le 12 octobre 2026
+> côté Dashboard (site vitrine en ligne, Supabase supprimé). Pour mettre à jour :
 > relancer ce même prompt.
 >
 > **Aucun secret ici** — uniquement des références publiques :
@@ -17,12 +18,12 @@
 
 - **iOS** : jamais soumise — la fiche est rédigée et le build Xcode Cloud fonctionne, mais l'URL de confidentialité manque
 - **Android** : jamais envoyée à Play — le bundle release est signé et vérifié localement ; l'existence d'une fiche Play reste à vérifier dans la console
-- **Web** : site vitrine prêt, non déployé — c'est lui qui débloque les deux boutiques
+- **Web** : site vitrine en ligne sur `kultiva.toakeur.com` depuis le 7 octobre 2026 — l'URL de confidentialité existe désormais
 - **Version commune** : `1.0.0+5` (`pubspec.yaml`) → `versionName 1.0.0` / `versionCode 5` côté Android, `CFBundleShortVersionString` et `CFBundleVersion` dérivés côté iOS
 - **Identifiant** : `com.toa.kultiva`, identique sur les deux plateformes
 - **Monétisation** : ni publicité ni achat intégré. 159 liens d'affiliation Amazon (tag `kultiva-21`), masqués en Afrique de l'Ouest — d'où le statut **trader** au sens du DSA, décidé le 24 août 2026
 - **Classification attendue** : **4+** depuis le retrait du feed communautaire — plus aucun contenu généré par les utilisateurs
-- **Chemin critique** : déployer la landing → récupérer l'URL de confidentialité → soumettre iOS
+- **Chemin critique** : recréer un backend Supabase → reporter l'URL de confidentialité dans les fiches → soumettre iOS
 
 Les deux boutiques sont au même point de départ, et pour la même raison :
 rien n'a jamais été envoyé. Ce n'est pas le code qui retient la
@@ -131,11 +132,10 @@ la signature d'application par Play est activée.
 
 | | |
 |---|---|
-| État | **Prêt, non déployé — bloque les deux boutiques** |
-| Console | <https://vercel.com/dashboard> |
-| Version publiée | aucune. GitHub Pages servait le dépôt à l'adresse `teiki5320.github.io/Kultiva/` ; coupé le 24 août 2026 |
-| Version en cours | `landing/` — `index.html`, `privacy.html`, images WebP, `vercel.json` |
-| Distribution | Vercel, racine `landing/` |
+| État | **En ligne** depuis le 7 octobre 2026 (vérifié le 12 octobre 2026) |
+| Console | <https://github.com/teiki5320/Kultiva/settings/pages> |
+| Version publiée | `landing/` — <https://kultiva.toakeur.com/>, confidentialité sur `/privacy.html` |
+| Distribution | GitHub Pages, workflow `site.yml` à chaque push touchant `landing/` ; domaine derrière Cloudflare |
 
 **Ce n'est pas une version web de l'app.** Le projet ne comporte que les
 cibles `android` et `ios` — il n'y a pas de dossier `web/`. Cette section
@@ -146,14 +146,14 @@ confidentialité, sans laquelle aucune soumission n'aboutit.
 
 **Ce qui est prêt.** Le site est complet et allégé : les images sont
 passées en WebP le 22 août 2026, faisant tomber le dossier de 5,6 Mo à
-0,2 Mo. `vercel.json` fixe déjà le cache immuable sur `/img/`.
+0,2 Mo.
 `privacy.html` est la version publique de la politique de
 confidentialité, tenue identique à celle embarquée dans l'app
 (`assets/tutos/privacy_policy.html`) — les deux ont été réalignées le
 24 août après le retrait du feed communautaire.
 
-**Ce qui reste.** Deux points, une fois le site en ligne : coller la
-vraie URL dans les trois champs de la fiche App Store, et remplacer les
+**Ce qui reste.** Deux points, maintenant que le site est en ligne : coller
+sa vraie URL dans les trois champs de la fiche App Store, et remplacer les
 boutons *Télécharger* de `landing/index.html`, qui pointent encore vers
 `href="#"`, par les liens des boutiques.
 
@@ -167,11 +167,11 @@ compte in-app exigée par Apple.
 
 | | |
 |---|---|
-| État | **Actif et vérifié le 24 août 2026** |
+| État | ⚠️ **Projet supprimé** — son adresse ne résout plus (constaté le 3 octobre 2026) ; tout est à recréer |
 | Console | <https://supabase.com/dashboard> |
-| Projet | `vkiwkeknfzwdvufcqbrp` (région Europe) |
-| Migrations | `001` → `016`, toutes appliquées — vérifié par appels API |
-| Edge function | `delete-account` déployée |
+| Projet | l'ancien `vkiwkeknfzwdvufcqbrp` n'existe plus |
+| Migrations | `001` → `016` dans le dépôt, à rejouer sur le nouveau projet |
+| Edge function | `delete-account` à redéployer |
 
 La clé `anon` présente dans `lib/config/supabase_config.dart` est un JWT
 public : c'est son usage normal, elle n'est pas un secret.
@@ -180,8 +180,8 @@ public : c'est son usage normal, elle n'est pas un secret.
 
 ## Ce qui reste, dans l'ordre
 
-1. **Web** — déployer `landing/` sur Vercel. Tout le reste en dépend.
-2. **iOS** — coller l'URL obtenue dans les trois champs : assistance,
+1. **Backend** — recréer le projet Supabase (voir `infra.md`). Le site vitrine, lui, est en ligne depuis le 7 octobre 2026.
+2. **iOS** — coller `https://kultiva.toakeur.com/` dans les trois champs : assistance,
    marketing, et politique de confidentialité (`/privacy.html`).
 3. **Les deux** — activer la redirection de `kultiva@toakeur.com`,
    adresse de support publiée partout.

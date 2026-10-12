@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Généré le 25 septembre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
+Généré le 25 septembre 2026 par un scan du dépôt, mis à jour le 12 octobre 2026 côté Dashboard (mesure d'audience active). Pour mettre à jour : relancer ce même prompt.
 
 > Aucun secret dans cette fiche — uniquement des références (noms de variables, consoles).
 
@@ -47,11 +47,11 @@ Généré le 25 septembre 2026 par un scan du dépôt. Pour mettre à jour : rel
 - **Secrets** : identifiants du compte et informations de paiement, uniquement dans la console Amazon.
 - **Coût** : gratuit.
 
-### 5. Cloudflare Web Analytics (mesure d'audience, en attente du jeton)
+### 5. Cloudflare Web Analytics (mesure d'audience)
 
-- **Rôle** : mesure d'audience gratuite, sans cookie (`mesureAudience`, `build/site.ts`). Le script n'est ajouté que si la variable de dépôt GitHub `CF_BEACON_TOKEN` est définie (Settings → Secrets and variables → Actions → Variables) ; la phrase des mentions légales suit automatiquement (`<!--#mesure-audience-->`).
+- **Rôle** : mesure d'audience gratuite, sans cookie, active sur toutes les pages depuis le 7 octobre 2026 (vérifié en ligne le 12 octobre 2026). Le jeton est désormais écrit dans `build/site.ts` (`MESURE_AUDIENCE`, injecté par `pluginSite`) ; l'ancienne fonction `mesureAudience`, qui le lisait dans la variable de dépôt `CF_BEACON_TOKEN`, reste dans le code. C'est le seul script externe autorisé par les tests (12 octobre 2026).
 - **Console** : https://dash.cloudflare.com → Analytics & Logs → Web Analytics (site `www.optiled.fr`, sans changer les DNS).
-- **Identifiants publics** : `CF_BEACON_TOKEN` (jeton de 32 caractères, visible dans les pages, non secret).
+- **Identifiants publics** : jeton du beacon (32 caractères, visible dans les pages, non secret) — dans `build/site.ts`.
 - **Secrets** : aucun.
 - **Coût** : gratuit.
 
