@@ -9,7 +9,6 @@
 (function () {
   var DATA = window.DASH_DATA;
   var $ = function (sel, root) { return (root || document).querySelector(sel); };
-  var PRENOM = 'Teiki'; // prénom affiché dans la barre latérale et le bandeau d'accueil
   var LOGO = 'assets/dash-logo.png'; // remplaçable ; repli sur l'icône PWA si absent
 
   // ── Utilitaires ────────────────────────────────────────────────────────────
@@ -266,7 +265,7 @@
   var FICHE_STALE_JOURS = 45;
 
   function renderAppHead(app, volet) {
-    // Ce que Teiki a demandé à voir, et rien d'autre : le logo, le nom, les
+    // Ce que Jean a demandé à voir, et rien d'autre : le logo, le nom, les
     // plateformes, le dépôt, le nombre de services, l'état du code.
     var h = '<div class="tile app-head tint-' + appTint(app) + ' rise">' +
       logoApp(app, 'app-big') +

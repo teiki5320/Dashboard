@@ -1,11 +1,17 @@
 # Dash
 
-Tableau de bord des projets numériques de Teiki, publié sur GitHub Pages
+Tableau de bord des projets numériques de Jean, publié sur GitHub Pages
 depuis `teiki5320/Dashboard` (dépôt **public**). Ce fichier est la mémoire
 durable du projet : à lire avant toute intervention.
 
 L'app s'appelait « Gestion Pro » jusqu'au 11 octobre 2026, quand la partie
 gestion commerciale a été mise en sommeil. Le dépôt, lui, garde son nom.
+
+## Son prénom est Jean
+
+`teiki5320` est son pseudo GitHub et sa marque, **pas son prénom**. L'app
+l'a salué « Bonjour Teiki » pendant des mois ; il l'a corrigé le 12 octobre
+2026. On écrit **Jean**.
 
 ## Règles absolues
 
@@ -32,7 +38,7 @@ ne sont pas des pages : ce sont des liens vers le **Studio**, qui tourne sur le
 Mac et s'ouvre par `studio.toakeur.com` (adresse protégée par Cloudflare
 Access).
 
-**Mes apps** montre, pour chaque app, strictement ce que Teiki a demandé le
+**Mes apps** montre, pour chaque app, strictement ce que Jean a demandé le
 12 octobre 2026 : dans la liste, son logo, son nom, ses plateformes, l'alerte
 de fiche périmée et l'état du code ; en tête de sa fiche, son logo, son nom,
 ses plateformes, son dépôt, son nombre de services et l'état du code. La liste
@@ -66,7 +72,7 @@ l'historique git, au commit qui précède ce retrait.
 navigateur**, sous les clés `v90_*` du localStorage. Un bandeau en haut de la
 page permet de les télécharger puis de les effacer, et disparaît une fois
 qu'il n'en reste plus (voir `renderRecuperation` dans `script.js`). Ne pas le
-supprimer tant que Teiki ne l'a pas vidé.
+supprimer tant que Jean ne l'a pas vidé.
 
 ## Mes apps — les 8 cartes
 
@@ -93,7 +99,7 @@ coup de `alohash`. Le site déployé, lui, affiche encore « AVELOR » et vit
 toujours sur `avelor.vercel.app` : c'est son dépôt qui changera ça, pas le
 Dashboard. **Solelis est en pause** (⏸️), mais son site répond.
 
-**Trois cartes ont été retirées le 12 octobre 2026**, sur décision de Teiki :
+**Trois cartes ont été retirées le 12 octobre 2026**, sur décision de Jean :
 `d-sign` et `tama-tv`, deux projets en pause, et `drama-studio` — c'est le
 Studio lui-même, un des deux dépôts dans lesquels on travaille, il n'a pas à
 figurer parmi les projets suivis. Leurs dossiers, leurs hachages de synchro et
