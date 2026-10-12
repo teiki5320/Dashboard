@@ -11,7 +11,7 @@
   "services": [
     "github",
     "hebergement-web",
-    "supabase",
+    "base-sql",
     "api-tierce",
     "email-transactionnel"
   ]
