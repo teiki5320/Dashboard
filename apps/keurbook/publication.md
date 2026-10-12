@@ -1,27 +1,37 @@
 # PUBLICATION — état de la mise en ligne
 
-> Généré le 1er octobre 2026, mis à jour le même jour après la mise en ligne (côté Dashboard : si le
-> dépôt publie un jour `docs/PUBLICATION.md`, cette fiche sera remplacée par la sienne).
+> Mis à jour le 12 octobre 2026, d'après le site en ligne et les exécutions GitHub Actions.
 >
 > Aucun secret ici — uniquement des références.
 
-## Vue d'ensemble
+## Web · Production
 
 | | |
 |---|---|
-| Web · Production | **En ligne** sur https://keurbook.com (`www.keurbook.com` répond aussi) |
-| Hébergeur | Cloudflare Pages (projet « keurbook »), workflow `deploy.yml` à chaque push sur `main` |
-| Mise en ligne | 1er octobre 2026 à 11 h 58, exécution « Publier le site » réussie |
+| Adresse | **En ligne** sur https://keurbook.com (vérifié le 12 octobre 2026 : réponse 200) |
+| Hébergeur | Cloudflare Pages (projet `keurbook`), workflow `deploy.yml` |
+| Dernière publication | 12 octobre 2026, publication programmée réussie (article Conseils du lundi) |
+| Mise en ligne | 1er octobre 2026 |
 | Dépôt | https://github.com/teiki5320/keurbook |
-| Taille publiée | 175 pages d'après le sitemap |
+| Taille publiée | 957 adresses dans le sitemap |
+| Contact affiché | `keurbook@toakeur.com` |
+| Maintenance | désactivée (`content/maintenance.json`) |
 
 ## Domaine & SSL
 
-- **Domaine** : `keurbook.com` et `www.keurbook.com`, tous deux actifs.
-- **SSL** : certificat fourni et renouvelé par Cloudflare Pages.
+- **Domaine** : `keurbook.com` (adresse canonique) ; `www.keurbook.com` redirige vers elle (301).
+- **Registraire et DNS** : Cloudflare.
+- **SSL** : certificat fourni et renouvelé par Cloudflare ; HSTS activé dans `public/_headers`.
+- L'ancienne version provisoire sur GitHub Pages est arrêtée : son adresse ne répond plus.
 
 ## Visibilité
 
-- La version provisoire sur GitHub Pages a été **arrêtée** le jour de la mise en ligne : son adresse
-  ne répond plus.
-- **À vérifier dans la console** : indexation, sitemap soumis aux moteurs, mesure d'audience.
+- **Sitemap** : https://keurbook.com/sitemap.xml répond (957 adresses) ; `robots.txt` autorise
+  tout et cite le sitemap.
+- **Google Search Console** : propriété de domaine `keurbook.com`, sitemap envoyé le 1er octobre
+  2026. Dernier contrôle connu (7 octobre 2026) : 618 pages indexées, 339 non indexées (2
+  redirections www voulues, 337 « Détectée, actuellement non indexée »). Chiffres du jour : à
+  vérifier dans la console ou dans l'onglet Indexation du Studio.
+- **IndexNow** (Bing, Yandex…) : tout le sitemap est signalé chaque lundi ; dernière exécution
+  réussie le 12 octobre 2026.
+- **Mesure d'audience** : aucune.

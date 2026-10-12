@@ -1,7 +1,6 @@
 # PUBLICATION — état des boutiques
 
-> Généré le 6 septembre 2026 d'après les consoles, mis à jour le 12 octobre 2026
-> côté Dashboard (site vitrine en ligne, Supabase supprimé). Pour mettre à jour :
+> Mis à jour le 12 octobre 2026. Pour mettre à jour :
 > relancer ce même prompt.
 >
 > **Aucun secret ici** — uniquement des références publiques :
@@ -16,20 +15,21 @@
 
 ## Vue d'ensemble
 
-- **iOS** : jamais soumise — la fiche est rédigée et le build Xcode Cloud fonctionne, mais l'URL de confidentialité manque
+- **iOS** : jamais soumise — la fiche est rédigée, le build Xcode Cloud fonctionne et l'URL de confidentialité existe désormais
 - **Android** : jamais envoyée à Play — le bundle release est signé et vérifié localement ; l'existence d'une fiche Play reste à vérifier dans la console
-- **Web** : site vitrine en ligne sur `kultiva.toakeur.com` depuis le 7 octobre 2026 — l'URL de confidentialité existe désormais
+- **Web** : site de présentation en ligne sur <https://kultiva.toakeur.com> depuis le 7 octobre 2026
+- **Backend** : projet Supabase **en pause** (vérifié le 12 octobre 2026) — connexion et synchronisation hors service tant qu'il n'est pas rallumé
 - **Version commune** : `1.0.0+5` (`pubspec.yaml`) → `versionName 1.0.0` / `versionCode 5` côté Android, `CFBundleShortVersionString` et `CFBundleVersion` dérivés côté iOS
 - **Identifiant** : `com.toa.kultiva`, identique sur les deux plateformes
 - **Monétisation** : ni publicité ni achat intégré. 159 liens d'affiliation Amazon (tag `kultiva-21`), masqués en Afrique de l'Ouest — d'où le statut **trader** au sens du DSA, décidé le 24 août 2026
 - **Classification attendue** : **4+** depuis le retrait du feed communautaire — plus aucun contenu généré par les utilisateurs
-- **Chemin critique** : recréer un backend Supabase → reporter l'URL de confidentialité dans les fiches → soumettre iOS
+- **Chemin critique** : rallumer Supabase → compléter la fiche App Store → soumettre iOS
 
-Les deux boutiques sont au même point de départ, et pour la même raison :
-rien n'a jamais été envoyé. Ce n'est pas le code qui retient la
-soumission — l'app compile, passe l'analyse, ses 187 tests sont verts et
-elle a été vérifiée sur simulateur. Ce qui manque tient à quatre champs
-de formulaire, dont trois attendent une URL qui n'existe pas encore.
+Les deux boutiques sont au même point de départ : rien n'a jamais été
+envoyé. Ce n'est pas le code qui retient la soumission — l'app compile,
+passe l'analyse et ses tests sont verts. L'URL de confidentialité qui
+bloquait tout existe depuis le 7 octobre 2026 ; restent le backend en
+pause et des champs de formulaire.
 
 ---
 
@@ -37,7 +37,7 @@ de formulaire, dont trois attendent une URL qui n'existe pas encore.
 
 | | |
 |---|---|
-| État | **Jamais soumise — bloquée sur l'URL de confidentialité** |
+| État | **Jamais soumise — bloquée par le backend en pause** |
 | Console | <https://appstoreconnect.apple.com> |
 | Version publiée | aucune — l'app n'est jamais sortie |
 | Version en cours | `1.0.0` (build `5`) — aucune soumission ; l'existence d'une fiche ASC est **à vérifier dans la console** |
@@ -53,10 +53,12 @@ la classification par âge et la déclaration de chiffrement ont leurs
 réponses. Tout est rassemblé dans `docs/FICHE_APP_STORE.md`, prêt à
 coller champ par champ.
 
-**Ce qui bloque, dans l'ordre.** L'**URL de la politique de
-confidentialité** est obligatoire et n'existe pas tant que la landing
-n'est pas en ligne — elle alimente aussi l'URL d'assistance et l'URL
-marketing, soit trois champs pour un seul déploiement. Viennent ensuite
+**Ce qui bloque, dans l'ordre.** Les trois URL de la fiche existent
+désormais — assistance et marketing `https://kultiva.toakeur.com`,
+confidentialité `https://kultiva.toakeur.com/privacy.html` — et restent à
+coller dans App Store Connect (à vérifier dans la console). Le testeur
+Apple essaiera la connexion et la suppression de compte : le projet
+Supabase doit donc être rallumé avant la soumission. Viennent ensuite
 le **numéro de téléphone** des informations de revue, les **captures
 d'écran** (8 en iPhone 6,9″ et, l'iPad étant conservé, 8 en iPad 13″ au
 format 2064 × 2752), et les **coordonnées de trader** à saisir dans
@@ -128,34 +130,23 @@ la signature d'application par Play est activée.
 
 ---
 
-### 3. Web · site vitrine
+### 3. Web · site de présentation
 
 | | |
 |---|---|
-| État | **En ligne** depuis le 7 octobre 2026 (vérifié le 12 octobre 2026) |
-| Console | <https://github.com/teiki5320/Kultiva/settings/pages> |
-| Version publiée | `landing/` — <https://kultiva.toakeur.com/>, confidentialité sur `/privacy.html` |
-| Distribution | GitHub Pages, workflow `site.yml` à chaque push touchant `landing/` ; domaine derrière Cloudflare |
+| Production | **En ligne** — <https://kultiva.toakeur.com> et <https://kultiva.toakeur.com/privacy.html> répondent (vérifié le 12 octobre 2026) |
+| Domaine & SSL | `kultiva.toakeur.com`, DNS chez Cloudflare (proxy actif), HTTPS valide ; contact affiché `kultiva@toakeur.com` |
+| Visibilité | publié par GitHub Pages via `.github/workflows/site.yml` (dossier `landing/`) depuis le 7 octobre 2026 ; l'ancienne adresse `teiki5320.github.io/Kultiva/` sert la même page |
 
 **Ce n'est pas une version web de l'app.** Le projet ne comporte que les
-cibles `android` et `ios` — il n'y a pas de dossier `web/`. Cette section
-existe parce que le site vitrine est une surface de distribution à part
-entière, et surtout parce qu'il est **sur le chemin critique des deux
-boutiques** : c'est lui qui fournit l'URL de politique de
-confidentialité, sans laquelle aucune soumission n'aboutit.
+cibles `android` et `ios`. Le site compte parce qu'il fournit les URL
+d'assistance, marketing et de confidentialité exigées par les boutiques.
+`privacy.html` est tenue identique à la politique embarquée dans l'app
+(`assets/tutos/privacy_policy.html`).
 
-**Ce qui est prêt.** Le site est complet et allégé : les images sont
-passées en WebP le 22 août 2026, faisant tomber le dossier de 5,6 Mo à
-0,2 Mo.
-`privacy.html` est la version publique de la politique de
-confidentialité, tenue identique à celle embarquée dans l'app
-(`assets/tutos/privacy_policy.html`) — les deux ont été réalignées le
-24 août après le retrait du feed communautaire.
-
-**Ce qui reste.** Deux points, maintenant que le site est en ligne : coller
-sa vraie URL dans les trois champs de la fiche App Store, et remplacer les
-boutons *Télécharger* de `landing/index.html`, qui pointent encore vers
-`href="#"`, par les liens des boutiques.
+**Ce qui reste.** Remplacer les boutons *Télécharger* de
+`landing/index.html`, qui pointent encore vers `href="#"`, par les liens
+des boutiques une fois l'app publiée.
 
 ---
 
@@ -167,39 +158,50 @@ compte in-app exigée par Apple.
 
 | | |
 |---|---|
-| État | ⚠️ **Projet supprimé** — son adresse ne résout plus (constaté le 3 octobre 2026) ; tout est à recréer |
-| Console | <https://supabase.com/dashboard> |
-| Projet | l'ancien `vkiwkeknfzwdvufcqbrp` n'existe plus |
-| Migrations | `001` → `016` dans le dépôt, à rejouer sur le nouveau projet |
-| Edge function | `delete-account` à redéployer |
+| État | **En pause** — le 12 octobre 2026, le compte Supabase liste le projet avec l'état *inactif* ; il n'est pas supprimé et se rallume depuis la console |
+| Console | <https://supabase.com/dashboard/project/vkiwkeknfzwdvufcqbrp> |
+| Projet | `vkiwkeknfzwdvufcqbrp` (région Europe) |
+| Adresse | ne résout plus pendant la pause — ce qui avait été pris, le 3 octobre, pour une suppression |
+| Migrations | `001` → `016`, toutes appliquées au 24 août 2026 |
+| Edge function | `delete-account` déployée au 24 août 2026 |
 
 La clé `anon` présente dans `lib/config/supabase_config.dart` est un JWT
-public : c'est son usage normal, elle n'est pas un secret.
+public : c'est son usage normal, elle n'est pas un secret. Les clés
+Google « Se connecter » ont été laissées à supprimer le 9 octobre 2026 :
+à recréer si on relance l'app.
 
 ---
 
 ## Ce qui reste, dans l'ordre
 
-1. **Backend** — recréer le projet Supabase (voir `infra.md`). Le site vitrine, lui, est en ligne depuis le 7 octobre 2026.
-2. **iOS** — coller `https://kultiva.toakeur.com/` dans les trois champs : assistance,
-   marketing, et politique de confidentialité (`/privacy.html`).
-3. **Les deux** — activer la redirection de `kultiva@toakeur.com`,
-   adresse de support publiée partout.
-4. **iOS** — saisir les coordonnées de trader dans *Accords → Digital
+1. **Les deux** — rallumer le projet Supabase et recréer les clés Google
+   « Se connecter » (sinon la connexion Google échoue).
+2. **iOS** — coller les trois URL de `kultiva.toakeur.com` dans la fiche
+   App Store (assistance, marketing, confidentialité) et l'adresse
+   `kultiva@toakeur.com`.
+3. **iOS** — saisir les coordonnées de trader dans *Accords → Digital
    Services Act* (boîte postale acceptée), puis le téléphone des
    informations de revue.
-5. **Les deux** — créer un compte de démonstration avec 2 ou 3
+4. **Les deux** — créer un compte de démonstration avec 2 ou 3
    plantations, une photo et un Tamassi entamé : il sert au testeur
    Apple **et** aux captures.
-6. **Les deux** — prendre les captures : 8 en iPhone 6,9″ (1320 × 2868)
+5. **Les deux** — prendre les captures : 8 en iPhone 6,9″ (1320 × 2868)
    et 8 en iPad 13″ (2064 × 2752).
-7. **iOS** — soumettre depuis `docs/FICHE_APP_STORE.md`.
-8. **Android** — créer la fiche Play, puis lancer le test fermé sans
+6. **iOS** — soumettre depuis `docs/FICHE_APP_STORE.md`.
+7. **Android** — créer la fiche Play, puis lancer le test fermé sans
    attendre : les quatorze jours courent en arrière-plan.
-9. **Web** — après publication, remplacer les `href="#"` des boutons
+8. **Web** — après publication, remplacer les `href="#"` des boutons
    *Télécharger* par les liens des boutiques.
 
 ---
+
+## Ce qui a été réglé depuis
+
+- **Site en ligne** (7 octobre) — `landing/` publié sur GitHub Pages à
+  l'adresse `kultiva.toakeur.com`.
+- **Adresse de contact** (7 octobre) — `kultiva@toakeur.com` partout
+  (site, confidentialité, fiches des stores) à la place de l'ancienne
+  adresse Gmail.
 
 ## Ce qui a été réglé fin août 2026
 

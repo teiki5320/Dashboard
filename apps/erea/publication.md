@@ -1,7 +1,8 @@
 # PUBLICATION — état des boutiques
 
-> Mis à jour le 15 septembre 2026 d'après les consoles App Store Connect et
-> Google Play. Une ligne par système d'exploitation, dans un format
+> Mis à jour le 12 octobre 2026 d'après l'App Store, la fiche publique
+> Google Play et l'historique du dépôt ; ce que seules les consoles savent
+> est marqué « à vérifier dans la console ». Une ligne par système d'exploitation, dans un format
 > réutilisable d'une application à l'autre. Pour mettre à jour :
 > relancer ce même prompt.
 >
@@ -10,21 +11,19 @@
 
 ## Vue d'ensemble
 
-- **iOS** : **1.0.2 en ligne depuis le 8 septembre 2026 à 12 h 19**, achat intégré compris — la version d'août est remplacée
-- **Android** : release 1.0.2 **approuvée le 8 septembre à 9 h 38**, disponible pour les testeurs · **12 testeurs inscrits le soir même**, les 14 jours courent jusqu'au **22 septembre**
-- **Chemin critique** : 14 jours avec 12 testeurs inscrits sans interruption — démarré le 8 septembre, demande d'accès à la production possible le 22 septembre
-- **Version dans le code** : `1.0.4+5` dans `erea_flutter/pubspec.yaml` depuis le 30 septembre 2026 (corrections de l'audit du 28 septembre) ; son envoi aux boutiques est à vérifier dans la console (constat du 2 octobre 2026)
-- **Version commune précédente** : `1.0.3+4` — release Android `4 (1.0.3)` et captures Play légendées **envoyées pour examen le 16 septembre à 10 h 14** (envoi 4) ; côté iOS, la 1.0.3 se construit sur Xcode Cloud (build 153, premier avec `url_launcher`)
+- **iOS** : **1.0.2 en ligne depuis le 8 septembre 2026 à 12 h 19**, achat intégré compris — toujours la version publique au 12 octobre 2026, 0 note
+- **Android** : **pas en production** — test fermé, release `4 (1.0.3)` servie aux testeurs depuis le 16 septembre ; les quatorze jours à douze testeurs sont tenus depuis le 22 septembre, la demande d'accès à la production n'était pas faite au 25 septembre et la fiche publique répond toujours 404 au 12 octobre
+- **Version dans le code** : `1.0.4+5` dans `erea_flutter/pubspec.yaml` depuis le 30 septembre 2026 (corrections de l'audit du 28 septembre) ; son envoi aux boutiques est à vérifier dans la console
 - **Identifiant** : `com.teiki.erea`, identique sur les deux plateformes
-- **Achat intégré** : `com.teiki.erea.sanspub` « Erea sans publicité », 3,99 €, non consommable — soumis avec la 1.0.2 sur iOS, **actif** sur Google Play
+- **Achat intégré** : `com.teiki.erea.sanspub` « Erea sans publicité », 3,99 €, non consommable — **approuvé** sur l'App Store, **actif** sur Google Play
 - **Monétisation** : interstitielle AdMob une partie sur deux, consentement RGPD publié le 3 septembre 2026
+- **Web** : vitrine `https://erea.toakeur.com/` en ligne, contact `erea@toakeur.com`
 
-Apple a tranché en une nuit : la 1.0.2 et l'achat intégré sont
-approuvés ensemble le 8 septembre à midi, et remplacent la version
-d'août dans les 24 heures. Côté Android, le tableau de bord coche le
-soir même « au moins 12 testeurs inscrits » : les quatorze jours que
-rien ne raccourcit ont commencé, la production devient demandable le
-22 septembre.
+Côté iOS, rien n'a bougé en boutique depuis le 8 septembre : la 1.0.3
+(build 161) est restée sur TestFlight, et la 1.0.4 n'a laissé aucune
+trace de soumission dans le dépôt. Côté Android, le seul délai
+incompressible est passé ; ce qui manque, c'est la demande d'accès à la
+production.
 
 ---
 
@@ -32,10 +31,13 @@ rien ne raccourcit ont commencé, la production devient demandable le
 
 | | |
 |---|---|
-| État | **1.0.2 en ligne depuis le 8 septembre 2026** |
+| État | **1.0.2 en ligne depuis le 8 septembre 2026** (vérifié sur l'App Store le 12 octobre 2026) |
 | Console | <https://appstoreconnect.apple.com> |
+| Fiche publique | identifiant App Store `6794918301` |
 | Version publiée | `1.0.2`, build `150`, en ligne depuis le 8 septembre 2026 à 12 h 19 (approuvée à 12 h 18, une minute avant) — remplace la `1.0.0` du 3 septembre |
-| Version soumise | aucune — la prochaine portera le nom long de l'app |
+| Dernier build connu | `161` (`1.0.3`), vert, sur TestFlight, jamais soumis (audit du 28 septembre) ; les builds de la `1.0.4` sont à vérifier dans la console |
+| Version soumise | aucune connue — à vérifier dans la console ; la prochaine doit porter la `1.0.4` |
+| Notes / avis | 0 / 0 au 12 octobre 2026 |
 | Achat intégré | `com.teiki.erea.sanspub` « Erea sans publicité », non consommable, **approuvé** le 8 septembre avec la 1.0.2 |
 | Distribution | Xcode Cloud, action *Archiver*, préparation **App Store Connect** |
 
@@ -77,6 +79,8 @@ l'année !` (23) ou `Erea : Quiz d'histoire & frise` (30).
 **DSA.** Toujours déclaré **non-trader**, ce qui ne tient plus : Apple
 range parmi les traders qui tire un revenu de son app, publicité
 comprise. À traiter après nettoyage du complément d'adresse du compte.
+Le contact public de l'app est `erea@toakeur.com` depuis le 7 octobre
+2026.
 
 ---
 
@@ -84,10 +88,11 @@ comprise. À traiter après nettoyage du complément d'adresse du compte.
 
 | | |
 |---|---|
-| État | **Test fermé en cours, 14 jours jusqu'au 22 septembre 2026** |
+| État | **Test fermé, pas en production** — fiche publique en 404 au 12 octobre 2026 |
 | Console | <https://play.google.com/console> |
 | Version publiée | aucune |
-| Canal en cours | test fermé « Alpha » — release `3 (1.0.2)` servie depuis le 8 septembre ; release `4 (1.0.3)` en examen depuis le 16 septembre (démo animée du geste, « Donner mon avis ») |
+| Canal en cours | test fermé « Alpha » — release `4 (1.0.3)` servie aux testeurs depuis le 16 septembre (démo animée du geste, « Donner mon avis ») |
+| Accès à la production | demandable depuis le 22 septembre ; **non demandé au 25 septembre** — la suite est à vérifier dans la console |
 | Examen | envoyé le 8 septembre 2026 à 9 h 07 (release 1.0.2, testeurs, description corrigée), approuvé à 9 h 38 |
 | Testeurs | groupe Google `testers-community@googlegroups.com` — service **Testers Community**, plan Starter 14 €, 15 testeurs, souscrit le 8 septembre à 22 h ; **« 12 testeurs inscrits pour 1 jour » le 10 septembre**, compteur Google |
 | Rapports | reçus le 15 septembre : rapport de test (aucun plantage, aucun bug ; trois « pistes » génériques : tutoriel dynamique, captures Play légendées, langues) et questionnaire d'accès à la production pré-rempli, à réécrire avec ce qui a réellement changé |
@@ -109,42 +114,40 @@ fusionné, ajoutée par le SDK Mobile Ads.
 achat unique qui n'existait pas encore. Le texte corrigé est parti avec
 la release 1.0.2. L'achat intégré, lui, existe maintenant vraiment.
 
-**Ce qui bloque.** Le seul délai qu'aucune décision ne raccourcit :
-**douze testeurs pendant quatorze jours consécutifs**, exigés d'un
-compte personnel avant toute mise en production. Le douzième s'est
-inscrit le 8 septembre au soir ; le compteur court jusqu'au
-22 septembre, et repart de zéro si les inscrits repassent sous douze.
+**Ce qui bloque.** Plus aucun délai : les **douze testeurs pendant
+quatorze jours consécutifs**, exigés d'un compte personnel, ont été
+tenus du 8 au 22 septembre. Reste à envoyer une release récente (la
+1.0.4 corrige les classements fantômes et le lien App Store partagé
+depuis Android), puis à demander l'accès à la production et à répondre
+au questionnaire avec ce qui a réellement changé.
+
+---
+
+### 3. Web · vitrine
+
+| | |
+|---|---|
+| Production | `https://erea.toakeur.com/` — vitrine, jeu web sur `/jeu.html`, `/support.html`, `/confidentialite.html` ; répond le 12 octobre 2026 |
+| Domaine & SSL | sous-domaine de `toakeur.com` depuis le 7 octobre 2026, servi par GitHub Pages derrière Cloudflare, HTTPS valide ; l'ancienne adresse `teiki5320.github.io/erea/` répond toujours |
+| Visibilité | Smart App Banner (`app-id=6794918301`) sur les pages ; badge officiel « Télécharger dans l'App Store » vers `https://apps.apple.com/fr/app/erea/id6794918301` depuis le 12 octobre 2026 ; Android annoncé « bientôt sur Google Play », sans lien tant que la fiche n'existe pas |
 
 ---
 
 ## Ce qui reste, dans l'ordre
 
-1. **Android** — laisser courir les quatorze jours (jusqu'au
-   22 septembre) en vérifiant de temps en temps que le tableau de bord
-   affiche toujours au moins douze inscrits, et que le nombre
-   d'installations de la release décolle (0 le 9 septembre : inscrits
-   ne veut pas dire installés, et les statistiques ont deux jours de
-   retard). Pendant ce temps, **publier
-   deux ou trois mises à jour** sur la piste (1.0.3 vers le 13, 1.0.4
-   vers le 18) : le formulaire d'accès à la production demande ce qui a
-   changé grâce aux retours des testeurs, et une piste figée se fait
-   refuser. La 1.0.3 répond au rapport du 15 septembre : démo animée
-   du geste (« tutoriel dynamique »), captures Play légendées, ligne
-   « Donner mon avis ». Le 22, « Demander un accès en production » et
-   répondre aux questions (aperçu dans le tableau de bord).
-2. **iOS** — vérifier dans les 24 heures que l'App Store affiche bien la
-   1.0.2 (l'API `itunes.apple.com/lookup?id=6794918301` répond avec le
-   numéro de version), puis que l'achat apparaît dans le jeu installé
-   depuis la boutique, à 3,99 €.
-3. **Android, 1.0.4** — deux textes hérités d'iOS à reprendre : « Respecte
-   le bouton silencieux de l'iPhone » et la ligne « Classement mondial »
-   des réglages, sans Play Jeux derrière.
+1. **Android** — envoyer la 1.0.4 sur la piste de test fermé, puis
+   « Demander un accès en production » et répondre au questionnaire
+   (rapport du 15 septembre et changements réels de la 1.0.3 et de la
+   1.0.4).
+2. **iOS** — soumettre la 1.0.4 (consentement attendu, achats restaurés,
+   `PrivacyInfo.xcprivacy` enfin juste), en choisissant au passage le
+   nom long de l'app.
+3. **Web** — le jour de la production Android, remplacer « Bientôt sur
+   Google Play » par le badge officiel et le lien vers la fiche.
 4. **Les deux** — se déclarer **trader** au titre du DSA, après avoir
-   nettoyé le complément d'adresse du compte Apple, qui porte encore le
-   nom d'une SARL sans rapport et deviendrait public.
-5. **iOS** — choisir le nom long de l'app pour la version suivante.
-6. **iOS** — élucider les builds Xcode Cloud 141 et 142, échoués le
-   4 septembre sur des commits de documentation ; 143 à 150 sont verts.
+   nettoyé le complément d'adresse du compte Apple.
+5. **iOS** — élucider les builds Xcode Cloud 141 et 142, échoués le
+   4 septembre sur des commits de documentation.
 
 ---
 

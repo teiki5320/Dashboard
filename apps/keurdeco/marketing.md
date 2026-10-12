@@ -1,12 +1,12 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 1er octobre 2026. Compagnon de INFRA.md (généré côté Dashboard : si le dépôt crée sa propre fiche docs/MARKETING.md, elle remplacera celle-ci à la synchro suivante).
+Mis à jour le 12 octobre 2026. Compagnon de INFRA.md.
 
 ## Positionnement
 
-- **Angle** : la décoration africaine expliquée et mise en scène — idées d'aménagement (« ambiances »), Top 10 et guides sur les matières et savoir-faire (wax, bogolan, kente, indigo, raphia…). « Keur » veut dire « maison » en wolof.
+- **Angle** : la décoration africaine expliquée et mise en scène — idées d'aménagement (« ambiances »), tops et guides sur les matières et savoir-faire (wax, bogolan, kente, indigo, raphia…). « Keur » veut dire « maison » en wolof.
 - **Publics** : la diaspora africaine en France, et tous les amateurs de déco.
-- **Différenciation** : contenu éditorial soigné (typographie française, animations signature, nuancier des matières interactif), produits vérifiés à la main sans photos Amazon, éthique affichée (mention IA sur les images, mention Partenaires, aucun prix inventé).
+- **Différenciation** : contenu éditorial soigné (animations, nuancier des matières), produits vérifiés à la main sans photos Amazon, éthique affichée (mention IA sur les images, mention Partenaires, aucun prix).
 
 ## Modèle de rémunération
 
@@ -14,29 +14,32 @@ Liens Partenaires Amazon.fr — tag `keurdeco-21`.
 
 | Phase | Levier | Statut |
 | --- | --- | --- |
-| 1 — Lancement | Affiliation Amazon (produits déco vérifiés à la main, mention Partenaires) | ✅ câblé |
-| 2 — Trafic | Épingles Pinterest automatiques (API v5, 5/jour max) | ✅ câblé — accès API : à vérifier dans la console Pinterest |
-| 3 — Recherche | Référencement Google (sitemap, données structurées, Search Console) | ⬜ inscription Search Console à vérifier |
+| 1 — Lancement | Affiliation Amazon (163 produits vérifiés à la main, mention Partenaires) | ✅ en ligne |
+| 2 — Trafic | Épingles Pinterest | ✅ par import CSV manuel — publication automatique par l'API pas encore ouverte |
+| 3 — Recherche | Référencement Google et Bing (sitemap, données structurées, Search Console, IndexNow) | ✅ en place — indexation en cours |
 
 ## Canaux
 
-- **Pinterest** (principal) : épingles générées au build (une par titre d'article, gabarits alternés), publication quotidienne automatique à 7 h 17 UTC ; import CSV manuel en repli tant que l'accès API n'est pas accordé ; Rich Pins et bouton « Épingler » sur le site.
-- **Google** : sitemap réservé aux pages indexables (rubriques vides en `noindex`), données structurées Article / ItemList / FAQ, balise `google-site-verification` prête (variable `GOOGLE_VERIFY`).
-- Pas d'autres canaux câblés dans le dépôt.
+- ✅ **Pinterest « Keur Déco »** (principal) : compte branché au Planning du Studio ; 62 épingles importées par CSV, dont 22 parues du 2 au 12 octobre 2026 et 40 programmées jusqu'au 1er novembre (`data/pinterest-etat.json`). La publication quotidienne par l'API tourne à blanc faute de secrets.
+- ✅ **Google** : Search Console vérifiée (propriété de domaine) ; au relevé du 7 octobre 2026, 71 pages indexées et 27 non indexées, demandes d'indexation faites les 7 et 8 octobre.
+- ✅ **Bing** : pages signalées par IndexNow après chaque reconstruction du lundi.
+- ⬜ **TikTok « Afrotok » et YouTube « toa.afrotok »** (comptes communs à toutes les apps, branchés au Planning) : aucune publication pour Keur Déco à ce jour.
 
 ## KPIs
 
-- Audience mesurée par **Cloudflare Web Analytics** (sans cookie) — chiffres à vérifier dans la console.
-- Épingles publiées : suivies dans `data/pinterest-etat.json` (mis à jour par le workflow).
-- Aucun autre chiffre disponible dans le dépôt.
+- Audience : Cloudflare Web Analytics (sans cookie) — chiffres à vérifier dans la console.
+- Indexation : Search Console — 71 pages indexées au 7 octobre 2026.
+- Épingles : suivies dans `data/pinterest-etat.json` ; statistiques à vérifier dans la console Pinterest.
+- Revenus : à vérifier dans la console Amazon Partenaires.
 
 ## Calendrier
 
-- Articles et conseils **publiés à leur date** (en-tête `publie_le`, heure de Paris) : le site est reconstruit à chaque push et chaque lundi à 5 h UTC. 19 articles en ligne au 1er octobre 2026 (dont Baptême, Noël, mariage en wax et Tabaski, publiés dès maintenant) ; 18 articles programmés, **un par lundi du 5 octobre 2026 au 1er février 2027** (dernier : chambre d'enfant en wax) ; 12 premiers conseils en place.
-- Épingles Pinterest : au fil de l'eau, 5 par jour au plus, jamais deux du même article le même jour.
+- Articles et conseils **publiés à leur date** (en-tête `publie_le`), le site étant reconstruit à chaque push et chaque lundi à 5 h UTC. Au 12 octobre 2026 : 37 articles, dont 21 à date (le top terre cuite paraît avec la reconstruction de ce lundi) et 16 programmés, un par lundi du 19 octobre 2026 au 25 janvier 2027, puis le balcon le 26 avril 2027.
+- Conseils : 50, dont 34 à date et 16 programmés (lundi, mercredi, vendredi) jusqu'au 18 novembre 2026 ; un rappel est prévu le 2 novembre pour préparer le lot suivant.
+- Épingles : par lots de 30 jours, 2 par jour au plus ; le lot en cours s'arrête le 1er novembre.
 
-## Prochaines actions
+## Les 3 priorités
 
-- ⬜ Faire accorder l'accès à l'API Pinterest (vidéo de démonstration exigée — formulaire prêt via `npm run pinterest:auth`) ; d'ici là, importer le CSV à la main.
-- ⬜ Vérifier l'inscription à la Search Console (variable `GOOGLE_VERIFY`).
-- ⬜ Remplacer les illustrations provisoires des trois articles de départ par les images OpenArt.
+- Importer avant le 1er novembre le lot Pinterest suivant (`npm run pinterest:lot`, import sur Pinterest, puis `--confirmer`), sinon plus aucune épingle ne paraît.
+- Obtenir l'accès standard à l'API Pinterest (vidéo de démonstration, voir `docs/pinterest.md`), puis renseigner les `board_id` et les trois secrets Actions pour que la publication devienne automatique.
+- Faire indexer par Google les pages encore « détectées, non indexées » (relecture du rapport Search Console prévue le 21 octobre).

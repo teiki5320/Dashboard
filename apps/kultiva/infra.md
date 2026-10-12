@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Généré le 2026-08-21 par un scan du dépôt, mis à jour le 12 octobre 2026 côté Dashboard (site vitrine en ligne sur GitHub Pages). Pour mettre à jour : relancer ce même prompt.
+Mis à jour le 12 octobre 2026 d'après le dépôt, la base Supabase et le site en ligne. Pour mettre à jour : relancer ce même prompt.
 
 > Aucun secret, clé ni jeton dans ce fichier — uniquement des références
 > (nom de variable, endroit où le secret vit, lien vers la console).
@@ -9,8 +9,9 @@ Généré le 2026-08-21 par un scan du dépôt, mis à jour le 12 octobre 2026 c
 
 - **Plateforme** : iOS + Android (Flutter ≥ 3.38), portrait, iPhone + iPad — app `com.toa.kultiva`, v1.0.0+5
 - **Stack** : Flutter/Dart Material 3, local-first (SharedPreferences + services singletons, `ValueNotifier`, sans framework d'état)
-- **Backend** : Supabase (auth, Postgres RLS, Storage, 2 edge functions) — facultatif, l'app fonctionne hors ligne
-- **Distribution** : App Store via Xcode Cloud + Play Store (AAB signé) — en pré-publication, textes des fiches prêts (`docs/store-listings.md`)
+- **Backend** : Supabase (auth, Postgres RLS, Storage, 2 edge functions) — facultatif, l'app fonctionne hors ligne. ⚠️ **Le projet est en pause** (vérifié le 12 octobre 2026) : tant qu'il n'est pas rallumé, ni connexion ni synchronisation ; le mode invité, lui, marche.
+- **Distribution** : App Store via Xcode Cloud + Play Store (AAB signé) — jamais soumise, textes des fiches prêts (`docs/store-listings.md`)
+- **Site** : <https://kultiva.toakeur.com> (présentation + confidentialité), en ligne depuis le 7 octobre 2026
 - **Marchés** : bi-marché France + 8 pays francophones d'Afrique de l'Ouest, détection du pays et de la sous-zone climatique
 - **Particularités** : météo Open-Meteo sans clé d'API, notifications locales uniquement, tutos et contenu 100 % hors ligne
 
@@ -18,7 +19,7 @@ Généré le 2026-08-21 par un scan du dépôt, mis à jour le 12 octobre 2026 c
 
 ### 1. GitHub
 
-- **Rôle** : dépôt du code + CI GitHub Actions — `ci.yml` (analyze + tests + builds Android AAB/APK), `site.yml` (publication de `landing/` sur GitHub Pages) et `sync-catalog.yml` (export du catalogue vers Supabase pour le projet sœur Kultivaprix).
+- **Rôle** : dépôt du code + CI GitHub Actions — `ci.yml` (analyze + tests + builds Android AAB/APK), `sync-catalog.yml` (export du catalogue vers Supabase pour le projet sœur Kultivaprix) et `site.yml` (publication du dossier `landing/`, voir plus bas).
 - **Console** : <https://github.com/teiki5320/Kultiva> (branche par défaut : `main`)
 - **Identifiants publics** : —
 - **Secrets** : `KULTIVA_SEED_SECRET` dans repo → Settings → Secrets → Actions (même valeur configurée côté edge function `seed-species`).
@@ -27,61 +28,22 @@ Généré le 2026-08-21 par un scan du dépôt, mis à jour le 12 octobre 2026 c
 ### 2. Supabase
 
 - **Rôle** : backend — auth (e-mail + Google + Apple), Postgres sous RLS (`profiles`, `plantations`, `unlocked_badges`, `preferences`, `challenge_posts`, `post_likes`, `post_reports`, `user_xp`, `news_items`, `species`), Storage (`plant-photos`, `news-images`), edge functions `seed-species` et `delete-account` (suppression de compte in-app). Migrations `supabase/migrations/001 → 016`, appliquées manuellement via le SQL Editor.
-- **État** : ⚠️ projet supprimé — son adresse ne résout plus (constaté le 3 octobre 2026, revérifié le 10 octobre 2026). L'app n'a donc plus ni authentification, ni données, ni stockage de photos : tout ce qui est listé ci-dessus est à recréer dans un nouveau projet.
-- **Console** : à recréer (l'ancien projet `vkiwkeknfzwdvufcqbrp` n'existe plus)
-- **Identifiants publics** : `lib/config/supabase_config.dart` pointe encore vers l'ancien projet `vkiwkeknfzwdvufcqbrp` + `anonKey` — à remplacer par ceux du nouveau projet. Publics par design, la sécurité repose sur les policies RLS.
+- **État** : ⏸️ **en pause, pas supprimé.** Le 12 octobre 2026, le compte Supabase liste toujours le projet « Kultiva » (`vkiwkeknfzwdvufcqbrp`, région `eu-west-1`) avec l'état *inactif* ; il se rallume depuis la console. Pendant la pause, son adresse ne résout plus du tout — c'est ce qui avait fait croire, le 3 octobre, à une suppression. Conséquence : sans rallumage, pas de connexion, pas de synchronisation, pas de suppression de compte in-app. Le mode invité et tout le contenu hors ligne fonctionnent.
+- **Console** : <https://supabase.com/dashboard/project/vkiwkeknfzwdvufcqbrp>
+- **Identifiants publics** : adresse du projet `vkiwkeknfzwdvufcqbrp` (elle ne répond plus tant que le projet est en pause) + `anonKey`, commitées dans `lib/config/supabase_config.dart` — publiques par design, la sécurité repose sur les policies RLS.
 - **Secrets** : clé `service_role` — dashboard uniquement (Settings → API), jamais dans le code ni le dépôt.
 - **Coût** : plan gratuit.
 
-### 3. Google Cloud
+### 3. Connexion utilisateurs (Apple / Google / e-mail)
 
-- **Rôle** : OAuth « Sign in with Google ».
-- **Console** : <https://console.cloud.google.com>
+- **Rôle** : comptes facultatifs, gérés par Supabase Auth (`lib/services/auth_service.dart`) — e-mail + mot de passe avec confirmation, « Se connecter avec Google » (`google_sign_in`), « Se connecter avec Apple » (`sign_in_with_apple`, nonce SHA-256, entitlement `ios/Runner/Runner.entitlements`). « Continuer sans compte » (mode invité) évite la connexion.
+- **État** : inopérante tant que Supabase est en pause. Les clés Google « Se connecter » ont été laissées à supprimer le 9 octobre 2026 (app pas publiée) : à recréer si on relance l'app.
+- **Console** : <https://console.cloud.google.com> (client OAuth Google) ; Supabase → Authentication → Providers.
 - **Identifiants publics** : client IDs Web et iOS dans `lib/config/supabase_config.dart` ; `REVERSED_CLIENT_ID` dans `ios/Runner/Info.plist`.
-- **Secrets** : le client secret OAuth vit dans le dashboard Supabase (Authentication → Providers → Google).
-- **Coût** : gratuit. À faire : créer le client OAuth Android (SHA-1 de la clé de signature release).
+- **Secrets** : le client secret OAuth Google vit dans le dashboard Supabase (Authentication → Providers → Google).
+- **Coût** : gratuit. Client OAuth Android (empreinte SHA-1 de la clé de signature) jamais créé.
 
-### 4. Apple Developer
-
-- **Rôle** : compte développeur — Sign in with Apple (entitlement `ios/Runner/Runner.entitlements`, nonce SHA-256), certificats et profils de signature gérés par Xcode Cloud (rien dans le dépôt).
-- **Console** : <https://developer.apple.com>
-- **Identifiants publics** : team `K597U7X3FZ`.
-- **Secrets** : identifiants du compte Apple → gestionnaire de mots de passe.
-- **Coût** : 99 $/an.
-
-### 5. App Store Connect
-
-- **Rôle** : fiche App Store, TestFlight, soumission à la review. Textes prêts à coller dans `docs/store-listings.md` (fiches par pays).
-- **Console** : <https://appstoreconnect.apple.com>
-- **Identifiants publics** : bundle `com.toa.kultiva`, version 1.0.0 (build 5). Conformité chiffrement déjà déclarée dans l'`Info.plist` (`ITSAppUsesNonExemptEncryption = false`).
-- **Secrets** : — (accès via le compte Apple Developer).
-- **Coût** : inclus dans l'adhésion Apple Developer.
-
-### 6. Xcode Cloud
-
-- **Rôle** : CI iOS — build automatique via `ios/ci_scripts/ci_post_clone.sh` (Flutter épinglé 3.41.6, SPM désactivé, `--config-only` avant `pod install`).
-- **Console** : App Store Connect → onglet Xcode Cloud.
-- **Identifiants publics** : —
-- **Secrets** : aucun secret dans le dépôt (signature gérée par Apple).
-- **Coût** : inclus (25 h de build/mois gratuites).
-
-### 7. Play Console
-
-- **Rôle** : publication Android — AAB signé (Gradle 8.14, Java 17, min SDK 21, desugaring activé).
-- **Console** : <https://play.google.com/console>
-- **Identifiants publics** : applicationId `com.toa.kultiva`.
-- **Secrets** : `android/key.properties` (non commité : storeFile, storePassword, keyAlias, keyPassword) + keystore `.jks` (non commité). ⚠️ Sauvegarder le keystore hors du dépôt : sa perte rend toute mise à jour impossible.
-- **Coût** : 25 $ (une seule fois).
-
-### 8. Sentry
-
-- **Rôle** : crash reporting (erreurs + stack traces), échantillonnage traces à 0,05 pour économiser la data.
-- **Console** : <https://sentry.io> — org `o4511455467864064` (région UE, `ingest.de`), projet `4511455478808656`.
-- **Identifiants publics** : DSN commité dans `lib/main.dart` (public par design).
-- **Secrets** : identifiants du compte → gestionnaire de mots de passe.
-- **Coût** : plan gratuit (développeur).
-
-### 9. Open-Meteo
+### 4. API tierce (météo Open-Meteo)
 
 - **Rôle** : météo 7 jours (`lib/services/weather_service.dart`), alertes arrosage/canicule. Fallback si géolocalisation refusée : Paris ou la capitale du pays sélectionné.
 - **Console** : aucune — pas de compte.
@@ -89,24 +51,97 @@ Généré le 2026-08-21 par un scan du dépôt, mis à jour le 12 octobre 2026 c
 - **Secrets** : aucun.
 - **Coût** : gratuit.
 
-### 10. Amazon Associates
+### 5. Apple Developer Program
 
-- **Rôle** : affiliation — liens « graines » sur les fiches légumes, tag `kultiva-21` (`lib/data/vegetables_base.dart`), mention « Lien partenaire » affichée. Marché France uniquement (masqué en Afrique de l'Ouest, remplacé par les conseils d'achat au marché).
-- **Console** : <https://partenaires.amazon.fr>
-- **Identifiants publics** : tag `kultiva-21`.
-- **Secrets** : identifiants du compte → gestionnaire de mots de passe.
-- **Coût** : gratuit (rémunérateur). ⚠️ Implique a priori le statut « trader » (DSA) pour la distribution UE — décision en cours, voir `docs/MARKETING.md`.
+- **Rôle** : compte développeur (compte Apple Developer de Jean) — Sign in with Apple, certificats et profils de signature gérés par Xcode Cloud (rien dans le dépôt).
+- **Console** : <https://developer.apple.com>
+- **Identifiants publics** : team `K597U7X3FZ`.
+- **Secrets** : identifiants du compte Apple → gestionnaire de mots de passe.
+- **Coût** : adhésion annuelle.
 
-### 11. GitHub Pages (hébergement web)
+### 6. App Store Connect
 
-- **Rôle** : hébergement du site vitrine (`landing/index.html` + `landing/privacy.html`), qui fournit l'URL d'assistance et l'URL de confidentialité exigées par les stores. Publié par le workflow `site.yml` à chaque push touchant `landing/` (en ligne depuis le 7 octobre 2026, vérifié le 12 octobre 2026).
+- **Rôle** : fiche App Store, TestFlight, soumission à la review. Textes prêts à coller dans `docs/FICHE_APP_STORE.md` et `docs/store-listings.md`.
+- **Console** : <https://appstoreconnect.apple.com>
+- **Identifiants publics** : bundle `com.toa.kultiva`, version 1.0.0 (build 5). Conformité chiffrement déclarée dans l'`Info.plist` (`ITSAppUsesNonExemptEncryption = false`).
+- **Secrets** : — (accès via le compte Apple Developer).
+- **Coût** : inclus dans l'adhésion Apple Developer.
+
+### 7. Xcode Cloud
+
+- **Rôle** : CI iOS — build automatique via `ios/ci_scripts/ci_post_clone.sh` (Flutter épinglé 3.41.6, SPM désactivé, `--config-only` avant `pod install`).
+- **Console** : App Store Connect → onglet Xcode Cloud.
+- **Identifiants publics** : —
+- **Secrets** : aucun secret dans le dépôt (signature gérée par Apple).
+- **Coût** : inclus (25 h de build/mois gratuites).
+
+### 8. Google Play Console
+
+- **Rôle** : publication Android — AAB signé (Gradle 8.14, Java 17, min SDK 24, target SDK 36, desugaring activé).
+- **Console** : <https://play.google.com/console>
+- **Identifiants publics** : applicationId `com.toa.kultiva`.
+- **Secrets** : voir « Keystore Android » ci-dessous.
+- **Coût** : frais d'inscription unique.
+
+### 9. Keystore Android (signature)
+
+- **Rôle** : signe les builds release Android. `android/app/build.gradle.kts` lit `android/key.properties` (`storeFile`, `storePassword`, `keyAlias`, `keyPassword`) ; sans ce fichier, le build release n'est pas signé avec la clé de publication. Certificat valable jusqu'en 2053.
+- **Console** : aucune — fichiers locaux.
+- **Identifiants publics** : —
+- **Secrets** : `android/key.properties` et le fichier `.jks`, tous deux ignorés par git. ⚠️ Les sauvegarder hors du dépôt : leur perte rend toute mise à jour sur Play impossible (sauf signature d'application par Play, à vérifier dans la console).
+- **Coût** : gratuit.
+
+### 10. Hébergement web (GitHub Pages / Cloudflare Pages)
+
+- **Rôle** : site de présentation `landing/` (`index.html` + `privacy.html` + images WebP), publié sur **GitHub Pages** par le workflow `.github/workflows/site.yml` à chaque modification de `landing/`. Fournit l'URL d'assistance, l'URL marketing et l'URL de confidentialité exigées par les stores.
+- **État** : en ligne — <https://kultiva.toakeur.com> et `/privacy.html` répondent (vérifié le 12 octobre 2026). Les boutons « Télécharger » pointent encore vers `#` (app non publiée).
 - **Console** : <https://github.com/teiki5320/Kultiva/settings/pages>
-- **Identifiants publics** : <https://kultiva.toakeur.com/> (domaine derrière Cloudflare) ; confidentialité : <https://kultiva.toakeur.com/privacy.html>. Le `vercel.json` de `landing/` est un reste de l'ancien projet et n'est plus utilisé par GitHub Pages.
+- **Identifiants publics** : adresse du site.
+- **Secrets** : aucun (jeton GitHub automatique du workflow).
+- **Coût** : gratuit.
+
+### 11. Nom de domaine
+
+- **Rôle** : sous-domaine `kultiva.toakeur.com` du domaine commun `toakeur.com`, DNS chez Cloudflare (proxy actif devant GitHub Pages). Adresse de contact publique `kultiva@toakeur.com` (site, confidentialité, fiches des stores).
+- **Console** : <https://dash.cloudflare.com> (compte de gestion `admin@toakeur.com`) ; bureau d'enregistrement du domaine à vérifier dans la console.
+- **Identifiants publics** : `kultiva.toakeur.com`, `kultiva@toakeur.com`.
+- **Secrets** : identifiants du compte → gestionnaire de mots de passe.
+- **Coût** : domaine partagé entre toutes les apps.
+
+### 12. Sentry (suivi des crashs)
+
+- **Rôle** : crash reporting (erreurs + stack traces), échantillonnage des traces à 0,05 pour économiser la data (`lib/main.dart`).
+- **Console** : <https://sentry.io> — org `o4511455467864064` (région UE, `ingest.de`), projet `4511455478808656`.
+- **Identifiants publics** : DSN commité dans `lib/main.dart` (public par design).
+- **Secrets** : identifiants du compte → gestionnaire de mots de passe.
+- **Coût** : plan gratuit (développeur).
+
+### 13. Avis in-app (StoreKit Review / In-App Review)
+
+- **Rôle** : demande de note sur les stores via `in_app_review` (`lib/services/review_service.dart`), déclenchée après des moments positifs.
+- **Console** : aucune — les notes apparaissent dans App Store Connect et la Play Console.
+- **Identifiants publics** : —
 - **Secrets** : aucun.
 - **Coût** : gratuit.
+
+### 14. Géolocalisation native
+
+- **Rôle** : position de l'appareil (`geolocator`) et nom de ville (`geocoding`) pour la météo, la région de culture et la configuration du jardin (`lib/services/geolocation_service.dart`, `weather_service.dart`, `garden_plan_config_sheet.dart`). Permission demandée en français (`Info.plist`), repli sur Paris ou la capitale du pays si refusée.
+- **Console** : aucune — services du système.
+- **Identifiants publics** : —
+- **Secrets** : aucun.
+- **Coût** : gratuit.
+
+### 15. Affiliation (Amazon Partenaires)
+
+- **Rôle** : liens « graines » sur les fiches légumes, tag `kultiva-21` (`lib/data/vegetables_base.dart`), mention « Lien partenaire » affichée. Marché France uniquement (masqué en Afrique de l'Ouest, remplacé par les conseils d'achat au marché). `kultiva.toakeur.com` fait partie des sites déclarés chez Amazon (9 octobre 2026). Une routine quotidienne vérifie que les produits cités restent achetables.
+- **Console** : <https://partenaires.amazon.fr> (compte de Jean)
+- **Identifiants publics** : tag `kultiva-21`.
+- **Secrets** : identifiants du compte → gestionnaire de mots de passe.
+- **Coût** : gratuit (rémunérateur). Implique le statut « trader » (DSA) pour la distribution UE — décidé le 24 août 2026.
 
 ## Notes
 
 - Valeurs **publiques par design** (leur présence dans le code est normale) : URL + `anonKey` Supabase, client IDs Google OAuth, DSN Sentry, tag Amazon.
-- E-mail de support public : `kultiva@toakeur.com` (affiché sur la landing et dans la privacy policy).
+- E-mail de support public : `kultiva@toakeur.com` (site, politique de confidentialité en ligne et dans l'app).
 - Reprise sur machine neuve : cloner le dépôt, Flutter ≥ 3.38, `flutter pub get` puis `flutter run` — aucun secret requis côté client ; release Android = keystore + `key.properties` depuis le coffre-fort ; release iOS = accès au compte Apple.

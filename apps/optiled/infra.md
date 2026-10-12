@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Généré le 25 septembre 2026 par un scan du dépôt, mis à jour le 12 octobre 2026 côté Dashboard (mesure d'audience active). Pour mettre à jour : relancer ce même prompt.
+Généré le 12 octobre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
 
 > Aucun secret dans cette fiche — uniquement des références (noms de variables, consoles).
 
@@ -9,64 +9,59 @@ Généré le 25 septembre 2026 par un scan du dépôt, mis à jour le 12 octobre
 - **Plateforme** : site web statique, en français, pensé d'abord pour le mobile, installable (PWA : `public/manifest.webmanifest`, `public/sw.js`, consultation hors ligne).
 - **Stack** : Vite 8 · TypeScript 6 · Vitest 5 · Playwright (test de bout en bout) · sharp (préparation des images) · police Urbanist hébergée avec le site (`@fontsource-variable/urbanist`). Node.js 22.12 ou plus récent (`package.json`, champ `engines`).
 - **Backend** : aucun. Le calculateur tourne entièrement dans le navigateur (`src/calc.ts`, fonctions pures) ; les réglages du visiteur restent dans son navigateur (stockage local) ou dans l'adresse de la page (`src/etat.ts`).
-- **Distribution** : GitHub Pages, publication automatique à chaque envoi sur `main` (`.github/workflows/pages.yml`), sur le domaine `www.optiled.fr` (`public/CNAME`, `SITE_URL` dans `build/site.ts`).
+- **Distribution** : GitHub Pages, publication automatique à chaque envoi sur `main` et chaque lundi, mercredi et vendredi à 5 h UTC pour les articles de conseil programmés (`.github/workflows/pages.yml`), sur le domaine `www.optiled.fr` (`public/CNAME`, `SITE_URL` dans `build/site.ts`).
+- **Contact public** : `optiled@toakeur.com` (mentions légales et page « À propos » ; dans le code depuis le 7 octobre 2026, en ligne depuis le 12). Plus aucune adresse en `alohash.fr` dans le site.
 - **Particularités** :
-  - 18 pages HTML à la racine, assemblées au build par un plugin Vite maison (`build/site.ts`) : en-tête, menu, pied de page, sommaire, sitemap, robots.txt, balises de partage, données structurées.
-  - Données des 26 cultures dans `src/data/legumes.json`, chaque valeur avec sa source ; sélection de 16 lampes Amazon.fr dans `src/data/lampes.json`.
-  - La chaîne de publication refuse de publier si les tests unitaires, le build ou le test de bout en bout échouent.
+  - 28 pages HTML à la racine, plus les articles de conseil (`contenu/conseils/`) et les pages des 26 cultures, assemblées au build par un plugin Vite maison (`build/site.ts`) : en-tête, menu, pied de page, sommaire, sitemap, robots.txt, flux RSS `conseils.xml`, balises de partage, données structurées.
+  - Données des 26 cultures dans `src/data/legumes.json`, chaque valeur avec sa source ; sélection de lampes Amazon dans `src/data/lampes.json` ; fourchettes de prix dans `src/data/budget.json`.
+  - La chaîne de publication refuse de publier si les tests unitaires, le build ou le test de bout en bout échouent (ce qui a bloqué toute mise en ligne du 7 au 12 octobre 2026).
+  - Signalement hebdomadaire des pages à Bing et aux autres moteurs par IndexNow (`.github/workflows/indexnow.yml`, le lundi à 7 h UTC ; clé publique dans `public/`).
+  - Routines Claude Code (console https://claude.ai/code/routines) : `optiled-verification-lampes`, prévue chaque jour (lampes et fourchettes de prix, envoi sur `main`) mais dont le dernier passage date du 1er octobre 2026 ; `optiled-nouvelle-serie-conseils`, rappel unique le 16 novembre 2026 pour préparer la série suivante d'articles.
 
-### 1. GitHub (code et publication)
+## GitHub
 
-- **Rôle** : hébergement du code (`teiki5320/optiled`, branche unique `main`) et chaîne de publication GitHub Actions : `npm ci` → `npm test` → `npm run build` → installation de Chromium → `npm run test:e2e` → envoi de `dist/` vers GitHub Pages.
+- **Rôle** : hébergement du code (`teiki5320/optiled`, branche unique `main`) et chaîne de publication GitHub Actions : `npm ci` → `npm test` → `npm run build` → installation de Chromium → `npm run test:e2e` → envoi de `dist/` vers GitHub Pages. Second workflow : IndexNow.
 - **Console** : https://github.com/teiki5320/optiled (onglet *Actions* pour le suivi des publications).
 - **Identifiants publics** : nom du dépôt `teiki5320/optiled`.
-- **Secrets** : aucun secret configuré. Le workflow n'utilise que les autorisations fournies par GitHub (`pages: write`, `id-token: write`).
+- **Secrets** : aucun secret ni variable de dépôt. Le workflow n'utilise que les autorisations fournies par GitHub (`pages: write`, `id-token: write`).
 - **Coût** : gratuit (dépôt public) — à vérifier dans la console en cas de changement de visibilité.
 
-### 2. GitHub Pages (hébergement)
+## Hébergement web (GitHub Pages / Cloudflare Pages)
 
-- **Rôle** : hébergement du site statique produit dans `dist/`.
+- **Rôle** : hébergement du site statique produit dans `dist/`, sur GitHub Pages (en-tête `server: GitHub.com` constaté le 12 octobre 2026). Pas de Cloudflare Pages.
 - **Console** : https://github.com/teiki5320/optiled/settings/pages
-- **Identifiants publics** : domaine personnalisé `www.optiled.fr` (fichier `public/CNAME`) ; l'ancienne adresse `https://teiki5320.github.io/optiled/` redirige vers le domaine.
+- **Identifiants publics** : domaine personnalisé `www.optiled.fr` (fichier `public/CNAME`) ; l'ancienne adresse `https://teiki5320.github.io/optiled/` redirige vers le domaine (301, constaté le 12 octobre 2026).
 - **Secrets** : aucun.
 - **Coût** : gratuit.
 
-### 3. IONOS (domaine, DNS, messagerie)
+## Nom de domaine
 
-- **Rôle** : registrar et DNS du domaine `optiled.fr`. La zone contient 4 enregistrements A vers GitHub Pages, un CNAME `www` → `teiki5320.github.io`, ainsi que les enregistrements de messagerie IONOS (MX, SPF, DKIM, DMARC, autodiscover) et une vérification Google (constaté dans la zone DNS le 24 septembre 2026 ; détail dans le README, section « Domaine personnalisé »).
+- **Rôle** : `optiled.fr`, enregistré chez IONOS, qui en gère aussi le DNS. La zone contient 4 enregistrements A vers GitHub Pages, un CNAME `www` → `teiki5320.github.io`, les enregistrements de messagerie IONOS (MX `mx00` / `mx01.ionos.fr`, SPF, DKIM, DMARC, autodiscover) et une vérification Google. L'adresse de contact publique, elle, est sur `toakeur.com`, pas sur `optiled.fr`.
 - **Console** : https://my.ionos.fr (Domaines & SSL → optiled.fr → DNS).
 - **Identifiants publics** : nom de domaine `optiled.fr`.
 - **Secrets** : identifiants du compte IONOS, conservés hors du dépôt.
-- **Coût** : à vérifier dans la console (contrat « IONOS Pack Domaine »).
+- **Coût** : à vérifier dans la console (contrat « IONOS Pack Domaine » ; renouvellement automatique désactivé au 24 septembre 2026, échéance à vérifier).
 
-### 4. Partenaires Amazon (affiliation)
+## Amazon Partenaires (affiliation)
 
-- **Rôle** : liens sponsorisés vers les lampes conseillées (`https://www.amazon.fr/dp/<ASIN>?tag=…`, `rel="sponsored"`), générés par `src/lampes.ts` ; page `lampes.html` et propositions dans le calculateur.
-- **Console** : https://partenaires.amazon.fr
+- **Rôle** : liens sponsorisés vers les lampes conseillées (`https://www.amazon.fr/dp/<ASIN>?tag=…`, `rel="sponsored"`), générés par `src/lampes.ts` ; page `lampes.html`, page `meilleures-lampes.html` et propositions dans le calculateur. Aucun prix, note ni avis n'est enregistré dans le dépôt (règles du programme, contrôlées par les tests).
+- **Console** : https://partenaires.amazon.fr (site `optiled.fr` déclaré).
 - **Identifiants publics** : identifiant de suivi `optiled-21` (constante `TAG_AMAZON` dans `src/lampes.ts`, à changer à un seul endroit).
 - **Secrets** : identifiants du compte et informations de paiement, uniquement dans la console Amazon.
 - **Coût** : gratuit.
 
-### 5. Cloudflare Web Analytics (mesure d'audience)
+## Analytics (mesure d'usage)
 
-- **Rôle** : mesure d'audience gratuite, sans cookie, active sur toutes les pages depuis le 7 octobre 2026 (vérifié en ligne le 12 octobre 2026). Le jeton est désormais écrit dans `build/site.ts` (`MESURE_AUDIENCE`, injecté par `pluginSite`) ; l'ancienne fonction `mesureAudience`, qui le lisait dans la variable de dépôt `CF_BEACON_TOKEN`, reste dans le code. C'est le seul script externe autorisé par les tests (12 octobre 2026).
+- **Rôle** : Cloudflare Web Analytics, mesure d'audience gratuite et sans cookie, **active sur le site en ligne** depuis la publication du 12 octobre 2026 (script `static.cloudflareinsights.com/beacon.min.js` présent sur les pages). Une seule source depuis le 12 octobre 2026 : le jeton du site, écrit dans le code (constante `JETON_MESURE_AUDIENCE`, `build/site.ts`), commande à la fois le script, ajouté au seul build de production, et la phrase des mentions légales, qui décrit la mesure (sans cookie, pages vues agrégées, adresse IP non conservée). L'ancienne variable de dépôt `CF_BEACON_TOKEN` a été retirée du code et du workflow. Le seul script externe autorisé par le test de bout en bout (`scripts/e2e.mjs`).
 - **Console** : https://dash.cloudflare.com → Analytics & Logs → Web Analytics (site `www.optiled.fr`, sans changer les DNS).
-- **Identifiants publics** : jeton du beacon (32 caractères, visible dans les pages, non secret) — dans `build/site.ts`.
+- **Identifiants publics** : jeton du site (32 caractères, visible dans les pages, non secret), dans `JETON_MESURE_AUDIENCE`.
 - **Secrets** : aucun.
 - **Coût** : gratuit.
 
-### 6. Génération d'images (IA)
+## API d'IA (génération d'images)
 
-- **Rôle** : photos de couverture des guides et miniatures des cultures, générées par IA puis converties en WebP (`npm run images`, `npm run planche`). Le README indique ElevenLabs (modèles Seedream et gpt-image-2) ; les consignes du projet (`CLAUDE.md`) prévoient OpenArt en priorité pour les prochaines images.
-- **Console** : selon le service utilisé.
+- **Rôle** : photos de couverture des guides et des articles, miniatures des cultures et illustrations des lampes, générées par IA hors du site puis converties en WebP (`npm run images`, `npm run planche`) ; le site n'appelle aucune IA. Les consignes du projet (`CLAUDE.md`) imposent OpenArt en priorité, avec annonce du coût en crédits avant chaque génération ; les premières images ont été faites avec ElevenLabs (d'après le README). Le pied de page signale les images générées.
+- **Console** : OpenArt (crédits) — à vérifier dans la console.
 - **Identifiants publics** : aucun dans le code.
 - **Secrets** : aucun dans le dépôt.
 - **Coût** : crédits consommés à chaque génération — à vérifier dans la console du service.
-
-### 7. Routine mensuelle (Claude Code)
-
-- **Rôle** : vérification mensuelle de la sélection de lampes Amazon (bonne évaluation, disponibilité, chiffres, date `verifie_le` ; les notes et avis ne sont plus enregistrés), avec mise à jour de `src/data/lampes.json` et envoi sur `main`. Le 1er de chaque mois à 9 h (heure de Paris).
-- **Console** : https://claude.ai/code/routines
-- **Identifiants publics** : aucun dans le code.
-- **Secrets** : aucun dans le dépôt.
-- **Coût** : inclus dans l'abonnement Claude — à vérifier dans la console.

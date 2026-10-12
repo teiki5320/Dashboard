@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 2026-08-21. Compagnon de `INFRA.md` : là où INFRA répertorie
+Mis à jour le 12 octobre 2026. Compagnon de `INFRA.md` : là où INFRA répertorie
 la technique, ce fichier suit la stratégie marketing et de rémunération.
 Pour l'actualiser : relancer le même prompt.
 
@@ -37,18 +37,21 @@ vente de biens physiques, dons.
 
 ## Canaux
 
+✅ seulement avec une preuve de publication ; un compte ouvert ou branché
+sans rien de publié reste ⬜.
+
 | Canal | Détail | Statut |
 | --- | --- | --- |
-| ASO (fiches stores) | Fiches par pays rédigées (`docs/store-listings.md`) ; `in_app_review` branché ; captures à refaire à chaque grosse version | ✅ |
-| Partage in-app | Cartes de partage (défis, Tamassi) = pub gratuite portée par les utilisateurs | ✅ |
+| Site de présentation | <https://kultiva.toakeur.com> en ligne depuis le 7 octobre 2026 (présentation + confidentialité, contact `kultiva@toakeur.com`) ; boutons « Télécharger » encore sans lien, faute de publication | ✅ |
+| ASO (fiches stores) | Fiches par pays rédigées (`docs/store-listings.md`, `docs/FICHE_APP_STORE.md`) ; `in_app_review` branché — mais l'app n'est publiée sur aucune boutique | ⬜ |
+| Partage in-app | Cartes de partage (défis, Tamassi) prêtes dans le code — sans utilisateurs tant que l'app n'est pas publiée | ⬜ |
 | Partage WhatsApp prioritaire (AO) | Mettre WhatsApp en avant sur les écrans de partage — canal dominant en Afrique de l'Ouest | ⬜ |
-| Instagram | `@toa.kultiva`, lien câblé dans l'app | ✅ |
-| TikTok / Reels | Vidéos courtes potager (#PotagerTok) | ⬜ |
+| Instagram | `@toa.kultiva`, lien câblé dans l'app ; aucune publication vérifiable | ⬜ |
+| TikTok / YouTube | Comptes communs « Afrotok » (TikTok) et « toa.afrotok » (YouTube) branchés au Planning du Studio ; rien de programmé pour Kultiva | ⬜ |
 | Groupes Facebook | Jardinage FR + Sénégal/Côte d'Ivoire — apporter de la valeur avant de promouvoir | ⬜ |
 | Micro-influenceurs | 3–5 créateurs potager FR (TikTok/YouTube), contact avec kit presse | ⬜ |
-| Newsletter | « Que semer ce mois-ci » (Brevo, gratuit ≤ 300/j) — fidélisation la moins chère | ⬜ |
-| Landing | Site vitrine + page privacy prêts dans `landing/` ; déploiement Vercel et vrais liens stores | ⬜ |
-| Presse | Rubriques « app du jour », magazines jardinage (Rustica…), featuring éditorial Apple/Google | ⬜ |
+| Newsletter | « Que semer ce mois-ci » — fidélisation la moins chère | ⬜ |
+| Presse | Rubriques « app du jour », magazines jardinage, featuring éditorial Apple/Google | ⬜ |
 
 Publicité payante (Meta/TikTok Ads) : **pas avant** d'avoir prouvé la
 rétention organique. À noter : CPI en AO ~10× moins cher qu'en France —
@@ -71,16 +74,13 @@ décider (Firebase Analytics ou PostHog, avec consentement RGPD).
 
 ## Calendrier
 
-- **Avant publication** : déployer la landing (Vercel), compte de démo, captures d'écran, décision DSA.
+- **Avant publication** : rallumer Supabase, compte de démo, captures d'écran, coordonnées de trader (DSA).
 - **Février–mars (France)** : lancer / pousser — pic des recherches « que semer ».
 - **Mai–juin (Afrique de l'Ouest)** : pousser avant l'hivernage.
 - **En continu** : partage in-app, réseaux sociaux, itération ASO mensuelle.
 
-## Prochaines actions
+## Les 3 priorités
 
-- Câbler les vrais liens stores dans `landing/index.html` (dès publication).
-- Mettre le partage WhatsApp en avant sur les écrans de partage (AO).
-- Créer le kit presse (pitch « l'appli kawaii qui fait pousser ton potager », visuels, contact).
-- Ouvrir la newsletter Brevo + formulaire sur la landing.
-- Rewarded video AdMob liée au Tamassi (consentement UMP inclus).
-- Contacter 3–5 micro-influenceurs potager avant le pic février-mars.
+- Décider si Kultiva repart : rallumer le projet Supabase (en pause) et recréer les clés Google « Se connecter », sinon la connexion et la synchronisation restent hors service.
+- Remplir la fiche App Store avec les adresses de `kultiva.toakeur.com` et `kultiva@toakeur.com`, puis compte de démo, captures et coordonnées de trader, et soumettre.
+- Créer la fiche Google Play et lancer tout de suite le test fermé (douze testeurs pendant quatorze jours si le compte est personnel).

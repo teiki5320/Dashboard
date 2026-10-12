@@ -1,13 +1,15 @@
 # PUBLICATION — état de la mise en ligne
 
-> Mise à jour le 10/10/2026 (hébergement Cloudflare).
+> Mise à jour le 12 octobre 2026 (domaine enregistré chez Cloudflare, mesure d'audience non active, contrôle en ligne du jour).
 
 ## Vue d'ensemble
 
-- **URL publique** : https://solelis.com
+- **État** : ⏸️ projet en pause — le site reste en ligne et répond (contrôle du 12 octobre 2026)
+- **URL publique** : https://solelis.com (titre « Solelis — Aide aux chefs d'entreprise en difficulté »)
 - **Hébergeur** : Cloudflare Workers (Worker « solelis », adaptateur OpenNext)
 - **Base** : Cloudflare D1 « solelis » (UE)
-- **Domaine + SSL** : solelis.com déclaré comme domaine personnalisé du Worker (`wrangler.jsonc`) ; certificat géré automatiquement par Cloudflare
+- **Domaine + SSL** : solelis.com, enregistré chez Cloudflare, déclaré comme domaine personnalisé du Worker (`wrangler.jsonc`) ; certificat géré automatiquement par Cloudflare
+- **Contact public** : solelis@toakeur.com (mentions légales, confidentialité, politique de données, accessibilité, témoignages)
 - **Dernière mise en production** : à lire dans la console Cloudflare (Worker → Déploiements)
 
 ### 1. Web · Production
@@ -20,14 +22,14 @@
 
 ### 2. Domaine & SSL
 
-- **Domaines servis** : `solelis.com` et `www.solelis.com` (redirection permanente vers `solelis.com` dans `worker.ts`)
+- **Domaines servis** : `solelis.com` et `www.solelis.com` (redirection permanente 301 vers `solelis.com` dans `worker.ts`, constatée le 12 octobre 2026)
 - **SSL** : automatique (Cloudflare)
-- **Registrar / échéance** : à vérifier dans la console Cloudflare
-- **E-mail** : vérifier le domaine d'envoi dans Resend (SPF/DKIM) et régler `RESEND_FROM` en conséquence
+- **Registrar / échéance** : Cloudflare ; domaine enregistré le 10 octobre 2026, échéance le 10 octobre 2027 (renouvellement automatique à vérifier dans la console)
+- **E-mail** : une clé DKIM Resend est publiée sur `toakeur.com` ; vérification du domaine d'envoi et réglage de `RESEND_FROM` à vérifier dans la console Resend
 
 ### 3. Visibilité
 
-- **Indexation** : `app/sitemap.ts` (servi sur `/sitemap.xml`, avec les 17 modèles de courriers) et `app/robots.ts` (bloque `/api/` et `/fiche/`, autorise `/api/og`) ; déclarer le site dans Google Search Console
+- **Indexation** : `app/sitemap.ts` (servi sur `/sitemap.xml`, 138 adresses le 12 octobre 2026) et `app/robots.ts` (bloque `/api/` et `/fiche/`, autorise `/api/og`) ; déclaration dans Google Search Console encore à faire d'après `_plans/roadmap.md` (à vérifier dans la console)
 - **Balises de partage** : Open Graph + Twitter Card par page (titre et description propres à chaque page), image générée dynamiquement par `/api/og` (runtime Node), URL canonique sur les pages qui la déclarent (`ogMeta({ chemin })`), JSON-LD Organization + WebSite (+ FAQPage, fil d'Ariane)
-- **Mesure d'audience** : Plausible, activée seulement si `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` est définie
+- **Mesure d'audience** : aucune en production — Plausible est prévu dans le code mais ne se charge que si `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` est définie, ce qui n'est pas le cas
 - **PWA** : `manifest.json` + icônes 512/192/favicon — installable sur mobile
