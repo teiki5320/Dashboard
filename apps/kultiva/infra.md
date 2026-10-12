@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Généré le 2026-08-21 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
+Généré le 2026-08-21 par un scan du dépôt, mis à jour le 12 octobre 2026 côté Dashboard (site vitrine en ligne sur GitHub Pages). Pour mettre à jour : relancer ce même prompt.
 
 > Aucun secret, clé ni jeton dans ce fichier — uniquement des références
 > (nom de variable, endroit où le secret vit, lien vers la console).
@@ -18,7 +18,7 @@ Généré le 2026-08-21 par un scan du dépôt. Pour mettre à jour : relancer c
 
 ### 1. GitHub
 
-- **Rôle** : dépôt du code + CI GitHub Actions — `ci.yml` (analyze + tests + builds Android AAB/APK) et `sync-catalog.yml` (export du catalogue vers Supabase pour le projet sœur Kultivaprix).
+- **Rôle** : dépôt du code + CI GitHub Actions — `ci.yml` (analyze + tests + builds Android AAB/APK), `site.yml` (publication de `landing/` sur GitHub Pages) et `sync-catalog.yml` (export du catalogue vers Supabase pour le projet sœur Kultivaprix).
 - **Console** : <https://github.com/teiki5320/Kultiva> (branche par défaut : `main`)
 - **Identifiants publics** : —
 - **Secrets** : `KULTIVA_SEED_SECRET` dans repo → Settings → Secrets → Actions (même valeur configurée côté edge function `seed-species`).
@@ -97,13 +97,13 @@ Généré le 2026-08-21 par un scan du dépôt. Pour mettre à jour : relancer c
 - **Secrets** : identifiants du compte → gestionnaire de mots de passe.
 - **Coût** : gratuit (rémunérateur). ⚠️ Implique a priori le statut « trader » (DSA) pour la distribution UE — décision en cours, voir `docs/MARKETING.md`.
 
-### 11. Vercel
+### 11. GitHub Pages (hébergement web)
 
-- **Rôle** : hébergement du site vitrine (`landing/index.html` + `landing/privacy.html`) — fournira l'URL d'assistance et l'URL de confidentialité exigées par les stores. Déploiement prévu (Root Directory = `landing`), URL à consigner ici une fois en ligne.
-- **Console** : <https://vercel.com>
-- **Identifiants publics** : URL publique du site — à consigner après déploiement.
-- **Secrets** : compte (connexion via GitHub).
-- **Coût** : gratuit (plan Hobby).
+- **Rôle** : hébergement du site vitrine (`landing/index.html` + `landing/privacy.html`), qui fournit l'URL d'assistance et l'URL de confidentialité exigées par les stores. Publié par le workflow `site.yml` à chaque push touchant `landing/` (en ligne depuis le 7 octobre 2026, vérifié le 12 octobre 2026).
+- **Console** : <https://github.com/teiki5320/Kultiva/settings/pages>
+- **Identifiants publics** : <https://kultiva.toakeur.com/> (domaine derrière Cloudflare) ; confidentialité : <https://kultiva.toakeur.com/privacy.html>. Le `vercel.json` de `landing/` est un reste de l'ancien projet et n'est plus utilisé par GitHub Pages.
+- **Secrets** : aucun.
+- **Coût** : gratuit.
 
 ## Notes
 
