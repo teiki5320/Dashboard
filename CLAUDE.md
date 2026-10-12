@@ -44,10 +44,8 @@ recherche (gardée sur le seul Lexique) et la cloche.
 
 **Les logos** sont les vraies icônes des apps, déposées dans `assets/logos/`
 (160 px, webp, ~5 Ko) et détectées par `tool/build.js`, qui pose `logo` dans
-`dash-data.js`. Sans fichier, l'emoji du manifeste sert de repli. **Tama TV et
-D-Sign n'en ont pas** : leurs dépôts portent encore l'icône Flutter par
-défaut — la même pour les deux. Afficher un logo générique aurait été pire que
-leur emoji.
+`dash-data.js`. Sans fichier, l'emoji du manifeste sert de repli — les huit
+cartes ont toutes leur vrai logo, le repli ne sert donc plus pour l'instant.
 
 `dash-module.js` pour l'affichage, `assets/dash-data.js` pour les données. Ce
 dernier est **généré** par `node tool/build.js` à partir de `apps/<id>/` et de
@@ -70,7 +68,7 @@ page permet de les télécharger puis de les effacer, et disparaît une fois
 qu'il n'en reste plus (voir `renderRecuperation` dans `script.js`). Ne pas le
 supprimer tant que Teiki ne l'a pas vidé.
 
-## Mes apps — les 11 cartes
+## Mes apps — les 8 cartes
 
 Le classement se fait sur `platforms` dans `apps/<id>/app.json` : une app dont
 toutes les plateformes sont `Web` est un **site**, sinon c'est une **appli**. Une
@@ -80,9 +78,6 @@ liste de plateformes **vide** ne fait pas un site : l'app reste une appli.
 |---|---|---|---|
 | Applis | Kultiva | `kultiva` | `teiki5320/Kultiva` |
 | Applis | Erea | `erea` | `teiki5320/erea` |
-| Applis | Drama-studio | `drama-studio` | `teiki5320/Studio` |
-| Applis | Tama TV | `tama-tv` | `teiki5320/Tama` |
-| Applis | D-Sign | `d-sign` | `teiki5320/D-Sign` |
 | Applis | Palabre | `palabre` | `teiki5320/palabre` |
 | Sites | Solelis | `solelis` | `teiki5320/Solelis` |
 | Sites | Keur Cook | `alohash` | `teiki5320/keurcook` |
@@ -96,11 +91,13 @@ domaine `keurcook.com`. **Avelor s'appelle Solelis** depuis le 10 octobre 2026 �
 dépôt, dossier et identifiant renommés en même temps, pour ne pas refaire le
 coup de `alohash`. Le site déployé, lui, affiche encore « AVELOR » et vit
 toujours sur `avelor.vercel.app` : c'est son dépôt qui changera ça, pas le
-Dashboard. **Solelis est en pause** (⏸️), mais son site répond. **Drama Studio n'est pas une app mobile** : c'est un
-studio local sur **macOS** (Express + React sur `127.0.0.1:4600`), et sa carte le
-dit depuis le 3 octobre 2026. Son dépôt a été renommé deux fois —
-`bd`, puis `Drama-Studio`, puis **`teiki5320/Studio`** depuis le 10 octobre 2026 ;
-ses propres fiches citent encore l'ancien nom (les redirections GitHub tiennent).
+Dashboard. **Solelis est en pause** (⏸️), mais son site répond.
+
+**Trois cartes ont été retirées le 12 octobre 2026**, sur décision de Teiki :
+`d-sign` et `tama-tv`, deux projets en pause, et `drama-studio` — c'est le
+Studio lui-même, un des deux dépôts dans lesquels on travaille, il n'a pas à
+figurer parmi les projets suivis. Leurs dossiers, leurs hachages de synchro et
+leurs fiches sont sortis du dépôt ; l'historique git les garde.
 
 ⚠️ **Kultiva n'a plus de backend.** Son projet Supabase a été supprimé : son
 adresse ne résout plus (constaté le 3 octobre 2026). L'app n'a donc plus ni
@@ -134,17 +131,11 @@ retouchée côté Dashboard n'est pas écrasée.
 
 ## États particuliers
 
-- `drama-studio`, `erea` et `alohash` régénèrent **leurs propres fiches** dans
-  leur dépôt. Le rôle du Dashboard s'y limite à la cohérence et aux trous.
+- `erea` et `alohash` régénèrent **leurs propres fiches** dans leur dépôt. Le
+  rôle du Dashboard s'y limite à la cohérence et aux trous.
 - `keurdeco` n'a pas de dossier `docs/` : ses fiches ont été générées côté
   Dashboard le 30 septembre 2026 et n'ont donc aucun hachage dans
   `.sync-state.json`. Elles seront remplacées le jour où son dépôt en publie.
-- `d-sign` et `tama-tv` ont été reliés à leurs dépôts le 3 octobre 2026.
-  `teiki5320/D-Sign` publie ses propres `docs/INFRA.md` et `docs/MARKETING.md`,
-  rapatriées par la synchro. `teiki5320/Tama` ne publie que `docs/PUBLICATION.md` :
-  ses fiches infra et marketing restent provisoires jusqu'à ce que son dépôt les
-  génère. D-Sign n'a aucun workflow, donc `ci: null` y est exact ; la dernière CI
-  de Tama est **en échec** depuis le 20 août 2026.
 - **Lexique** : on écrit « Hébergement web (GitHub Pages / Cloudflare Pages) ».
   Des alias invisibles (vercel, netlify) servent uniquement à l'ancrage de la
   recherche — ne pas réintroduire d'outils abandonnés dans les textes visibles.
@@ -168,7 +159,7 @@ Deux règles y sont acquises, et valent aussi pour `tool/sync.js` :
 1. **Un échec réseau n'est pas un constat.** Une adresse est réessayée une fois
    avant d'être déclarée morte, et un refus de l'API GitHub (403 de quota, droit
    manquant) donne « non vérifiable », jamais « introuvable ». Sans cela, un quota
-   épuisé faisait dire au Dashboard que les onze dépôts avaient disparu.
+   épuisé faisait dire au Dashboard que tous ses dépôts avaient disparu.
 2. **Ne jamais confondre « il n'y a rien » et « je n'ai pas pu savoir ».** Dans
    `sync.js`, seul un 404 signifie qu'il n'y a ni release ni run ; tout autre
    refus conserve les valeurs précédentes de `status.json`. Sans cela, une simple

@@ -66,6 +66,29 @@ const SERVICES = [
 
   // ── Backend & données ──────────────────────────────────────────────────────
   {
+    id: 'base-sql',
+    nom: 'Base SQL hébergée (Cloudflare D1 / Neon / Turso)',
+    emoji: '🗄️',
+    categorie: 'Backend & données',
+    badge: 'gratuit',
+    alias: ['cloudflare d1', 'd1', 'neon', 'turso', 'base sql', 'base de donnees'],
+    resume: 'Une base SQL sans serveur à administrer, facturée à l’usage.',
+    role: "Une base de données SQL gérée par l'hébergeur : on écrit des tables et des requêtes, personne n'administre de machine. Contrairement à Supabase, elle ne fournit QUE la base — ni authentification, ni stockage de fichiers, ni API générée. C'est le bon choix quand l'application a déjà son propre serveur et n'a besoin que d'un endroit où ranger ses données.",
+    concepts: [
+      { terme: 'Binding', def: "Le nom sous lequel le code atteint la base (par exemple `DB`), déclaré dans la configuration de l'hébergeur plutôt que dans une adresse de connexion." },
+      { terme: 'Migration', def: "Un fichier SQL numéroté qui fait évoluer le schéma. On les rejoue dans l'ordre pour reconstruire la base à l'identique." },
+      { terme: 'Juridiction', def: "La région où les données sont stockées — à fixer à l'UE quand l'application touche des données personnelles européennes." },
+    ],
+    cout: "Offre gratuite confortable chez Cloudflare D1 (5 Go, 5 millions de lectures par jour) ; au-delà, facturation à la lecture et à l'écriture. Neon et Turso ont des offres gratuites comparables.",
+    quand: "Quand le site a déjà un serveur (Worker, API) et n'a besoin que d'une base. Si l'app a aussi besoin d'authentification et de stockage de fichiers, Supabase évite d'assembler trois services.",
+    alternatives: 'Supabase (base + auth + stockage), Firebase, PostgreSQL auto-hébergé.',
+    consigner: [
+      'Le nom de la base et sa juridiction',
+      'Le binding utilisé par le code',
+      'Où vivent les migrations',
+    ],
+  },
+  {
     id: 'supabase',
     nom: 'Supabase',
     emoji: '⚡',
@@ -325,7 +348,7 @@ const SERVICES = [
     cout: "Gratuit pour un usage personnel (quotas très larges).",
     quand: "Dès la préparation de la sortie : page support + politique de confidentialité sont demandées à la soumission.",
     alternatives: "OVH mutualisé, serveur perso.",
-    alias: ['vercel', 'netlify'],
+    alias: ['vercel', 'netlify', 'cloudflare workers', 'workers', 'opennext'],
     consigner: [
       "Plateforme utilisée et dépôt source du site",
       "URLs : vitrine, support, politique de confidentialité",

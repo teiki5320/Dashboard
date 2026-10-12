@@ -35,8 +35,10 @@ const TITRES_HORS_SERVICE = [
   /^(ou vit chaque secret|reprise du projet|format .*source des donnees|routine )/,
   // Dépendances techniques sans compte : registres de paquets, polices web
   /^(registres? de paquets|google fonts|polices)/,
-  // Un service que la fiche dit explicitement non souscrit
-  /(non souscrit|pas souscrit|non utilise)/,
+  // Le titre dit lui-même que le service n'est pas en place
+  /(non souscrit|pas souscrit|non utilise|a souscrire|\(?optionnel\)?$)/,
+  // Sections de synthèse en fin de fiche
+  /^(limites connues|ce qui reste a faire|points de vigilance)/,
 ];
 
 const horsService = (t) => TITRES_HORS_SERVICE.some((re) => re.test(t));
