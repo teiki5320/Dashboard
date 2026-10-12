@@ -20,27 +20,29 @@ function ech(s) {
 }
 
 // --- NAVIGATION ---
-// Il n'y a plus qu'une page. showPage reste parce que le module Mes apps
-// s'accroche dessus pour s'initialiser et pour nettoyer le rail.
+// Deux pages : la page de garde et Mes apps. Le module s'accroche sur
+// showPage pour s'initialiser et pour nettoyer le rail en le quittant.
 function showPage(id) {
     showPage._cur = id;
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     const cible = $('page-' + id);
     if (cible) cible.classList.add('active');
+    document.querySelectorAll('#gp-rail .rail-item[data-page]').forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-page') === id);
+    });
+    majBoutonRetour();
     window.scrollTo(0, 0);
 }
 
-// La flèche retour appartient au module : elle ramène à sa vue d'ensemble.
-// Depuis la vue d'ensemble il n'y a plus rien derrière, donc elle s'efface —
-// un bouton qui ne fait rien vaut moins qu'un bouton absent.
+// La flèche retour : d'abord la vue d'ensemble du module, puis la page de
+// garde. Sur la page de garde il n'y a plus rien derrière, elle s'efface.
 function goBack() {
-    if (typeof window.dashBack === 'function') window.dashBack();
+    if (showPage._cur === 'dash' && typeof window.dashBack === 'function' && window.dashBack()) return;
+    showPage('accueil');
 }
 function majBoutonRetour() {
     const b = $('global-back');
-    if (!b) return;
-    const dansUneFiche = !!document.querySelector('#page-dash .app-head, #page-dash .cat-section');
-    b.style.display = dansUneFiche ? 'flex' : 'none';
+    if (b) b.style.display = showPage._cur === 'accueil' ? 'none' : 'flex';
 }
 
 // --- NOTIFICATIONS (message non bloquant) ---
@@ -152,11 +154,22 @@ function appliquerAccessibilite() {
 appliquerAccessibilite();
 
 // Le module régénère tout son HTML à chaque navigation : on repasse derrière
-// lui pour le clavier, la flèche retour et le titre de l'en-tête.
+// lui pour rendre ses éléments cliquables au clavier.
 (function suivreLeModule() {
     const zone = $('dash-contenu');
-    if (!zone) return;
-    new MutationObserver(() => { majBoutonRetour(); appliquerAccessibilite(); })
-        .observe(zone, { childList: true });
-    majBoutonRetour();
+    if (zone) new MutationObserver(appliquerAccessibilite).observe(zone, { childList: true });
 })();
+
+// La page de garde annonce ce qu'elle contient, sans l'ouvrir. Appelée
+// depuis index.html, après le chargement de assets/dash-data.js.
+function sousTitreDeGarde() {
+    const el = $('garde-apps-sous');
+    const d = window.DASH_DATA;
+    if (!el || !d || !d.apps) return;
+    const site = (a) => (a.platforms || []).length > 0 && a.platforms.every((p) => p === 'Web');
+    const sites = d.apps.filter(site).length;
+    const applis = d.apps.length - sites;
+    const ko = d.apps.filter((a) => a.status && a.status.ci && a.status.ci.conclusion === 'failure').length;
+    el.textContent = applis + ' applis · ' + sites + ' sites' + (ko ? ' · ' + ko + ' en erreur' : '');
+    el.classList.toggle('garde-alerte', ko > 0);
+}

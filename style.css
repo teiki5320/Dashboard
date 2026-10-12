@@ -783,3 +783,59 @@ html[data-anim="off"] *, html[data-anim="off"] *::before, html[data-anim="off"] 
 .recup-danger { color: var(--ko); }
 @media (max-width: 900px) { #recup-anciennes { margin: 12px 14px 0; }
 }
+/* ════════════════════════════════════════
+   PAGE DE GARDE — deux portes, rien d'autre
+════════════════════════════════════════ */
+.garde {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+    gap: 18px; max-width: 900px; margin: 0 auto; padding-top: 10px;
+}
+.garde-tuile {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+    padding: 26px 26px 24px; border: 0; border-radius: var(--r-xl); text-align: left;
+    background: var(--carte); color: var(--texte); box-shadow: var(--clay);
+    font-family: inherit; cursor: pointer;
+    transition: transform .2s var(--bounce);
+    animation: rise .4s ease both;
+}
+.garde-tuile:nth-child(2) { animation-delay: .06s; cursor: default; }
+button.garde-tuile:hover { transform: translateY(-4px); }
+button.garde-tuile:active { transform: scale(.985); }
+.g-apps { background: var(--peach); }
+.g-pub  { background: var(--lilac); }
+.garde-ico { font-size: 34px; line-height: 1; }
+.garde-nom { font-size: 24px; font-weight: 800; letter-spacing: -.01em; }
+.garde-sous { font-size: 14px; font-weight: 700; color: var(--muted); }
+.garde-sous.garde-alerte { color: var(--ko); }
+.garde-liens { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+.garde-liens a {
+    padding: 9px 14px; border-radius: var(--r-md); font-size: 13px; font-weight: 800;
+    background: var(--carte); color: var(--texte); box-shadow: var(--clay-sm);
+    transition: transform .18s var(--bounce);
+}
+.garde-liens a:hover { transform: translateY(-2px); color: var(--texte); }
+
+/* ════════════════════════════════════════
+   MES APPS — onglets Applis / Sites et pastilles de comptage
+════════════════════════════════════════ */
+#page-dash .grp-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-bottom: 16px; }
+#page-dash .grp-bar .seg { flex: 0 0 auto; min-width: 220px; margin: 0; }
+#page-dash .pastilles { display: flex; flex-wrap: wrap; gap: 8px; }
+#page-dash .pastille {
+    display: inline-flex; align-items: baseline; gap: 6px;
+    padding: 7px 14px; border-radius: 999px;
+    font-size: 12.5px; font-weight: 700; box-shadow: var(--d-clay-sm);
+}
+#page-dash .pastille b { font-size: 15px; font-weight: 800; }
+#page-dash .p-ok   { background: var(--d-ok-tint); color: var(--d-ok); }
+#page-dash .p-ko   { background: var(--d-ko-tint); color: var(--d-ko); }
+#page-dash .p-none { background: var(--d-card2); color: var(--d-muted); }
+
+/* Le vrai logo de l'app, à la place de l'emoji */
+.logo-vrai { overflow: visible; padding: 0; }
+.logo-vrai img { width: 76%; height: 76%; object-fit: contain; border-radius: 22%; display: block; }
+#gp-rail .rail-item .logo-vrai img { width: 80%; height: 80%; }
+#page-dash .app-big.logo-vrai img { width: 88%; height: 88%; border-radius: 24%; }
+.logo-vrai, #page-dash .row-ico.logo-vrai, #page-dash .app-big.logo-vrai {
+    display: flex; align-items: center; justify-content: center;
+}

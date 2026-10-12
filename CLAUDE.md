@@ -26,11 +26,28 @@ gestion commerciale a été mise en sommeil. Le dépôt, lui, garde son nom.
 
 ## Ce que fait cette application
 
-**Un seul module : « Mes apps ».** Le tableau de bord ne sert plus qu'aux
-projets numériques de Teiki — l'état de ses onze applis et sites, leurs
-fiches, leurs services. Le rail n'a que trois entrées : **Mes apps**, et deux
-raccourcis vers le Studio (**Publicité**, **Chaîne**), qui ouvrent
-`studio.toakeur.com` dans un onglet.
+**Une page de garde, puis un seul module : « Mes apps ».** L'app ouvre sur
+deux portes — *Mes apps* et *Publicité* — et rien d'autre. Publicité et Chaîne
+ne sont pas des pages : ce sont des liens vers le **Studio**, qui tourne sur le
+Mac et s'ouvre par `studio.toakeur.com` (adresse protégée par Cloudflare
+Access).
+
+**Mes apps** montre, pour chaque app, strictement ce que Teiki a demandé le
+12 octobre 2026 : dans la liste, son logo, son nom, ses plateformes, l'alerte
+de fiche périmée et l'état du code ; en tête de sa fiche, son logo, son nom,
+ses plateformes, son dépôt, son nombre de services et l'état du code. La liste
+est coupée en deux onglets, **Applis** et **Sites**, chacun avec deux
+pastilles : au vert, en erreur. Ont été retirés : l'accroche, le nombre de
+services dans la liste, la date de vérification, la tuile « release », la ligne
+de fraîcheur, le bandeau d'accueil, deux compteurs, les prochaines actions, la
+recherche (gardée sur le seul Lexique) et la cloche.
+
+**Les logos** sont les vraies icônes des apps, déposées dans `assets/logos/`
+(160 px, webp, ~5 Ko) et détectées par `tool/build.js`, qui pose `logo` dans
+`dash-data.js`. Sans fichier, l'emoji du manifeste sert de repli. **Tama TV et
+D-Sign n'en ont pas** : leurs dépôts portent encore l'icône Flutter par
+défaut — la même pour les deux. Afficher un logo générique aurait été pire que
+leur emoji.
 
 `dash-module.js` pour l'affichage, `assets/dash-data.js` pour les données. Ce
 dernier est **généré** par `node tool/build.js` à partir de `apps/<id>/` et de

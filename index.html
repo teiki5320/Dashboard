@@ -27,7 +27,8 @@
 <aside id="gp-rail">
     <img class="rail-logo" src="assets/dash-logo.png" alt="" onerror="this.onerror=null;this.src='assets/icon-192.png'">
     <nav>
-        <button type="button" class="rail-item active" data-page="dash" onclick="showPage('dash')"><span class="ico">📱</span><span class="lbl">Mes apps</span></button>
+        <button type="button" class="rail-item active" data-page="accueil" onclick="showPage('accueil')"><span class="ico">⌂</span><span class="lbl">Accueil</span></button>
+        <button type="button" class="rail-item" data-page="dash" onclick="showPage('dash')"><span class="ico">📱</span><span class="lbl">Mes apps</span></button>
         <div id="rail-dash-slot"></div>
         <!-- Studio : les vidéos (pubs de mes applis — recettes dans Keur Cook —, chaînes).
              Le studio tourne sur le Mac ; on l'ouvre par son adresse protégée
@@ -61,7 +62,29 @@
      seulement s'il en reste dans ce navigateur, et disparaît une fois vidé. -->
 <div id="recup-anciennes" style="display:none"></div>
 
-<div id="page-dash" class="page active">
+<!-- Page de garde : deux portes, rien d'autre. Mes apps est ici ; Publicité
+     et Chaîne vivent dans le Studio, qui tourne sur le Mac et s'ouvre par son
+     adresse protégée. -->
+<div id="page-accueil" class="page active">
+    <div class="garde">
+        <button type="button" class="garde-tuile g-apps" onclick="showPage('dash')">
+            <span class="garde-ico">📱</span>
+            <span class="garde-nom">Mes apps</span>
+            <span class="garde-sous" id="garde-apps-sous">mes applis et mes sites</span>
+        </button>
+        <div class="garde-tuile g-pub">
+            <span class="garde-ico">📣</span>
+            <span class="garde-nom">Publicité</span>
+            <span class="garde-sous">les vidéos, dans le Studio</span>
+            <span class="garde-liens">
+                <a href="https://studio.toakeur.com/#/pub" target="_blank" rel="noopener">Publicité ↗</a>
+                <a href="https://studio.toakeur.com/#/chaine" target="_blank" rel="noopener">Chaîne ↗</a>
+            </span>
+        </div>
+    </div>
+</div>
+
+<div id="page-dash" class="page">
     <div id="dash-contenu"></div>
 </div>
 
@@ -88,8 +111,9 @@ function gpApplyTheme(t) {
 function gpToggleTheme() { gpApplyTheme(gpTheme() === 'clair' ? 'sombre' : 'clair'); }
 gpApplyTheme(gpTheme());
 
-// Le module s'initialise de lui-même au premier showPage('dash').
-showPage('dash');
+// On arrive sur la page de garde ; Mes apps se charge au premier clic.
+sousTitreDeGarde();
+showPage('accueil');
 
 // Mode hors-ligne (PWA) : inactif en file:// et sur les très vieux navigateurs.
 if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {

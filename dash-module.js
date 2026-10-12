@@ -46,6 +46,15 @@
     if (withTime) s += ' · ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
     return s;
   }
+  // Le vrai logo de l'app quand son dépôt en fournit un (assets/logos/, posé
+  // par tool/build.js) ; sinon son emoji. Drama Studio n'en a pas : son dépôt
+  // ne publie aucune icône.
+  function logoApp(a, cls) {
+    if (!a.logo) return '<span class="' + cls + ' logo-emoji">' + esc(a.emoji) + '</span>';
+    return '<span class="' + cls + ' logo-vrai"><img src="' + esc(a.logo) + '" alt="" loading="lazy"' +
+      ' onerror="this.parentElement.className=\'' + cls + ' logo-emoji\';this.parentElement.textContent=' + "'" + esc(a.emoji) + "'" + '"></span>';
+  }
+
   function logoImg(cls) {
     return '<img class="' + cls + '" src="' + LOGO + '" alt="" onerror="this.onerror=null;this.src=\'assets/icon-192.png\'">';
   }
@@ -110,20 +119,11 @@
       ? '<a class="' + cls + '" href="' + esc(c.url) + '" target="_blank" rel="noopener">' + inner + '</a>'
       : '<span class="' + cls + '">' + inner + '</span>';
   }
-  function releaseTile(app) {
-    var rel = app.status && app.status.release;
-    var h = '<div class="mini">';
-    if (rel) h += '<a href="' + esc(rel.url || ('https://github.com/' + app.repo + '/releases')) + '" target="_blank" rel="noopener"><b>🏷️ ' + esc(rel.tag) + '</b><small>dernière release</small></a>';
-    else if (app.repo) h += '<b>Aucune release</b><small>' + esc(app.repo) + '</small>';
-    else h += '<b>Pas de dépôt</b><small>à créer</small>';
-    return h + '</div>';
-  }
-
   // ── État de vue (pas de hash : la coquille pilote sa propre navigation) ───
-  var vue = { page: 'accueil', id: null, volet: 'technique' };
+  var vue = { page: 'accueil', id: null, volet: 'technique', groupe: 'applis' };
   function dashGo(page, id, volet) {
     var v = (volet === 'marketing' || volet === 'publication') ? volet : 'technique';
-    vue = { page: page || 'accueil', id: id || null, volet: v };
+    vue = { page: page || 'accueil', id: id || null, volet: v, groupe: vue.groupe || 'applis' };
     dashRender();
   }
   window.dashGo = dashGo;
@@ -149,7 +149,7 @@
     var railApp = function (a) {
       h += '<button type="button" class="rail-item rail-sub' + (route.page === 'app' && route.id === a.id ? ' active' : '') +
         '" onclick="dashGo(\'app\',\'' + esc(a.id) + '\')" title="' + esc(a.name) + ' — ' + esc(ciInfo(a).label) + '">' +
-        '<span class="ico">' + esc(a.emoji) + '<i class="dot ci-' + ciInfo(a).k + '"></i></span>' +
+        logoApp(a, 'ico').replace('</span>', '<i class="dot ci-' + ciInfo(a).k + '"></i></span>') +
         '<span class="lbl">' + esc(a.name) + '</span></button>';
     };
     var applis = lesApplis(), sites = lesSites();
@@ -168,20 +168,16 @@
 
   // ── Barre haute ────────────────────────────────────────────────────────────
   function renderTopbar(route, app) {
-    // L'info de synchro vivait dans l'ancienne barre latérale du module :
-    // elle rejoint le sous-titre de la barre haute.
     var sync = fmtDate(DATA.generatedAt, true);
-    var titre = 'Mes apps', sous = lesApplis().length + ' applis · ' + lesSites().length + ' sites' + (sync ? ' · données du ' + sync : '');
+    var titre = 'Mes apps', sous = (sync ? 'données du ' + sync : '');
     if (route.page === 'app' && app) { titre = app.name; sous = (app.platforms || []).join(' · ') || 'Aucune plateforme'; }
     if (route.page === 'catalogue') { titre = 'Lexique'; sous = DATA.services.length + ' services · ' + DATA.categories.length + ' familles'; }
-    var kos = DATA.apps.filter(function (a) { return ciInfo(a).k === 'ko'; });
     var h = '<div class="topbar"><div class="tb-title"><h2>' + esc(titre) + '</h2><span class="tb-sub">' + esc(sous) + '</span></div>';
-    if (route.page !== 'app') {
-      h += '<label class="tb-search"><span>⌕</span><input id="dash-search" type="search" autocomplete="off" placeholder="' +
-        (route.page === 'catalogue' ? 'Rechercher un service…' : 'Rechercher une app…') + '"></label>';
+    // La recherche ne reste que sur le Lexique : avec 39 services elle sert,
+    // avec six applis à l'écran elle ne servait qu'à occuper la place.
+    if (route.page === 'catalogue') {
+      h += '<label class="tb-search"><span>⌕</span><input id="dash-search" type="search" autocomplete="off" placeholder="Rechercher un service…"></label>';
     }
-    h += '<button type="button" class="clay-btn bell"' + (kos.length ? ' data-dash-go="app/' + esc(kos[0].id) + '" title="' + esc(kos.map(function (a) { return a.name; }).join(', ')) + ' : erreur détectée dans le code"' : ' title="Aucune alerte"') + '>🔔' +
-      (kos.length ? '<span class="badge-n">' + kos.length + '</span>' : '') + '</button>';
     return h + '</div>';
   }
 
@@ -193,69 +189,51 @@
   }
 
   function renderAccueil() {
-    var done = 0, todo = 0, actions = [], nbOk = 0, nbKo = 0, nbNone = 0, ko = null, lastRun = null;
-    DATA.apps.forEach(function (a) {
-      var s = a.marketingSummary || {};
-      done += s.done || 0; todo += s.todo || 0;
-      (s.nextActions || []).slice(0, 2).forEach(function (t, j) { actions.push({ app: a, texte: t, key: a.id + ':' + j }); });
-      var c = ciInfo(a);
-      if (c.k === 'ok') nbOk++; else if (c.k === 'ko') { nbKo++; ko = ko || a; } else nbNone++;
-      var ts = a.status && a.status.ci && a.status.ci.updatedAt;
-      if (ts && (!lastRun || ts > lastRun.ts)) lastRun = { ts: ts, app: a };
+    // Deux onglets, Applis et Sites : on ne regarde qu'un groupe à la fois.
+    var groupe = vue.groupe === 'sites' ? 'sites' : 'applis';
+    var liste = groupe === 'sites' ? lesSites() : lesApplis();
+    var nbOk = 0, nbKo = 0;
+    liste.forEach(function (a) {
+      var k = ciInfo(a).k;
+      if (k === 'ok') nbOk++; else if (k === 'ko') nbKo++;
     });
-    var total = 0, faites = 0;
-    DATA.apps.forEach(function (a) {
-      ((a.marketingSummary || {}).nextActions || []).forEach(function (t, i) { total++; if (todos[a.id + ':' + i]) faites++; });
-    });
-    var p = pct(done, todo);
-    var koC = ko ? ciInfo(ko) : null;
 
-    var h = '<div class="hero-row">';
-    h += '<div class="tile tint-peach hero rise">' + logoImg('hero-img') + '<div class="hero-txt"><h3>Bonjour, ' + esc(PRENOM) + ' ☀️</h3>' +
-      '<p>' + (ko
-        ? nbOk + ' app' + (nbOk > 1 ? 's' : '') + ' au vert, mais la dernière vérification du code de <b>' + esc(ko.name) + '</b> a échoué' + (koC.date ? ' le ' + esc(koC.date) : '') + '.'
-        : 'Toutes tes apps sont au vert. ' + total + ' action' + (total > 1 ? 's' : '') + ' marketing en attente.') + '</p>' +
-      '<button type="button" class="cta" data-dash-go="' + (ko ? 'app/' + esc(ko.id) : 'catalogue') + '">' + (ko ? 'Voir ' + esc(ko.name) + ' →' : 'Ouvrir le catalogue →') + '</button></div></div>';
-    h += '<div class="tile rise" style="animation-delay:.05s"><div class="tile-h"><b>Canaux marketing</b><span>toutes apps</span></div>' +
-      donutHtml(p, done, todo, '✅ / ⬜ des tableaux de marketing.md') + '</div>';
+    var h = '<div class="grp-bar rise">';
+    h += '<div class="seg" style="--n:2">';
+    h += '<span class="seg-thumb" style="--i:' + (groupe === 'sites' ? 1 : 0) + '"></span>';
+    h += '<button type="button" class="' + (groupe === 'applis' ? 'active' : '') + '" data-grp="applis">Applis</button>';
+    h += '<button type="button" class="' + (groupe === 'sites' ? 'active' : '') + '" data-grp="sites">Sites</button>';
     h += '</div>';
+    // Les deux compteurs, comptés sur le groupe affiché — pas sur l'ensemble,
+    // sans quoi la pastille parlerait d'apps qu'on ne voit pas.
+    h += '<div class="pastilles">' +
+      '<span class="pastille p-ok"><b>' + nbOk + '</b> au vert</span>' +
+      '<span class="pastille ' + (nbKo ? 'p-ko' : 'p-none') + '"><b>' + nbKo + '</b> en erreur</span>' +
+      '</div></div>';
 
-    h += '<div class="kpi-row">';
-    h += '<div class="tile kpi tint-mint rise" style="animation-delay:.08s"><span class="kpi-ico">📱</span><span class="kpi-lab">Applis & sites</span><b>' + DATA.apps.length + '</b><small>' + lesApplis().length + ' applis · ' + lesSites().length + ' sites</small></div>';
-    h += '<div class="tile kpi tint-ok rise" style="animation-delay:.12s"><span class="kpi-ico">✅</span><span class="kpi-lab">Apps au vert</span><b>' + nbOk + '</b><small class="c-ok">' + (lastRun ? 'dernière vérif. ' + esc(fmtDate(lastRun.ts)) : 'aucune vérification') + '</small></div>';
-    h += '<div class="tile kpi ' + (nbKo ? 'tint-ko' : 'tint-none') + ' rise" style="animation-delay:.16s"><span class="kpi-ico">' + (nbKo ? '⚠️' : '🧘') + '</span><span class="kpi-lab">Apps en erreur</span><b>' + nbKo + '</b><small class="' + (nbKo ? 'c-ko' : '') + '">' + (ko ? esc(ko.name) + (koC.date ? ' · ' + esc(koC.date) : '') : 'tout est au vert') + '</small></div>';
-    h += '<div class="tile kpi tint-sky rise" style="animation-delay:.2s"><span class="kpi-ico">🗒️</span><span class="kpi-lab">Actions à faire</span><b>' + (total - faites) + '</b><small>' + faites + ' cochée' + (faites > 1 ? 's' : '') + '</small></div>';
-    h += '</div>';
-
-    h += '<div class="two-col">';
-    h += '<div class="tile rise" style="animation-delay:.22s"><div class="tile-h"><b>Mes applis & sites</b><span>état de la vérification automatique du code (CI)</span></div><div class="rows" id="app-rows">';
-    var iRow = 0;
-    var appRow = function (a) {
+    h += '<div class="rows rise" id="app-rows" style="animation-delay:.04s">';
+    liste.forEach(function (a, i) {
       var c = ciInfo(a), meta = [];
       meta.push((a.platforms || []).join(' · ') || 'Aucune plateforme');
-      if (a.services.length) meta.push(a.services.length + ' services');
-      if (c.date) meta.push('vérif. ' + c.date);
       var ages = [ficheAge(a.fiches && a.fiches.infra), ficheAge(a.fiches && a.fiches.marketing)]
         .filter(function (x) { return x !== null; });
       if (ages.length && Math.min.apply(null, ages) > FICHE_STALE_JOURS) meta.push('🔶 fiches à rafraîchir');
-      h += '<a class="row" data-dash-go="app/' + esc(a.id) + '" data-search="' + esc(norm(a.name + ' ' + a.tagline)) + '" style="animation-delay:' + (0.24 + iRow * 0.04).toFixed(2) + 's">' +
-        '<span class="row-ico tint-' + appTint(a) + '">' + esc(a.emoji) + '</span>' +
-        '<span class="row-txt"><b>' + esc(a.name) + '</b><small>' + esc(meta.join(' · ')) + '</small></span>' + ciPill(a) + '</a>';
-      iRow++;
-    };
-    var grpApplis = lesApplis(), grpSites = lesSites();
-    if (grpApplis.length && grpSites.length) h += '<div class="rows-grp">📱 Applis</div>';
-    grpApplis.forEach(appRow);
-    if (grpSites.length) h += '<div class="rows-grp">🌐 Sites internet</div>';
-    grpSites.forEach(appRow);
-    h += '</div></div>';
-    h += '<div class="tile rise" style="animation-delay:.26s"><div class="tile-h"><b>Prochaines actions</b><span>' + (total - faites) + ' restantes</span></div><div class="todos">';
-    if (actions.length) {
-      actions.slice(0, 8).forEach(function (a) {
-        h += todoHtml(a.key, esc(a.texte), '<a data-dash-go="app/' + esc(a.app.id) + '/marketing">' + esc(a.app.name) + '</a>');
-      });
-    } else h += '<span class="empty-note">Aucune section « Prochaines actions » dans les fiches marketing.</span>';
-    h += '</div></div></div>';
+      h += '<a class="row" data-dash-go="app/' + esc(a.id) + '" style="animation-delay:' + (0.06 + i * 0.03).toFixed(2) + 's">' +
+        logoApp(a, 'row-ico') +
+        '<span class="row-txt"><b>' + esc(a.name) + '</b><small>' + esc(meta.join(' · ')) + '</small></span>' +
+        ciPill(a) + '</a>';
+    });
+    h += '</div>';
+
+    // Les canaux marketing, toutes apps confondues : le seul chiffre
+    // d'ensemble qui reste sur cette page.
+    var done = 0, todo = 0;
+    DATA.apps.forEach(function (a) {
+      var m = a.marketingSummary || {};
+      done += m.done || 0; todo += m.todo || 0;
+    });
+    h += '<div class="tile rise" style="animation-delay:.12s"><div class="tile-h"><b>Canaux marketing</b><span>toutes apps</span></div>' +
+      donutHtml(pct(done, todo), done, todo, null) + '</div>';
     return h;
   }
 
@@ -288,14 +266,15 @@
   var FICHE_STALE_JOURS = 45;
 
   function renderAppHead(app, volet) {
-    var c = ciInfo(app);
+    // Ce que Teiki a demandé à voir, et rien d'autre : le logo, le nom, les
+    // plateformes, le dépôt, le nombre de services, l'état du code.
     var h = '<div class="tile app-head tint-' + appTint(app) + ' rise">' +
-      '<span class="app-big">' + esc(app.emoji) + '</span>' +
-      '<div class="app-txt"><h3>' + esc(app.name) + '</h3><p>' + esc(app.tagline || '') + '</p><div class="chips">' +
+      logoApp(app, 'app-big') +
+      '<div class="app-txt"><h3>' + esc(app.name) + '</h3><div class="chips">' +
       (app.platforms || []).map(function (p) { return '<span class="chip">' + esc(p) + '</span>'; }).join('') +
       (app.repo ? '<a class="chip" href="https://github.com/' + esc(app.repo) + '" target="_blank" rel="noopener">📦 ' + esc(app.repo) + '</a>' : '<span class="chip">Pas de dépôt</span>') +
       '<span class="chip">' + app.services.length + ' services</span></div></div>' +
-      '<div class="app-side">' + ciPill(app, true) + releaseTile(app) + '</div></div>';
+      '<div class="app-side">' + ciPill(app, true) + '</div></div>';
 
     var volets = [['technique', 'Technique'], ['marketing', 'Marketing']];
     if (app.publicationHtml) volets.push(['publication', 'Publication']);
@@ -305,19 +284,7 @@
     volets.forEach(function (v) {
       h += '<button type="button" class="' + (v[0] === volet ? 'active' : '') + '" data-dash-go="app/' + esc(app.id) + '/' + v[0] + '">' + v[1] + '</button>';
     });
-    h += '</div>';
-
-    // Fraîcheur de la fiche affichée : sa date d'en-tête + alerte passé 45 j
-    // (rappel : la régénération se fait en relançant le prompt dans le dépôt).
-    var ficheKey = volet === 'technique' ? 'infra' : volet;
-    var iso = app.fiches && app.fiches[ficheKey];
-    var age = ficheAge(iso);
-    if (age !== null) {
-      var stale = age > FICHE_STALE_JOURS;
-      h += '<div class="fiche-date' + (stale ? ' stale' : '') + '">Fiche du ' + esc(fmtDate(iso)) +
-        (stale ? ' · 🔶 à rafraîchir (relancer le prompt dans le dépôt de l’app)' : '') + '</div>';
-    }
-    return h;
+    return h + '</div>';
   }
 
   function renderServices(app) {
@@ -461,12 +428,11 @@
         cards[j].style.display = ok ? '' : 'none';
         if (ok) visibles++;
       }
-      if (sectionSel !== '#app-rows') sections[i].style.display = visibles ? '' : 'none';
+      sections[i].style.display = visibles ? '' : 'none';
     }
   }
   function onSearch(q) {
-    if (vue.page === 'catalogue') filterCards(q, '.cat-section', '.svc-card');
-    else filterCards(q, '#app-rows', '.row');
+    filterCards(q, '.cat-section', '.svc-card');
   }
 
   // ── Fiche service ──────────────────────────────────────────────────────────
@@ -704,6 +670,8 @@
       if (tog) { tog.parentElement.classList.toggle('open'); return; }
       var lien = e.target.closest && e.target.closest('a[href^="#"]');
       if (lien) { revealAnchor(lien.getAttribute('href'), e); return; }
+      var grp = e.target.closest && e.target.closest('[data-grp]');
+      if (grp) { vue.groupe = grp.getAttribute('data-grp'); dashRender(); return; }
       var card = e.target.closest && e.target.closest('[data-svc]');
       if (!card) return;
       var svc = serviceById(card.getAttribute('data-svc'));
