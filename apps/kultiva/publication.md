@@ -1,6 +1,6 @@
 # PUBLICATION — état des boutiques
 
-> Mis à jour le 12 octobre 2026. Pour mettre à jour :
+> Mis à jour le 13 octobre 2026. Pour mettre à jour :
 > relancer ce même prompt.
 >
 > **Aucun secret ici** — uniquement des références publiques :
@@ -13,15 +13,33 @@
 > « à vérifier dans la console » attend ta confirmation — aucun statut de
 > boutique n'a été deviné.
 
+## En bref
+
+- **Version commune** : `1.0.0+5` (`pubspec.yaml`), jamais soumise
+- **Identifiant de bundle** : `com.toa.kultiva` (iOS et Android)
+- **Monétisation** : gratuite ; affiliation Amazon France, ni pub ni achat
+- **Confidentialité** : <https://kultiva.toakeur.com/privacy.html> en ligne
+- **Contact** : `kultiva@toakeur.com`
+
+## Boutiques
+
+| | 🍎 App Store | 🤖 Google Play |
+|---|---|---|
+| État | [pas encore] jamais soumise ; fiche ASC à vérifier dans la console | [pas encore] jamais envoyée ; fiche à vérifier dans la console |
+| Construction | [ok] Xcode Cloud (`ci_post_clone.sh`, Flutter 3.41.6) | [ok] App Bundle construit par la CI GitHub Actions |
+| Signature | [ok] gérée par Xcode Cloud, équipe `K597U7X3FZ` | [ok] keystore local, valable jusqu'en 2053 |
+| Classification | [à faire] 4+ attendu, questionnaire prêt à reporter | [à faire] questionnaire de contenu à remplir |
+| Cible | [ok] iOS 13.0 et plus, iPhone et iPad, portrait | [ok] `minSdk 24`, `targetSdk 36` |
+| Permissions | [ok] caméra, photos, localisation (textes en français) | [ok] localisation, notifications, alarmes exactes |
+| Poids | [pas encore] à mesurer au premier envoi (35 Mo d'assets) | [pas encore] à mesurer au premier envoi (35 Mo d'assets) |
+
 ## Vue d'ensemble
 
-- **iOS** : jamais soumise — la fiche est rédigée, le build Xcode Cloud fonctionne et l'URL de confidentialité existe désormais
+- **iOS** : jamais soumise — la fiche est rédigée, le build Xcode Cloud est configuré et l'URL de confidentialité existe
 - **Android** : jamais envoyée à Play — le bundle release est signé et vérifié localement ; l'existence d'une fiche Play reste à vérifier dans la console
 - **Web** : site de présentation en ligne sur <https://kultiva.toakeur.com> depuis le 7 octobre 2026
-- **Backend** : projet Supabase **en pause** (vérifié le 12 octobre 2026) — connexion et synchronisation hors service tant qu'il n'est pas rallumé
-- **Version commune** : `1.0.0+5` (`pubspec.yaml`) → `versionName 1.0.0` / `versionCode 5` côté Android, `CFBundleShortVersionString` et `CFBundleVersion` dérivés côté iOS
-- **Identifiant** : `com.toa.kultiva`, identique sur les deux plateformes
-- **Monétisation** : ni publicité ni achat intégré. 159 liens d'affiliation Amazon (tag `kultiva-21`), masqués en Afrique de l'Ouest — d'où le statut **trader** au sens du DSA, décidé le 24 août 2026
+- **Backend** : projet Supabase **en pause** (vérifié le 13 octobre 2026) — connexion et synchronisation hors service tant qu'il n'est pas rallumé
+- **Monétisation** : 159 liens d'affiliation Amazon (tag `kultiva-21`), masqués en Afrique de l'Ouest — d'où le statut **trader** au sens du DSA, décidé le 24 août 2026
 - **Classification attendue** : **4+** depuis le retrait du feed communautaire — plus aucun contenu généré par les utilisateurs
 - **Chemin critique** : rallumer Supabase → compléter la fiche App Store → soumettre iOS
 
@@ -134,7 +152,7 @@ la signature d'application par Play est activée.
 
 | | |
 |---|---|
-| Production | **En ligne** — <https://kultiva.toakeur.com> et <https://kultiva.toakeur.com/privacy.html> répondent (vérifié le 12 octobre 2026) |
+| Production | **En ligne** — <https://kultiva.toakeur.com> et <https://kultiva.toakeur.com/privacy.html> répondent (vérifié le 13 octobre 2026) |
 | Domaine & SSL | `kultiva.toakeur.com`, DNS chez Cloudflare (proxy actif), HTTPS valide ; contact affiché `kultiva@toakeur.com` |
 | Visibilité | publié par GitHub Pages via `.github/workflows/site.yml` (dossier `landing/`) depuis le 7 octobre 2026 ; l'ancienne adresse `teiki5320.github.io/Kultiva/` sert la même page |
 
@@ -158,7 +176,7 @@ compte in-app exigée par Apple.
 
 | | |
 |---|---|
-| État | **En pause** — le 12 octobre 2026, le compte Supabase liste le projet avec l'état *inactif* ; il n'est pas supprimé et se rallume depuis la console |
+| État | **En pause** — le 13 octobre 2026, le compte Supabase liste le projet avec l'état *inactif* ; il n'est pas supprimé et se rallume depuis la console |
 | Console | <https://supabase.com/dashboard/project/vkiwkeknfzwdvufcqbrp> |
 | Projet | `vkiwkeknfzwdvufcqbrp` (région Europe) |
 | Adresse | ne résout plus pendant la pause — ce qui avait été pris, le 3 octobre, pour une suppression |
@@ -174,24 +192,15 @@ Google « Se connecter » ont été laissées à supprimer le 9 octobre 2026 :
 
 ## Ce qui reste, dans l'ordre
 
-1. **Les deux** — rallumer le projet Supabase et recréer les clés Google
-   « Se connecter » (sinon la connexion Google échoue).
-2. **iOS** — coller les trois URL de `kultiva.toakeur.com` dans la fiche
-   App Store (assistance, marketing, confidentialité) et l'adresse
-   `kultiva@toakeur.com`.
-3. **iOS** — saisir les coordonnées de trader dans *Accords → Digital
-   Services Act* (boîte postale acceptée), puis le téléphone des
-   informations de revue.
-4. **Les deux** — créer un compte de démonstration avec 2 ou 3
-   plantations, une photo et un Tamassi entamé : il sert au testeur
-   Apple **et** aux captures.
-5. **Les deux** — prendre les captures : 8 en iPhone 6,9″ (1320 × 2868)
-   et 8 en iPad 13″ (2064 × 2752).
-6. **iOS** — soumettre depuis `docs/FICHE_APP_STORE.md`.
-7. **Android** — créer la fiche Play, puis lancer le test fermé sans
-   attendre : les quatorze jours courent en arrière-plan.
-8. **Web** — après publication, remplacer les `href="#"` des boutons
-   *Télécharger* par les liens des boutiques.
+1. ✅ **Site et confidentialité** : `kultiva.toakeur.com` et `/privacy.html` en ligne depuis le 7 octobre 2026.
+2. ✅ **Adresse de contact** : `kultiva@toakeur.com` sur le site, la confidentialité et les textes des fiches.
+3. **Rallumer le backend** : relancer le projet Supabase et recréer les clés Google « Se connecter ».
+4. **Compléter la fiche App Store** : les trois URL, l'adresse de contact, les coordonnées de trader (DSA) et le téléphone de revue.
+5. **Compte de démonstration** : 2 ou 3 plantations, une photo et un Tamassi entamé, pour le testeur et les captures.
+6. **Captures d'écran** : 8 en iPhone 6,9″ (1320 × 2868) et 8 en iPad 13″ (2064 × 2752).
+7. **Soumettre iOS** : depuis `docs/FICHE_APP_STORE.md`.
+8. **Créer la fiche Google Play** : puis lancer le test fermé sans attendre, ses quatorze jours courent en arrière-plan.
+9. **Relier les boutons « Télécharger »** : remplacer les `href="#"` du site par les liens des boutiques.
 
 ---
 

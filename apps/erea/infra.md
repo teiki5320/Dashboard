@@ -1,7 +1,23 @@
 # INFRA — fiche technique
 
 > Généré le 20 août 2026 par un scan du dépôt, mis à jour le
-> 12 octobre 2026. Pour mettre à jour : relancer ce même prompt.
+> 13 octobre 2026. Pour mettre à jour : relancer ce même prompt.
+
+## En bref
+
+- **Plateforme** : iOS 15+ en ligne · Android en test fermé · site vitrine
+- **Stack** : Flutter (Dart ≥ 3.6), version `1.0.4+5` dans le code
+- **Backend** : aucun — tout reste sur l'appareil, jeu hors ligne
+- **Distribution** : Xcode Cloud vers l'App Store · App Bundle signé en local
+- **Site** : `erea.toakeur.com`, GitHub Pages derrière Cloudflare
+- **IA et outils** : aucune IA dans l'app ; AdMob, Game Center, StoreKit
+
+## Parcours
+
+- 🍎 **iOS** : 🐙 GitHub — main, 1.0.4 dans le code [ok] → ☁️ Xcode Cloud — build à chaque poussée sur main [ok] → 🛍️ App Store Connect — 1.0.4 pas encore soumise [à faire] → 📱 App Store — 1.0.2 en ligne depuis le 8 septembre [ok]
+- 🤖 **Android** : 🐙 GitHub — main, 1.0.4 dans le code [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — test fermé 1.0.3, production non demandée [à faire] → 🛒 Google Play — pas en production [pas encore]
+- 🌐 **Web** : 🐙 GitHub — racine de main, sans CNAME [ok] → 📄 Hébergement web (GitHub Pages / Cloudflare Pages) — GitHub Pages [ok] → 🏷️ Nom de domaine — erea.toakeur.com via Cloudflare [ok] → 🌐 Site — vitrine, jeu, support, confidentialité [ok]
+- 🎬 **Contenu** : 🎬 Studio — neuf pubs vidéo produites le 5 octobre [ok] → 🗓️ Planning — aucune publication programmée [à faire] → 📣 Réseaux sociaux & influenceurs — TikTok et YouTube Afrotok, rien publié [pas encore]
 
 ## Vue d'ensemble
 
@@ -53,7 +69,7 @@ appartenait à la 1.0.0.
 - Le jeu web jouable est sur `/jeu.html`, copie déployée de `index-v8.html`.
 - `/support.html` et `/confidentialite.html` : les deux URL exigées par l'App Store, contact `erea@toakeur.com`.
 - Site servi depuis la racine de `main` (fichier `.nojekyll` présent), redéployé à chaque poussée.
-- L'adresse `erea.toakeur.com` passe par Cloudflare, qui relaie GitHub Pages ; le dépôt ne contient pas de fichier `CNAME`. L'ancienne adresse `teiki5320.github.io/erea/` répond toujours (vérifié le 12 octobre 2026).
+- L'adresse `erea.toakeur.com` passe par Cloudflare, qui relaie GitHub Pages ; le dépôt ne contient pas de fichier `CNAME`. L'ancienne adresse `teiki5320.github.io/erea/` répond toujours (vérifié le 13 octobre 2026).
 
 **Où vivent les secrets :** nulle part.
 
@@ -122,7 +138,7 @@ art. 12 à 0 %). L'achat intégré lui-même est décrit plus bas, section
 2026 après un refus *Guideline 2.1 — Information Needed* et une
 re-soumission (détail dans `docs/APP_REVIEW.md`). La **`1.0.2` (build
 150) est en ligne depuis le 8 septembre 2026**, avec la publicité et
-l'achat intégré — c'est encore la version publique au 12 octobre 2026.
+l'achat intégré — c'est encore la version publique au 13 octobre 2026.
 Le build 161 (`1.0.3`) est resté sur TestFlight sans être soumis ; la
 `1.0.4` existe dans le code depuis le 30 septembre, son envoi est à
 vérifier dans la console.
@@ -297,7 +313,7 @@ passe par le compte Google (+ double facteur).
 **État réel :**
 - Application ID `com.teiki.erea`, identique à iOS (`android/app/build.gradle.kts`).
 - Test fermé « Alpha » : release `4 (1.0.3)` servie aux testeurs depuis le 16 septembre 2026. Les **douze testeurs pendant quatorze jours** exigés d'un compte personnel ont été tenus le 22 septembre ; la demande d'accès à la production n'était pas faite au 25 septembre.
-- Au 12 octobre 2026, la fiche publique `play.google.com/store/apps/details?id=com.teiki.erea` répond 404 : l'app n'est pas en production. Où en est la demande d'accès : à vérifier dans la console.
+- Au 13 octobre 2026, la fiche publique `play.google.com/store/apps/details?id=com.teiki.erea` répond 404 : l'app n'est pas en production. Où en est la demande d'accès : à vérifier dans la console.
 - Achat intégré actif (voir « StoreKit / Play Billing »). Classements Play Games non configurés (voir « Game Center / Play Games »).
 - Appareil physique de vérification : un Pixel 8a, utilisé pour les tests du 16 septembre.
 
@@ -339,7 +355,7 @@ uniquement.
 Proposée après un PERFECT, un record ou trois défis d'affilée, une seule
 fois, jamais au lancement ; le système décide de l'affichage. Le même
 fichier fournit le lien de boutique ajouté aux grilles partagées : App
-Store sur iOS, Play Store sur Android depuis la 1.0.4. Au 12 octobre
+Store sur iOS, Play Store sur Android depuis la 1.0.4. Au 13 octobre
 2026, l'App Store compte 0 note.
 
 **Où vivent les secrets :** aucun.
@@ -350,14 +366,15 @@ Store sur iOS, Play Store sur Android depuis la 1.0.4. Au 12 octobre
 
 | | |
 |---|---|
-| Rôle | Sert les polices Baloo 2 et Nunito au prototype web de la racine, via CDN |
+| Rôle | Sert les polices Baloo 2 et Nunito à tout le site, via CDN |
 | Console | aucune — service public sans compte |
 | Coût | gratuit |
 
-L'app Flutter n'en dépend pas : les mêmes polices sont embarquées dans
-`erea_flutter/assets/fonts/`, licence SIL OFL incluse, justement pour que
-l'app fonctionne hors ligne. Si le prototype web est abandonné un jour,
-cette dépendance disparaît avec lui.
+Toutes les pages publiées l'appellent : la vitrine (`index.html`), le
+jeu web (`jeu.html`), `support.html` et `confidentialite.html` — pas
+seulement le prototype. L'app Flutter n'en dépend pas : les mêmes
+polices sont embarquées dans `erea_flutter/assets/fonts/`, licence
+SIL OFL incluse, justement pour que l'app fonctionne hors ligne.
 
 ---
 

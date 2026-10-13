@@ -1,7 +1,21 @@
 # INFRA — fiche technique
 
-> Mise à jour le 12 octobre 2026 (sections au nom du Lexique, nom de domaine ajouté, mesure d'audience non active en production).
+> Mise à jour le 13 octobre 2026 (rubrique Conseils publiée par date, pages Conseils et sitemap mises en cache 1 h par le Worker ; mesure d'audience toujours inactive en production).
 > Aucun secret dans cette fiche — uniquement des références (noms de variables, consoles).
+
+## En bref
+
+- **Plateforme** : site web, en pause mais en ligne sur solelis.com
+- **Stack** : Next.js 15.5 · React 19 · TypeScript · Tailwind 3.4
+- **Backend** : Worker Cloudflare (OpenNext) · base D1 « solelis » (UE)
+- **Distribution** : Cloudflare Workers, déployé depuis `main`
+- **Site** : https://solelis.com (www redirige)
+- **IA et outils** : aucune IA · Resend, API Recherche d'entreprises, BODACC
+
+## Parcours
+
+- 🌐 **Web** : 🐙 GitHub — main · CI au vert [ok] → 🌐 Hébergement web — Worker Cloudflare « solelis » [ok] → 🏷️ Nom de domaine — solelis.com, SSL auto [ok] → 🔎 Google — 28 pages indexées sur 69 [à faire]
+- 📝 **Contenu** : 🐙 GitHub — articles Markdown des Conseils [ok] → ⚙️ Build — génération des articles [ok] → 🕒 Publication — à sa date, sans redéploiement [ok] → 📣 Réseaux sociaux — comptes branchés, rien publié [pas encore]
 
 ## Vue d'ensemble
 
@@ -12,8 +26,9 @@
 - **Base de données** : Cloudflare D1 « solelis » (juridiction UE), binding `DB`, schéma dans `migrations/`
 - **E-mail** : Resend (liens magiques + rappels quotidiens)
 - **Données d'entreprise** : API Recherche d'entreprises (serveur et navigateur), BODACC, INSEE Sirene en secours, Google Places pour les avocats
+- **Contenus** : rubrique Conseils — articles Markdown dans `content/conseils/`, convertis au build par `scripts/generer-conseils.ts` (lancé avant `dev`, `build`, `test` et dans la CI) ; `/conseils`, `/conseils/rss.xml` et `/sitemap.xml` sont rendus à la requête et n'affichent que les articles dont la date est passée (heure de Paris), ce qui publie les articles programmés sans redéploiement. Ces pages et le sitemap sont mis en cache 1 h par le Worker (clé liée à la version déployée, `worker.ts`) : un article programmé paraît au plus une heure après sa date. Aucun service externe
 - **Tâche planifiée** : Cron Trigger Cloudflare chaque jour à 7 h UTC → `GET /api/cron/rappels`
-- **CI** : GitHub Actions (lint → TypeScript → build → tests → build OpenNext) à chaque push/PR vers `main`
+- **CI** : GitHub Actions (génération des Conseils → lint → TypeScript → build → tests → build OpenNext) à chaque push/PR vers `main`
 
 ## GitHub
 
@@ -23,8 +38,8 @@
 
 ## Hébergement web (GitHub Pages / Cloudflare Pages)
 
-- **Ici** : Cloudflare **Workers** (et non Pages) — Worker « solelis » qui sert le rendu serveur et les fichiers statiques, redirige www et lance le cron des rappels
-- **Fichiers** : `wrangler.jsonc` (nom, domaines, D1, cron, observabilité), `worker.ts` (point d'entrée : redirection www + `scheduled`), `open-next.config.ts`
+- **Ici** : Cloudflare **Workers** (et non Pages) — Worker « solelis » qui sert le rendu serveur et les fichiers statiques, redirige www, ajoute les en-têtes de sécurité, met en cache `/api/og` (7 jours), `/api/stats` (5 min), `/conseils` et `/sitemap.xml` (1 h), et lance le cron des rappels
+- **Fichiers** : `wrangler.jsonc` (nom, domaines, D1, version déployée, cron, observabilité), `worker.ts` (point d'entrée : redirection www + `scheduled`), `open-next.config.ts`
 - **Console** : dash.cloudflare.com → Workers & Pages → « solelis »
 - **Identifiants publics** : nom du Worker `solelis`, domaines `solelis.com` / `www.solelis.com`
 - **Secrets** : variables et secrets de production dans la console (Worker → Paramètres → Variables et secrets) ou via `npx wrangler secret put <NOM>` : `RESEND_API_KEY`, `RESEND_FROM`, `NEXT_PUBLIC_BASE_URL`, `CRON_SECRET`, `INSEE_API_KEY`, `GOOGLE_PLACES_API_KEY`, `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`. Les `NEXT_PUBLIC_*` doivent aussi exister au moment du build
@@ -68,10 +83,12 @@ Quatre sources, toutes appelées depuis le code (`lib/`) :
 - **INSEE Sirene** (secours) : données SIRET si l'API gouv.fr échoue (`lib/sirene.ts`) — console https://portail-api.insee.fr, secret `INSEE_API_KEY` (optionnelle), gratuite
 - **Google Places** : recherche d'avocats près de la ville du dirigeant (`lib/googlePlaces.ts`, Places API New ; bloc vide sans clé, le reste du site fonctionne) — console https://console.cloud.google.com (projet avec « Places API (New) » activée), secret `GOOGLE_PLACES_API_KEY` (optionnelle, à restreindre à l'API Places), paiement à l'usage avec crédit mensuel offert (surveiller les quotas)
 
-## Analytics (mesure d'usage) — non souscrit
+## Prévu mais pas branché
+
+Mesure d'audience : aucun service n'est utilisé en production, cette section ne compte donc pas parmi les services de l'app.
 
 - **Prévu** : Plausible, sans cookies ; le script n'est chargé que si `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` est définie (`app/layout.tsx`). Mode manuel : adresses envoyées sans paramètres, `/fiche/<token>` remplacé par `/fiche/[token]`
-- **État le 12 octobre 2026** : aucun script de mesure sur https://solelis.com — la variable n'est pas définie en production et aucun compte n'est souscrit
+- **État le 13 octobre 2026** : aucun script de mesure sur https://solelis.com — la variable n'est pas définie en production et aucun compte n'est souscrit
 - **Console** : https://plausible.io
 - **Coût** : payant — à souscrire si besoin
 

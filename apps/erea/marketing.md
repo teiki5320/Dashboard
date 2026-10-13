@@ -1,11 +1,11 @@
 # Erea — plan marketing & rémunération
 
-> Généré le 3 août 2026, mis à jour le 12 octobre 2026. Le modèle de
+> Généré le 3 août 2026, mis à jour le 13 octobre 2026. Le modèle de
 > rémunération est en ligne sur l'App Store depuis la 1.0.2 (publicité +
 > achat unique qui la retire). Pour le mettre à jour : relancer ce même prompt. Aucun secret
 > ici.
 >
-> Légende : ✅ fait · ⬜ à faire.
+> Légende : ✅ en place · ⬜ pas en place.
 
 ---
 
@@ -38,6 +38,20 @@ classiques :
 | Amateurs de culture G / joueurs de quiz | Modes Difficile et Chrono, classements mondiaux | « Tu peux faire mieux que moi ? » |
 
 ---
+
+## Rémunération par phases
+
+- [fait] **Aujourd'hui** : pub AdMob une partie sur deux, achat unique 3,99 € qui la retire, sur iOS
+- [en cours] **Android en production** : même modèle, déjà prêt dans le test fermé ; reste l'accès à la production
+- **Premiers versements AdMob** : seuil de 70 €, puis code PIN postal et vérification d'identité
+- **Statut trader (DSA)** : obligatoire dès qu'on tire un revenu de l'app, sur les deux boutiques
+- **Licence éducation** : seulement si un établissement se présente de lui-même
+
+## Points forts
+
+- ⏳ **Le geste de la frise** : on place l'événement sur un ruban de −3000 à aujourd'hui, au lieu de choisir entre quatre réponses.
+- 🔥 **Le Défi du jour** : dix questions identiques pour tous, une tentative, une série et une grille emoji à partager.
+- 🌍 **1 831 faits, Afrique comprise** : hors ligne et sans compte, avec choix du pays et un pack Afrique rare dans le genre.
 
 ## Modèle de rémunération
 
@@ -115,7 +129,7 @@ pas encore faite.
 
 ## Calendrier
 
-| Période | Opportunité | Action |
+| Période | Opportunité | Angle |
 |---|---|---|
 | Septembre | Rentrée scolaire + Journées du patrimoine | Campagne enseignants, clip « révise en jouant » |
 | Novembre–décembre | Cadeaux, temps en famille | Mise en avant du Défi du jour à faire en famille, push presse « jeux pour les fêtes » |
@@ -126,29 +140,39 @@ pas encore faite.
 
 ---
 
-## KPIs
+## Mesures
+
+- **Téléchargements** : à vérifier dans la console (App Store Connect)
+- **Note App Store** : aucune note au 13 octobre 2026
+- **Rétention J1 et J7** : à vérifier dans la console
+- **Participants au Défi du jour** : à vérifier dans la console (classement `erea.daily`)
+- **Ventes « Erea sans publicité »** : à vérifier dans la console
+- **Revenus publicitaires AdMob** : à vérifier dans la console
+- **Usage des modes dans l'app** : à instrumenter — aucun analytics, par choix
 
 Contrainte assumée : **pas d'analytics tiers dans l'app** (seul le SDK
 publicitaire de Google collecte, pour la pub). On suit donc ce que
 fournissent les plateformes. L'app est en ligne sur l'App Store depuis
-le 3 septembre 2026 ; les chiffres d'usage sont à lire dans la console.
+le 3 septembre 2026.
 
-| Métrique | Valeur | Objectif |
-|---|---|---|
-| Téléchargements (App Store Connect) | à vérifier dans la console | tendance, pas de seuil |
-| Rétention J1 (App Store Connect) | — | > 30 % |
-| Rétention J7 (App Store Connect) | — | > 15 % |
-| Participants au défi du jour (scores sur `erea.daily`) | — | croissance hebdomadaire |
-| Longueur des séries (scores sur `erea.streak`) | — | médiane ≥ 3 |
-| Note App Store | aucune note au 12 octobre 2026 | ≥ 4,5 |
-| Taux de conversion de la fiche (vues → installs) | — | > 30 % |
-| Ventes « Erea sans publicité » | — | 2 à 5 % des actifs |
-| Revenus publicitaires (AdMob) | à vérifier dans la console | premier versement au seuil de 70 € |
+## Objectifs chiffrés
 
-⬜ Si un besoin plus fin apparaît (entonnoir d'onboarding, usage des
-modes), trancher alors pour un analytics respectueux (TelemetryDeck ou
-équivalent, sans identifiant) — décision explicite à prendre, car elle
-ferait perdre le « aucune donnée collectée » de la fiche.
+| Métrique | Objectif |
+|---|---|
+| Téléchargements | tendance, pas de seuil |
+| Rétention J1 | > 30 % |
+| Rétention J7 | > 15 % |
+| Participants au Défi du jour (`erea.daily`) | croissance hebdomadaire |
+| Longueur des séries (`erea.streak`) | médiane ≥ 3 |
+| Note App Store | ≥ 4,5 |
+| Conversion de la fiche (vues → installations) | > 30 % |
+| Ventes « Erea sans publicité » | 2 à 5 % des actifs |
+| Revenus publicitaires | premier versement au seuil de 70 € |
+
+Si un besoin plus fin apparaît (entonnoir d'onboarding, usage des
+modes), il faudra trancher pour un analytics respectueux (TelemetryDeck
+ou équivalent, sans identifiant) : une décision explicite, qui ajouterait
+une collecte à la fiche de confidentialité.
 
 ---
 

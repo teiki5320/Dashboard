@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 12 octobre 2026. Compagnon de `INFRA.md` : là où INFRA répertorie
+Mis à jour le 13 octobre 2026. Compagnon de `INFRA.md` : là où INFRA répertorie
 la technique, ce fichier suit la stratégie marketing et de rémunération.
 Pour l'actualiser : relancer le même prompt.
 
@@ -16,24 +16,23 @@ Pour l'actualiser : relancer le même prompt.
   calendriers par pays ET sous-zone climatique, 100 % utilisable
   hors ligne.
 
-## Modèle de rémunération
+## Rémunération par phases
 
-Modèle **actuel** : app gratuite + affiliation Amazon (France).
+- [fait] **Aujourd'hui** : app gratuite, affiliation Amazon France câblée (tag `kultiva-21`, mention « Lien partenaire ») ; aucun revenu tant que l'app n'est pas publiée.
+- [en cours] **Relance et lancement** : décider si Kultiva repart (backend en pause), publier, et trancher la vidéo récompensée AdMob liée au Tamassi (« une pub → un boost d'XP »).
+- **Rétention prouvée** : abonnement Kultiva Plus via RevenueCat (jardins illimités, export PDF, variantes du Tamassi), France d'abord.
+- **Afrique de l'Ouest** : sponsoring par des ONG et programmes agricoles qui financent la diffusion de conseils.
 
-| Phase | Levier | Statut |
-| --- | --- | --- |
-| 1 — Lancement | App gratuite. Affiliation Amazon France (tag `kultiva-21`, mention « Lien partenaire ») | ✅ câblé |
-| 1 — Lancement | Vidéo récompensée AdMob liée au Tamassi (« regarde une pub → boost d'XP ») — volontaire, compatible kawaii, adaptée à l'AO | ⬜ à faire |
-| 2 — Rétention prouvée | Abonnement **Kultiva Plus** via RevenueCat (~2–3 €/mois, ~15 €/an) : jardins illimités, export PDF, variantes exclusives du Tamassi. France d'abord (friction de paiement stores en AO) | ⬜ à étudier |
-| 3 — Spécifique AO | Sponsoring institutionnel : ONG et programmes agricoles (FAO, GIZ, projets maraîchage) financent la diffusion de conseils | ⬜ à démarcher |
+Statut DSA : les liens d'affiliation font de l'app un « trader » dans
+l'UE (décidé le 24 août 2026) — coordonnées publiques sur la fiche App
+Store. Écarté pour l'instant : bannières et interstitiels, vente de biens
+physiques, dons.
 
-⚠️ Décision en cours (DSA) : les liens d'affiliation classent a priori
-l'app « trader » pour l'UE → coordonnées postales publiées sur la fiche
-App Store. Alternative : masquer l'affiliation au lancement (comme en AO)
-et se déclarer non-trader, réactiver plus tard.
+## Points forts
 
-Écarté pour l'instant : bannières/interstitiels (cassent l'expérience),
-vente de biens physiques, dons.
+- 🐣 **Tamassi** : une créature virtuelle animée (Poussia, Soleia, Spira) qui grandit avec l'activité réelle au jardin.
+- 🌍 **France et Afrique de l'Ouest** : calendriers par pays et sous-zone climatique, noms locaux, marchés et prix en FCFA.
+- 📴 **Tout hors ligne, sans compte** : 169 fiches, 33 tutoriels, potager et Poussidex utilisables en mode invité.
 
 ## Canaux
 
@@ -57,24 +56,20 @@ Publicité payante (Meta/TikTok Ads) : **pas avant** d'avoir prouvé la
 rétention organique. À noter : CPI en AO ~10× moins cher qu'en France —
 un petit budget Meta ciblé Sénégal/Côte d'Ivoire ira loin le moment venu.
 
-## KPIs
+## Mesures
 
-L'app n'est pas encore publiée — aucun chiffre réel à ce jour. Aucun
-analytics produit n'est branché (Sentry = crashs uniquement) ; outil à
-décider (Firebase Analytics ou PostHog, avec consentement RGPD).
+L'app n'est publiée sur aucune boutique et aucun outil d'analytics produit
+n'est branché (Sentry ne suit que les crashs).
 
-| Métrique | Valeur | Objectif |
-| --- | --- | --- |
-| Installs (par pays) | — (pas publiée) | à définir au lancement |
-| Rétention J1 / J7 / J30 | — | à définir (base des décisions phase 2) |
-| Note moyenne stores | — | ≥ 4,5 |
-| Volume de partages | — | à définir |
-| Abonnés newsletter | — | à définir |
-| Revenus (affiliation, puis pub/abonnements) | — | à définir |
+- **Installations** : aucune — app pas publiée
+- **Rétention J1 / J7 / J30** : à instrumenter
+- **Note moyenne en boutique** : aucune — app pas publiée
+- **Crashs** : à vérifier dans la console Sentry
+- **Clics d'affiliation** : à vérifier dans la console Amazon Partenaires
+- **Visites du site** : à vérifier dans la console Cloudflare (aucun script de mesure sur la page)
 
 ## Calendrier
 
-- **Avant publication** : rallumer Supabase, compte de démo, captures d'écran, coordonnées de trader (DSA).
 - **Février–mars (France)** : lancer / pousser — pic des recherches « que semer ».
 - **Mai–juin (Afrique de l'Ouest)** : pousser avant l'hivernage.
 - **En continu** : partage in-app, réseaux sociaux, itération ASO mensuelle.

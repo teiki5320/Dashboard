@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 12 octobre 2026. Compagnon de INFRA.md. Pour l'actualiser : relancer le même prompt.
+Mis à jour le 13 octobre 2026. Compagnon de INFRA.md. Pour l'actualiser : relancer le même prompt.
 
 ## Positionnement
 
@@ -18,50 +18,53 @@ Trois choses que les concurrents directs n'ont pas :
 
 **Le ton.** Sobre, sec, adulte. Pas de caricature, pas de folklore. Le dépôt contient des scènes de chambre (`assets/contenu/chambre.json`, `assets/images/palais/pieces/chambre_lit/`) qui imposent une classification adulte : la cible retenue est **17+ App Store / 18 Play** — à confirmer par les questionnaires des deux consoles. Cela ferme la porte au public enfant et assume une écriture d'adulte.
 
+## Points forts
+
+- 🃏 **Un décor neuf** : un palais d'Afrique de l'Ouest inventé, quand le genre vit au Moyen Âge.
+- 📜 **Des histoires qui se souviennent** : 687 cartes, 59 histoires ; une réponse du jour 12 rouvre une carte au jour 40.
+- 🏛️ **Le palais et les romances** : 24 objets gardés d'un mandat à l'autre, dix romances qui ne bougent que sur réponse.
+
 ## Modèle de rémunération
 
-**État réel du code au 12 octobre 2026 : aucune monétisation n'est implémentée.** Le scan est sans ambiguïté — `pubspec.yaml` ne déclare ni `google_mobile_ads`, ni `in_app_purchase`, ni aucun SDK publicitaire ou de paiement ; `lib/` ne contient aucun code de publicité ni d'achat intégré ; l'application ne fait aucun appel réseau. Le jeu est aujourd'hui **entièrement jouable hors ligne, sans aucune source de revenu**.
+**État réel du code au 13 octobre 2026 : aucune monétisation n'est implémentée.** Le scan est sans ambiguïté — `pubspec.yaml` ne déclare ni `google_mobile_ads`, ni `in_app_purchase`, ni aucun SDK publicitaire ou de paiement ; `lib/` ne contient aucun code de publicité ni d'achat intégré ; l'application ne fait aucun appel réseau. Le jeu est aujourd'hui **entièrement jouable hors ligne, sans aucune source de revenu**.
 
 Le levier envisagé à ce stade est la paire habituelle du genre — publicité interstitielle plus un achat unique « Sans pub » — mais **la décision est explicitement reportée** : la question de la publicité mobile en Afrique de l'Ouest (remplissage, valeur du mille, moyens de paiement disponibles) n'est pas tranchée, et rien ne doit être câblé avant qu'elle le soit.
 
-| Phase | Levier | Statut |
-|---|---|---|
-| 0 — aujourd'hui | Aucune monétisation, jeu complet hors ligne | ✅ |
-| 1 — décision | Trancher le modèle pour le marché visé (pub, payant d'emblée, ou mixte) | ⬜ |
-| 2 — gratuit + pub | Interstitiel entre deux mandats, jamais pendant une partie | ⬜ |
-| 3 — achat unique | « Sans pub » en achat intégré non consommable | ⬜ |
-| 4 — moyens de paiement | Vérifier ce qui est réellement encaissable sur les marchés visés | ⬜ |
-| 5 — contenu payant | Mandats ou parcours supplémentaires | ⬜ |
+Les leviers possibles, dans l'ordre où ils se poseraient : d'abord trancher le modèle pour le marché visé (pub, payant d'emblée ou mixte) ; en cas de gratuit avec publicité, un interstitiel entre deux mandats, jamais pendant une partie, et un achat unique « Sans pub » non consommable ; vérifier ce qui est réellement encaissable sur les marchés visés ; plus tard, des mandats ou parcours supplémentaires payants. Aucun n'est câblé.
 
 Deux garde-fous à tenir quel que soit le modèle retenu : la publicité ne doit jamais s'intercaler entre une réponse et la carte suivante — c'est le cœur du rythme — et l'achat « Sans pub » doit rester un paiement unique, jamais un abonnement.
 
+## Rémunération par phases
+
+- [fait] **Aujourd'hui** : aucune monétisation, jeu complet et hors ligne
+- [en cours] **Décision** : trancher pub, payant d'emblée ou mixte pour le marché visé
+- **Gratuit avec pub** : interstitiel entre deux mandats, jamais pendant une partie
+- **Achat unique** : « Sans pub » non consommable, jamais un abonnement
+- **Contenu payant** : mandats ou parcours supplémentaires
+
 ## Canaux
 
-Aucun canal n'est actif : le jeu n'est publié sur aucune boutique et aucune publication ne le concerne à ce jour.
+Le jeu n'est publié sur aucune boutique et aucune publication ne le concerne à ce jour. Canaux en place : les comptes de réseaux sociaux communs, branchés au Planning du Studio, et la page d'accueil du site.
 
-- ⬜ **Les fiches de boutique elles-mêmes.** Premier canal, et le seul gratuit qui compte au lancement. Textes et captures sont prêts (`docs/BOUTIQUE.md`, `docs/captures/`), rien n'est soumis. Les captures montrent une carte lisible, pas un écran-titre.
-- ⬜ **Réseaux sociaux.** La chaîne TikTok « Afrotok » et la chaîne YouTube « toa.afrotok », communes à toutes les apps, sont branchées au Planning du Studio, mais aucune publication sur Palabre n'est faite ni programmée. Les portraits et les plaques du palais sont l'argument visuel : ils se partagent seuls, sans expliquer le jeu.
+- ⬜ **Les fiches de boutique elles-mêmes.** Premier canal, et le seul gratuit qui compte au lancement. Textes et captures sont prêts (`docs/BOUTIQUE.md`, `docs/captures/`), rien n'est soumis — à vérifier dans la console. Les captures montrent une carte lisible, pas un écran-titre.
+- ✅ **Réseaux sociaux.** La chaîne TikTok « Afrotok » et la chaîne YouTube « toa.afrotok », communes à toutes les apps, sont branchées au Planning du Studio et listent Palabre. Aucune publication sur Palabre n'est encore faite. Les portraits et les plaques du palais sont l'argument visuel : ils se partagent seuls, sans expliquer le jeu.
 - ⬜ **Communautés de jeux narratifs**, en français et en anglais — les joueurs de *Reigns* sont identifiables et demandeurs.
 - ⬜ **Presse et créateurs francophones**, d'abord spécialisés jeu vidéo, ensuite généralistes si l'angle du décor prend.
-- ⬜ **TestFlight** pour une boucle de retours fermée avant l'ouverture publique.
+- ⬜ **TestFlight**, boucle de retours fermée avant l'ouverture publique : aucune build visible depuis le dépôt — à vérifier dans la console.
+- ✅ **Site** `palabre.toakeur.com` : en ligne depuis le 12 octobre 2026, il présente le jeu mais ne renvoie vers aucune boutique.
 
-Aucune campagne payante n'est prévue tant que la phase 1 du tableau ci-dessus n'est pas tranchée : on ne paie pas pour acquérir des joueurs qui ne rapportent rien.
+Aucune campagne payante n'est prévue tant que le modèle de rémunération n'est pas tranché : on ne paie pas pour acquérir des joueurs qui ne rapportent rien.
 
-## KPIs
+## Mesures
 
-Aucune mesure n'existe à ce jour : l'application n'embarque aucun outil d'analyse et ne fait aucun appel réseau. Les chiffres ci-dessous sont donc **tous à relever dans les consoles** une fois la distribution ouverte, et aucun n'est renseigné ici.
+- **Installations** : à vérifier dans la console
+- **Rétention à J1 et J7** : à vérifier dans la console
+- **Note moyenne et avis** : à vérifier dans la console
+- **Mandats terminés par joueur** : à instrumenter
+- **Joueurs qui atteignent le jour 100** : à instrumenter
+- **Achèvement des 59 histoires** : mesuré par simulation (`outils/mesure_par_histoire.dart`)
 
-| Indicateur | Où le lire | Valeur |
-|---|---|---|
-| Installations | App Store Connect / Play Console | à vérifier dans la console |
-| Rétention à J1 et J7 | App Store Connect / Play Console | à vérifier dans la console |
-| Mandats terminés par joueur | aucune mesure en place | à instrumenter |
-| Part de joueurs qui atteignent le jour 100 | aucune mesure en place | à instrumenter |
-| Note moyenne et avis | consoles des deux boutiques | à vérifier dans la console |
-| Revenu par mille affichages | aucune régie branchée | sans objet en phase 0 |
-| Taux de conversion « Sans pub » | aucun achat intégré | sans objet en phase 0 |
-
-Le seul chiffre mesuré aujourd'hui l'est hors application, par simulation : `outils/mesure_par_histoire.dart` joue mille mandats et écrit le taux d'achèvement de chacune des 59 histoires. C'est un indicateur d'équilibrage, pas d'audience.
+L'application n'embarque aucun outil d'analyse et ne fait aucun appel réseau : les chiffres d'audience se liront dans les consoles une fois la distribution ouverte. Le seul chiffre mesuré aujourd'hui l'est hors application : `outils/mesure_par_histoire.dart` joue mille mandats et écrit le taux d'achèvement de chaque histoire — un indicateur d'équilibrage, pas d'audience. Revenu par mille affichages et conversion « Sans pub » sont sans objet tant qu'aucune régie ni aucun achat n'existe.
 
 ## Calendrier
 
@@ -70,5 +73,5 @@ Aucune date de sortie n'est arrêtée dans le dépôt. L'ordre est contraint par
 ## Les 3 priorités
 
 - Trancher le modèle de rémunération (pub, payant d'emblée ou mixte) : il décide de la fiche, de la classification et du questionnaire de confidentialité, et le changer après la soumission obligerait à tout reprendre.
-- Remplir la fiche App Store avec `palabre.toakeur.com` et `palabre@toakeur.com` — en donnant d'abord une page d'accueil à `palabre.toakeur.com`, dont la racine renvoie une 404 alors qu'il faut une adresse d'assistance —, répondre aux questionnaires 17+ et confidentialité, puis envoyer une première build Xcode Cloud sur TestFlight.
+- Remplir la fiche App Store avec `https://palabre.toakeur.com/` comme site et assistance, `palabre@toakeur.com` comme contact et la page de confidentialité déjà en ligne, répondre aux questionnaires 17+ et confidentialité, puis envoyer une première build Xcode Cloud sur TestFlight.
 - Préparer Android : poser la vraie clé de publication (`android/key.properties`, sauvegardée hors du dépôt) et ramener le bundle sous 150 Mo — il en fait 143,3, avec une marge sous 5 %.

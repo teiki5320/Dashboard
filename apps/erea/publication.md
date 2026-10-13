@@ -1,6 +1,6 @@
 # PUBLICATION — état des boutiques
 
-> Mis à jour le 12 octobre 2026 d'après l'App Store, la fiche publique
+> Mis à jour le 13 octobre 2026 d'après l'App Store, la fiche publique
 > Google Play et l'historique du dépôt ; ce que seules les consoles savent
 > est marqué « à vérifier dans la console ». Une ligne par système d'exploitation, dans un format
 > réutilisable d'une application à l'autre. Pour mettre à jour :
@@ -9,10 +9,30 @@
 > **Aucun secret ici** — uniquement des références publiques :
 > identifiants d'app, numéros de version, liens de console.
 
+## En bref
+
+- **Version commune** : `1.0.4` dans le code ; 1.0.2 sur l'App Store, 1.0.3 en test Android
+- **Identifiant de bundle** : `com.teiki.erea`, identique sur iOS et Android
+- **Monétisation** : pub AdMob + achat unique « Erea sans publicité », 3,99 €
+- **Confidentialité** : six types déclarés (SDK AdMob), consentement RGPD et ATT
+- **Contact** : `erea@toakeur.com` · site `erea.toakeur.com`
+
+## Boutiques
+
+| | 🍎 App Store | 🤖 Google Play |
+|---|---|---|
+| État | [ok] 1.0.2 en ligne depuis le 8 septembre 2026 | [à faire] test fermé 1.0.3, production pas demandée |
+| Construction | [ok] Xcode Cloud, à chaque poussée sur `main` | [ok] App Bundle construit sur le Mac |
+| Signature | [ok] automatique, gérée par Apple | [ok] keystore `CN=Toa`, copie de secours |
+| Classification | [ok] 4+ | [ok] questionnaire rempli, note à vérifier dans la console |
+| Cible | [ok] iOS 15.0 minimum | [ok] public de 13 ans et plus |
+| Permissions | [ok] suivi publicitaire (ATT) | [ok] notifications, identifiant publicitaire (`AD_ID`) |
+| Poids | [ok] 30,7 Mo sur l'App Store | [ok] 56 Mo de bundle, 13,6 Mo installé |
+
 ## Vue d'ensemble
 
-- **iOS** : **1.0.2 en ligne depuis le 8 septembre 2026 à 12 h 19**, achat intégré compris — toujours la version publique au 12 octobre 2026, 0 note
-- **Android** : **pas en production** — test fermé, release `4 (1.0.3)` servie aux testeurs depuis le 16 septembre ; les quatorze jours à douze testeurs sont tenus depuis le 22 septembre, la demande d'accès à la production n'était pas faite au 25 septembre et la fiche publique répond toujours 404 au 12 octobre
+- **iOS** : **1.0.2 en ligne depuis le 8 septembre 2026 à 12 h 19**, achat intégré compris — toujours la version publique au 13 octobre 2026, 0 note
+- **Android** : **pas en production** — test fermé, release `4 (1.0.3)` servie aux testeurs depuis le 16 septembre ; les quatorze jours à douze testeurs sont tenus depuis le 22 septembre, la demande d'accès à la production n'était pas faite au 25 septembre et la fiche publique répond toujours 404 au 13 octobre
 - **Version dans le code** : `1.0.4+5` dans `erea_flutter/pubspec.yaml` depuis le 30 septembre 2026 (corrections de l'audit du 28 septembre) ; son envoi aux boutiques est à vérifier dans la console
 - **Identifiant** : `com.teiki.erea`, identique sur les deux plateformes
 - **Achat intégré** : `com.teiki.erea.sanspub` « Erea sans publicité », 3,99 €, non consommable — **approuvé** sur l'App Store, **actif** sur Google Play
@@ -31,13 +51,13 @@ production.
 
 | | |
 |---|---|
-| État | **1.0.2 en ligne depuis le 8 septembre 2026** (vérifié sur l'App Store le 12 octobre 2026) |
+| État | **1.0.2 en ligne depuis le 8 septembre 2026** (vérifié sur l'App Store le 13 octobre 2026) |
 | Console | <https://appstoreconnect.apple.com> |
 | Fiche publique | identifiant App Store `6794918301` |
 | Version publiée | `1.0.2`, build `150`, en ligne depuis le 8 septembre 2026 à 12 h 19 (approuvée à 12 h 18, une minute avant) — remplace la `1.0.0` du 3 septembre |
 | Dernier build connu | `161` (`1.0.3`), vert, sur TestFlight, jamais soumis (audit du 28 septembre) ; les builds de la `1.0.4` sont à vérifier dans la console |
 | Version soumise | aucune connue — à vérifier dans la console ; la prochaine doit porter la `1.0.4` |
-| Notes / avis | 0 / 0 au 12 octobre 2026 |
+| Notes / avis | 0 / 0 au 13 octobre 2026 |
 | Achat intégré | `com.teiki.erea.sanspub` « Erea sans publicité », non consommable, **approuvé** le 8 septembre avec la 1.0.2 |
 | Distribution | Xcode Cloud, action *Archiver*, préparation **App Store Connect** |
 
@@ -68,9 +88,11 @@ données de performance. La page produit affiche désormais « Données
 utilisées pour vous suivre ». Le badge « Aucune donnée collectée » est
 perdu ; c'est le prix de la publicité.
 
-**Nom du compte.** Le compte s'affiche **TOA CORP**. ⚠️ Ce n'est qu'un
-nom d'affichage — le compte reste **individuel**, ce qui compte pour le
-DSA (voir plus bas).
+**Nom du compte.** Dans la console, le compte s'affiche **TOA CORP** ;
+sur la fiche publique, le vendeur affiché est le nom civil de Jean
+(vérifié le 13 octobre 2026). ⚠️ « TOA CORP » n'est qu'un nom
+d'affichage — le compte reste **individuel**, ce qui compte pour le DSA
+(voir plus bas).
 
 **Nom de l'app.** « Erea » n'occupe que 4 des 30 caractères du champ le
 plus indexé. À trancher pour la version suivante : `Erea — Devine
@@ -88,7 +110,7 @@ Le contact public de l'app est `erea@toakeur.com` depuis le 7 octobre
 
 | | |
 |---|---|
-| État | **Test fermé, pas en production** — fiche publique en 404 au 12 octobre 2026 |
+| État | **Test fermé, pas en production** — fiche publique en 404 au 13 octobre 2026 |
 | Console | <https://play.google.com/console> |
 | Version publiée | aucune |
 | Canal en cours | test fermé « Alpha » — release `4 (1.0.3)` servie aux testeurs depuis le 16 septembre (démo animée du geste, « Donner mon avis ») |
@@ -127,7 +149,7 @@ au questionnaire avec ce qui a réellement changé.
 
 | | |
 |---|---|
-| Production | `https://erea.toakeur.com/` — vitrine, jeu web sur `/jeu.html`, `/support.html`, `/confidentialite.html` ; répond le 12 octobre 2026 |
+| Production | `https://erea.toakeur.com/` — vitrine, jeu web sur `/jeu.html`, `/support.html`, `/confidentialite.html` ; répond le 13 octobre 2026 |
 | Domaine & SSL | sous-domaine de `toakeur.com` depuis le 7 octobre 2026, servi par GitHub Pages derrière Cloudflare, HTTPS valide ; l'ancienne adresse `teiki5320.github.io/erea/` répond toujours |
 | Visibilité | Smart App Banner (`app-id=6794918301`) sur les pages ; badge officiel « Télécharger dans l'App Store » vers `https://apps.apple.com/fr/app/erea/id6794918301` depuis le 12 octobre 2026 ; Android annoncé « bientôt sur Google Play », sans lien tant que la fiche n'existe pas |
 
@@ -135,19 +157,14 @@ au questionnaire avec ce qui a réellement changé.
 
 ## Ce qui reste, dans l'ordre
 
-1. **Android** — envoyer la 1.0.4 sur la piste de test fermé, puis
-   « Demander un accès en production » et répondre au questionnaire
-   (rapport du 15 septembre et changements réels de la 1.0.3 et de la
-   1.0.4).
-2. **iOS** — soumettre la 1.0.4 (consentement attendu, achats restaurés,
-   `PrivacyInfo.xcprivacy` enfin juste), en choisissant au passage le
-   nom long de l'app.
-3. **Web** — le jour de la production Android, remplacer « Bientôt sur
-   Google Play » par le badge officiel et le lien vers la fiche.
-4. **Les deux** — se déclarer **trader** au titre du DSA, après avoir
-   nettoyé le complément d'adresse du compte Apple.
-5. **iOS** — élucider les builds Xcode Cloud 141 et 142, échoués le
-   4 septembre sur des commits de documentation.
+1. ✅ **App Store** : la 1.0.2 est en ligne depuis le 8 septembre 2026, achat intégré compris.
+2. ✅ **Douze testeurs Android pendant quatorze jours** : tenus du 8 au 22 septembre 2026.
+3. **Envoyer la 1.0.4 en test fermé** : elle corrige les classements fantômes et le lien partagé depuis Android.
+4. **Demander l'accès à la production Google Play** : répondre au questionnaire avec les vrais changements des 1.0.3 et 1.0.4.
+5. **Soumettre la 1.0.4 sur l'App Store** : consentement attendu, achats restaurés, manifeste de confidentialité juste ; choisir le nom long.
+6. **Badge Google Play sur la vitrine** : le jour de la production Android, remplacer « Bientôt sur Google Play » par le lien.
+7. **Se déclarer trader (DSA)** : sur les deux boutiques, après avoir nettoyé le complément d'adresse du compte Apple.
+8. **Élucider les builds Xcode Cloud 141 et 142** : échoués le 4 septembre sur des commits de documentation.
 
 ---
 

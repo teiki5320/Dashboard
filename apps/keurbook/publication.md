@@ -1,16 +1,44 @@
 # PUBLICATION — état de la mise en ligne
 
-> Mis à jour le 12 octobre 2026, d'après le site en ligne et les exécutions GitHub Actions.
+> Mis à jour le 13 octobre 2026, d'après le site en ligne et les exécutions GitHub Actions.
 >
 > Aucun secret ici — uniquement des références.
+
+## En bref
+
+- **Production** : en ligne sur keurbook.com depuis le 1er octobre 2026
+- **Domaine & SSL** : Cloudflare, certificat valide jusqu'au 30 décembre 2026, renouvelé seul
+- **Visibilité** : 638 pages indexées par Google sur 957, IndexNow chaque lundi
+- **Contact** : keurbook@toakeur.com
+
+## Boutiques
+
+| | 🌐 Site |
+|---|---|
+| État | [ok] En ligne, réponse 200 |
+| Hébergement | [ok] Cloudflare Pages, projet keurbook |
+| Domaine | [ok] keurbook.com, www redirigé (301) |
+| SSL | [ok] Certificat Cloudflare, HSTS actif |
+| Indexation | [à faire] 638 / 957 pages indexées par Google |
+| Mesure d'audience | [pas encore] Aucune |
+
+## Ce qui reste, dans l'ordre
+
+1. ✅ **Mise en ligne** : site publié sur keurbook.com par Cloudflare Pages le 1er octobre 2026.
+2. ✅ **Search Console et IndexNow** : sitemap envoyé à Google, tout le site signalé chaque lundi.
+3. ✅ **Publicité en place** : script AdSense, ads.txt et 4 blocs d'annonces publiés le 12 octobre.
+4. **Validation AdSense** : attendre et suivre l'avis de Google dans la console AdSense.
+5. **Indexation complète** : faire entrer dans Google les 319 pages encore absentes.
+6. **Mesure d'audience** : installer Cloudflare Web Analytics en ouvrant son script dans `public/_headers`.
+7. **Design définitif** : remplacer l'habillage provisoire par le design fait à part.
 
 ## Web · Production
 
 | | |
 |---|---|
-| Adresse | **En ligne** sur https://keurbook.com (vérifié le 12 octobre 2026 : réponse 200) |
+| Adresse | **En ligne** sur https://keurbook.com (vérifié le 13 octobre 2026 : réponse 200) |
 | Hébergeur | Cloudflare Pages (projet `keurbook`), workflow `deploy.yml` |
-| Dernière publication | 12 octobre 2026, publication programmée réussie (article Conseils du lundi) |
+| Dernière publication | 13 octobre 2026 (8 h UTC), publication réussie après la mise à jour des fiches |
 | Mise en ligne | 1er octobre 2026 |
 | Dépôt | https://github.com/teiki5320/keurbook |
 | Taille publiée | 957 adresses dans le sitemap |
@@ -21,7 +49,8 @@
 
 - **Domaine** : `keurbook.com` (adresse canonique) ; `www.keurbook.com` redirige vers elle (301).
 - **Registraire et DNS** : Cloudflare.
-- **SSL** : certificat fourni et renouvelé par Cloudflare ; HSTS activé dans `public/_headers`.
+- **SSL** : certificat fourni et renouvelé par Cloudflare (valide jusqu'au 30 décembre 2026) ;
+  HSTS activé dans `public/_headers`.
 - L'ancienne version provisoire sur GitHub Pages est arrêtée : son adresse ne répond plus.
 
 ## Visibilité
@@ -29,9 +58,11 @@
 - **Sitemap** : https://keurbook.com/sitemap.xml répond (957 adresses) ; `robots.txt` autorise
   tout et cite le sitemap.
 - **Google Search Console** : propriété de domaine `keurbook.com`, sitemap envoyé le 1er octobre
-  2026. Dernier contrôle connu (7 octobre 2026) : 618 pages indexées, 339 non indexées (2
-  redirections www voulues, 337 « Détectée, actuellement non indexée »). Chiffres du jour : à
-  vérifier dans la console ou dans l'onglet Indexation du Studio.
+  2026 et renvoyé le 12 octobre. Suivi du Studio au 13 octobre 2026 : 638 pages indexées sur 957,
+  319 pas encore (175 inconnues de Google, 142 détectées mais non explorées, 2 explorées mais non
+  indexées).
 - **IndexNow** (Bing, Yandex…) : tout le sitemap est signalé chaque lundi ; dernière exécution
   réussie le 12 octobre 2026.
 - **Mesure d'audience** : aucune.
+- **Publicité** : Google AdSense en place (script chargé sur les pages, `https://keurbook.com/ads.txt`
+  répond). Validation du site par AdSense : à vérifier dans la console.

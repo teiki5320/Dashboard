@@ -1,45 +1,47 @@
 # MARKETING — plan marketing & rémunération
 
-> Mise à jour le 12 octobre 2026 (projet en pause, site en ligne sur solelis.com ; canaux et priorités revus).
+> Mise à jour le 13 octobre 2026 (rubrique Conseils en ligne, Search Console déclaré, comptes TikTok et YouTube branchés ; rémunération, points forts et mesures au format du Studio).
 > Aucun chiffre inventé : les valeurs non mesurées sont marquées comme telles.
 
-## Modèle de rémunération
+## Rémunération par phases
 
-| Phase | Modèle | Détail | Statut |
-|---|---|---|---|
-| 0 | **Gratuit intégral** | Aucune monétisation ; assumé dans les mentions légales (« projet d'accompagnement gratuit »). Coûts d'infra quasi nuls (free tiers) | **actuel** |
-| 1 | Soutien non marchand | Subventions, appels à projets, fondations (Entreprendre, MMA des Entrepreneurs du Futur), mécénat | ⬜ |
-| 2 | B2B prescripteurs | Tableau de bord multi-fiches / marque blanche pour experts-comptables, CIP, CCI-CMA — le dirigeant final ne paie jamais | ⬜ |
-| 3 | Partenariats qualifiés | Mise en relation transparente vers des professionnels vérifiés — ⚠️ encadrement déontologique à valider avec un avocat avant lancement | ⬜ |
-| 4 | Affiliation éthique | Outils de rebond (compta, assurance pro) avec lien d'affiliation affiché — jamais dans le parcours de crise | ⬜ |
+- [fait] **Aujourd'hui** : gratuit intégral, assumé dans les mentions légales
+- [en cours] **Soutien non marchand** : subventions, appels à projets, fondations, mécénat
+- **Prescripteurs (B2B)** : tableau multi-fiches pour experts-comptables, CIP, CCI-CMA
+- **Partenariats qualifiés** : mise en relation transparente, cadre déontologique à valider
+- **Affiliation éthique** : outils de rebond, jamais dans le parcours de crise
 
-Exclusions par design : pas de publicité display, pas de paywall sur la fiche, pas de revente de données (engagement `/politique-donnees`).
+Le dirigeant final ne paie jamais. Exclusions par design : pas de publicité display, pas de paywall sur la fiche, pas de revente de données (engagement `/politique-donnees`).
+
+## Points forts
+
+- 🧭 **Une fiche sur mesure** : un SIRET et 18 questions donnent stratégie, priorités, courriers, échéances et aides adaptés.
+- 🏛️ **Sources officielles seulement** : textes de loi et sites publics, organismes réels de 107 territoires, outre-mer compris.
+- 🤝 **Gratuit et humain** : aucune publicité ni revente de données, mode « perdu » réduit à trois infos et renvoi vers le soutien psychologique.
 
 ## Canaux
 
 | Canal | Détail | Statut |
 |---|---|---|
-| SEO organique | 48 pages avec métadonnées, sitemap, robots, JSON-LD (site + FAQ), image OG dynamique, ~50 pages longue traîne (17 courriers, 11 calculateurs, 4 annuaires, FAQ, glossaire) | ✅ base technique |
-| Search Console | Déclaration de solelis.com + du sitemap (138 adresses) et suivi des positions | ⬜ |
+| SEO organique | Métadonnées par page, sitemap (90 adresses), robots, JSON-LD (site, FAQ, articles), image OG dynamique ; pages longue traîne (17 courriers, 11 calculateurs, 4 annuaires, FAQ, glossaire) et rubrique Conseils (20 articles publiés, 10 programmés jusqu'au 9 novembre 2026, flux RSS) | ✅ base technique |
+| Search Console | solelis.com déclaré, sitemap envoyé le 12 octobre 2026 ; 28 pages indexées sur 69 suivies (onglet Indexation du Studio) | ✅ |
 | Prescripteurs institutionnels | Référencement par CIP, greffes, CCI/CMA, URSSAF, APESA, 60 000 Rebonds — le canal au meilleur rendement | ⬜ |
 | Experts-comptables & avocats | Page `/pro` + kit prescripteur (PDF + email type) | ⬜ |
 | Partage in-app | « Envoyer cette fiche à un proche » (magic link ✅ existant) + partage natif sur les calculateurs | ⬜ |
 | LinkedIn | Page entreprise + 2 posts pédagogiques/semaine (45 jours, caution, PGE…) | ⬜ |
-| TikTok « Afrotok » / YouTube « toa.afrotok » | Comptes communs à toutes les apps, branchés au Planning du Studio — aucune publication Solelis, aucune routine | ⬜ |
+| TikTok « Afrotok » / YouTube « toa.afrotok » | Comptes communs à toutes les apps, branchés au Planning du Studio pour Solelis — aucune publication Solelis à ce jour, aucune routine | ✅ branché |
 | Presse spécialisée | Les Échos Entrepreneurs, presse pro sectorielle — angle « outil gratuit » + chiffres du compteur | ⬜ |
 | Newsletter prescripteurs | Actualité juridique mensuelle (non pertinente pour le public en crise, one-shot par nature) | ⬜ |
-| SEA / réseaux grand public | Google Ads (coût/clic prohibitif), Instagram/TikTok (inadaptés au public) | — exclus |
+| SEA / réseaux grand public | Google Ads (coût/clic prohibitif), Instagram (inadapté au public) | — exclus |
 
-## KPIs
+## Mesures
 
-| Métrique | Valeur | Objectif |
-|---|---|---|
-| Fiches créées | à vérifier sur `/api/stats` (compteur ✅ câblé) | à définir après première mesure |
-| Visiteurs / sources de trafic | non mesuré (Plausible câblé dans le code, inactif en production, compte non souscrit) | activer la mesure |
-| Taux de complétion questionnaire → fiche | non mesuré | instrumenter (événements Plausible) |
-| Magic links envoyés / délivrés | à vérifier dans le dashboard Resend | surveiller la délivrabilité (< 5 % d'échecs) |
-| Pages indexées Google | non vérifié | 100 % du sitemap après Search Console |
-| Backlinks prescripteurs | 0 connu | 3 liens institutionnels au premier trimestre |
+- **Fiches créées** : à vérifier sur `/api/stats` (compteur câblé)
+- **Visiteurs et sources de trafic** : à instrumenter (Plausible prévu, inactif)
+- **Questionnaire mené jusqu'à la fiche** : à instrumenter
+- **Liens magiques délivrés** : à vérifier dans la console Resend
+- **Pages indexées par Google** : 28 sur 69 suivies (relevé du Studio, 12 octobre 2026)
+- **Liens entrants de prescripteurs** : aucun connu
 
 ## Calendrier
 
@@ -54,5 +56,5 @@ Exclusions par design : pas de publicité display, pas de paywall sur la fiche, 
 ## Les 3 priorités
 
 - Vérifier en production le parcours complet : création d'une fiche, lien magique reçu (et pas en indésirables) depuis Resend, rappel du cron, avocats locaux — et confirmer que solelis@toakeur.com reçoit bien les messages, puisque c'est l'adresse de suppression des fiches (RGPD)
-- Faire indexer par Google les pages encore absentes : solelis.com est déclaré dans Search Console, mais seules 28 pages sur 69 y figurent (suivi dans l'onglet Indexation du Studio)
+- Faire indexer par Google les pages encore absentes : seules 28 pages sur 69 suivies y figurent, et les 20 articles Conseils, entrés dans le sitemap (90 adresses), ne sont pas encore suivis dans l'onglet Indexation du Studio
 - Activer la mesure d'audience (Plausible : souscrire puis définir `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`) avant tout effort d'acquisition

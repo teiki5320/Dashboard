@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 12 octobre 2026. Compagnon de INFRA.md.
+Mis à jour le 13 octobre 2026. Compagnon de INFRA.md.
 
 ## Positionnement
 
@@ -16,17 +16,25 @@ Mis à jour le 12 octobre 2026. Compagnon de INFRA.md.
 
 ## Modèle de rémunération
 
-Affiliation Amazon Partenaires : les boutons « Acheter · prix » mènent à Amazon.fr (tag `keurcook-21`, `src/lib/amazon.ts`) ; Amazon encaisse, livre et verse une commission sur les achats. Le site ne vend rien lui-même. Les recettes et les conseils sont gratuits et attirent les visiteurs. Prix affichés indicatifs, relevés le 27 septembre 2026.
+Deux sources, sans rien vendre soi-même :
 
-| Phase | Levier | Statut |
-| --- | --- | --- |
-| 1. Lancement | Site ouvert au public (maintenance coupée) | ✅ |
-| 1. Lancement | Recettes en ligne (fiches, pays, recherche par ingrédient, favoris) | ✅ |
-| 1. Lancement | Boutique : 91 produits, 8 gammes, boutons « Acheter · prix » vers Amazon.fr ; keurcook.com déclaré chez Amazon Partenaires | ✅ |
-| 1. Lancement | Rubrique « Conseils », trois articles par semaine | ✅ (33 en réserve, jusqu'au 28 décembre 2026) |
-| 2. Conversion | Bouton d'achat Amazon sur les ingrédients des recettes | ✅ |
-| 2. Conversion | Mise à jour régulière des prix indicatifs | ⬜ (relevé manuel, dernier le 27 septembre 2026) |
-| 3. Fidélisation | Newsletter « la recette de la semaine » | ⬜ aucun outil choisi |
+- **Affiliation Amazon Partenaires** : les boutons « Acheter · prix » mènent à Amazon.fr (tag `keurcook-21`, `src/lib/amazon.ts`) ; Amazon encaisse, livre et verse une commission sur les achats.
+- **Publicité Google AdSense** (depuis le 12 octobre 2026) : annonces titrées « Publicité » sur les recettes, les articles « Conseils » et les pages pays ; consentement recueilli par le message de Google.
+
+Les recettes et les conseils sont gratuits et attirent les visiteurs. Prix affichés indicatifs, relevés le 27 septembre 2026.
+
+## Rémunération par phases
+
+- [fait] **Aujourd'hui** : affiliation Amazon sur 91 produits et annonces AdSense depuis le 12 octobre 2026
+- [en cours] **Mesurer** : installer une mesure d'audience pour savoir quelles pages rapportent
+- **Fidéliser** : newsletter « la recette de la semaine », outil à choisir
+- **Élargir** : vidéos de recettes sur les comptes TikTok et YouTube déjà branchés au Studio
+
+## Points forts
+
+- 🌍 **Seize pays, une seule table** : 52 recettes de 16 pays, avec l'histoire du plat, les étapes et les valeurs nutritionnelles.
+- 🛒 **De la recette au produit** : chaque ingrédient rare est signalé dans la recette et s'achète en un clic sur Amazon.fr.
+- 📝 **Un contenu qui paraît seul** : trois articles « Conseils » par semaine, publiés automatiquement par GitHub Actions.
 
 ## Canaux
 
@@ -38,16 +46,14 @@ Affiliation Amazon Partenaires : les boutons « Acheter · prix » mènent à Am
 - **E-mail** : pas de newsletter (outil à choisir). ⬜
 - **Publicité payante** : aucune. ⬜
 
-## KPIs
+## Mesures
 
-Aucun outil de mesure d'audience n'est installé ; la bannière cookies est une simple information (cookies nécessaires seulement).
-
-| Indicateur | Source | Valeur |
-| --- | --- | --- |
-| Pages indexées par Google | Google Search Console (domaine keurcook.com) | 189 indexées, 31 non indexées (7 octobre 2026) |
-| Clics, achats et commissions Amazon | https://partenaires.amazon.fr | à vérifier dans la console |
-| Impressions et clics des épingles | Pinterest (statistiques du compte Keur Cook) | à vérifier dans la console |
-| Visites, recettes et articles les plus vus | aucun outil installé | — |
+- **Pages indexées par Google** : 189 indexées, 31 non indexées (Search Console, 7 octobre 2026)
+- **Adresses du sitemap** : 201 (13 octobre 2026)
+- **Clics, achats et commissions Amazon** : à vérifier dans la console (partenaires.amazon.fr)
+- **Affichages et revenus des annonces** : à vérifier dans la console (adsense.google.com)
+- **Épingles Pinterest** : 40 recettes épinglées ; impressions et clics à vérifier dans la console
+- **Visites et pages les plus vues** : à instrumenter (aucun outil de mesure installé)
 
 ## Les 3 priorités
 
