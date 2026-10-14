@@ -1,6 +1,6 @@
 # PUBLICATION — état de la mise en ligne
 
-> Mis à jour le 13 octobre 2026. Aucun secret ici.
+> Mis à jour le 14 octobre 2026. Aucun secret ici.
 
 ## En bref
 
@@ -19,7 +19,7 @@
 | Domaine | [ok] keurcook.com, www redirigé en 301 |
 | SSL | [ok] Certificat géré par Cloudflare, HSTS |
 | Indexation | [ok] 189 pages indexées par Google (7 octobre 2026) |
-| Mesure d'audience | [à faire] Aucun outil installé |
+| Mesure d'audience | [ok] Cloudflare Web Analytics, sans cookie |
 
 ## Ce qui reste, dans l'ordre
 
@@ -29,7 +29,7 @@
 4. ✅ **Référencement** : Search Console déclarée, IndexNow chaque lundi, Pinterest revendiqué.
 5. ✅ **Annonces AdSense** : en ligne depuis le 12 octobre 2026, ads.txt publié.
 6. **Approbation AdSense** : vérifier dans la console que le site est approuvé et sert des annonces.
-7. **Mesure d'audience** : installer un outil respectueux du consentement et l'autoriser dans la CSP.
+7. ✅ **Mesure d'audience** : Cloudflare Web Analytics autorisé dans la CSP le 13 octobre 2026.
 
 ## Web · Production
 
@@ -57,7 +57,7 @@ Pendant une maintenance : écran « On prépare la marmite », pages en `noindex
 ## Domaine & SSL
 
 - **Domaine** : `keurcook.com` chez Cloudflare, relié au projet Pages `keurcook` ; `www.keurcook.com` redirigé vers `keurcook.com` (301). Adresse technique : https://keurcook.pages.dev.
-- **SSL** : certificat HTTPS géré par Cloudflare ; en-têtes de sécurité (CSP, HSTS…) dans `public/_headers`, la CSP n'ouvrant que les adresses Google d'AdSense et du consentement.
+- **SSL** : certificat HTTPS géré par Cloudflare ; en-têtes de sécurité (CSP, HSTS…) dans `public/_headers`, la CSP n'ouvrant que les adresses Google d'AdSense et du consentement, et celles de Cloudflare Web Analytics.
 - **E-mail** : `keurcook@toakeur.com` (Cloudflare Email Routing de toakeur.com), affichée sur le site ; l'ancienne `contact@keurcook.com` arrive au même endroit.
 - **Ancien domaine** : `alohash.fr` (IONOS) ne sert plus au site ; il expire le 16 octobre 2026, renouvellement à décider.
 - **Redirections** : `public/_redirects` (`/cgv`, `/categorie/<gamme>` (une règle par gamme), anciennes pages `/panier`, `/commande`, `/admin`…).
@@ -69,7 +69,7 @@ Pendant une maintenance : écran « On prépare la marmite », pages en `noindex
 - **IndexNow** : sitemap signalé chaque lundi (`.github/workflows/indexnow.yml`) ; dernier envoi réussi le 12 octobre 2026.
 - **Pinterest** : site revendiqué sur le compte « Keur Cook » ; 40 recettes épinglées du 2 au 12 octobre 2026.
 - **Publicité** : Google AdSense en ligne depuis le 12 octobre 2026 ; approbation du site à vérifier dans la console.
-- **Analytics** : aucun outil installé ; consentement aux cookies publicitaires recueilli par le message de Google, rouvert par le lien « Cookies » du pied de page.
+- **Analytics** : Cloudflare Web Analytics (sans cookie), balise constatée en ligne le 14 octobre 2026, chiffres à vérifier dans la console ; consentement aux cookies publicitaires recueilli par le message de Google, rouvert par le lien « Cookies » du pied de page.
 - **Newsletter** : aucune.
 
 ## Vérifications avant envoi

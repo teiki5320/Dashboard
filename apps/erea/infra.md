@@ -1,7 +1,7 @@
 # INFRA — fiche technique
 
 > Généré le 20 août 2026 par un scan du dépôt, mis à jour le
-> 13 octobre 2026. Pour mettre à jour : relancer ce même prompt.
+> 14 octobre 2026. Pour mettre à jour : relancer ce même prompt.
 
 ## En bref
 
@@ -17,7 +17,7 @@
 - 🍎 **iOS** : 🐙 GitHub — main, 1.0.4 dans le code [ok] → ☁️ Xcode Cloud — build à chaque poussée sur main [ok] → 🛍️ App Store Connect — 1.0.4 pas encore soumise [à faire] → 📱 App Store — 1.0.2 en ligne depuis le 8 septembre [ok]
 - 🤖 **Android** : 🐙 GitHub — main, 1.0.4 dans le code [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — test fermé 1.0.3, production non demandée [à faire] → 🛒 Google Play — pas en production [pas encore]
 - 🌐 **Web** : 🐙 GitHub — racine de main, sans CNAME [ok] → 📄 Hébergement web (GitHub Pages / Cloudflare Pages) — GitHub Pages [ok] → 🏷️ Nom de domaine — erea.toakeur.com via Cloudflare [ok] → 🌐 Site — vitrine, jeu, support, confidentialité [ok]
-- 🎬 **Contenu** : 🎬 Studio — neuf pubs vidéo produites le 5 octobre [ok] → 🗓️ Planning — aucune publication programmée [à faire] → 📣 Réseaux sociaux & influenceurs — TikTok et YouTube Afrotok, rien publié [pas encore]
+- 🎬 **Contenu** : 🎬 Studio — neuf pubs vidéo produites le 5 octobre [ok] → 🗓️ Planning — aucune publication programmée [à faire] → 📣 Réseaux sociaux & influenceurs — YouTube toa.afrotok, rien publié [pas encore]
 
 ## Vue d'ensemble
 

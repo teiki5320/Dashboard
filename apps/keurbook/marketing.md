@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 13 octobre 2026. Un canal n'est coché que s'il est prouvé (compte branché et
+Mis à jour le 14 octobre 2026. Un canal n'est coché que s'il est prouvé (compte branché et
 publications réelles, ou routine qui publie).
 
 ## Positionnement
@@ -34,17 +34,17 @@ publications réelles, ou routine qui publie).
   jusqu'au 6 novembre, puis seuls des articles de saison sont programmés. La routine « Écrire les
   articles Conseils » repasse le 1er et le 15 de chaque mois.
 - ⬜ Pinterest : aucun compte Keurbook.
-- ⬜ TikTok et YouTube : les comptes communs « Afrotok » sont branchés au Planning du Studio ; une
+- ⬜ TikTok et YouTube : TikTok « Afrotok » est branché au Studio mais rattaché à aucune app, YouTube « toa.afrotok » à Erea seule ; une
   vidéo Keurbook est prête depuis le 5 octobre, mais aucune publication n'est constatée.
 - ⬜ Newsletter : aucune.
-- ⬜ Mesure d'audience : aucune sur le site.
+- ✅ Mesure d'audience : Cloudflare Web Analytics, sans cookie, active depuis le 13 octobre 2026.
 
 ## Mesures
 
 - **Pages indexées par Google** : 638 sur 957 (suivi du Studio, 13 octobre 2026)
 - **Pages pas encore indexées** : 319, dont 175 inconnues de Google et 142 détectées non explorées
 - **Articles Conseils** : 34 publiés, 16 programmés
-- **Visites** : à instrumenter (aucune mesure d'audience sur le site)
+- **Visites** : à vérifier dans la console Cloudflare Web Analytics (mesure active depuis le 13 octobre 2026)
 - **Clics et revenus Amazon** : à vérifier dans la console
 - **Revenus AdSense** : à vérifier dans la console
 
@@ -53,7 +53,7 @@ publications réelles, ou routine qui publie).
 - Faire indexer par Google les 319 pages qui ne le sont pas encore (107 BD, les 92 pages
   auteurs, 84 livres, 24 pages pays) : renforcer les liens internes vers elles et suivre leur
   évolution dans l'onglet Indexation du Studio.
-- Mettre en place une mesure d'audience (Cloudflare Web Analytics, en autorisant son script dans
-  `public/_headers`) pour savoir quelles pages attirent des lecteurs.
+- Remplacer les recherches Amazon par des liens directs vers des fiches produit vérifiées (ASIN),
+  en commençant par les livres les plus vus dans Cloudflare Web Analytics.
 - Ouvrir un premier canal social pour Keurbook — un compte Pinterest Keurbook pour les couvertures
   et les portraits d'auteurs, comme Keur Cook et Keur Déco — et le brancher au Planning du Studio.

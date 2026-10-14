@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 13 octobre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
+Mis à jour le 14 octobre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
 
 ## En bref
 
@@ -9,7 +9,7 @@ Mis à jour le 13 octobre 2026 par un scan du dépôt. Pour mettre à jour : rel
 - **Backend** : aucun, site 100 % statique sans base de données
 - **Distribution** : Cloudflare Pages, publié par GitHub Actions
 - **Site** : https://keurcook.com (www redirigé)
-- **IA et outils** : photos OpenArt · Amazon Partenaires · AdSense
+- **IA et outils** : photos OpenArt · Amazon Partenaires · AdSense · Cloudflare Web Analytics
 
 ## Parcours
 
@@ -24,13 +24,13 @@ Mis à jour le 13 octobre 2026 par un scan du dépôt. Pour mettre à jour : rel
 - **Stack** : Next.js 16 (App Router, `output: "export"`) · React 19 · TypeScript · Tailwind CSS 4 · Three.js (carte de l'Afrique en particules) · Marked (articles Markdown) · sharp (images de partage et d'épingles au build).
 - **Backend** : aucun. Site 100 % statique (dossier `out/`) : pas de serveur, pas de base de données, pas d'espace admin. Recettes et produits dans `src/lib/demo/`, articles dans `content/conseils/`, mode maintenance dans `content/maintenance.json` (lu au build ; désactivé aujourd'hui).
 - **Distribution** : une seule version, https://keurcook.com (`www` redirigé), publiée sur Cloudflare Pages par GitHub Actions depuis la branche `main`.
-- **Mesure d'audience** : aucune. Pas de script de mesure dans le code ; la politique de sécurité (`public/_headers`) n'autorise comme scripts externes que ceux de Google utiles à AdSense et au message de consentement.
+- **Mesure d'audience** : Cloudflare Web Analytics, sans cookie, ajouté par Cloudflare aux pages servies (rien dans le code) ; la politique de sécurité (`public/_headers`) l'autorise depuis le 13 octobre 2026 (voir section 8).
 - **Particularités** :
   - pages légales `/conditions` (CGU ; `/cgv` y redirige), `/mentions-legales`, `/confidentialite`, groupe de routes `src/app/(legal)` accessible même en maintenance ; hébergeur indiqué : Cloudflare, Inc. ; consentement aux cookies recueilli par le message de Google (Confidentialité et messages, dans AdSense), que le lien « Cookies » du pied de page rouvre (`src/components/compliance/CookieBanner.tsx`) ; l'ancien bandeau maison n'est plus affiché ;
   - liste des allégations de santé interdites (`src/lib/compliance.ts`) ;
   - étiquetage alimentaire sur chaque produit (ingrédients, allergènes, conservation) ;
   - mode maintenance piloté par le bouton « Maintenance » de GitHub Actions ; en maintenance, pages en `noindex` et sitemap vide ;
-  - en-têtes de sécurité (CSP, HSTS, `X-Frame-Options`, `nosniff`…) dans `public/_headers` ; la CSP n'ouvre que les adresses Google d'AdSense et du consentement ; redirections (`/cgv`, `/categorie/<gamme>` (une règle par gamme), anciennes pages `/panier`, `/commande`, `/admin`…) dans `public/_redirects` ;
+  - en-têtes de sécurité (CSP, HSTS, `X-Frame-Options`, `nosniff`…) dans `public/_headers` ; la CSP n'ouvre que les adresses Google d'AdSense et du consentement, et celles de Cloudflare Web Analytics ; redirections (`/cgv`, `/categorie/<gamme>` (une règle par gamme), anciennes pages `/panier`, `/commande`, `/admin`…) dans `public/_redirects` ;
   - favoris stockés dans le navigateur (aucun compte) ;
   - liens Amazon construits par `src/lib/amazon.ts` (tag `keurcook-21`, champ `amazonAsin` rempli depuis les offres de `src/lib/demo/catalog*.ts`) ; prix indicatifs relevés le 27 septembre 2026 (`AMAZON_PRICES_CHECKED_ON`).
 
@@ -93,3 +93,11 @@ Mis à jour le 13 octobre 2026 par un scan du dépôt. Pour mettre à jour : rel
 - **Identifiants publics** : identifiant d'éditeur `ca-pub-…` et numéro de bloc d'annonces dans `src/lib/ads.ts` et `public/ads.txt` (publics par nature).
 - **Secrets** : aucun.
 - **Coût** : gratuit ; Google verse une part des revenus publicitaires. Approbation du site et revenus : à vérifier dans la console.
+
+## 8. Analytics (mesure d'usage)
+
+- **Rôle** : Cloudflare Web Analytics, mesure de fréquentation sans cookie (pages vues, pays, type d'appareil). La balise est ajoutée par Cloudflare aux pages servies ; depuis le 13 octobre 2026, `public/_headers` autorise son script (`static.cloudflareinsights.com`) et son envoi (`cloudflareinsights.com`), bloqués jusque-là. Balise constatée en ligne le 14 octobre 2026 ; la page Confidentialité décrit cette mesure.
+- **Console** : https://dash.cloudflare.com (Analytics & Logs → Web Analytics).
+- **Identifiants publics** : aucun dans le dépôt.
+- **Secrets** : aucun.
+- **Coût** : gratuit.

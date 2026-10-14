@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 13 octobre 2026, d'après le code du dépôt et le site en ligne. Aucun secret ici :
+Mis à jour le 14 octobre 2026, d'après le code du dépôt et le site en ligne. Aucun secret ici :
 uniquement des noms de variables et de consoles.
 
 ## En bref
@@ -10,7 +10,7 @@ uniquement des noms de variables et de consoles.
 - **Backend** : aucun — site statique, sans base ni compte
 - **Distribution** : Cloudflare Pages, publié par GitHub Actions
 - **Site** : keurbook.com (957 adresses dans le sitemap)
-- **IA et outils** : routine « Écrire les articles Conseils », IndexNow
+- **IA et outils** : routine « Écrire les articles Conseils », IndexNow, Cloudflare Web Analytics
 
 ## Parcours
 
@@ -50,8 +50,8 @@ uniquement des noms de variables et de consoles.
 ## Hébergement web (GitHub Pages / Cloudflare Pages)
 
 - **Fournisseur** : Cloudflare Pages, projet `keurbook`, publié par `wrangler` depuis `deploy.yml`.
-- **En-têtes** : `public/_headers` (politique de sécurité limitée au site lui-même, HSTS, cache des
-  images) ; les adresses techniques `*.pages.dev` sont en `noindex`.
+- **En-têtes** : `public/_headers` (politique de sécurité limitée au site lui-même, à Google AdSense
+  et à Cloudflare Web Analytics, HSTS, cache des images) ; les adresses techniques `*.pages.dev` sont en `noindex`.
 - **Redirections** : `public/_redirects`.
 - **Console** : tableau de bord Cloudflare, rubrique Workers & Pages → `keurbook`.
 
@@ -94,3 +94,13 @@ uniquement des noms de variables et de consoles.
 - **Détail** : docs/PUBLICITE.md.
 - **Validation du site et revenus** : à vérifier dans la console.
 - **Console** : https://adsense.google.com (compte AdSense de Jean).
+
+## Analytics (mesure d'usage)
+
+- **Fournisseur** : Cloudflare Web Analytics, gratuit et sans cookie. La balise est ajoutée par
+  Cloudflare aux pages servies (rien dans le code) ; depuis le 13 octobre 2026, la politique de
+  sécurité de `public/_headers` autorise son script (`static.cloudflareinsights.com`) et son envoi
+  (`cloudflareinsights.com`), qui étaient bloqués jusque-là. Balise constatée en ligne le 14 octobre
+  2026. La page Confidentialité décrit cette mesure.
+- **Chiffres** : à vérifier dans la console.
+- **Console** : tableau de bord Cloudflare, rubrique Analytics & Logs → Web Analytics.

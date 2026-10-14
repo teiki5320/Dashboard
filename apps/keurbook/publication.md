@@ -1,6 +1,6 @@
 # PUBLICATION — état de la mise en ligne
 
-> Mis à jour le 13 octobre 2026, d'après le site en ligne et les exécutions GitHub Actions.
+> Mis à jour le 14 octobre 2026, d'après le site en ligne et les exécutions GitHub Actions.
 >
 > Aucun secret ici — uniquement des références.
 
@@ -20,7 +20,7 @@
 | Domaine | [ok] keurbook.com, www redirigé (301) |
 | SSL | [ok] Certificat Cloudflare, HSTS actif |
 | Indexation | [à faire] 638 / 957 pages indexées par Google |
-| Mesure d'audience | [pas encore] Aucune |
+| Mesure d'audience | [ok] Cloudflare Web Analytics, sans cookie |
 
 ## Ce qui reste, dans l'ordre
 
@@ -29,7 +29,7 @@
 3. ✅ **Publicité en place** : script AdSense, ads.txt et 4 blocs d'annonces publiés le 12 octobre.
 4. **Validation AdSense** : attendre et suivre l'avis de Google dans la console AdSense.
 5. **Indexation complète** : faire entrer dans Google les 319 pages encore absentes.
-6. **Mesure d'audience** : installer Cloudflare Web Analytics en ouvrant son script dans `public/_headers`.
+6. ✅ **Mesure d'audience** : Cloudflare Web Analytics autorisé dans `public/_headers` le 13 octobre.
 7. **Design définitif** : remplacer l'habillage provisoire par le design fait à part.
 
 ## Web · Production
@@ -63,6 +63,7 @@
   indexées).
 - **IndexNow** (Bing, Yandex…) : tout le sitemap est signalé chaque lundi ; dernière exécution
   réussie le 12 octobre 2026.
-- **Mesure d'audience** : aucune.
+- **Mesure d'audience** : Cloudflare Web Analytics (sans cookie), balise constatée en ligne le
+  14 octobre 2026 ; chiffres à vérifier dans la console.
 - **Publicité** : Google AdSense en place (script chargé sur les pages, `https://keurbook.com/ads.txt`
   répond). Validation du site par AdSense : à vérifier dans la console.

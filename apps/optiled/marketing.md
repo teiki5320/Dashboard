@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 13 octobre 2026. Compagnon de INFRA.md.
+Mis à jour le 14 octobre 2026. Compagnon de INFRA.md.
 
 > Aucun chiffre inventé : les valeurs non mesurées sont marquées comme telles.
 
@@ -19,7 +19,6 @@ Mis à jour le 13 octobre 2026. Compagnon de INFRA.md.
 
 - [fait] **Aujourd'hui** : site gratuit sans compte ; affiliation Amazon (16 lampes, identifiant `optiled-21`, liens `rel="sponsored"`, mentions obligatoires) et publicité AdSense dans les pages de lecture.
 - [en cours] **Validation AdSense** : validation du site et diffusion des annonces, à vérifier dans la console AdSense.
-- **Sélection fiable** : relancer la vérification automatique des lampes (`optiled-verification-lampes`), arrêtée depuis le 1er octobre 2026.
 - **Affiliation élargie** : proposer aussi les autres achats de la liste (alimentation, programmateur, variateur…).
 
 ## Points forts
@@ -43,7 +42,7 @@ Mis à jour le 13 octobre 2026. Compagnon de INFRA.md.
 | Partage par les visiteurs | Bouton « Partager » du calculateur (lien avec les réglages) | ✅ |
 | Installation sur mobile | Manifest et service worker (PWA) | ✅ |
 | Pinterest | 12 épingles prêtes (`public/images/pinterest/`, import `docs/pinterest.csv`) ; aucun compte Pinterest OptiLED branché au Studio, aucune publication constatée | ⬜ |
-| TikTok « Afrotok » et YouTube « toa.afrotok » | Comptes communs branchés au Studio, mais aucune publication OptiLED planifiée | ⬜ |
+| TikTok « Afrotok » et YouTube « toa.afrotok » | TikTok rattaché à aucune app, YouTube à Erea seule dans le Studio ; aucune publication OptiLED | ⬜ |
 | Forums et communautés de jardinage | Aucune trace | ⬜ |
 
 ## Mesures
@@ -60,10 +59,11 @@ Mis à jour le 13 octobre 2026. Compagnon de INFRA.md.
 | Date | Événement |
 |---|---|
 | 24 septembre 2026 | Domaine `www.optiled.fr` en ligne, mentions légales complétées, affiliation Amazon configurée |
-| 1er octobre 2026 | Première vérification automatique des lampes Amazon (la seule à ce jour) |
+| 1er octobre 2026 | Vérification automatique des lampes Amazon, puis interruption de la routine |
 | 7 octobre 2026 | Contact `optiled@toakeur.com` et mesure d'audience Cloudflare ajoutés au code |
 | 7 au 12 octobre 2026 | Publications bloquées par le test de bout en bout ; débloquées le 12 octobre |
 | 12 octobre 2026 | Mentions légales accordées à la mesure d'audience Cloudflare (une seule source, le jeton du site) ; publicité Google AdSense en ligne (script, emplacements, consentement, `ads.txt`), mentions légales et « À propos » mises à jour |
+| 13 et 14 octobre 2026 | Vérification quotidienne des lampes de nouveau active : 16 lampes, une indisponible |
 | 16 novembre 2026 | Rappel : préparer la série suivante d'articles de conseil |
 | 15 janvier 2027 | Dernier article programmé de la série actuelle (hors un article en juin 2027) |
 

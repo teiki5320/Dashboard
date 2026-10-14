@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 13 octobre 2026. Compagnon de INFRA.md.
+Mis à jour le 14 octobre 2026. Compagnon de INFRA.md.
 
 ## Positionnement
 
@@ -10,7 +10,7 @@ Mis à jour le 13 octobre 2026. Compagnon de INFRA.md.
 
 ## Rémunération par phases
 
-- [fait] **Aujourd'hui** : liens Amazon Partenaires (tag `keurdeco-21`, 163 produits vérifiés) et annonces AdSense sur les pages de lecture depuis le 12 octobre 2026.
+- [fait] **Aujourd'hui** : liens Amazon Partenaires (tag `keurdeco-21`, 162 produits actifs sur 163 relevés) et annonces AdSense sur les pages de lecture depuis le 12 octobre 2026.
 - [en cours] **Validation AdSense** : Google examine le site avant de diffuser ; état à vérifier dans la console AdSense.
 - **Trafic Pinterest automatique** : publication quotidienne par l'API, dès l'accès standard accordé.
 - **Trafic de recherche** : pages indexées par Google et Bing, qui font vivre les deux revenus.
@@ -26,7 +26,7 @@ Mis à jour le 13 octobre 2026. Compagnon de INFRA.md.
 - ✅ **Pinterest « Keur Déco »** (principal) : compte branché au Planning du Studio ; 62 épingles importées par CSV, dont 24 parues du 2 au 13 octobre 2026 et 38 programmées jusqu'au 1er novembre (`data/pinterest-etat.json`). La publication quotidienne par l'API tourne à blanc faute de secrets.
 - ✅ **Google** : Search Console vérifiée (propriété de domaine) ; au relevé du 7 octobre 2026, 71 pages indexées et 27 non indexées, demandes d'indexation faites les 7 et 8 octobre.
 - ✅ **Bing** : pages signalées par IndexNow après chaque reconstruction du lundi.
-- ⬜ **TikTok « Afrotok » et YouTube « toa.afrotok »** (comptes communs à toutes les apps, branchés au Planning) : aucune publication pour Keur Déco à ce jour.
+- ⬜ **TikTok et YouTube** : TikTok « Afrotok » est branché au Studio mais rattaché à aucune app, YouTube « toa.afrotok » à Erea seule (Studio, 13 octobre 2026) ; aucune publication pour Keur Déco.
 
 ## Mesures
 

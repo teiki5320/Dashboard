@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 13 octobre 2026. Compagnon de INFRA.md. Pour l'actualiser : relancer le même prompt.
+Mis à jour le 14 octobre 2026. Compagnon de INFRA.md. Pour l'actualiser : relancer le même prompt.
 
 ## Positionnement
 
@@ -44,10 +44,10 @@ Deux garde-fous à tenir quel que soit le modèle retenu : la publicité ne doit
 
 ## Canaux
 
-Le jeu n'est publié sur aucune boutique et aucune publication ne le concerne à ce jour. Canaux en place : les comptes de réseaux sociaux communs, branchés au Planning du Studio, et la page d'accueil du site.
+Le jeu n'est publié sur aucune boutique et aucune publication ne le concerne à ce jour. Canal en place : la page d'accueil du site.
 
 - ⬜ **Les fiches de boutique elles-mêmes.** Premier canal, et le seul gratuit qui compte au lancement. Textes et captures sont prêts (`docs/BOUTIQUE.md`, `docs/captures/`), rien n'est soumis — à vérifier dans la console. Les captures montrent une carte lisible, pas un écran-titre.
-- ✅ **Réseaux sociaux.** La chaîne TikTok « Afrotok » et la chaîne YouTube « toa.afrotok », communes à toutes les apps, sont branchées au Planning du Studio et listent Palabre. Aucune publication sur Palabre n'est encore faite. Les portraits et les plaques du palais sont l'argument visuel : ils se partagent seuls, sans expliquer le jeu.
+- ⬜ **Réseaux sociaux.** Depuis le 13 octobre 2026, le Studio range les chaînes par app : TikTok « Afrotok » n'est rattachée à aucune, YouTube « toa.afrotok » à Erea seule. Aucun compte n'est donc branché pour Palabre, et aucune publication n'est faite. Les portraits et les plaques du palais sont l'argument visuel : ils se partagent seuls, sans expliquer le jeu.
 - ⬜ **Communautés de jeux narratifs**, en français et en anglais — les joueurs de *Reigns* sont identifiables et demandeurs.
 - ⬜ **Presse et créateurs francophones**, d'abord spécialisés jeu vidéo, ensuite généralistes si l'angle du décor prend.
 - ⬜ **TestFlight**, boucle de retours fermée avant l'ouverture publique : aucune build visible depuis le dépôt — à vérifier dans la console.

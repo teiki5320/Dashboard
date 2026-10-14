@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 13 octobre 2026 d'après le dépôt et le site en ligne. Cette fiche, avec MARKETING.md et PUBLICATION.md, est désormais la source : le Studio la recopie.
+Mis à jour le 14 octobre 2026 d'après le dépôt et le site en ligne. Cette fiche, avec MARKETING.md et PUBLICATION.md, est désormais la source : le Studio la recopie.
 
 ## En bref
 
@@ -61,7 +61,7 @@ Mis à jour le 13 octobre 2026 d'après le dépôt et le site en ligne. Cette fi
 
 ## Affiliation (Amazon Partenaires)
 
-- **Rôle** : rémunération du site — liens `https://www.amazon.fr/dp/<ASIN>?tag=keurdeco-21`, tag défini dans `src/amazon.ts` et nulle part ailleurs. 163 produits relevés à la main sur Amazon.fr (`src/data/produits.json`), sans API : jamais d'ASIN, de note, d'avis ni de prix inventés, aucune photo Amazon, mention Partenaires près des liens, en pied de page et dans les mentions légales. `npm run verifier-produits` contrôle la disponibilité.
+- **Rôle** : rémunération du site — liens `https://www.amazon.fr/dp/<ASIN>?tag=keurdeco-21`, tag défini dans `src/amazon.ts` et nulle part ailleurs. 163 produits relevés à la main sur Amazon.fr (`src/data/produits.json`), sans API : jamais d'ASIN, de note, d'avis ni de prix inventés, aucune photo Amazon, mention Partenaires près des liens, en pied de page et dans les mentions légales. `npm run verifier-produits` contrôle la disponibilité ; au passage du 13 octobre 2026, 162 produits actifs et 1 indisponible (`jarre-terre-cuite-toscane`, retiré de l'affichage, à remplacer).
 - **Console** : https://partenaires.amazon.fr (compte Amazon Partenaires de Jean ; keurdeco.com fait partie des sites déclarés).
 - **Identifiants publics** : tag `keurdeco-21`.
 - **Secrets** : aucun dans le dépôt.

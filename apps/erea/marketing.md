@@ -1,6 +1,6 @@
 # Erea — plan marketing & rémunération
 
-> Généré le 3 août 2026, mis à jour le 13 octobre 2026. Le modèle de
+> Généré le 3 août 2026, mis à jour le 14 octobre 2026. Le modèle de
 > rémunération est en ligne sur l'App Store depuis la 1.0.2 (publicité +
 > achat unique qui la retire). Pour le mettre à jour : relancer ce même prompt. Aucun secret
 > ici.
@@ -120,7 +120,7 @@ pas encore faite.
 | Badge « Télécharger dans l'App Store » | Badge officiel d'Apple sur la vitrine, en tête et en bas de page, vers la fiche `id6794918301` ; Android annoncé « bientôt sur Google Play » — depuis le 12 octobre 2026 | ✅ |
 | Enseignants & parents | Dossier d'une page « Erea en classe » (repères du brevet couverts, mode Facile, zéro collecte) à envoyer aux profs d'histoire-géo, groupes Facebook de profs, La Salle des Maîtres | ⬜ |
 | Afrique de l'Ouest | Mise en avant du pack Afrique auprès des communautés éducatives francophones (Sénégal, Côte d'Ivoire…) ; presse tech locale ; créateurs de contenu éducation | ⬜ |
-| Réseaux sociaux | Comptes communs du Studio branchés au Planning : TikTok « Afrotok » et YouTube « toa.afrotok ». Pubs vidéo produites par le Studio le 5 octobre 2026 (« le temps qui bugue ») : une validée le 6 octobre, huit à valider. **Aucune publication** : le Planning est vide | ⬜ |
+| Réseaux sociaux | YouTube « toa.afrotok » rattaché à Erea dans le Studio ; TikTok « Afrotok » branché mais rattaché à aucune app. Pubs vidéo produites par le Studio le 5 octobre 2026 (« le temps qui bugue ») : une validée le 6 octobre, huit à valider. **Aucune publication** : le Planning est vide | ⬜ |
 | Presse & sites spécialisés | App du jour (iPhon.fr, iGen, Frandroid), sites parents (Geek Junior, Super Julie — références du jeu éducatif) | ⬜ |
 | Featuring Apple | Formulaire « App Store featuring » : app famille, française, hors ligne, avec Game Center — bon dossier, même si l'argument « sans pub » est tombé avec la 1.0.2 | ⬜ |
 | Play Store | Second magasin, donc second public : les douze testeurs ont tenu quatorze jours (22 septembre), l'accès à la production reste à demander (`docs/PUBLICATION.md`) | ⬜ |
@@ -179,7 +179,7 @@ une collecte à la fiche de confidentialité.
 ## Les 3 priorités
 
 - **Demander l'accès à la production sur Google Play**, avec la 1.0.4 sur la piste : les quatorze jours sont tenus depuis le 22 septembre, et c'est tout un second public qui attend derrière.
-- **Publier la pub vidéo validée** du Studio sur TikTok « Afrotok » et YouTube « toa.afrotok » par le Planning, puis trier les huit vidéos en attente : aucune publication n'a encore eu lieu.
+- **Publier la pub vidéo validée** du Studio sur YouTube « toa.afrotok » par le Planning (et sur TikTok « Afrotok » une fois rattaché à Erea), puis trier les huit vidéos en attente : aucune publication n'a encore eu lieu.
 - **Envoyer le dossier « Erea en classe »** aux professeurs d'histoire-géographie et à leurs groupes : c'est le public naturel d'un jeu familial calé sur les repères du brevet, et rien ne lui a encore été adressé.
 
 ## Déjà fait

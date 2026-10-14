@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 13 octobre 2026. Compagnon de `INFRA.md` : là où INFRA répertorie
+Mis à jour le 14 octobre 2026. Compagnon de `INFRA.md` : là où INFRA répertorie
 la technique, ce fichier suit la stratégie marketing et de rémunération.
 Pour l'actualiser : relancer le même prompt.
 
@@ -46,7 +46,7 @@ sans rien de publié reste ⬜.
 | Partage in-app | Cartes de partage (défis, Tamassi) prêtes dans le code — sans utilisateurs tant que l'app n'est pas publiée | ⬜ |
 | Partage WhatsApp prioritaire (AO) | Mettre WhatsApp en avant sur les écrans de partage — canal dominant en Afrique de l'Ouest | ⬜ |
 | Instagram | `@toa.kultiva`, lien câblé dans l'app ; aucune publication vérifiable | ⬜ |
-| TikTok / YouTube | Comptes communs « Afrotok » (TikTok) et « toa.afrotok » (YouTube) branchés au Planning du Studio ; rien de programmé pour Kultiva | ⬜ |
+| TikTok / YouTube | « Afrotok » (TikTok) branché au Studio mais rattaché à aucune app, « toa.afrotok » (YouTube) à Erea seule ; rien de programmé pour Kultiva | ⬜ |
 | Groupes Facebook | Jardinage FR + Sénégal/Côte d'Ivoire — apporter de la valeur avant de promouvoir | ⬜ |
 | Micro-influenceurs | 3–5 créateurs potager FR (TikTok/YouTube), contact avec kit presse | ⬜ |
 | Newsletter | « Que semer ce mois-ci » — fidélisation la moins chère | ⬜ |

@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 13 octobre 2026. Compagnon de INFRA.md.
+Mis à jour le 14 octobre 2026. Compagnon de INFRA.md.
 
 ## Positionnement
 
@@ -25,10 +25,10 @@ Les recettes et les conseils sont gratuits et attirent les visiteurs. Prix affic
 
 ## Rémunération par phases
 
-- [fait] **Aujourd'hui** : affiliation Amazon sur 91 produits et annonces AdSense depuis le 12 octobre 2026
-- [en cours] **Mesurer** : installer une mesure d'audience pour savoir quelles pages rapportent
+- [fait] **Aujourd'hui** : affiliation Amazon sur 91 produits, annonces AdSense depuis le 12 octobre 2026, audience mesurée depuis le 13
+- [en cours] **Mesurer** : lire dans Cloudflare Web Analytics quelles pages attirent et rapportent
 - **Fidéliser** : newsletter « la recette de la semaine », outil à choisir
-- **Élargir** : vidéos de recettes sur les comptes TikTok et YouTube déjà branchés au Studio
+- **Élargir** : vidéos de recettes sur TikTok et YouTube, comptes à rattacher à Keur Cook dans le Studio
 
 ## Points forts
 
@@ -42,7 +42,7 @@ Les recettes et les conseils sont gratuits et attirent les visiteurs. Prix affic
 - **Contenu régulier** : trois articles « Conseils » par semaine (lundi, mercredi, vendredi), publiés automatiquement. ✅
 - **Pinterest** : compte « Keur Cook » branché, site revendiqué, bouton « Épingler » sur chaque recette. Épingles publiées par la routine `keurcook-epingles-pinterest` : 40 recettes épinglées du 2 au 12 octobre 2026 dans les tableaux par région, deux jours de plan restants. ✅
 - **Partage** : boutons « Partager sur WhatsApp » et « Épingler sur Pinterest », version imprimable sur chaque recette. ✅
-- **TikTok et YouTube** : comptes communs « Afrotok » et « toa.afrotok » branchés au Planning du Studio, mais aucune publication Keur Cook prévue. ⬜
+- **TikTok et YouTube** : TikTok « Afrotok » est branché au Studio mais rattaché à aucune app, YouTube « toa.afrotok » à Erea seule ; aucune publication Keur Cook prévue. ⬜
 - **E-mail** : pas de newsletter (outil à choisir). ⬜
 - **Publicité payante** : aucune. ⬜
 
@@ -53,10 +53,10 @@ Les recettes et les conseils sont gratuits et attirent les visiteurs. Prix affic
 - **Clics, achats et commissions Amazon** : à vérifier dans la console (partenaires.amazon.fr)
 - **Affichages et revenus des annonces** : à vérifier dans la console (adsense.google.com)
 - **Épingles Pinterest** : 40 recettes épinglées ; impressions et clics à vérifier dans la console
-- **Visites et pages les plus vues** : à instrumenter (aucun outil de mesure installé)
+- **Visites et pages les plus vues** : à vérifier dans la console Cloudflare Web Analytics (mesure active depuis le 13 octobre 2026)
 
 ## Les 3 priorités
 
 - Écrire de nouveaux articles « Conseils » : il en reste 33 en réserve, la réserve passe sous 20 vers le 13 novembre et se vide le 28 décembre 2026.
 - Relever à nouveau les prix indicatifs des 91 produits : le dernier relevé date du 27 septembre 2026 et rien ne le refait automatiquement.
-- Installer une mesure d'audience respectueuse du consentement (Cloudflare Web Analytics, en autorisant son script dans `public/_headers`) pour savoir quelles recettes et quels articles attirent les visiteurs.
+- Préparer la suite des épingles Pinterest : le plan de la routine `keurcook-epingles-pinterest` s'achève et 12 des 52 recettes n'ont pas encore d'épingle.

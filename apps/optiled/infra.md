@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Généré le 13 octobre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
+Généré le 14 octobre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
 
 > Aucun secret dans cette fiche — uniquement des références (noms de variables, consoles).
 
@@ -17,7 +17,7 @@ Généré le 13 octobre 2026 par un scan du dépôt. Pour mettre à jour : relan
 
 - 🌐 **Web** : 🐙 GitHub — main, dernière publication au vert [ok] → ⚙️ GitHub Actions — tests, build et test de bout en bout [ok] → 🏠 GitHub Pages — hébergement du site [ok] → 🔗 Nom de domaine — www.optiled.fr, HTTPS forcé [ok] → 🔎 Google — 62 pages indexées sur 86 [à faire]
 - 📝 **Contenu** : ✍️ Articles de conseil — 74 rédigés [ok] → ⏰ GitHub Actions — publication lundi, mercredi, vendredi [ok] → 📰 Rubrique Conseils — 34 en ligne, 40 programmés [ok] → 📌 Pinterest — 12 épingles prêtes, aucun compte [pas encore]
-- 🛒 **Affiliation** : 💡 Sélection de lampes — 16 lampes, une indisponible [ok] → 🔁 Routine de vérification — dernier passage le 13 octobre [ok] → 🛍️ Affiliation — liens Amazon.fr optiled-21 [ok]
+- 🛒 **Affiliation** : 💡 Sélection de lampes — 16 lampes, une indisponible [ok] → 🔁 Routine de vérification — dernier passage le 14 octobre [ok] → 🛍️ Affiliation — liens Amazon.fr optiled-21 [ok]
 - 📢 **Publicité** : 📰 Pages de lecture — deux emplacements au plus [ok] → 🍪 Consentement — bandeau de Google en ligne [ok] → 💰 AdSense (publicité web) — validation à vérifier [à faire]
 
 ## Vue d'ensemble
@@ -33,7 +33,7 @@ Généré le 13 octobre 2026 par un scan du dépôt. Pour mettre à jour : relan
   - La chaîne de publication refuse de publier si les tests unitaires, le build ou le test de bout en bout échouent (ce qui a bloqué toute mise en ligne du 7 au 12 octobre 2026).
   - Publicité Google AdSense depuis le 12 octobre 2026 (`build/annonces.ts`, fichier `public/ads.txt`) : script et bandeau de consentement de Google sur toutes les pages publiées, sauf le calculateur intégré sur d'autres sites ; annonces seulement dans les guides, conseils, fiches des cultures, parcours et glossaire.
   - Signalement hebdomadaire des pages à Bing et aux autres moteurs par IndexNow (`.github/workflows/indexnow.yml`, le lundi à 7 h UTC ; clé publique dans `public/`).
-  - Routines Claude Code (console https://claude.ai/code/routines) : `optiled-verification-lampes`, prévue chaque jour (lampes et fourchettes de prix, envoi sur `main`) mais dont le dernier passage date du 1er octobre 2026 ; `optiled-nouvelle-serie-conseils`, rappel unique le 16 novembre 2026 pour préparer la série suivante d'articles.
+  - Routines Claude Code (console https://claude.ai/code/routines) : `optiled-verification-lampes`, chaque jour (lampes et fourchettes de prix, envoi sur `main`), de nouveau active : passages des 13 et 14 octobre 2026 après une interruption depuis le 1er octobre ; `optiled-nouvelle-serie-conseils`, rappel unique le 16 novembre 2026 pour préparer la série suivante d'articles.
 
 ## GitHub
 

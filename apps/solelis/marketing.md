@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-> Mise à jour le 13 octobre 2026 (rubrique Conseils en ligne, Search Console déclaré, comptes TikTok et YouTube branchés ; rémunération, points forts et mesures au format du Studio).
+> Mise à jour le 14 octobre 2026 (rubrique Conseils en ligne, Search Console déclaré, aucun compte TikTok ni YouTube rattaché à Solelis dans le Studio ; rémunération, points forts et mesures au format du Studio).
 > Aucun chiffre inventé : les valeurs non mesurées sont marquées comme telles.
 
 ## Rémunération par phases
@@ -29,7 +29,7 @@ Le dirigeant final ne paie jamais. Exclusions par design : pas de publicité dis
 | Experts-comptables & avocats | Page `/pro` + kit prescripteur (PDF + email type) | ⬜ |
 | Partage in-app | « Envoyer cette fiche à un proche » (magic link ✅ existant) + partage natif sur les calculateurs | ⬜ |
 | LinkedIn | Page entreprise + 2 posts pédagogiques/semaine (45 jours, caution, PGE…) | ⬜ |
-| TikTok « Afrotok » / YouTube « toa.afrotok » | Comptes communs à toutes les apps, branchés au Planning du Studio pour Solelis — aucune publication Solelis à ce jour, aucune routine | ✅ branché |
+| TikTok « Afrotok » / YouTube « toa.afrotok » | Le Studio range les chaînes par app depuis le 13 octobre 2026 : TikTok rattaché à aucune, YouTube à Erea seule — rien pour Solelis, aucune publication, aucune routine | ⬜ |
 | Presse spécialisée | Les Échos Entrepreneurs, presse pro sectorielle — angle « outil gratuit » + chiffres du compteur | ⬜ |
 | Newsletter prescripteurs | Actualité juridique mensuelle (non pertinente pour le public en crise, one-shot par nature) | ⬜ |
 | SEA / réseaux grand public | Google Ads (coût/clic prohibitif), Instagram (inadapté au public) | — exclus |
