@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 14 octobre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
+Mis à jour le 15 octobre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
 
 ## En bref
 
@@ -64,7 +64,7 @@ Mis à jour le 14 octobre 2026 par un scan du dépôt. Pour mettre à jour : rel
 
 ## 4. Amazon Partenaires (affiliation)
 
-- **Rôle** : les boutons « Acheter · prix » mènent à Amazon.fr (programme Partenaires, tag `keurcook-21`, `src/lib/amazon.ts`) ; Amazon encaisse et livre. Produits retenus : plus de 3,5 étoiles sur Amazon ; prix indicatifs relevés le 27 septembre 2026. `keurcook.com` figure dans la liste des sites du compte (9 octobre 2026). Une routine quotidienne vérifie par lots que les produits cités sont toujours achetables.
+- **Rôle** : les boutons « Acheter · prix » mènent à Amazon.fr (programme Partenaires, tag `keurcook-21`, `src/lib/amazon.ts`) ; Amazon encaisse et livre. Produits retenus : plus de 3,5 étoiles sur Amazon ; prix indicatifs relevés le 27 septembre 2026. `keurcook.com` figure dans la liste des sites du compte (9 octobre 2026). Une routine quotidienne vérifie par lots que les produits cités sont toujours achetables. Les 13 et 14 octobre 2026, 14 produits devenus indisponibles ont été remplacés par des équivalents en vente (fiches vérifiées sur amazon.fr le 14 octobre).
 - **Console** : https://partenaires.amazon.fr (compte Amazon Partenaires de Jean).
 - **Identifiants publics** : tag partenaire `keurcook-21` (`NEXT_PUBLIC_AMAZON_TAG` pour le changer).
 - **Secrets** : aucun.

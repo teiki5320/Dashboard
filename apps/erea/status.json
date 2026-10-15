@@ -1,10 +1,10 @@
 {
   "release": null,
   "ci": {
-    "status": "completed",
-    "conclusion": "success",
-    "updatedAt": "2026-10-14T07:49:05Z",
-    "url": "https://github.com/teiki5320/erea/actions/runs/38530670165"
+    "status": "queued",
+    "conclusion": null,
+    "updatedAt": "2026-10-15T10:52:12Z",
+    "url": "https://github.com/teiki5320/erea/actions/runs/38723301805"
   },
-  "fetchedAt": "2026-10-14T11:12:16.715Z"
+  "fetchedAt": "2026-10-15T10:52:16.608Z"
 }

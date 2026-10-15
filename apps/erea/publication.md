@@ -1,6 +1,6 @@
 # PUBLICATION — état des boutiques
 
-> Mis à jour le 13 octobre 2026 d'après l'App Store, la fiche publique
+> Mis à jour le 14 octobre 2026 d'après l'App Store, la fiche publique
 > Google Play et l'historique du dépôt ; ce que seules les consoles savent
 > est marqué « à vérifier dans la console ». Une ligne par système d'exploitation, dans un format
 > réutilisable d'une application à l'autre. Pour mettre à jour :
@@ -11,7 +11,7 @@
 
 ## En bref
 
-- **Version commune** : `1.0.4` dans le code ; 1.0.2 sur l'App Store, 1.0.3 en test Android
+- **Version commune** : `1.0.4` dans le code ; 1.0.2 sur l'App Store, 1.0.4 en examen sur la piste Android
 - **Identifiant de bundle** : `com.teiki.erea`, identique sur iOS et Android
 - **Monétisation** : pub AdMob + achat unique « Erea sans publicité », 3,99 €
 - **Confidentialité** : six types déclarés (SDK AdMob), consentement RGPD et ATT
@@ -21,7 +21,7 @@
 
 | | 🍎 App Store | 🤖 Google Play |
 |---|---|---|
-| État | [ok] 1.0.2 en ligne depuis le 8 septembre 2026 | [à faire] test fermé 1.0.3, production pas demandée |
+| État | [en cours] 1.0.4 envoyée le 15 octobre 2026 · 1.0.2 en ligne en attendant | [en cours] production demandée le 14 octobre 2026, réponse sous sept jours environ |
 | Construction | [ok] Xcode Cloud, à chaque poussée sur `main` | [ok] App Bundle construit sur le Mac |
 | Signature | [ok] automatique, gérée par Apple | [ok] keystore `CN=Toa`, copie de secours |
 | Classification | [ok] 4+ | [ok] questionnaire rempli, note à vérifier dans la console |
@@ -31,19 +31,19 @@
 
 ## Vue d'ensemble
 
-- **iOS** : **1.0.2 en ligne depuis le 8 septembre 2026 à 12 h 19**, achat intégré compris — toujours la version publique au 13 octobre 2026, 0 note
-- **Android** : **pas en production** — test fermé, release `4 (1.0.3)` servie aux testeurs depuis le 16 septembre ; les quatorze jours à douze testeurs sont tenus depuis le 22 septembre, la demande d'accès à la production n'était pas faite au 25 septembre et la fiche publique répond toujours 404 au 13 octobre
-- **Version dans le code** : `1.0.4+5` dans `erea_flutter/pubspec.yaml` depuis le 30 septembre 2026 (corrections de l'audit du 28 septembre) ; son envoi aux boutiques est à vérifier dans la console
+- **iOS** : **1.0.4 (build 182) en attente de vérification depuis le 15 octobre 2026 à 12 h 51**, publication automatique ; nouveau nom « Erea : Quiz d'histoire & frise » ; la 1.0.2 reste en ligne jusqu'à l'approbation
+- **Android** : **accès à la production demandé le 14 octobre 2026 à 18 h 39** (formulaire en trois pages, 300 caractères par réponse) ; le même jour, release `5 (1.0.4)` et captures légendées envoyées pour examen sur la piste Alpha ; fiche publique encore en 404
+- **Version dans le code** : `1.0.4+5` depuis le 30 septembre 2026 (corrections de l'audit du 28 septembre) ; envoyée à Google le 14 octobre, pas encore à Apple
 - **Identifiant** : `com.teiki.erea`, identique sur les deux plateformes
 - **Achat intégré** : `com.teiki.erea.sanspub` « Erea sans publicité », 3,99 €, non consommable — **approuvé** sur l'App Store, **actif** sur Google Play
 - **Monétisation** : interstitielle AdMob une partie sur deux, consentement RGPD publié le 3 septembre 2026
 - **Web** : vitrine `https://erea.toakeur.com/` en ligne, contact `erea@toakeur.com`
 
 Côté iOS, rien n'a bougé en boutique depuis le 8 septembre : la 1.0.3
-(build 161) est restée sur TestFlight, et la 1.0.4 n'a laissé aucune
-trace de soumission dans le dépôt. Côté Android, le seul délai
-incompressible est passé ; ce qui manque, c'est la demande d'accès à la
-production.
+(build 161) est restée sur TestFlight, et la 1.0.4 attend sa soumission
+avec le nom long et les captures légendées. Côté Android, tout est chez
+Google depuis le 14 octobre : la demande de production et la release
+1.0.4 ; il n'y a plus qu'à attendre.
 
 ---
 
@@ -51,12 +51,12 @@ production.
 
 | | |
 |---|---|
-| État | **1.0.2 en ligne depuis le 8 septembre 2026** (vérifié sur l'App Store le 13 octobre 2026) |
+| État | **1.0.4 (build 182) en attente de vérification depuis le 15 octobre 2026 à 12 h 51** · 1.0.2 en ligne en attendant |
 | Console | <https://appstoreconnect.apple.com> |
 | Fiche publique | identifiant App Store `6794918301` |
 | Version publiée | `1.0.2`, build `150`, en ligne depuis le 8 septembre 2026 à 12 h 19 (approuvée à 12 h 18, une minute avant) — remplace la `1.0.0` du 3 septembre |
-| Dernier build connu | `161` (`1.0.3`), vert, sur TestFlight, jamais soumis (audit du 28 septembre) ; les builds de la `1.0.4` sont à vérifier dans la console |
-| Version soumise | aucune connue — à vérifier dans la console ; la prochaine doit porter la `1.0.4` |
+| Dernier build connu | `182` (`1.0.4`), soumis ; les builds suivants viennent de commits de documentation, même code |
+| Version soumise | `1.0.4`, build `182`, le 15 octobre 2026 à 12 h 51 — les builds `176` et `180` ont été refusés à l'import (ITMS-91064) : le validateur n'accepte ni « suivi à vrai, liste de domaines vide » ni « suivi à vrai, sans clé » ; le 182 porte « suivi à faux, sans clé » (commit 6e981b6) ; nom « Erea : Quiz d'histoire & frise », mots-clés sans « quiz/frise/histoire » (déjà dans le nom), captures iPhone légendées écran moyen et grand écran (iPad : celles d'août), adresses passées sur `erea.toakeur.com` (assistance, site, confidentialité), notes App Review réécrites (AdMob, consentement, achat intégré) |
 | Notes / avis | 0 / 0 au 13 octobre 2026 |
 | Achat intégré | `com.teiki.erea.sanspub` « Erea sans publicité », non consommable, **approuvé** le 8 septembre avec la 1.0.2 |
 | Distribution | Xcode Cloud, action *Archiver*, préparation **App Store Connect** |
@@ -110,11 +110,11 @@ Le contact public de l'app est `erea@toakeur.com` depuis le 7 octobre
 
 | | |
 |---|---|
-| État | **Test fermé, pas en production** — fiche publique en 404 au 13 octobre 2026 |
+| État | **Accès à la production demandé le 14 octobre 2026 à 18 h 39** — fiche publique en 404 tant que Google n'a pas répondu |
 | Console | <https://play.google.com/console> |
 | Version publiée | aucune |
-| Canal en cours | test fermé « Alpha » — release `4 (1.0.3)` servie aux testeurs depuis le 16 septembre (démo animée du geste, « Donner mon avis ») |
-| Accès à la production | demandable depuis le 22 septembre ; **non demandé au 25 septembre** — la suite est à vérifier dans la console |
+| Canal en cours | test fermé « Alpha » — release `4 (1.0.3)` servie depuis le 16 septembre ; release `5 (1.0.4)` en examen depuis le 14 octobre (consentement attendu, achats restaurés, lien Play, classement masqué) |
+| Accès à la production | demandable depuis le 22 septembre ; **demandé le 14 octobre à 18 h 39** — « Nous avons reçu votre demande », réponse par e-mail sous sept jours environ |
 | Examen | envoyé le 8 septembre 2026 à 9 h 07 (release 1.0.2, testeurs, description corrigée), approuvé à 9 h 38 |
 | Testeurs | groupe Google `testers-community@googlegroups.com` — service **Testers Community**, plan Starter 14 €, 15 testeurs, souscrit le 8 septembre à 22 h ; **« 12 testeurs inscrits pour 1 jour » le 10 septembre**, compteur Google |
 | Rapports | reçus le 15 septembre : rapport de test (aucun plantage, aucun bug ; trois « pistes » génériques : tutoriel dynamique, captures Play légendées, langues) et questionnaire d'accès à la production pré-rempli, à réécrire avec ce qui a réellement changé |
@@ -159,10 +159,9 @@ au questionnaire avec ce qui a réellement changé.
 
 1. ✅ **App Store** : la 1.0.2 est en ligne depuis le 8 septembre 2026, achat intégré compris.
 2. ✅ **Douze testeurs Android pendant quatorze jours** : tenus du 8 au 22 septembre 2026.
-3. **Envoyer la 1.0.4 en test fermé** : elle corrige les classements fantômes et le lien partagé depuis Android.
-4. **Demander l'accès à la production Google Play** : répondre au questionnaire avec les vrais changements des 1.0.3 et 1.0.4.
-5. **Soumettre la 1.0.4 sur l'App Store** : consentement attendu, achats restaurés, manifeste de confidentialité juste ; choisir le nom long.
-6. **Badge Google Play sur la vitrine** : le jour de la production Android, remplacer « Bientôt sur Google Play » par le lien.
+3. **Attendre la réponse de Google** à la demande de production (envoyée le 14 octobre), puis créer la première release de production avec le bundle 1.0.4.
+4. **Attendre l'App Review de la 1.0.4** (envoyée le 15 octobre ; jusqu'à 48 heures). Publication automatique à l'approbation.
+5. **Badge Google Play sur la vitrine** : le jour de la production Android, remplacer « Bientôt sur Google Play » par le lien.
 7. **Se déclarer trader (DSA)** : sur les deux boutiques, après avoir nettoyé le complément d'adresse du compte Apple.
 8. **Élucider les builds Xcode Cloud 141 et 142** : échoués le 4 septembre sur des commits de documentation.
 

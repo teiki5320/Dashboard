@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 14 octobre 2026. Compagnon de INFRA.md.
+Mis à jour le 15 octobre 2026. Compagnon de INFRA.md.
 
 ## Positionnement
 
@@ -10,7 +10,7 @@ Mis à jour le 14 octobre 2026. Compagnon de INFRA.md.
 
 ## Rémunération par phases
 
-- [fait] **Aujourd'hui** : liens Amazon Partenaires (tag `keurdeco-21`, 162 produits actifs sur 163 relevés) et annonces AdSense sur les pages de lecture depuis le 12 octobre 2026.
+- [fait] **Aujourd'hui** : liens Amazon Partenaires (tag `keurdeco-21`, 161 produits actifs sur 163 relevés) et annonces AdSense sur les pages de lecture depuis le 12 octobre 2026.
 - [en cours] **Validation AdSense** : Google examine le site avant de diffuser ; état à vérifier dans la console AdSense.
 - **Trafic Pinterest automatique** : publication quotidienne par l'API, dès l'accès standard accordé.
 - **Trafic de recherche** : pages indexées par Google et Bing, qui font vivre les deux revenus.
