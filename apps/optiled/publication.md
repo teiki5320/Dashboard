@@ -1,6 +1,6 @@
 # PUBLICATION — état de la mise en ligne
 
-> Généré le 13 octobre 2026. Aucun secret ici.
+> Généré le 16 octobre 2026. Aucun secret ici.
 
 ## En bref
 
@@ -33,7 +33,7 @@
 - **Hébergeur** : GitHub Pages, publication automatique à chaque envoi sur `main` et chaque lundi, mercredi et vendredi pour les articles programmés (`.github/workflows/pages.yml` : tests unitaires, build, test de bout en bout, puis mise en ligne). Aucune action manuelle.
 - **Ancienne adresse** : https://teiki5320.github.io/optiled/ redirige vers le domaine (301).
 - **Dernière mise en production** : 13 octobre 2026 au matin, publication réussie (dernière modification du site le 12 octobre au soir : publicité Google AdSense ; une publication avait d'abord échoué, le test de bout en bout refusant les scripts de Google, puis a réussi une fois ce test corrigé).
-- **Articles de conseil** : 34 en ligne, 40 programmés (le prochain le 14 octobre 2026).
+- **Articles de conseil** : 36 en ligne, 38 programmés (le prochain le 19 octobre 2026).
 - **Contact affiché** : `optiled@toakeur.com` (mentions légales et « À propos »).
 
 ## Domaine & SSL

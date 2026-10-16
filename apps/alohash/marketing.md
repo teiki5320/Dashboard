@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 14 octobre 2026. Compagnon de INFRA.md.
+Mis à jour le 16 octobre 2026. Compagnon de INFRA.md.
 
 ## Positionnement
 
@@ -8,7 +8,7 @@ Mis à jour le 14 octobre 2026. Compagnon de INFRA.md.
 - **Promesse** : « Recettes africaines & produits rares » (`src/lib/config.ts`). Les grands plats d'Afrique expliqués pas à pas, et les ingrédients introuvables en grande surface pour les réussir chez soi.
 - **Contenu** :
   - 52 recettes de 16 pays (Afrique de l'Ouest, centrale, de l'Est, australe et Madagascar), avec histoire du plat, ingrédients, étapes, astuces et valeurs nutritionnelles estimées ; une section « La cuisine de … » sur chaque page pays ;
-  - rubrique « Conseils » : 67 articles, dont 34 publiés et 33 programmés, trois par semaine (lundi, mercredi, vendredi) jusqu'au 28 décembre 2026 (`content/conseils/`, `docs/CONSEILS.md`, `docs/CONSEILS-CALENDRIER.md`) ;
+  - rubrique « Conseils » : 67 articles, dont 36 publiés et 31 programmés, trois par semaine (lundi, mercredi, vendredi) jusqu'au 28 décembre 2026 (`content/conseils/`, `docs/CONSEILS.md`, `docs/CONSEILS-CALENDRIER.md`) ;
   - boutique de 91 produits en 8 gammes : Épices & aromates, Farines & céréales, Feuilles & fleurs séchées, Poissons & fumés, Huiles & pâtes, Snacks & fruits secs, Cafés & thés, Ustensiles. Produits retenus : plus de 3,5 étoiles sur Amazon.
 - **Lien recettes → boutique** : chaque ingrédient disponible en boutique est signalé « Produit rare » dans la recette, avec un bouton d'achat Amazon ; chaque fiche produit liste les recettes qui l'utilisent.
 - **Ton et image** : thème sombre « Braise », carte de l'Afrique en particules sur l'accueil (« Seize pays, une seule table. »), grandes photos, carrousels par type de plat.
@@ -57,6 +57,6 @@ Les recettes et les conseils sont gratuits et attirent les visiteurs. Prix affic
 
 ## Les 3 priorités
 
-- Écrire de nouveaux articles « Conseils » : il en reste 33 en réserve, la réserve passe sous 20 vers le 13 novembre et se vide le 28 décembre 2026.
+- Écrire de nouveaux articles « Conseils » : il en reste 31 en réserve, la réserve passe sous 20 vers le 13 novembre et se vide le 28 décembre 2026.
 - Relever à nouveau les prix indicatifs des 91 produits : le dernier relevé date du 27 septembre 2026 et rien ne le refait automatiquement.
 - Préparer la suite des épingles Pinterest : le plan de la routine `keurcook-epingles-pinterest` s'achève et 12 des 52 recettes n'ont pas encore d'épingle.

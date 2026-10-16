@@ -1,6 +1,6 @@
 # Erea — plan marketing & rémunération
 
-> Généré le 3 août 2026, mis à jour le 14 octobre 2026. Le modèle de
+> Généré le 3 août 2026, mis à jour le 16 octobre 2026. Le modèle de
 > rémunération est en ligne sur l'App Store depuis la 1.0.2 (publicité +
 > achat unique qui la retire). Pour le mettre à jour : relancer ce même prompt. Aucun secret
 > ici.
@@ -32,7 +32,7 @@ classiques :
 
 | Public | Pourquoi eux | Accroche |
 |---|---|---|
-| Familles francophones (parents + 8-15 ans) | Cœur de cible du ton et du mode Facile (191 faits « grand public ») | « Le jeu d'histoire pour toute la famille » |
+| Familles francophones (parents + 8-15 ans) | Cœur de cible du ton et du mode Facile (268 faits « grand public ») | « Le jeu d'histoire pour toute la famille » |
 | Collégiens / brevet | Le niveau 1 s'appuie sur les repères officiels du brevet | « Révise tes repères sans t'en rendre compte » |
 | Afrique de l'Ouest francophone | Onboarding avec choix du pays (30 pays africains proposés), mélange 50/50 avec le pack Afrique (196 faits) — rare dans le genre | « Enfin un jeu d'histoire qui parle de chez toi » |
 | Amateurs de culture G / joueurs de quiz | Modes Difficile et Chrono, classements mondiaux | « Tu peux faire mieux que moi ? » |
@@ -42,9 +42,9 @@ classiques :
 ## Rémunération par phases
 
 - [fait] **Aujourd'hui** : pub AdMob une partie sur deux, achat unique 3,99 € qui la retire, sur iOS
-- [en cours] **Android en production** : même modèle, déjà prêt dans le test fermé ; reste l'accès à la production
+- [en cours] **Android en production** : même modèle, déjà prêt dans le test fermé ; accès à la production demandé le 14 octobre 2026
 - **Premiers versements AdMob** : seuil de 70 €, puis code PIN postal et vérification d'identité
-- **Statut trader (DSA)** : obligatoire dès qu'on tire un revenu de l'app, sur les deux boutiques
+- **Statut trader (DSA)** : obligatoire dès qu'on tire un revenu de l'app, sur les deux boutiques ; passage du compte Apple en compte entreprise demandé en octobre 2026
 - **Licence éducation** : seulement si un établissement se présente de lui-même
 
 ## Points forts
@@ -97,11 +97,11 @@ pas encore faite.
 
 | Élément | Contenu proposé | Statut |
 |---|---|---|
-| Nom | saisi : `Erea` (la variante `Erea — Devine l'année !` remonterait mieux en recherche) | ✅ |
+| Nom | `Erea : Quiz d'histoire & frise` (30 caractères) depuis la 1.0.4, en ligne le 15 octobre 2026 ; la 1.0.2 s'appelait `Erea` | ✅ |
 | Sous-titre | `Le jeu d'histoire en famille` | ✅ |
-| Mots-clés (100 **octets**, accents comptés double) | `quiz,frise,chronologie,date,culture,générale,brevet,éducatif,afrique,collège,révision,enfant` — 97 octets, saisis (le texte qui fait foi est dans `docs/FICHE_APP_STORE.md`) | ✅ |
+| Mots-clés (100 **octets**, accents comptés double) | 1.0.2 : `quiz,frise,chronologie,date,culture,générale,brevet,éducatif,afrique,collège,révision,enfant` (97 octets) ; 1.0.4 : `chronologie,culture,générale,brevet,éducatif,afrique,collège,révision,trivia,siècle,année` (96 octets), sans « quiz », « frise », « histoire », déjà dans le nom | ✅ |
 | Description | corrigée le 7 septembre 2026 avec la 1.0.2 : plus de « sans publicité », plus de mode Duel | ✅ |
-| Captures | App Store déposées le 9 août : iPhone 6,9″ (1260 × 2736) et iPad 13″ (2064 × 2752) ; Play : sept captures légendées envoyées le 16 septembre | ✅ |
+| Captures | App Store : sept captures iPhone légendées avec la 1.0.4 (écran moyen 1206 × 2622 et 6,9″ 1260 × 2736), iPad 13″ (2064 × 2752) du 9 août ; Play : sept captures légendées en place depuis le 16 septembre | ✅ |
 | Vidéo de preview | 15-20 s : le geste de défilement, une révélation, la grille copiée — pas encore déposée dans les boutiques | ⬜ (optionnel mais le geste est notre meilleur argument) |
 | Notes & avis | Demande de note in-app (`lib/core/avis.dart`) : après un PERFECT, un record ou 3 défis d'affilée, une seule fois, jamais au lancement | ✅ fait le 5 août 2026 |
 | Fiche confidentialité | refaite le 7 septembre 2026 : six types déclarés, collectes du SDK AdMob | ✅ |
@@ -118,12 +118,12 @@ pas encore faite.
 | Classements mondiaux | Game Center : défi, série, Classique ×3, Chrono (`lib/core/classement.dart`) — actifs sur iOS ; Play Games pas configuré, classements masqués sur Android | ✅ iOS · ⬜ Android |
 | Vitrine web | `erea.toakeur.com` (depuis le 7 octobre 2026) : page de présentation dédiée, le jeu jouable sur `/jeu.html`, Smart App Banner sur les pages | ✅ |
 | Badge « Télécharger dans l'App Store » | Badge officiel d'Apple sur la vitrine, en tête et en bas de page, vers la fiche `id6794918301` ; Android annoncé « bientôt sur Google Play » — depuis le 12 octobre 2026 | ✅ |
-| Enseignants & parents | Dossier d'une page « Erea en classe » (repères du brevet couverts, mode Facile, zéro collecte) à envoyer aux profs d'histoire-géo, groupes Facebook de profs, La Salle des Maîtres | ⬜ |
+| Enseignants & parents | Dossier d'une page « Erea en classe » (repères du brevet couverts, mode Facile, sans compte ni inscription) à envoyer aux profs d'histoire-géo, groupes Facebook de profs, La Salle des Maîtres | ⬜ |
 | Afrique de l'Ouest | Mise en avant du pack Afrique auprès des communautés éducatives francophones (Sénégal, Côte d'Ivoire…) ; presse tech locale ; créateurs de contenu éducation | ⬜ |
-| Réseaux sociaux | YouTube « toa.afrotok » rattaché à Erea dans le Studio ; TikTok « Afrotok » branché mais rattaché à aucune app. Pubs vidéo produites par le Studio le 5 octobre 2026 (« le temps qui bugue ») : une validée le 6 octobre, huit à valider. **Aucune publication** : le Planning est vide | ⬜ |
+| Réseaux sociaux | YouTube « toa.afrotok » et TikTok « erea.jeu » rattachés à Erea dans le Studio ; TikTok « Afrotok » branché mais rattaché à aucune app. Pubs vidéo produites par le Studio le 5 octobre 2026 (« le temps qui bugue ») : une validée le 6 octobre, huit à valider. **Aucune publication** : le Planning est vide | ⬜ |
 | Presse & sites spécialisés | App du jour (iPhon.fr, iGen, Frandroid), sites parents (Geek Junior, Super Julie — références du jeu éducatif) | ⬜ |
 | Featuring Apple | Formulaire « App Store featuring » : app famille, française, hors ligne, avec Game Center — bon dossier, même si l'argument « sans pub » est tombé avec la 1.0.2 | ⬜ |
-| Play Store | Second magasin, donc second public : les douze testeurs ont tenu quatorze jours (22 septembre), l'accès à la production reste à demander (`docs/PUBLICATION.md`) | ⬜ |
+| Play Store | Second magasin, donc second public : les douze testeurs ont tenu quatorze jours (22 septembre), l'accès à la production est demandé depuis le 14 octobre 2026 (`docs/PUBLICATION.md`) | ⬜ |
 
 ---
 
@@ -148,12 +148,13 @@ pas encore faite.
 - **Participants au Défi du jour** : à vérifier dans la console (classement `erea.daily`)
 - **Ventes « Erea sans publicité »** : à vérifier dans la console
 - **Revenus publicitaires AdMob** : à vérifier dans la console
-- **Usage des modes dans l'app** : à instrumenter — aucun analytics, par choix
+- **Usage des modes dans l'app** : à instrumenter — aucun analytics propre, par choix
 
-Contrainte assumée : **pas d'analytics tiers dans l'app** (seul le SDK
-publicitaire de Google collecte, pour la pub). On suit donc ce que
-fournissent les plateformes. L'app est en ligne sur l'App Store depuis
-le 3 septembre 2026.
+Contrainte assumée : **pas d'analytics à nous dans l'app**. Seul le SDK
+publicitaire de Google collecte, et sa déclaration couvre publicité,
+analyse et prévention des fraudes (déclaration Play) ; ces données
+restent chez Google. On suit donc ce que fournissent les plateformes.
+L'app est en ligne sur l'App Store depuis le 3 septembre 2026.
 
 ## Objectifs chiffrés
 
@@ -178,8 +179,8 @@ une collecte à la fiche de confidentialité.
 
 ## Les 3 priorités
 
-- **Demander l'accès à la production sur Google Play**, avec la 1.0.4 sur la piste : les quatorze jours sont tenus depuis le 22 septembre, et c'est tout un second public qui attend derrière.
-- **Publier la pub vidéo validée** du Studio sur YouTube « toa.afrotok » par le Planning (et sur TikTok « Afrotok » une fois rattaché à Erea), puis trier les huit vidéos en attente : aucune publication n'a encore eu lieu.
+- **Ouvrir la production sur Google Play** dès la réponse de Google à la demande du 14 octobre : créer la première release de production avec la 1.0.4, puis remplacer « Bientôt sur Google Play » par le badge sur la vitrine. C'est tout un second public qui attend derrière.
+- **Publier la pub vidéo validée** du Studio sur YouTube « toa.afrotok » et TikTok « erea.jeu » par le Planning, puis trier les huit vidéos en attente : aucune publication n'a encore eu lieu.
 - **Envoyer le dossier « Erea en classe »** aux professeurs d'histoire-géographie et à leurs groupes : c'est le public naturel d'un jeu familial calé sur les repères du brevet, et rien ne lui a encore été adressé.
 
 ## Déjà fait
@@ -192,4 +193,6 @@ une collecte à la fiche de confidentialité.
 - ✅ **Smart App Banner** sur les pages de la vitrine.
 - ✅ **Badge App Store sur la vitrine** — fini « Bientôt sur l'App Store », 12 octobre 2026.
 - ✅ **Douze testeurs Android pendant quatorze jours** — du 8 au 22 septembre 2026.
+- ✅ **Accès à la production Google Play demandé** — 14 octobre 2026.
+- ✅ **1.0.4 en ligne sur l'App Store** sous le nom long, captures légendées — 15 octobre 2026.
 - ✅ **Adresse et contact propres** — `erea.toakeur.com` et `erea@toakeur.com`, 7 octobre 2026.

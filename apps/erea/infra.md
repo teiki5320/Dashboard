@@ -1,12 +1,12 @@
 # INFRA — fiche technique
 
 > Généré le 20 août 2026 par un scan du dépôt, mis à jour le
-> 14 octobre 2026. Pour mettre à jour : relancer ce même prompt.
+> 16 octobre 2026. Pour mettre à jour : relancer ce même prompt.
 
 ## En bref
 
 - **Plateforme** : iOS 15+ en ligne · Android en test fermé · site vitrine
-- **Stack** : Flutter (Dart ≥ 3.6), version `1.0.4+5` dans le code
+- **Stack** : Flutter (Dart ≥ 3.6), version `1.0.5+6` dans le code
 - **Backend** : aucun — tout reste sur l'appareil, jeu hors ligne
 - **Distribution** : Xcode Cloud vers l'App Store · App Bundle signé en local
 - **Site** : `erea.toakeur.com`, GitHub Pages derrière Cloudflare
@@ -14,15 +14,15 @@
 
 ## Parcours
 
-- 🍎 **iOS** : 🐙 GitHub — main, 1.0.4 dans le code [ok] → ☁️ Xcode Cloud — build à chaque poussée sur main [ok] → 🛍️ App Store Connect — 1.0.4 pas encore soumise [à faire] → 📱 App Store — 1.0.2 en ligne depuis le 8 septembre [ok]
-- 🤖 **Android** : 🐙 GitHub — main, 1.0.4 dans le code [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — test fermé 1.0.3, production non demandée [à faire] → 🛒 Google Play — pas en production [pas encore]
+- 🍎 **iOS** : 🐙 GitHub — main, 1.0.5 dans le code [ok] → ☁️ Xcode Cloud — build à chaque poussée sur main [ok] → 🛍️ App Store Connect — 1.0.4 (build 182) approuvée le 15 octobre [ok] → 📱 App Store — 1.0.4 en ligne depuis le 15 octobre [ok]
+- 🤖 **Android** : 🐙 GitHub — main, 1.0.5 dans le code [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — test fermé terminé, 1.0.4 en examen, production demandée le 14 octobre [en cours] → 🛒 Google Play — pas en production [pas encore]
 - 🌐 **Web** : 🐙 GitHub — racine de main, sans CNAME [ok] → 📄 Hébergement web (GitHub Pages / Cloudflare Pages) — GitHub Pages [ok] → 🏷️ Nom de domaine — erea.toakeur.com via Cloudflare [ok] → 🌐 Site — vitrine, jeu, support, confidentialité [ok]
-- 🎬 **Contenu** : 🎬 Studio — neuf pubs vidéo produites le 5 octobre [ok] → 🗓️ Planning — aucune publication programmée [à faire] → 📣 Réseaux sociaux & influenceurs — YouTube toa.afrotok, rien publié [pas encore]
+- 🎬 **Contenu** : 🎬 Studio — neuf pubs vidéo produites le 5 octobre [ok] → 🗓️ Planning — aucune publication programmée [à faire] → 📣 Réseaux sociaux & influenceurs — YouTube et TikTok branchés, rien publié [pas encore]
 
 ## Vue d'ensemble
 
-- **Plateforme** : iOS 15+ (1.0.2 en ligne sur l'App Store depuis le 8 septembre 2026) · Android en test fermé, pas encore en production · site vitrine `erea.toakeur.com`
-- **Stack** : Flutter (Dart ≥ 3.6), version `1.0.4+5` dans le code, 167 tests, aucun serveur applicatif
+- **Plateforme** : iOS 15+ (1.0.4 en ligne sur l'App Store depuis le 15 octobre 2026) · Android en test fermé, pas encore en production · site vitrine `erea.toakeur.com`
+- **Stack** : Flutter (Dart ≥ 3.6), version `1.0.5+6` dans le code, 167 tests, aucun serveur applicatif
 - **Backend** : aucun — tout l'état du joueur vit sur l'appareil (`shared_preferences`)
 - **Distribution** : App Store via Xcode Cloud · Play Store via App Bundle signé localement
 - **Monétisation** : interstitielle AdMob + achat unique 3,99 € qui la retire, en ligne depuis la 1.0.2
@@ -30,7 +30,9 @@
 
 Les deux seuls tiers embarqués sont Google (publicité) et les boutiques
 (achat, classements, demande de note). Pas de base de données, pas
-d'analytics, pas de crash reporting. Le site vit sur un sous-domaine de
+d'analytics propre, pas de crash reporting : seul le SDK AdMob collecte,
+et sa déclaration Play couvre publicité, analyse et prévention des
+fraudes. Le site vit sur un sous-domaine de
 `toakeur.com`, le domaine commun des apps. Conséquence directe : la
 fiche « Confidentialité » de l'App Store déclare, **depuis la 1.0.2**,
 les collectes du SDK de Google — le badge « Aucune donnée collectée »
@@ -124,8 +126,8 @@ sauvegarder, rien à recopier sur une machine neuve.
 | Coût | inclus dans l'adhésion |
 
 **Identifiants publics :**
-- App « Erea », bundle `com.teiki.erea`.
-- Version `1.0.4+5` dans `erea_flutter/pubspec.yaml` depuis le 30 septembre 2026 — **doit être identique** au numéro saisi dans la console, sinon le build reste non sélectionnable.
+- App « Erea », bundle `com.teiki.erea` ; nom « Erea : Quiz d'histoire & frise » à partir de la 1.0.4.
+- Version `1.0.5+6` dans `erea_flutter/pubspec.yaml` depuis le 16 octobre 2026 : la 1.0.4 étant approuvée, Apple refuse tout nouveau build 1.0.4. Les builds 1.0.5 vont dans TestFlight ; avant de soumettre, créer la version 1.0.5 dans la console avec **exactement** ce numéro, sinon le build reste non sélectionnable.
 - iOS minimum : 15.0 (`IPHONEOS_DEPLOYMENT_TARGET`, `Podfile`).
 - Chiffrement : `ITSAppUsesNonExemptEncryption = false` dans `ios/Runner/Info.plist` — pas de formulaire d'export à chaque build.
 
@@ -137,11 +139,12 @@ art. 12 à 0 %). L'achat intégré lui-même est décrit plus bas, section
 **État des versions :** la `1.0.0` (build 90) est sortie le 3 septembre
 2026 après un refus *Guideline 2.1 — Information Needed* et une
 re-soumission (détail dans `docs/APP_REVIEW.md`). La **`1.0.2` (build
-150) est en ligne depuis le 8 septembre 2026**, avec la publicité et
-l'achat intégré — c'est encore la version publique au 13 octobre 2026.
-Le build 161 (`1.0.3`) est resté sur TestFlight sans être soumis ; la
-`1.0.4` existe dans le code depuis le 30 septembre, son envoi est à
-vérifier dans la console.
+150) est sortie le 8 septembre 2026**, avec la publicité et
+l'achat intégré. Le build 161 (`1.0.3`) est resté sur TestFlight sans
+être soumis. La **`1.0.4` (build 182), soumise le 15 octobre 2026, est
+en ligne depuis le même jour à 14 h 01** (publication automatique) ; les
+builds 176 et 180 avaient été refusés à l'import (ITMS-91064, manifeste
+de confidentialité).
 
 **Où vivent les secrets :** aucun côté dépôt. L'authentification est
 celle du compte Apple (+ double facteur).
@@ -285,8 +288,10 @@ la fenêtre d'Apple.
 
 **SKAdNetwork** : les cinquante identifiants publiés par Google sont
 dans `Info.plist` depuis septembre 2026. Depuis la 1.0.4,
-`PrivacyInfo.xcprivacy` déclare aussi le suivi (`NSPrivacyTracking`) et
-les six types de données de la fiche Confidentialité.
+`PrivacyInfo.xcprivacy` déclare les six types de données de la fiche
+Confidentialité. `NSPrivacyTracking` y reste à faux, sans clé de
+domaines : c'est la seule combinaison acceptée à l'import (build 182) ;
+le suivi reste déclaré dans la fiche Confidentialité.
 
 **Paiements (état au 18 août 2026, à vérifier dans la console)** : seuil de versement 70 €, mensuel
 vers le 21. L'IBAN ne peut pas encore être saisi — Google n'ouvre
@@ -312,8 +317,8 @@ passe par le compte Google (+ double facteur).
 
 **État réel :**
 - Application ID `com.teiki.erea`, identique à iOS (`android/app/build.gradle.kts`).
-- Test fermé « Alpha » : release `4 (1.0.3)` servie aux testeurs depuis le 16 septembre 2026. Les **douze testeurs pendant quatorze jours** exigés d'un compte personnel ont été tenus le 22 septembre ; la demande d'accès à la production n'était pas faite au 25 septembre.
-- Au 13 octobre 2026, la fiche publique `play.google.com/store/apps/details?id=com.teiki.erea` répond 404 : l'app n'est pas en production. Où en est la demande d'accès : à vérifier dans la console.
+- Test fermé « Alpha » : release `4 (1.0.3)` servie aux testeurs depuis le 16 septembre 2026 ; release `5 (1.0.4)` en examen depuis le 14 octobre. Les **douze testeurs pendant quatorze jours** exigés d'un compte personnel ont été tenus du 8 au 22 septembre (service Testers Community, §14).
+- **Accès à la production demandé le 14 octobre 2026 à 18 h 39**, réponse de Google attendue. D'ici là, la fiche publique `play.google.com/store/apps/details?id=com.teiki.erea` répond 404.
 - Achat intégré actif (voir « StoreKit / Play Billing »). Classements Play Games non configurés (voir « Game Center / Play Games »).
 - Appareil physique de vérification : un Pixel 8a, utilisé pour les tests du 16 septembre.
 
@@ -355,7 +360,7 @@ uniquement.
 Proposée après un PERFECT, un record ou trois défis d'affilée, une seule
 fois, jamais au lancement ; le système décide de l'affichage. Le même
 fichier fournit le lien de boutique ajouté aux grilles partagées : App
-Store sur iOS, Play Store sur Android depuis la 1.0.4. Au 13 octobre
+Store sur iOS, Play Store sur Android depuis la 1.0.4. Au 16 octobre
 2026, l'App Store compte 0 note.
 
 **Où vivent les secrets :** aucun.
@@ -375,6 +380,21 @@ jeu web (`jeu.html`), `support.html` et `confidentialite.html` — pas
 seulement le prototype. L'app Flutter n'en dépend pas : les mêmes
 polices sont embarquées dans `erea_flutter/assets/fonts/`, licence
 SIL OFL incluse, justement pour que l'app fonctionne hors ligne.
+
+---
+
+### 14. Testers Community (test fermé Android)
+
+| | |
+|---|---|
+| Rôle | Fournir les douze testeurs pendant quatorze jours exigés d'un compte Play personnel |
+| Compte | souscrit le 8 septembre 2026, plan Starter, 15 testeurs, groupe Google `testers-community@googlegroups.com` ajouté au test fermé |
+| Coût | 14 €, une fois |
+
+Test tenu du 8 au 22 septembre 2026. Le rapport du 15 septembre est dans
+`docs/erea_feedback.pdf`.
+
+**Où vivent les secrets :** aucun dans le dépôt.
 
 ---
 

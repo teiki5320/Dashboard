@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 14 octobre 2026, d'après le code du dépôt et le site en ligne. Aucun secret ici :
+Mis à jour le 16 octobre 2026, d'après le code du dépôt et le site en ligne. Aucun secret ici :
 uniquement des noms de variables et de consoles.
 
 ## En bref
@@ -15,7 +15,7 @@ uniquement des noms de variables et de consoles.
 ## Parcours
 
 - 🌐 **Web** : 🐙 GitHub — main · publication au vert [ok] → ⚙️ GitHub Actions — lint, types, tests, build [ok] → ☁️ Cloudflare Pages — projet keurbook [ok] → 🌍 keurbook.com — en ligne, réponse 200 [ok]
-- 📝 **Contenu** : ✍️ Articles Conseils — 34 publiés, 16 programmés [ok] → ⚙️ GitHub Actions — publie lundi, mercredi, vendredi [ok] → 📡 IndexNow — sitemap signalé chaque lundi [ok] → 🔍 Google — 638 pages indexées sur 957 [à faire]
+- 📝 **Contenu** : ✍️ Articles Conseils — 36 publiés, 25 programmés [ok] → ⚙️ GitHub Actions — publie lundi, mercredi, vendredi [ok] → 📡 IndexNow — sitemap signalé chaque lundi [ok] → 🔍 Google — 638 pages indexées sur 957 [à faire]
 - 🛒 **Affiliation** : 📚 Fiche livre ou BD — bouton « Acheter sur Amazon » [ok] → 🛒 Amazon Partenaires (affiliation) — tag keurbook-21 [ok] → 🔗 Liens directs — surtout des recherches, peu d'ASIN [à faire]
 - 📰 **Publicité** : 📰 AdSense (publicité web) — script et 4 blocs en place [ok] → ✅ Validation du site — à vérifier dans la console [pas encore] → 💶 Revenus — aucun constaté [pas encore]
 
@@ -30,7 +30,7 @@ uniquement des noms de variables et de consoles.
   compte. La pile à lire reste dans le navigateur du visiteur. Seuls cookies : ceux de Google AdSense,
   après accord dans le bandeau de consentement de Google (voir docs/PUBLICITE.md).
 - **Taille** : 957 adresses dans le sitemap au 13 octobre 2026 (675 livres, 122 BD, 92 auteurs,
-  26 pays, 34 articles Conseils publiés, pages de liste et pages légales).
+  26 pays, 36 articles Conseils publiés, pages de liste et pages légales).
 - **Particularités** : interrupteur de maintenance dans `content/maintenance.json` (désactivé),
   tests de cohérence des contenus dans `tests/`, signalement IndexNow chaque lundi.
 

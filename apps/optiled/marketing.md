@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 14 octobre 2026. Compagnon de INFRA.md.
+Mis à jour le 16 octobre 2026. Compagnon de INFRA.md.
 
 > Aucun chiffre inventé : les valeurs non mesurées sont marquées comme telles.
 
@@ -37,7 +37,7 @@ Mis à jour le 14 octobre 2026. Compagnon de INFRA.md.
 | Calculateur intégrable | `integrer.html` : code à coller pour les blogs, avec lien vers le site | ✅ prêt, aucun blog contacté |
 | Google Search Console | Propriété `optiled.fr` vérifiée, sitemap envoyé le 25 septembre 2026 puis renvoyé le 12 octobre 2026 (86 adresses) | ✅ |
 | Guides d'achat | 3 guides (`led-puissance`, `led-comparer`, `led-semis`) avec tableaux calculés depuis les données du site, sans prix ni liens Amazon dans le texte | ✅ |
-| Articles de conseil | Rubrique « Conseils » : 34 articles en ligne et 40 programmés jusqu'au 15 janvier 2027, trois par semaine (lundi, mercredi, vendredi, publication automatique) ; rappel le 16 novembre 2026 pour préparer la série suivante | ✅ |
+| Articles de conseil | Rubrique « Conseils » : 36 articles en ligne et 38 programmés jusqu'au 15 janvier 2027, trois par semaine (lundi, mercredi, vendredi, publication automatique) ; rappel le 16 novembre 2026 pour préparer la série suivante | ✅ |
 | Pages détaillées par culture | 26 pages `legume-<id>.html` (lumière, exemple pour 1 m², lampes, climat, solution nutritive, récolte) | ✅ |
 | Partage par les visiteurs | Bouton « Partager » du calculateur (lien avec les réglages) | ✅ |
 | Installation sur mobile | Manifest et service worker (PWA) | ✅ |
@@ -52,7 +52,7 @@ Mis à jour le 14 octobre 2026. Compagnon de INFRA.md.
 - **Clics vers Amazon** : à vérifier dans la console Partenaires Amazon
 - **Commissions Amazon** : à vérifier dans la console Partenaires Amazon
 - **Revenus publicitaires** : à vérifier dans la console AdSense
-- **Articles de conseil** : 34 en ligne, 40 programmés jusqu'au 15 janvier 2027
+- **Articles de conseil** : 36 en ligne, 38 programmés jusqu'au 15 janvier 2027
 
 ## Calendrier
 

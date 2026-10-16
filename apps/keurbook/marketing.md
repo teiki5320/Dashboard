@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 14 octobre 2026. Un canal n'est coché que s'il est prouvé (compte branché et
+Mis à jour le 16 octobre 2026. Un canal n'est coché que s'il est prouvé (compte branché et
 publications réelles, ou routine qui publie).
 
 ## Positionnement
@@ -30,8 +30,8 @@ publications réelles, ou routine qui publie).
 - ✅ Site en ligne sur `keurbook.com`.
 - ✅ Référencement naturel : sitemap envoyé à Google Search Console (propriété `keurbook.com`),
   IndexNow chaque lundi, articles Conseils publiés trois fois par semaine (lundi, mercredi,
-  vendredi). Au 13 octobre 2026 : 34 articles publiés, 16 en attente ; le rythme régulier va
-  jusqu'au 6 novembre, puis seuls des articles de saison sont programmés. La routine « Écrire les
+  vendredi). Au 16 octobre 2026 : 36 articles publiés, 25 en attente ; le rythme régulier va
+  jusqu'au 7 décembre (11 articles ajoutés le 15 octobre), puis seuls des articles de saison sont programmés. La routine « Écrire les
   articles Conseils » repasse le 1er et le 15 de chaque mois.
 - ⬜ Pinterest : aucun compte Keurbook.
 - ⬜ TikTok et YouTube : TikTok « Afrotok » est branché au Studio mais rattaché à aucune app, YouTube « toa.afrotok » à Erea seule ; une
@@ -43,7 +43,7 @@ publications réelles, ou routine qui publie).
 
 - **Pages indexées par Google** : 638 sur 957 (suivi du Studio, 13 octobre 2026)
 - **Pages pas encore indexées** : 319, dont 175 inconnues de Google et 142 détectées non explorées
-- **Articles Conseils** : 34 publiés, 16 programmés
+- **Articles Conseils** : 36 publiés, 25 programmés
 - **Visites** : à vérifier dans la console Cloudflare Web Analytics (mesure active depuis le 13 octobre 2026)
 - **Clics et revenus Amazon** : à vérifier dans la console
 - **Revenus AdSense** : à vérifier dans la console

@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Généré le 14 octobre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
+Généré le 16 octobre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
 
 > Aucun secret dans cette fiche — uniquement des références (noms de variables, consoles).
 
@@ -16,7 +16,7 @@ Généré le 14 octobre 2026 par un scan du dépôt. Pour mettre à jour : relan
 ## Parcours
 
 - 🌐 **Web** : 🐙 GitHub — main, dernière publication au vert [ok] → ⚙️ GitHub Actions — tests, build et test de bout en bout [ok] → 🏠 GitHub Pages — hébergement du site [ok] → 🔗 Nom de domaine — www.optiled.fr, HTTPS forcé [ok] → 🔎 Google — 62 pages indexées sur 86 [à faire]
-- 📝 **Contenu** : ✍️ Articles de conseil — 74 rédigés [ok] → ⏰ GitHub Actions — publication lundi, mercredi, vendredi [ok] → 📰 Rubrique Conseils — 34 en ligne, 40 programmés [ok] → 📌 Pinterest — 12 épingles prêtes, aucun compte [pas encore]
+- 📝 **Contenu** : ✍️ Articles de conseil — 74 rédigés [ok] → ⏰ GitHub Actions — publication lundi, mercredi, vendredi [ok] → 📰 Rubrique Conseils — 36 en ligne, 38 programmés [ok] → 📌 Pinterest — 12 épingles prêtes, aucun compte [pas encore]
 - 🛒 **Affiliation** : 💡 Sélection de lampes — 16 lampes, une indisponible [ok] → 🔁 Routine de vérification — dernier passage le 14 octobre [ok] → 🛍️ Affiliation — liens Amazon.fr optiled-21 [ok]
 - 📢 **Publicité** : 📰 Pages de lecture — deux emplacements au plus [ok] → 🍪 Consentement — bandeau de Google en ligne [ok] → 💰 AdSense (publicité web) — validation à vérifier [à faire]
 

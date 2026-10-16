@@ -1,6 +1,6 @@
 # PUBLICATION — état de la mise en ligne
 
-> Mis à jour le 14 octobre 2026. Aucun secret ici.
+> Mis à jour le 16 octobre 2026. Aucun secret ici.
 
 ## En bref
 
@@ -46,7 +46,7 @@ Site 100 % statique (Next.js `output: "export"`, dossier `out/`), sans serveur n
 
 Étapes : lint, types, tests, build, puis `wrangler pages deploy out --project-name=keurcook`. Sans les secrets GitHub `CLOUDFLARE_API_TOKEN` et `CLOUDFLARE_ACCOUNT_ID`, le workflow affiche un avertissement et ne publie rien.
 
-Contenu en ligne : 52 recettes (16 pays), 34 articles « Conseils » publiés et 33 programmés jusqu'au 28 décembre 2026, 91 produits en 8 gammes dont les boutons « Acheter · prix » mènent à Amazon.fr (tag `keurcook-21`, prix indicatifs relevés le 27 septembre 2026), et des annonces Google AdSense sur les recettes, les articles et les pages pays (`public/ads.txt` en ligne). Le site ne vend rien lui-même.
+Contenu en ligne : 52 recettes (16 pays), 36 articles « Conseils » publiés et 31 programmés jusqu'au 28 décembre 2026, 91 produits en 8 gammes dont les boutons « Acheter · prix » mènent à Amazon.fr (tag `keurcook-21`, prix indicatifs relevés le 27 septembre 2026), et des annonces Google AdSense sur les recettes, les articles et les pages pays (`public/ads.txt` en ligne). Le site ne vend rien lui-même.
 
 ### Maintenance
 
