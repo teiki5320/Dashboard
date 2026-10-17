@@ -7,7 +7,7 @@
 - **Production** : en ligne sur https://www.optiled.fr/ (GitHub Pages)
 - **Domaine & SSL** : optiled.fr chez IONOS, HTTPS par GitHub Pages
 - **Visibilité** : 62 pages indexées sur 86, AdSense et mesure actives
-- **Contact** : optiled@toakeur.com
+- **Contact** : kultiled@toakeur.com
 
 ## Boutiques
 
@@ -34,7 +34,7 @@
 - **Ancienne adresse** : https://teiki5320.github.io/optiled/ redirige vers le domaine (301).
 - **Dernière mise en production** : 13 octobre 2026 au matin, publication réussie (dernière modification du site le 12 octobre au soir : publicité Google AdSense ; une publication avait d'abord échoué, le test de bout en bout refusant les scripts de Google, puis a réussi une fois ce test corrigé).
 - **Articles de conseil** : 36 en ligne, 38 programmés (le prochain le 19 octobre 2026).
-- **Contact affiché** : `optiled@toakeur.com` (mentions légales et « À propos »).
+- **Contact affiché** : `kultiled@toakeur.com` (mentions légales et « À propos »).
 
 ## Domaine & SSL
 

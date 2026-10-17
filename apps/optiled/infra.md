@@ -10,7 +10,7 @@ Généré le 16 octobre 2026 par un scan du dépôt. Pour mettre à jour : relan
 - **Stack** : Vite 8 · TypeScript 6 · Vitest · Playwright
 - **Backend** : aucun, tout le calcul se fait dans le navigateur
 - **Distribution** : GitHub Pages par GitHub Actions, sur www.optiled.fr
-- **Site** : https://www.optiled.fr/ — contact optiled@toakeur.com
+- **Site** : https://www.optiled.fr/ — contact kultiled@toakeur.com
 - **IA et outils** : images faites par IA hors du site (OpenArt)
 
 ## Parcours
@@ -26,7 +26,7 @@ Généré le 16 octobre 2026 par un scan du dépôt. Pour mettre à jour : relan
 - **Stack** : Vite 8 · TypeScript 6 · Vitest 5 · Playwright (test de bout en bout) · sharp (préparation des images) · police Urbanist hébergée avec le site (`@fontsource-variable/urbanist`). Node.js 22.12 ou plus récent (`package.json`, champ `engines`).
 - **Backend** : aucun. Le calculateur tourne entièrement dans le navigateur (`src/calc.ts`, fonctions pures) ; les réglages du visiteur restent dans son navigateur (stockage local) ou dans l'adresse de la page (`src/etat.ts`).
 - **Distribution** : GitHub Pages, publication automatique à chaque envoi sur `main` et chaque lundi, mercredi et vendredi à 5 h UTC pour les articles de conseil programmés (`.github/workflows/pages.yml`), sur le domaine `www.optiled.fr` (`public/CNAME`, `SITE_URL` dans `build/site.ts`).
-- **Contact public** : `optiled@toakeur.com` (mentions légales et page « À propos » ; dans le code depuis le 7 octobre 2026, en ligne depuis le 12). Plus aucune adresse en `alohash.fr` dans le site.
+- **Contact public** : `kultiled@toakeur.com` (mentions légales et page « À propos » ; dans le code depuis le 7 octobre 2026, en ligne depuis le 12). Plus aucune adresse en `alohash.fr` dans le site.
 - **Particularités** :
   - 28 pages HTML à la racine, plus les articles de conseil (`contenu/conseils/`) et les pages des 26 cultures, assemblées au build par un plugin Vite maison (`build/site.ts`) : en-tête, menu, pied de page, sommaire, sitemap, robots.txt, flux RSS `conseils.xml`, balises de partage, données structurées.
   - Données des 26 cultures dans `src/data/legumes.json`, chaque valeur avec sa source ; sélection de lampes Amazon dans `src/data/lampes.json` ; fourchettes de prix dans `src/data/budget.json`.
@@ -79,7 +79,7 @@ Généré le 16 octobre 2026 par un scan du dépôt. Pour mettre à jour : relan
 
 - **Rôle** : annonces display de Google dans les pages de lecture, ajoutées le 12 octobre 2026 (`build/annonces.ts`). Au plus deux par page (milieu et fin de l'article), signalées « Publicité », jamais dans le calculateur, le carnet de suivi ni les pages de lampes, jamais à côté d'un lien Amazon ; l'emplacement reste replié tant que Google ne fournit pas d'annonce. Le bandeau de consentement est celui de Google (Autoriser, Refuser, Gérer les options), rouvert par le lien « Gérer les cookies » du pied de page ; les mentions légales et la page « À propos » décrivent la publicité et ses cookies. Le calculateur intégré sur d'autres sites ne charge pas le code de Google. Script et `ads.txt` constatés en ligne le 13 octobre 2026.
 - **Console** : https://adsense.google.com (validation du site et diffusion des annonces : à vérifier dans la console).
-- **Identifiants publics** : identifiant d'éditeur (constante `CLIENT_ADSENSE`) et bloc d'annonces « OptiLED - articles » (constante `BLOC_ARTICLES`), dans `build/annonces.ts` ; ligne de déclaration dans `public/ads.txt`.
+- **Identifiants publics** : identifiant d'éditeur (constante `CLIENT_ADSENSE`) et bloc d'annonces « Kultiled - articles » (constante `BLOC_ARTICLES`), dans `build/annonces.ts` ; ligne de déclaration dans `public/ads.txt`.
 - **Secrets** : aucun dans le dépôt ; compte et informations de paiement uniquement dans la console AdSense.
 - **Coût** : gratuit (Google prélève sa part sur les revenus).
 

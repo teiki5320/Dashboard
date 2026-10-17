@@ -41,8 +41,8 @@ Mis à jour le 16 octobre 2026. Compagnon de INFRA.md.
 | Pages détaillées par culture | 26 pages `legume-<id>.html` (lumière, exemple pour 1 m², lampes, climat, solution nutritive, récolte) | ✅ |
 | Partage par les visiteurs | Bouton « Partager » du calculateur (lien avec les réglages) | ✅ |
 | Installation sur mobile | Manifest et service worker (PWA) | ✅ |
-| Pinterest | 12 épingles prêtes (`public/images/pinterest/`, import `docs/pinterest.csv`) ; aucun compte Pinterest OptiLED branché au Studio, aucune publication constatée | ⬜ |
-| TikTok « Afrotok » et YouTube « toa.afrotok » | TikTok rattaché à aucune app, YouTube à Erea seule dans le Studio ; aucune publication OptiLED | ⬜ |
+| Pinterest | 12 épingles prêtes (`public/images/pinterest/`, import `docs/pinterest.csv`) ; aucun compte Pinterest Kultiled branché au Studio, aucune publication constatée | ⬜ |
+| TikTok « Afrotok » et YouTube « toa.afrotok » | TikTok rattaché à aucune app, YouTube à Erea seule dans le Studio ; aucune publication Kultiled | ⬜ |
 | Forums et communautés de jardinage | Aucune trace | ⬜ |
 
 ## Mesures
@@ -60,7 +60,7 @@ Mis à jour le 16 octobre 2026. Compagnon de INFRA.md.
 |---|---|
 | 24 septembre 2026 | Domaine `www.optiled.fr` en ligne, mentions légales complétées, affiliation Amazon configurée |
 | 1er octobre 2026 | Vérification automatique des lampes Amazon, puis interruption de la routine |
-| 7 octobre 2026 | Contact `optiled@toakeur.com` et mesure d'audience Cloudflare ajoutés au code |
+| 7 octobre 2026 | Contact `kultiled@toakeur.com` et mesure d'audience Cloudflare ajoutés au code |
 | 7 au 12 octobre 2026 | Publications bloquées par le test de bout en bout ; débloquées le 12 octobre |
 | 12 octobre 2026 | Mentions légales accordées à la mesure d'audience Cloudflare (une seule source, le jeton du site) ; publicité Google AdSense en ligne (script, emplacements, consentement, `ads.txt`), mentions légales et « À propos » mises à jour |
 | 13 et 14 octobre 2026 | Vérification quotidienne des lampes de nouveau active : 16 lampes, une indisponible |
@@ -70,7 +70,7 @@ Mis à jour le 16 octobre 2026. Compagnon de INFRA.md.
 ## Les 3 priorités
 
 - Faire indexer par Google les pages encore absentes : 62 des 86 adresses du plan du site y figurent (contrôle du Studio du 12 octobre 2026) ; plan du site renvoyé le 12 octobre, à renvoyer après chaque série de pages.
-- Ouvrir un premier canal d'audience : créer et brancher un compte Pinterest OptiLED, puis importer les 12 épingles déjà prêtes (`docs/pinterest.csv`).
+- Ouvrir un premier canal d'audience : créer et brancher un compte Pinterest Kultiled, puis importer les 12 épingles déjà prêtes (`docs/pinterest.csv`).
 - Obtenir de premiers liens entrants : proposer le calculateur intégrable (`integrer.html`) à quelques blogs et forums de jardinage en intérieur, aucun n'ayant encore été contacté.
 
 ## Pinterest

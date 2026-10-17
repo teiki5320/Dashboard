@@ -21,7 +21,7 @@
 
 | | 🍎 App Store | 🤖 Google Play |
 |---|---|---|
-| État | [ok] 1.0.4 en ligne depuis le 15 octobre 2026 | [en cours] production demandée le 14 octobre 2026, réponse sous sept jours environ |
+| État | [ok] 1.0.4 en ligne depuis le 15 octobre 2026 | [en cours] production accordée le 17 octobre 2026, release 1.0.4 en examen |
 | Construction | [ok] Xcode Cloud, à chaque poussée sur `main` | [ok] App Bundle construit sur le Mac |
 | Signature | [ok] automatique, gérée par Apple | [ok] keystore `CN=Toa`, copie de secours |
 | Classification | [ok] 4+ | [ok] questionnaire rempli, note à vérifier dans la console |
@@ -32,7 +32,7 @@
 ## Vue d'ensemble
 
 - **iOS** : **1.0.4 (build 182) en ligne depuis le 15 octobre 2026 à 14 h 01**, soumise à 12 h 51 et publiée automatiquement à l'approbation ; nouveau nom « Erea : Quiz d'histoire & frise »
-- **Android** : **accès à la production demandé le 14 octobre 2026 à 18 h 39** (formulaire en trois pages, 300 caractères par réponse) ; le même jour, release `5 (1.0.4)` et captures légendées envoyées pour examen sur la piste Alpha ; fiche publique encore en 404
+- **Android** : **accès à la production accordé le 17 octobre 2026** (demandé le 14 octobre à 18 h 39) ; **release de production `5 (1.0.4)` envoyée pour examen le 17 octobre vers 8 h 25**, promue depuis la piste Alpha, 177 pays plus « reste du monde », déploiement complet, publication gérée désactivée (en ligne dès l'approbation) ; fiche publique encore en 404
 - **Version dans le code** : `1.0.5+6` depuis le 16 octobre 2026, pour que Xcode Cloud ne bute plus sur la 1.0.4 approuvée (build 187 refusé, ITMS-90186) ; même code que la 1.0.4, envoyée à Google le 14 octobre et à Apple le 15 octobre ; le bundle Android de production reste celui de la 1.0.4 (`versionCode 5`)
 - **Identifiant** : `com.teiki.erea`, identique sur les deux plateformes
 - **Achat intégré** : `com.teiki.erea.sanspub` « Erea sans publicité », 3,99 €, non consommable — **approuvé** sur l'App Store, **actif** sur Google Play
@@ -41,9 +41,9 @@
 
 La 1.0.4 est en ligne sur l'App Store depuis le 15 octobre, avec le nom
 long et les captures légendées, après deux builds refusés à l'import pour
-le manifeste de confidentialité. Google examine depuis le 14 octobre la
-demande d'accès à la production : il ne reste plus que cette réponse à
-attendre.
+le manifeste de confidentialité. Google a accordé l'accès à la
+production le 17 octobre ; la release 1.0.4 est en examen, et en ligne
+dès l'approbation.
 
 ---
 
@@ -111,7 +111,7 @@ Le contact public de l'app est `erea@toakeur.com` depuis le 7 octobre
 
 | | |
 |---|---|
-| État | **Accès à la production demandé le 14 octobre 2026 à 18 h 39** — fiche publique en 404 tant que Google n'a pas répondu |
+| État | **Release de production `5 (1.0.4)` en examen depuis le 17 octobre 2026 vers 8 h 25** — accès accordé le 17 octobre (demandé le 14) ; fiche publique en 404 jusqu'à l'approbation |
 | Console | <https://play.google.com/console> |
 | Version publiée | aucune |
 | Canal en cours | test fermé « Alpha » — release `4 (1.0.3)` servie depuis le 16 septembre ; release `5 (1.0.4)` en examen depuis le 14 octobre (consentement attendu, achats restaurés, lien Play, classement masqué) |
@@ -159,7 +159,7 @@ changements des 1.0.3 et 1.0.4.
 
 1. ✅ **App Store** : la 1.0.2 est en ligne depuis le 8 septembre 2026, achat intégré compris.
 2. ✅ **Douze testeurs Android pendant quatorze jours** : tenus du 8 au 22 septembre 2026.
-3. **Attendre la réponse de Google** à la demande de production (envoyée le 14 octobre), puis créer la première release de production avec le bundle 1.0.4.
+3. **Attendre l'examen de la release de production** `5 (1.0.4)`, envoyée le 17 octobre 2026 (accès à la production accordé le même jour). Notes de version : « Bienvenue dans Erea ! ».
 4. ✅ **App Review de la 1.0.4** : approuvée et en ligne le 15 octobre 2026, le jour de l'envoi.
 5. **Le jour de la production Android** : passer `PLAY_OUVERT` à `true` dans `telecharger/index.html`, et remplacer « Bientôt sur Google Play » par le badge (`badge-google-play.png`, déjà dans le dépôt) dans `index.html`.
 6. **Lancer la pub TikTok** vers `https://erea.toakeur.com/telecharger/?src=tiktok`, une fois les deux boutiques en ligne.
