@@ -14,7 +14,7 @@ Mis à jour le 16 octobre 2026 d'après le dépôt et le site en ligne. Cette fi
 ## Parcours
 
 - 🌐 **Web** : 🐙 GitHub — main · pages.yml au vert [ok] → 📄 Hébergement web — GitHub Pages, HTTPS imposé [ok] → 🌍 Nom de domaine — keurdeco.com chez Cloudflare [ok] → 🔎 Google et Bing — indexation en cours [à faire]
-- 🛒 **Affiliation** : 📝 Articles — 21 en ligne, 16 programmés [ok] → 🛍️ Affiliation — Amazon Partenaires, tag keurdeco-21 [ok] → 💶 Commissions — à vérifier dans la console [pas encore]
+- 🛒 **Affiliation** : 📝 Articles — 21 en ligne, 16 programmés [ok] → 🛍️ Affiliation — Amazon Partenaires, tag keurdecofr-21 [ok] → 💶 Commissions — à vérifier dans la console [pas encore]
 - 📌 **Contenu** : 🖼️ Épingles — générées au build [ok] → 📥 Import CSV — lot jusqu'au 1er novembre [ok] → 🤖 API Pinterest — tourne à blanc, sans secrets [bloquant]
 - 📰 **Publicité** : 📄 Pages de lecture — emplacements In-Article [ok] → 📰 AdSense (publicité web) — validation à vérifier [à faire]
 
@@ -61,9 +61,9 @@ Mis à jour le 16 octobre 2026 d'après le dépôt et le site en ligne. Cette fi
 
 ## Affiliation (Amazon Partenaires)
 
-- **Rôle** : rémunération du site — liens `https://www.amazon.fr/dp/<ASIN>?tag=keurdeco-21`, tag défini dans `src/amazon.ts` et nulle part ailleurs. 163 produits relevés à la main sur Amazon.fr (`src/data/produits.json`), sans API : jamais d'ASIN, de note, d'avis ni de prix inventés, aucune photo Amazon, mention Partenaires près des liens, en pied de page et dans les mentions légales. `npm run verifier-produits` contrôle la disponibilité ; après les passages des 13, 14 et 15 octobre 2026 et le remplacement de `bannette-courrier-jonc` le 16 octobre, 158 produits actifs et 5 indisponibles (`jarre-terre-cuite-toscane`, `plaid-tricot-chenille`, `lampadaire-rotin-boheme`, `sphere-terre-cuite-etoiles` et `suspension-paille-parasol`, retirés de l'affichage, à remplacer).
+- **Rôle** : rémunération du site — liens `https://www.amazon.fr/dp/<ASIN>?tag=keurdecofr-21`, tag défini dans `src/amazon.ts` et nulle part ailleurs. 163 produits relevés à la main sur Amazon.fr (`src/data/produits.json`), sans API : jamais d'ASIN, de note, d'avis ni de prix inventés, aucune photo Amazon, mention Partenaires près des liens, en pied de page et dans les mentions légales. `npm run verifier-produits` contrôle la disponibilité ; après les passages des 13, 14 et 15 octobre 2026 et le remplacement de `bannette-courrier-jonc` le 16 octobre, 158 produits actifs et 5 indisponibles (`jarre-terre-cuite-toscane`, `plaid-tricot-chenille`, `lampadaire-rotin-boheme`, `sphere-terre-cuite-etoiles` et `suspension-paille-parasol`, retirés de l'affichage, à remplacer).
 - **Console** : https://partenaires.amazon.fr (compte Amazon Partenaires de Jean ; keurdeco.com fait partie des sites déclarés).
-- **Identifiants publics** : tag `keurdeco-21`.
+- **Identifiants publics** : tag `keurdecofr-21`.
 - **Secrets** : aucun dans le dépôt.
 - **Coût** : gratuit — commissions sur les achats.
 
