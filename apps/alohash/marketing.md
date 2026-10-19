@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 16 octobre 2026. Compagnon de INFRA.md.
+Mis à jour le 19 octobre 2026. Compagnon de INFRA.md.
 
 ## Positionnement
 
@@ -18,7 +18,7 @@ Mis à jour le 16 octobre 2026. Compagnon de INFRA.md.
 
 Deux sources, sans rien vendre soi-même :
 
-- **Affiliation Amazon Partenaires** : les boutons « Acheter · prix » mènent à Amazon.fr (tag `keurcook-21`, `src/lib/amazon.ts`) ; Amazon encaisse, livre et verse une commission sur les achats.
+- **Affiliation Amazon Partenaires** : les boutons « Acheter · prix » mènent à Amazon.fr (tag `keurcookfr-21`, `src/lib/amazon.ts`) ; Amazon encaisse, livre et verse une commission sur les achats.
 - **Publicité Google AdSense** (depuis le 12 octobre 2026) : annonces titrées « Publicité » sur les recettes, les articles « Conseils » et les pages pays ; consentement recueilli par le message de Google.
 
 Les recettes et les conseils sont gratuits et attirent les visiteurs. Prix affichés indicatifs, relevés le 27 septembre 2026.

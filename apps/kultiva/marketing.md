@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 14 octobre 2026. Compagnon de `INFRA.md` : là où INFRA répertorie
+Mis à jour le 19 octobre 2026. Compagnon de `INFRA.md` : là où INFRA répertorie
 la technique, ce fichier suit la stratégie marketing et de rémunération.
 Pour l'actualiser : relancer le même prompt.
 
@@ -18,7 +18,7 @@ Pour l'actualiser : relancer le même prompt.
 
 ## Rémunération par phases
 
-- [fait] **Aujourd'hui** : app gratuite, affiliation Amazon France câblée (tag `kultiva-21`, mention « Lien partenaire ») ; aucun revenu tant que l'app n'est pas publiée.
+- [fait] **Aujourd'hui** : app gratuite, affiliation Amazon France câblée (tag `kultiva-21`, mention « Lien partenaire »), mais le compte de ce tag a été fermé par Amazon le 18 octobre 2026 : identifiant à remplacer ; aucun revenu tant que l'app n'est pas publiée.
 - [en cours] **Relance et lancement** : décider si Kultiva repart (backend en pause), publier, et trancher la vidéo récompensée AdMob liée au Tamassi (« une pub → un boost d'XP »).
 - **Rétention prouvée** : abonnement Kultiva Plus via RevenueCat (jardins illimités, export PDF, variantes du Tamassi), France d'abord.
 - **Afrique de l'Ouest** : sponsoring par des ONG et programmes agricoles qui financent la diffusion de conseils.

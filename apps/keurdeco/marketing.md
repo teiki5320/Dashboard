@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 16 octobre 2026. Compagnon de INFRA.md.
+Mis à jour le 19 octobre 2026. Compagnon de INFRA.md.
 
 ## Positionnement
 
@@ -10,7 +10,7 @@ Mis à jour le 16 octobre 2026. Compagnon de INFRA.md.
 
 ## Rémunération par phases
 
-- [fait] **Aujourd'hui** : liens Amazon Partenaires (tag `keurdeco-21`, 158 produits actifs sur 163 relevés) et annonces AdSense sur les pages de lecture depuis le 12 octobre 2026.
+- [fait] **Aujourd'hui** : liens Amazon Partenaires (tag `keurdecofr-21` depuis le 18 octobre 2026, l'ancien compte ayant été fermé par Amazon ; 158 produits actifs sur 163 relevés) et annonces AdSense sur les pages de lecture depuis le 12 octobre 2026.
 - [en cours] **Validation AdSense** : Google examine le site avant de diffuser ; état à vérifier dans la console AdSense.
 - **Trafic Pinterest automatique** : publication quotidienne par l'API, dès l'accès standard accordé.
 - **Trafic de recherche** : pages indexées par Google et Bing, qui font vivre les deux revenus.
@@ -23,7 +23,7 @@ Mis à jour le 16 octobre 2026. Compagnon de INFRA.md.
 
 ## Canaux
 
-- ✅ **Pinterest « Keur Déco »** (principal) : compte branché au Planning du Studio ; 62 épingles importées par CSV, dont 24 parues du 2 au 13 octobre 2026 et 38 programmées jusqu'au 1er novembre (`data/pinterest-etat.json`). La publication quotidienne par l'API tourne à blanc faute de secrets.
+- ✅ **Pinterest « Keur Déco »** (principal) : compte branché au Planning du Studio ; 62 épingles importées par CSV, dont 36 parues du 2 au 19 octobre 2026 et 26 programmées jusqu'au 1er novembre (`data/pinterest-etat.json`). Publication par l'API : 20 tableaux reliés et secrets posés le 19 octobre ; accès standard demandé le 16 octobre, en attente.
 - ✅ **Google** : Search Console vérifiée (propriété de domaine) ; au relevé du 7 octobre 2026, 71 pages indexées et 27 non indexées, demandes d'indexation faites les 7 et 8 octobre.
 - ✅ **Bing** : pages signalées par IndexNow après chaque reconstruction du lundi.
 - ⬜ **TikTok et YouTube** : TikTok « Afrotok » est branché au Studio mais rattaché à aucune app, YouTube « toa.afrotok » à Erea seule (Studio, 13 octobre 2026) ; aucune publication pour Keur Déco.
@@ -32,7 +32,7 @@ Mis à jour le 16 octobre 2026. Compagnon de INFRA.md.
 
 - **Audience** : Cloudflare Web Analytics (sans cookie) — à vérifier dans la console.
 - **Pages indexées** : 71 indexées et 27 non indexées au 7 octobre 2026 (Search Console).
-- **Épingles importées** : 62, dont 38 programmées jusqu'au 1er novembre 2026 (`data/pinterest-etat.json`).
+- **Épingles importées** : 62, dont 26 programmées jusqu'au 1er novembre 2026 (`data/pinterest-etat.json`).
 - **Statistiques Pinterest** : à vérifier dans la console Pinterest.
 - **Commissions Amazon** : à vérifier dans la console Amazon Partenaires.
 - **Revenus AdSense** : à vérifier dans la console AdSense.
@@ -46,5 +46,5 @@ Mis à jour le 16 octobre 2026. Compagnon de INFRA.md.
 ## Les 3 priorités
 
 - Importer avant le 1er novembre le lot Pinterest suivant (`npm run pinterest:lot`, import sur Pinterest, puis `--confirmer`), sinon plus aucune épingle ne paraît.
-- Obtenir l'accès standard à l'API Pinterest (vidéo de démonstration, voir `docs/pinterest.md`), puis renseigner les `board_id` et les trois secrets Actions pour que la publication devienne automatique.
+- Obtenir l'accès standard à l'API Pinterest (demande envoyée le 16 octobre 2026) : tableaux et secrets sont prêts, la publication automatique n'attend plus que la réponse de Pinterest.
 - Faire indexer par Google les pages encore « détectées, non indexées » (relecture du rapport Search Console prévue le 21 octobre).

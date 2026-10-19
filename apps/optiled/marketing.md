@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 16 octobre 2026. Compagnon de INFRA.md.
+Mis à jour le 19 octobre 2026. Compagnon de INFRA.md.
 
 > Aucun chiffre inventé : les valeurs non mesurées sont marquées comme telles.
 
@@ -17,8 +17,8 @@ Mis à jour le 16 octobre 2026. Compagnon de INFRA.md.
 
 ## Rémunération par phases
 
-- [fait] **Aujourd'hui** : site gratuit sans compte ; affiliation Amazon (16 lampes, identifiant `optiled-21`, liens `rel="sponsored"`, mentions obligatoires) et publicité AdSense dans les pages de lecture.
-- [en cours] **Validation AdSense** : validation du site et diffusion des annonces, à vérifier dans la console AdSense.
+- [fait] **Aujourd'hui** : site gratuit sans compte ; affiliation Amazon (16 lampes, identifiant `kultiledfr-21`, liens `rel="sponsored"`, mentions obligatoires) et publicité AdSense dans les pages de lecture.
+- [en cours] **Validation AdSense** : examen de kultiled.com demandé le 16 octobre 2026, réponse à suivre dans la console AdSense.
 - **Affiliation élargie** : proposer aussi les autres achats de la liste (alimentation, programmateur, variateur…).
 
 ## Points forts
@@ -31,11 +31,11 @@ Mis à jour le 16 octobre 2026. Compagnon de INFRA.md.
 
 | Canal | Détail | Statut |
 |---|---|---|
-| Référencement naturel (base technique) | Sitemap (86 adresses le 12 octobre 2026) avec date de dernière modification réelle, robots.txt, adresses canoniques, Open Graph et Twitter Card avec images de partage 1200 × 630, données structurées schema.org sur toutes les pages | ✅ |
+| Référencement naturel (base technique) | Sitemap (88 adresses le 19 octobre 2026) avec date de dernière modification réelle, robots.txt, adresses canoniques, Open Graph et Twitter Card avec images de partage 1200 × 630, données structurées schema.org sur toutes les pages | ✅ |
 | IndexNow (Bing et autres moteurs) | Signalement automatique des pages chaque lundi (`.github/workflows/indexnow.yml`) | ✅ |
 | Flux RSS et Google Discover | `conseils.xml`, grandes images autorisées (`max-image-preview:large`) | ✅ |
 | Calculateur intégrable | `integrer.html` : code à coller pour les blogs, avec lien vers le site | ✅ prêt, aucun blog contacté |
-| Google Search Console | Propriété `optiled.fr` vérifiée, sitemap envoyé le 25 septembre 2026 puis renvoyé le 12 octobre 2026 (86 adresses) | ✅ |
+| Google Search Console et Bing | `kultiled.com` ajouté le 16 octobre 2026 dans les deux consoles ; ancienne propriété `optiled.fr` toujours vérifiée | ✅ |
 | Guides d'achat | 3 guides (`led-puissance`, `led-comparer`, `led-semis`) avec tableaux calculés depuis les données du site, sans prix ni liens Amazon dans le texte | ✅ |
 | Articles de conseil | Rubrique « Conseils » : 36 articles en ligne et 38 programmés jusqu'au 15 janvier 2027, trois par semaine (lundi, mercredi, vendredi, publication automatique) ; rappel le 16 novembre 2026 pour préparer la série suivante | ✅ |
 | Pages détaillées par culture | 26 pages `legume-<id>.html` (lumière, exemple pour 1 m², lampes, climat, solution nutritive, récolte) | ✅ |
@@ -48,7 +48,7 @@ Mis à jour le 16 octobre 2026. Compagnon de INFRA.md.
 ## Mesures
 
 - **Visiteurs** : à vérifier dans la console Cloudflare Web Analytics (mesure active depuis le 12 octobre 2026)
-- **Pages indexées par Google** : 62 sur 86 (contrôle du Studio, 12 octobre 2026)
+- **Pages indexées par Google** : à vérifier dans la console pour kultiled.com (62 sur 86 sous optiled.fr au 12 octobre 2026)
 - **Clics vers Amazon** : à vérifier dans la console Partenaires Amazon
 - **Commissions Amazon** : à vérifier dans la console Partenaires Amazon
 - **Revenus publicitaires** : à vérifier dans la console AdSense
@@ -64,12 +64,13 @@ Mis à jour le 16 octobre 2026. Compagnon de INFRA.md.
 | 7 au 12 octobre 2026 | Publications bloquées par le test de bout en bout ; débloquées le 12 octobre |
 | 12 octobre 2026 | Mentions légales accordées à la mesure d'audience Cloudflare (une seule source, le jeton du site) ; publicité Google AdSense en ligne (script, emplacements, consentement, `ads.txt`), mentions légales et « À propos » mises à jour |
 | 13 et 14 octobre 2026 | Vérification quotidienne des lampes de nouveau active : 16 lampes, une indisponible |
+| 16 octobre 2026 | OptiLED devient Kultiled : nom, logo, contact `kultiled@toakeur.com`, domaine `www.kultiled.com` ; Search Console, Bing, Amazon et examen AdSense pour le nouveau domaine |
 | 16 novembre 2026 | Rappel : préparer la série suivante d'articles de conseil |
 | 15 janvier 2027 | Dernier article programmé de la série actuelle (hors un article en juin 2027) |
 
 ## Les 3 priorités
 
-- Faire indexer par Google les pages encore absentes : 62 des 86 adresses du plan du site y figurent (contrôle du Studio du 12 octobre 2026) ; plan du site renvoyé le 12 octobre, à renvoyer après chaque série de pages.
+- Réussir le changement de domaine dans Google : suivre dans Search Console l'indexation des 88 adresses sous kultiled.com et y signaler le déménagement depuis optiled.fr, avant la fin du contrat IONOS en novembre.
 - Ouvrir un premier canal d'audience : créer et brancher un compte Pinterest Kultiled, puis importer les 12 épingles déjà prêtes (`docs/pinterest.csv`).
 - Obtenir de premiers liens entrants : proposer le calculateur intégrable (`integrer.html`) à quelques blogs et forums de jardinage en intérieur, aucun n'ayant encore été contacté.
 

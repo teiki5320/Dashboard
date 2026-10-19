@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 13 octobre 2026 d'après le dépôt, la base Supabase et le site en ligne. Pour mettre à jour : relancer ce même prompt.
+Mis à jour le 19 octobre 2026 d'après le dépôt, la base Supabase et le site en ligne. Pour mettre à jour : relancer ce même prompt.
 
 > Aucun secret, clé ni jeton dans ce fichier — uniquement des références
 > (nom de variable, endroit où le secret vit, lien vers la console).
@@ -20,7 +20,7 @@ Mis à jour le 13 octobre 2026 d'après le dépôt, la base Supabase et le site 
 - 🤖 **Android** : 🐙 GitHub — CI construit l'App Bundle [ok] → 🔑 Keystore Android — clé locale, valable 2053 [ok] → 🛍️ Google Play Console — fiche à créer [à faire] → 📱 Google Play — pas publiée [pas encore]
 - 🗄️ **Comptes** : 📱 App — mode invité sans compte [ok] → 🗄️ Supabase — projet en pause [bloquant] → 🔐 Connexion utilisateurs — clés Google à recréer [à faire]
 - 🌐 **Web** : 🐙 GitHub — dossier landing/ [ok] → 📄 GitHub Pages — publié par site.yml [ok] → 🌐 Nom de domaine — kultiva.toakeur.com, HTTPS [ok] → ⬇️ Boutons « Télécharger » — encore sans lien [pas encore]
-- 🛒 **Affiliation** : 📚 Catalogue — 159 liens tag kultiva-21 [ok] → 🛒 Amazon Partenaires (affiliation) — site déclaré [ok] → 📱 Utilisateurs — app pas publiée [pas encore]
+- 🛒 **Affiliation** : 📚 Catalogue — 159 liens tag kultiva-21 [ok] → 🛒 Amazon Partenaires (affiliation) — compte du tag fermé le 18/10 [bloquant] → 📱 Utilisateurs — app pas publiée [pas encore]
 
 ## Vue d'ensemble
 
@@ -151,9 +151,9 @@ Mis à jour le 13 octobre 2026 d'après le dépôt, la base Supabase et le site 
 
 ### 15. Affiliation (Amazon Partenaires)
 
-- **Rôle** : liens « graines » sur les fiches légumes, tag `kultiva-21` (`lib/data/vegetables_base.dart`), mention « Lien partenaire » affichée. Marché France uniquement (masqué en Afrique de l'Ouest, remplacé par les conseils d'achat au marché). `kultiva.toakeur.com` fait partie des sites déclarés chez Amazon (9 octobre 2026). Une routine quotidienne vérifie que les produits cités restent achetables.
-- **Console** : <https://partenaires.amazon.fr> (compte de Jean)
-- **Identifiants publics** : tag `kultiva-21`.
+- **Rôle** : liens « graines » sur les fiches légumes, tag `kultiva-21` (`lib/data/vegetables_base.dart`), mention « Lien partenaire » affichée. Marché France uniquement (masqué en Afrique de l'Ouest, remplacé par les conseils d'achat au marché). ⚠️ Le code utilise toujours `kultiva-21`, mais le compte Amazon Partenaires qui portait ce tag a été fermé par Amazon le 18 octobre 2026 ; les sites ont reçu des identifiants d'un nouveau compte, pas encore l'app. Il faudra créer un identifiant dans le nouveau compte et le mettre dans `lib/data/vegetables_base.dart` avant toute publication. Une routine quotidienne vérifie que les produits cités restent achetables.
+- **Console** : <https://partenaires.amazon.fr> (nouveau compte depuis le 18 octobre 2026)
+- **Identifiants publics** : tag `kultiva-21` dans le code, rattaché au compte fermé.
 - **Secrets** : identifiants du compte → gestionnaire de mots de passe.
 - **Coût** : gratuit (rémunérateur). Implique le statut « trader » (DSA) pour la distribution UE — décidé le 24 août 2026.
 

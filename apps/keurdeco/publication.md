@@ -1,6 +1,6 @@
 # PUBLICATION — état de la mise en ligne
 
-> Mis à jour le 13 octobre 2026 d'après le dépôt et le site en ligne.
+> Mis à jour le 19 octobre 2026 d'après le dépôt et le site en ligne.
 >
 > Aucun secret ici — uniquement des références.
 
@@ -24,11 +24,11 @@
 ## Ce qui reste, dans l'ordre
 
 1. ✅ **Site en ligne** : www.keurdeco.com sert les articles, conseils et glossaire en HTTPS.
-2. ✅ **Affiliation Amazon** : liens `keurdeco-21` et mention Partenaires sur toutes les pages concernées.
+2. ✅ **Affiliation Amazon** : liens `keurdecofr-21` (nouveau compte depuis le 18 octobre 2026) et mention Partenaires sur toutes les pages concernées.
 3. ✅ **Code AdSense en ligne** : annonces sur les pages de lecture, `ads.txt` et fenêtre de choix des cookies.
 4. **Validation AdSense** : attendre que Google déclare le site prêt — à vérifier dans la console.
 5. **Indexation complète** : faire indexer les pages encore « détectées, non indexées » dans la Search Console.
-6. **Publication Pinterest automatique** : accès standard à l'API, `board_id` et trois secrets Actions.
+6. **Publication Pinterest automatique** : accès standard demandé le 16 octobre ; tableaux et secrets déjà prêts.
 
 ## Web · Production
 
@@ -52,5 +52,5 @@
 - **Référencement** : `sitemap.xml` limité aux pages indexables (avec `lastmod`), rubriques vides en `noindex`, `robots.txt`, Open Graph, données structurées Article / ItemList / FAQ / fil d'Ariane. Search Console vérifiée : 71 pages indexées au 7 octobre 2026, demandes d'indexation en cours. Pages signalées à Bing par IndexNow chaque lundi.
 - **Mesure d'audience** : Cloudflare Web Analytics (sans cookie), balise présente en ligne — chiffres à vérifier dans la console.
 - **Publicité** : Google AdSense en ligne depuis le 12 octobre 2026 (code sur les pages qui peuvent porter une annonce, plus sur l'accueil, les Tops, À propos, Mentions légales ni la 404, `ads.txt` à la racine, annonces sur les pages de lecture, fenêtre de choix des cookies de Google) — validation du site à vérifier dans la console AdSense.
-- **Pinterest** : domaine revendiqué par la balise `p:domain_verify` (présente en ligne) ; épingles importées par CSV jusqu'au 1er novembre 2026 ; publication automatique par l'API en attente de l'accès standard.
+- **Pinterest** : domaine revendiqué par la balise `p:domain_verify` (présente en ligne) ; épingles importées par CSV jusqu'au 1er novembre 2026 ; publication automatique par l'API en attente de l'accès standard (demandé le 16 octobre 2026 ; 20 tableaux reliés, secrets posés le 19 octobre).
 - **Pages légales** : mentions légales (éditeur, hébergeur GitHub Pages, mention Partenaires, section Publicité, images IA), confidentialité (aucun cookie du site lui-même ; cookies publicitaires de Google seulement avec accord), lien « Gérer mes cookies » en bas de chaque page, paragraphe sur les liens affiliés dans « À propos ».

@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 16 octobre 2026, d'après le code du dépôt et le site en ligne. Aucun secret ici :
+Mis à jour le 19 octobre 2026, d'après le code du dépôt et le site en ligne. Aucun secret ici :
 uniquement des noms de variables et de consoles.
 
 ## En bref
@@ -9,14 +9,14 @@ uniquement des noms de variables et de consoles.
 - **Stack** : Next.js 16 en export statique, React 19, Tailwind CSS 4
 - **Backend** : aucun — site statique, sans base ni compte
 - **Distribution** : Cloudflare Pages, publié par GitHub Actions
-- **Site** : keurbook.com (957 adresses dans le sitemap)
+- **Site** : keurbook.com (960 adresses dans le sitemap)
 - **IA et outils** : routine « Écrire les articles Conseils », IndexNow, Cloudflare Web Analytics
 
 ## Parcours
 
 - 🌐 **Web** : 🐙 GitHub — main · publication au vert [ok] → ⚙️ GitHub Actions — lint, types, tests, build [ok] → ☁️ Cloudflare Pages — projet keurbook [ok] → 🌍 keurbook.com — en ligne, réponse 200 [ok]
-- 📝 **Contenu** : ✍️ Articles Conseils — 36 publiés, 25 programmés [ok] → ⚙️ GitHub Actions — publie lundi, mercredi, vendredi [ok] → 📡 IndexNow — sitemap signalé chaque lundi [ok] → 🔍 Google — 638 pages indexées sur 957 [à faire]
-- 🛒 **Affiliation** : 📚 Fiche livre ou BD — bouton « Acheter sur Amazon » [ok] → 🛒 Amazon Partenaires (affiliation) — tag keurbook-21 [ok] → 🔗 Liens directs — surtout des recherches, peu d'ASIN [à faire]
+- 📝 **Contenu** : ✍️ Articles Conseils — 37 publiés, 24 programmés [ok] → ⚙️ GitHub Actions — publie lundi, mercredi, vendredi [ok] → 📡 IndexNow — sitemap signalé chaque lundi [ok] → 🔍 Google — 663 pages indexées sur 960 [à faire]
+- 🛒 **Affiliation** : 📚 Fiche livre ou BD — bouton « Acheter sur Amazon » [ok] → 🛒 Amazon Partenaires (affiliation) — tag keurbookfr-21 [ok] → 🔗 Liens directs — surtout des recherches, peu d'ASIN [à faire]
 - 📰 **Publicité** : 📰 AdSense (publicité web) — script et 4 blocs en place [ok] → ✅ Validation du site — à vérifier dans la console [pas encore] → 💶 Revenus — aucun constaté [pas encore]
 
 ## Vue d'ensemble
@@ -29,8 +29,8 @@ uniquement des noms de variables et de consoles.
 - **Backend** : aucun. Site entièrement statique (dossier `out/`), sans base de données, sans
   compte. La pile à lire reste dans le navigateur du visiteur. Seuls cookies : ceux de Google AdSense,
   après accord dans le bandeau de consentement de Google (voir docs/PUBLICITE.md).
-- **Taille** : 957 adresses dans le sitemap au 13 octobre 2026 (675 livres, 122 BD, 92 auteurs,
-  26 pays, 36 articles Conseils publiés, pages de liste et pages légales).
+- **Taille** : 960 adresses dans le sitemap au 19 octobre 2026 (675 livres, 122 BD, 92 auteurs,
+  26 pays, 37 articles Conseils publiés, pages de liste et pages légales).
 - **Particularités** : interrupteur de maintenance dans `content/maintenance.json` (désactivé),
   tests de cohérence des contenus dans `tests/`, signalement IndexNow chaque lundi.
 
@@ -68,14 +68,14 @@ uniquement des noms de variables et de consoles.
 
 ## Amazon Partenaires (affiliation)
 
-- **Rôle** : les boutons « Acheter sur Amazon » mènent à Amazon.fr avec le tag `keurbook-21`
+- **Rôle** : les boutons « Acheter sur Amazon » mènent à Amazon.fr avec le tag `keurbookfr-21`
   (construits par `src/lib/amazon.ts`, réglable par `NEXT_PUBLIC_AMAZON_TAG`). Sans ASIN vérifié, le
   lien ouvre une recherche Amazon (ISBN ou titre + auteur, rayon Livres) — c'est le cas courant
   aujourd'hui.
 - **Site déclaré** : `keurbook.com` figure parmi les sites déclarés chez Amazon (9 octobre 2026).
 - **Contrôle** : la routine « Vérifier les liens Amazon » (Keur Cook, Keurbook, Kultiva) passe
   chaque jour.
-- **Console** : https://partenaires.amazon.fr (compte Amazon Partenaires de Jean).
+- **Console** : https://partenaires.amazon.fr (nouveau compte Amazon Partenaires créé le 18 octobre 2026, l'ancien ayant été fermé par Amazon ; identifiant `keurbookfr-21` depuis cette date).
 
 ## AdSense (publicité web)
 

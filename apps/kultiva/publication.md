@@ -1,6 +1,6 @@
 # PUBLICATION — état des boutiques
 
-> Mis à jour le 13 octobre 2026. Pour mettre à jour :
+> Mis à jour le 19 octobre 2026. Pour mettre à jour :
 > relancer ce même prompt.
 >
 > **Aucun secret ici** — uniquement des références publiques :
@@ -39,7 +39,7 @@
 - **Android** : jamais envoyée à Play — le bundle release est signé et vérifié localement ; l'existence d'une fiche Play reste à vérifier dans la console
 - **Web** : site de présentation en ligne sur <https://kultiva.toakeur.com> depuis le 7 octobre 2026
 - **Backend** : projet Supabase **en pause** (vérifié le 13 octobre 2026) — connexion et synchronisation hors service tant qu'il n'est pas rallumé
-- **Monétisation** : 159 liens d'affiliation Amazon (tag `kultiva-21`), masqués en Afrique de l'Ouest — d'où le statut **trader** au sens du DSA, décidé le 24 août 2026
+- **Monétisation** : 159 liens d'affiliation Amazon (tag `kultiva-21`, rattaché au compte Amazon fermé le 18 octobre 2026 : à remplacer), masqués en Afrique de l'Ouest — d'où le statut **trader** au sens du DSA, décidé le 24 août 2026
 - **Classification attendue** : **4+** depuis le retrait du feed communautaire — plus aucun contenu généré par les utilisateurs
 - **Chemin critique** : rallumer Supabase → compléter la fiche App Store → soumettre iOS
 
@@ -198,9 +198,10 @@ Google « Se connecter » ont été laissées à supprimer le 9 octobre 2026 :
 4. **Compléter la fiche App Store** : les trois URL, l'adresse de contact, les coordonnées de trader (DSA) et le téléphone de revue.
 5. **Compte de démonstration** : 2 ou 3 plantations, une photo et un Tamassi entamé, pour le testeur et les captures.
 6. **Captures d'écran** : 8 en iPhone 6,9″ (1320 × 2868) et 8 en iPad 13″ (2064 × 2752).
-7. **Soumettre iOS** : depuis `docs/FICHE_APP_STORE.md`.
-8. **Créer la fiche Google Play** : puis lancer le test fermé sans attendre, ses quatorze jours courent en arrière-plan.
-9. **Relier les boutons « Télécharger »** : remplacer les `href="#"` du site par les liens des boutiques.
+7. **Nouvel identifiant Amazon** : remplacer `kultiva-21`, dont le compte a été fermé le 18 octobre, par un identifiant du nouveau compte.
+8. **Soumettre iOS** : depuis `docs/FICHE_APP_STORE.md`.
+9. **Créer la fiche Google Play** : puis lancer le test fermé sans attendre, ses quatorze jours courent en arrière-plan.
+10. **Relier les boutons « Télécharger »** : remplacer les `href="#"` du site par les liens des boutiques.
 
 ---
 

@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 16 octobre 2026. Un canal n'est coché que s'il est prouvé (compte branché et
+Mis à jour le 19 octobre 2026. Un canal n'est coché que s'il est prouvé (compte branché et
 publications réelles, ou routine qui publie).
 
 ## Positionnement
@@ -14,7 +14,7 @@ publications réelles, ou routine qui publie).
 
 ## Rémunération par phases
 
-- [fait] **Aujourd'hui** : affiliation Amazon Partenaires (tag `keurbook-21`) et publicité AdSense depuis le 12 octobre ; le site ne vend rien.
+- [fait] **Aujourd'hui** : affiliation Amazon Partenaires (tag `keurbookfr-21`) et publicité AdSense depuis le 12 octobre ; le site ne vend rien.
 - [en cours] **Validation AdSense** : Google examine le site avant d'y mettre des annonces ; état à vérifier dans la console.
 - **Liens Amazon directs** : remplacer les recherches par des fiches produit vérifiées (ASIN), qui convertissent mieux.
 - **Partenariats** : mises en avant payées par des éditeurs ou libraires, une fois l'audience mesurée.
@@ -41,17 +41,17 @@ publications réelles, ou routine qui publie).
 
 ## Mesures
 
-- **Pages indexées par Google** : 638 sur 957 (suivi du Studio, 13 octobre 2026)
-- **Pages pas encore indexées** : 319, dont 175 inconnues de Google et 142 détectées non explorées
-- **Articles Conseils** : 36 publiés, 25 programmés
+- **Pages indexées par Google** : 663 sur 960 (Search Console, 19 octobre 2026)
+- **Pages pas encore indexées** : 297, dont 160 inconnues de Google et 137 détectées non explorées
+- **Articles Conseils** : 37 publiés, 24 programmés
 - **Visites** : à vérifier dans la console Cloudflare Web Analytics (mesure active depuis le 13 octobre 2026)
 - **Clics et revenus Amazon** : à vérifier dans la console
 - **Revenus AdSense** : à vérifier dans la console
 
 ## Les 3 priorités
 
-- Faire indexer par Google les 319 pages qui ne le sont pas encore (107 BD, les 92 pages
-  auteurs, 84 livres, 24 pages pays) : renforcer les liens internes vers elles et suivre leur
+- Faire indexer par Google les 297 pages qui ne le sont pas encore (BD, pages auteurs, livres,
+  pays et pages de liste) : renforcer les liens internes vers elles et suivre leur
   évolution dans l'onglet Indexation du Studio.
 - Remplacer les recherches Amazon par des liens directs vers des fiches produit vérifiées (ASIN),
   en commençant par les livres les plus vus dans Cloudflare Web Analytics.

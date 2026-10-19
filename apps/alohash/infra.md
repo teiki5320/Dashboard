@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 16 octobre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
+Mis à jour le 19 octobre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
 
 ## En bref
 
@@ -15,7 +15,7 @@ Mis à jour le 16 octobre 2026 par un scan du dépôt. Pour mettre à jour : rel
 
 - 🌐 **Web** : 🐙 GitHub — main · publication au vert [ok] → ☁️ Hébergement web — Cloudflare Pages, projet keurcook [ok] → 🔗 Nom de domaine — keurcook.com, SSL Cloudflare [ok] → 👥 Visiteurs — site ouvert au public [ok]
 - 📝 **Contenu** : 🐙 GitHub — 31 articles programmés [ok] → ⏰ GitHub Actions — publication lun., mer., ven. [ok] → 🌐 keurcook.com — 36 articles en ligne [ok] → ✍️ Réserve — vide le 28 décembre 2026 [à faire]
-- 🛒 **Affiliation** : 🌐 keurcook.com — boutons « Acheter · prix » [ok] → 🤝 Affiliation — Amazon Partenaires, tag keurcook-21 [ok] → 📦 Amazon.fr — Amazon encaisse et livre [ok]
+- 🛒 **Affiliation** : 🌐 keurcook.com — boutons « Acheter · prix » [ok] → 🤝 Affiliation — Amazon Partenaires, tag keurcookfr-21 [ok] → 📦 Amazon.fr — Amazon encaisse et livre [ok]
 - 📢 **Publicité** : 🌐 keurcook.com — cinq emplacements « Publicité » [ok] → 💰 AdSense (publicité web) — approbation à vérifier [à faire]
 
 ## Vue d'ensemble
@@ -32,7 +32,7 @@ Mis à jour le 16 octobre 2026 par un scan du dépôt. Pour mettre à jour : rel
   - mode maintenance piloté par le bouton « Maintenance » de GitHub Actions ; en maintenance, pages en `noindex` et sitemap vide ;
   - en-têtes de sécurité (CSP, HSTS, `X-Frame-Options`, `nosniff`…) dans `public/_headers` ; la CSP n'ouvre que les adresses Google d'AdSense et du consentement, et celles de Cloudflare Web Analytics ; redirections (`/cgv`, `/categorie/<gamme>` (une règle par gamme), anciennes pages `/panier`, `/commande`, `/admin`…) dans `public/_redirects` ;
   - favoris stockés dans le navigateur (aucun compte) ;
-  - liens Amazon construits par `src/lib/amazon.ts` (tag `keurcook-21`, champ `amazonAsin` rempli depuis les offres de `src/lib/demo/catalog*.ts`) ; prix indicatifs relevés le 27 septembre 2026 (`AMAZON_PRICES_CHECKED_ON`).
+  - liens Amazon construits par `src/lib/amazon.ts` (tag `keurcookfr-21`, champ `amazonAsin` rempli depuis les offres de `src/lib/demo/catalog*.ts`) ; prix indicatifs relevés le 27 septembre 2026 (`AMAZON_PRICES_CHECKED_ON`).
 
 ## 1. GitHub
 
@@ -64,9 +64,9 @@ Mis à jour le 16 octobre 2026 par un scan du dépôt. Pour mettre à jour : rel
 
 ## 4. Amazon Partenaires (affiliation)
 
-- **Rôle** : les boutons « Acheter · prix » mènent à Amazon.fr (programme Partenaires, tag `keurcook-21`, `src/lib/amazon.ts`) ; Amazon encaisse et livre. Produits retenus : plus de 3,5 étoiles sur Amazon ; prix indicatifs relevés le 27 septembre 2026. `keurcook.com` figure dans la liste des sites du compte (9 octobre 2026). Une routine quotidienne vérifie par lots que les produits cités sont toujours achetables. Les 13 et 14 octobre 2026, 14 produits devenus indisponibles ont été remplacés par des équivalents en vente (fiches vérifiées sur amazon.fr le 14 octobre) ; le 15 octobre, trois nouveautés de plus (bitter kola, farine d'igname, akpi).
-- **Console** : https://partenaires.amazon.fr (compte Amazon Partenaires de Jean).
-- **Identifiants publics** : tag partenaire `keurcook-21` (`NEXT_PUBLIC_AMAZON_TAG` pour le changer).
+- **Rôle** : les boutons « Acheter · prix » mènent à Amazon.fr (programme Partenaires, tag `keurcookfr-21`, `src/lib/amazon.ts`) ; Amazon encaisse et livre. Produits retenus : plus de 3,5 étoiles sur Amazon ; prix indicatifs relevés le 27 septembre 2026. Identifiant `keurcookfr-21` depuis le 18 octobre 2026 (nouveau compte Amazon Partenaires créé le 18 octobre 2026, l'ancien ayant été fermé par Amazon) ; sites déclarés dans le nouveau compte : à vérifier dans la console. Une routine quotidienne vérifie par lots que les produits cités sont toujours achetables. Les 13 et 14 octobre 2026, 14 produits devenus indisponibles ont été remplacés par des équivalents en vente (fiches vérifiées sur amazon.fr le 14 octobre) ; le 15 octobre, trois nouveautés de plus (bitter kola, farine d'igname, akpi) ; le 19 octobre, le berbère.
+- **Console** : https://partenaires.amazon.fr (nouveau compte depuis le 18 octobre 2026).
+- **Identifiants publics** : tag partenaire `keurcookfr-21` (`NEXT_PUBLIC_AMAZON_TAG` pour le changer).
 - **Secrets** : aucun.
 - **Coût** : gratuit ; commission versée par Amazon sur les achats.
 
