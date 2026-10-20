@@ -128,10 +128,12 @@ Studio lui-même, un des deux dépôts dans lesquels on travaille, il n'a pas à
 figurer parmi les projets suivis. Leurs dossiers, leurs hachages de synchro et
 leurs fiches sont sortis du dépôt ; l'historique git les garde.
 
-⚠️ **Kultiva n'a plus de backend.** Son projet Supabase a été supprimé : son
-adresse ne résout plus (constaté le 3 octobre 2026). L'app n'a donc plus ni
-authentification, ni données, ni stockage de photos. `apps/kultiva/infra.md`
-décrit ce qu'il faudra recréer.
+⚠️ **Le backend de Kultiva est en pause.** Son projet Supabase « Kultiva »
+(eu-west-1) existe toujours mais est mis en pause (état INACTIVE, vérifié le
+20 octobre 2026) : son adresse ne répond plus tant qu'il n'est pas relancé.
+L'app n'a donc, pour l'instant, ni authentification, ni données, ni stockage
+de photos. Le relancer depuis le tableau de bord Supabase suffit à tout
+retrouver ; `apps/kultiva/infra.md` décrit l'infrastructure.
 
 ## La synchro automatique (`.github/workflows/sync.yml`)
 
