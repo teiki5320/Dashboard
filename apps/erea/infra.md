@@ -1,11 +1,11 @@
 # INFRA — fiche technique
 
 > Généré le 20 août 2026 par un scan du dépôt, mis à jour le
-> 16 octobre 2026. Pour mettre à jour : relancer ce même prompt.
+> 20 octobre 2026. Pour mettre à jour : relancer ce même prompt.
 
 ## En bref
 
-- **Plateforme** : iOS 15+ en ligne · Android en test fermé · site vitrine
+- **Plateforme** : iOS 15+ en ligne · Android en examen · site vitrine
 - **Stack** : Flutter (Dart ≥ 3.6), version `1.0.5+6` dans le code
 - **Backend** : aucun — tout reste sur l'appareil, jeu hors ligne
 - **Distribution** : Xcode Cloud vers l'App Store · App Bundle signé en local
@@ -15,13 +15,13 @@
 ## Parcours
 
 - 🍎 **iOS** : 🐙 GitHub — main, 1.0.5 dans le code [ok] → ☁️ Xcode Cloud — build à chaque poussée sur main [ok] → 🛍️ App Store Connect — 1.0.4 (build 182) approuvée le 15 octobre [ok] → 📱 App Store — 1.0.4 en ligne depuis le 15 octobre [ok]
-- 🤖 **Android** : 🐙 GitHub — main, 1.0.5 dans le code [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — test fermé terminé, 1.0.4 en examen, production demandée le 14 octobre [en cours] → 🛒 Google Play — pas en production [pas encore]
+- 🤖 **Android** : 🐙 GitHub — main, 1.0.5 dans le code [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — production accordée, 1.0.4 en examen [en cours] → 🛒 Google Play — pas en production [pas encore]
 - 🌐 **Web** : 🐙 GitHub — racine de main, sans CNAME [ok] → 📄 Hébergement web (GitHub Pages / Cloudflare Pages) — GitHub Pages [ok] → 🏷️ Nom de domaine — erea.toakeur.com via Cloudflare [ok] → 🌐 Site — vitrine, jeu, support, confidentialité [ok]
 - 🎬 **Contenu** : 🎬 Studio — neuf pubs vidéo produites le 5 octobre [ok] → 🗓️ Planning — aucune publication programmée [à faire] → 📣 Réseaux sociaux & influenceurs — YouTube et TikTok branchés, rien publié [pas encore]
 
 ## Vue d'ensemble
 
-- **Plateforme** : iOS 15+ (1.0.4 en ligne sur l'App Store depuis le 15 octobre 2026) · Android en test fermé, pas encore en production · site vitrine `erea.toakeur.com`
+- **Plateforme** : iOS 15+ (1.0.4 en ligne sur l'App Store depuis le 15 octobre 2026) · Android : production accordée le 17 octobre 2026, release 1.0.4 en examen · site vitrine `erea.toakeur.com`
 - **Stack** : Flutter (Dart ≥ 3.6), version `1.0.5+6` dans le code, 167 tests, aucun serveur applicatif
 - **Backend** : aucun — tout l'état du joueur vit sur l'appareil (`shared_preferences`)
 - **Distribution** : App Store via Xcode Cloud · Play Store via App Bundle signé localement
@@ -310,7 +310,7 @@ passe par le compte Google (+ double facteur).
 
 | | |
 |---|---|
-| Rôle | Distribution Android — test fermé, pas encore en production |
+| Rôle | Distribution Android — production accordée, première release en examen |
 | Console | <https://play.google.com/console> |
 | Compte propriétaire | Compte développeur **personnel**, créé le 20 août 2026, sur le compte Google de gestion |
 | Coût | 25 $ une seule fois |
@@ -318,7 +318,7 @@ passe par le compte Google (+ double facteur).
 **État réel :**
 - Application ID `com.teiki.erea`, identique à iOS (`android/app/build.gradle.kts`).
 - Test fermé « Alpha » : release `4 (1.0.3)` servie aux testeurs depuis le 16 septembre 2026 ; release `5 (1.0.4)` en examen depuis le 14 octobre. Les **douze testeurs pendant quatorze jours** exigés d'un compte personnel ont été tenus du 8 au 22 septembre (service Testers Community, §14).
-- **Accès à la production demandé le 14 octobre 2026 à 18 h 39**, réponse de Google attendue. D'ici là, la fiche publique `play.google.com/store/apps/details?id=com.teiki.erea` répond 404.
+- **Accès à la production demandé le 14 octobre 2026 à 18 h 39, accordé le 17 octobre** ; la release de production `5 (1.0.4)`, promue depuis la piste Alpha, est en examen depuis le 17 octobre vers 8 h 25. D'ici l'approbation, la fiche publique `play.google.com/store/apps/details?id=com.teiki.erea` répond 404.
 - Achat intégré actif (voir « StoreKit / Play Billing »). Classements Play Games non configurés (voir « Game Center / Play Games »).
 - Appareil physique de vérification : un Pixel 8a, utilisé pour les tests du 16 septembre.
 

@@ -1,6 +1,6 @@
 # PUBLICATION — état des boutiques
 
-> Mis à jour le 16 octobre 2026 d'après l'App Store, la fiche publique
+> Mis à jour le 20 octobre 2026 d'après l'App Store, la fiche publique
 > Google Play et l'historique du dépôt ; ce que seules les consoles savent
 > est marqué « à vérifier dans la console ». Une ligne par système d'exploitation, dans un format
 > réutilisable d'une application à l'autre. Pour mettre à jour :
@@ -32,7 +32,7 @@
 ## Vue d'ensemble
 
 - **iOS** : **1.0.4 (build 182) en ligne depuis le 15 octobre 2026 à 14 h 01**, soumise à 12 h 51 et publiée automatiquement à l'approbation ; nouveau nom « Erea : Quiz d'histoire & frise »
-- **Android** : **accès à la production accordé le 17 octobre 2026** (demandé le 14 octobre à 18 h 39) ; **release de production `5 (1.0.4)` envoyée pour examen le 17 octobre vers 8 h 25**, promue depuis la piste Alpha, 177 pays plus « reste du monde », déploiement complet, publication gérée désactivée (en ligne dès l'approbation) ; fiche publique encore en 404
+- **Android** : **accès à la production accordé le 17 octobre 2026** (demandé le 14 octobre à 18 h 39) ; **release de production `5 (1.0.4)` envoyée pour examen le 17 octobre vers 8 h 25**, promue depuis la piste Alpha, 177 pays plus « reste du monde », déploiement complet, publication gérée désactivée (en ligne dès l'approbation) ; fiche publique encore en 404 le 20 octobre 2026
 - **Version dans le code** : `1.0.5+6` depuis le 16 octobre 2026, pour que Xcode Cloud ne bute plus sur la 1.0.4 approuvée (build 187 refusé, ITMS-90186) ; même code que la 1.0.4, envoyée à Google le 14 octobre et à Apple le 15 octobre ; le bundle Android de production reste celui de la 1.0.4 (`versionCode 5`)
 - **Identifiant** : `com.teiki.erea`, identique sur les deux plateformes
 - **Achat intégré** : `com.teiki.erea.sanspub` « Erea sans publicité », 3,99 €, non consommable — **approuvé** sur l'App Store, **actif** sur Google Play
@@ -57,7 +57,7 @@ dès l'approbation.
 | Version publiée | `1.0.4`, build `182`, en ligne depuis le 15 octobre 2026 à 14 h 01 — remplace la `1.0.2` (build `150`) du 8 septembre, qui remplaçait la `1.0.0` du 3 septembre |
 | Dernier build connu | `182` (`1.0.4`), publié ; les builds suivants viennent de commits de documentation, même code |
 | Dernière soumission | `1.0.4`, build `182`, le 15 octobre 2026 à 12 h 51, approuvée le jour même — les builds `176` et `180` ont été refusés à l'import (ITMS-91064) : le validateur n'accepte ni « suivi à vrai, liste de domaines vide » ni « suivi à vrai, sans clé » ; le 182 porte « suivi à faux, sans clé » (commit 6e981b6) ; nom « Erea : Quiz d'histoire & frise », mots-clés sans « quiz/frise/histoire » (déjà dans le nom), captures iPhone légendées écran moyen et grand écran (iPad : celles d'août), adresses passées sur `erea.toakeur.com` (assistance, site, confidentialité), notes App Review réécrites (AdMob, consentement, achat intégré) |
-| Notes / avis | 0 / 0 au 16 octobre 2026 |
+| Notes / avis | 0 / 0 au 20 octobre 2026 |
 | Achat intégré | `com.teiki.erea.sanspub` « Erea sans publicité », non consommable, **approuvé** le 8 septembre avec la 1.0.2 |
 | Distribution | Xcode Cloud, action *Archiver*, préparation **App Store Connect** |
 
@@ -149,7 +149,7 @@ changements des 1.0.3 et 1.0.4.
 
 | | |
 |---|---|
-| Production | `https://erea.toakeur.com/` — vitrine, jeu web sur `/jeu.html`, `/support.html`, `/confidentialite.html` ; répond le 16 octobre 2026 |
+| Production | `https://erea.toakeur.com/` — vitrine, jeu web sur `/jeu.html`, `/support.html`, `/confidentialite.html` ; répond le 20 octobre 2026 |
 | Domaine & SSL | sous-domaine de `toakeur.com` depuis le 7 octobre 2026, servi par GitHub Pages derrière Cloudflare, HTTPS valide ; l'ancienne adresse `teiki5320.github.io/erea/` répond toujours |
 | Visibilité | Smart App Banner (`app-id=6794918301`) sur les pages ; badge officiel « Télécharger dans l'App Store » vers `https://apps.apple.com/fr/app/erea/id6794918301` depuis le 12 octobre 2026 ; Android annoncé « bientôt sur Google Play », sans lien tant que la fiche n'existe pas ; page d'aiguillage `https://erea.toakeur.com/telecharger/` depuis le 15 octobre 2026 (iPhone et iPad vers l'App Store, Android vers Google Play une fois `PLAY_OUVERT` à vrai, `?src=` relayé aux boutiques) |
 

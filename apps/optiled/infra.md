@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Généré le 19 octobre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
+Généré le 20 octobre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
 
 > Aucun secret dans cette fiche — uniquement des références (noms de variables, consoles).
 
@@ -16,8 +16,8 @@ Généré le 19 octobre 2026 par un scan du dépôt. Pour mettre à jour : relan
 ## Parcours
 
 - 🌐 **Web** : 🐙 GitHub — main, dernière publication au vert [ok] → ⚙️ GitHub Actions — tests, build et test de bout en bout [ok] → 🏠 GitHub Pages — hébergement du site [ok] → 🔗 Nom de domaine — www.kultiled.com depuis le 16 octobre [ok] → 🔎 Google — nouveau domaine à faire indexer [à faire]
-- 📝 **Contenu** : ✍️ Articles de conseil — 74 rédigés [ok] → ⏰ GitHub Actions — publication lundi, mercredi, vendredi [ok] → 📰 Rubrique Conseils — 36 en ligne, 38 programmés [ok] → 📌 Pinterest — 12 épingles prêtes, aucun compte [pas encore]
-- 🛒 **Affiliation** : 💡 Sélection de lampes — 16 lampes, une indisponible [ok] → 🔁 Routine de vérification — dernier passage le 17 octobre [ok] → 🛍️ Affiliation — liens Amazon.fr kultiledfr-21 [ok]
+- 📝 **Contenu** : ✍️ Articles de conseil — 74 rédigés [ok] → ⏰ GitHub Actions — publication lundi, mercredi, vendredi [ok] → 📰 Rubrique Conseils — 37 en ligne, 37 programmés [ok] → 📌 Pinterest — 12 épingles prêtes, aucun compte [pas encore]
+- 🛒 **Affiliation** : 💡 Sélection de lampes — 16 lampes, deux indisponibles [ok] → 🔁 Routine de vérification — dernier passage le 19 octobre [ok] → 🏆 Top 10 — 9 onglets de 10 produits depuis le 19 octobre [ok] → 🛍️ Affiliation — liens Amazon.fr kultiledfr-21 [ok]
 - 📢 **Publicité** : 📰 Pages de lecture — deux emplacements au plus [ok] → 🍪 Consentement — bandeau de Google en ligne [ok] → 💰 AdSense (publicité web) — examen de kultiled.com demandé [à faire]
 
 ## Vue d'ensemble
@@ -28,16 +28,17 @@ Généré le 19 octobre 2026 par un scan du dépôt. Pour mettre à jour : relan
 - **Distribution** : GitHub Pages, publication automatique à chaque envoi sur `main` et chaque lundi, mercredi et vendredi à 5 h UTC pour les articles de conseil programmés (`.github/workflows/pages.yml`), sur le domaine `www.kultiled.com` depuis le 16 octobre 2026 (`public/CNAME`, `SITE_URL` dans `build/site.ts`). L'ancien domaine `www.optiled.fr` ne sert plus qu'une page « Kultiled a déménagé » qui renvoie vers le nouveau, publiée par le dépôt `teiki5320/optiled-redirection`.
 - **Contact public** : `kultiled@toakeur.com` (mentions légales et page « À propos » ; dans le code depuis le 7 octobre 2026, en ligne depuis le 12). Plus aucune adresse en `alohash.fr` dans le site.
 - **Particularités** :
-  - 28 pages HTML à la racine, plus les articles de conseil (`contenu/conseils/`) et les pages des 26 cultures, assemblées au build par un plugin Vite maison (`build/site.ts`) : en-tête, menu, pied de page, sommaire, sitemap, robots.txt, flux RSS `conseils.xml`, balises de partage, données structurées.
-  - Données des 26 cultures dans `src/data/legumes.json`, chaque valeur avec sa source ; sélection de lampes Amazon dans `src/data/lampes.json` ; fourchettes de prix dans `src/data/budget.json`.
+  - 28 pages HTML à la racine, plus les articles de conseil (`contenu/conseils/`), les pages des 26 cultures et les pages « Top 10 » (`build/top-10.ts`), assemblées au build par un plugin Vite maison (`build/site.ts`) : en-tête, menu, pied de page, sommaire, sitemap, robots.txt, flux RSS `conseils.xml`, balises de partage, données structurées.
+  - Données des 26 cultures dans `src/data/legumes.json`, chaque valeur avec sa source ; sélection de lampes Amazon dans `src/data/lampes.json` ; fourchettes de prix dans `src/data/budget.json` ; produits des onglets « Top 10 » dans `src/data/tentes.json` et `src/data/top-10/`.
+  - Pages « Top 10 » depuis le 19 octobre 2026 (`build/top-10.ts`) : onglet « Top 10 » dans le menu, une page par sujet (`top-10-<sujet>.html`), publiée seulement si elle compte 10 vrais produits. Neuf onglets en ligne : lampes LED de culture, tentes, kits complets, kits hydroponiques, extracteurs et ventilateurs, minuteurs et thermomètres, terreaux et substrats, lampes pour semis, lampes pour placard. Les lampes sont classées par efficacité, les autres produits selon la note des acheteurs relevée le 19 octobre 2026, note qui n'est ni enregistrée ni affichée.
   - La chaîne de publication refuse de publier si les tests unitaires, le build ou le test de bout en bout échouent (ce qui a bloqué toute mise en ligne du 7 au 12 octobre 2026).
   - Publicité Google AdSense depuis le 12 octobre 2026 (`build/annonces.ts`, fichier `public/ads.txt`) : script et bandeau de consentement de Google sur toutes les pages publiées, sauf le calculateur intégré sur d'autres sites ; annonces seulement dans les guides, conseils, fiches des cultures, parcours et glossaire.
   - Signalement hebdomadaire des pages à Bing et aux autres moteurs par IndexNow (`.github/workflows/indexnow.yml`, le lundi à 7 h UTC ; clé publique dans `public/`).
-  - Routines Claude Code (console https://claude.ai/code/routines) : `optiled-verification-lampes`, chaque jour (lampes et fourchettes de prix, envoi sur `main`), de nouveau active depuis le 13 octobre 2026 (dernier envoi le 17 octobre) après une interruption depuis le 1er octobre ; `optiled-nouvelle-serie-conseils`, rappel unique le 16 novembre 2026 pour préparer la série suivante d'articles.
+  - Routines Claude Code (console https://claude.ai/code/routines) : `optiled-verification-lampes`, chaque jour (lampes et fourchettes de prix, envoi sur `main`), de nouveau active depuis le 13 octobre 2026 (dernier envoi le 19 octobre) après une interruption depuis le 1er octobre ; `optiled-nouvelle-serie-conseils`, rappel unique le 16 novembre 2026 pour préparer la série suivante d'articles.
 
 ## GitHub
 
-- **Rôle** : hébergement du code (`teiki5320/optiled`, branche unique `main`) et chaîne de publication GitHub Actions : `npm ci` → `npm test` → `npm run build` → installation de Chromium → `npm run test:e2e` → envoi de `dist/` vers GitHub Pages. Second workflow : IndexNow.
+- **Rôle** : hébergement du code (`teiki5320/optiled`, branche unique `main`) et chaîne de publication GitHub Actions : `npm ci` → `npm test` → `npm run build` → installation de Chromium → `npm run test:e2e` → envoi de `dist/` vers GitHub Pages. Second workflow : IndexNow (dernier passage réussi le 19 octobre 2026).
 - **Console** : https://github.com/teiki5320/optiled (onglet *Actions* pour le suivi des publications).
 - **Identifiants publics** : nom du dépôt `teiki5320/optiled`.
 - **Secrets** : aucun secret ni variable de dépôt. Le workflow n'utilise que les autorisations fournies par GitHub (`pages: write`, `id-token: write`).
@@ -61,7 +62,7 @@ Généré le 19 octobre 2026 par un scan du dépôt. Pour mettre à jour : relan
 
 ## Amazon Partenaires (affiliation)
 
-- **Rôle** : liens sponsorisés vers les lampes conseillées (`https://www.amazon.fr/dp/<ASIN>?tag=…`, `rel="sponsored"`), générés par `src/lampes.ts` ; page `lampes.html`, page `meilleures-lampes.html` et propositions dans le calculateur. Aucun prix, note ni avis n'est enregistré dans le dépôt (règles du programme, contrôlées par les tests).
+- **Rôle** : liens sponsorisés vers les lampes conseillées (`https://www.amazon.fr/dp/<ASIN>?tag=…`, `rel="sponsored"`), générés par `src/lampes.ts` ; page `lampes.html`, page `meilleures-lampes.html`, les neuf pages « Top 10 » (10 liens chacune, constaté le 20 octobre 2026) et propositions dans le calculateur. Aucun prix, note ni avis n'est enregistré dans le dépôt (règles du programme, contrôlées par les tests).
 - **Console** : https://partenaires.amazon.fr (site `kultiled.com` déclaré le 16 octobre 2026, à côté d'`optiled.fr`).
 - **Identifiants publics** : identifiant de suivi `kultiledfr-21` (constante `TAG_AMAZON` dans `src/lampes.ts`, à changer à un seul endroit), depuis le 18 octobre 2026 : nouveau compte Amazon Partenaires créé le 18 octobre 2026, l'ancien ayant été fermé par Amazon (l'ancien identifiant était `optiled-21`).
 - **Secrets** : identifiants du compte et informations de paiement, uniquement dans la console Amazon.

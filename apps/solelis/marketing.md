@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-> Mise à jour le 14 octobre 2026 (rubrique Conseils en ligne, Search Console déclaré, aucun compte TikTok ni YouTube rattaché à Solelis dans le Studio ; rémunération, points forts et mesures au format du Studio).
+> Mise à jour le 20 octobre 2026 (78 pages indexées sur 91 suivies, 21 articles Conseils publiés ; aucun compte TikTok ni YouTube rattaché à Solelis dans le Studio).
 > Aucun chiffre inventé : les valeurs non mesurées sont marquées comme telles.
 
 ## Rémunération par phases
@@ -23,8 +23,8 @@ Le dirigeant final ne paie jamais. Exclusions par design : pas de publicité dis
 
 | Canal | Détail | Statut |
 |---|---|---|
-| SEO organique | Métadonnées par page, sitemap (90 adresses), robots, JSON-LD (site, FAQ, articles), image OG dynamique ; pages longue traîne (17 courriers, 11 calculateurs, 4 annuaires, FAQ, glossaire) et rubrique Conseils (20 articles publiés, 10 programmés jusqu'au 9 novembre 2026, flux RSS) | ✅ base technique |
-| Search Console | solelis.com déclaré, sitemap envoyé le 12 octobre 2026 ; 28 pages indexées sur 69 suivies (onglet Indexation du Studio) | ✅ |
+| SEO organique | Métadonnées par page, sitemap (91 adresses), robots, JSON-LD (site, FAQ, articles), image OG dynamique ; pages longue traîne (17 courriers, 11 calculateurs, 4 annuaires, FAQ, glossaire) et rubrique Conseils (21 articles publiés, 9 programmés jusqu'au 9 novembre 2026, flux RSS) | ✅ base technique |
+| Search Console | solelis.com déclaré, sitemap envoyé le 12 octobre 2026 et renvoyé le 19 octobre ; 78 pages indexées sur 91 suivies (onglet Indexation du Studio) | ✅ |
 | Prescripteurs institutionnels | Référencement par CIP, greffes, CCI/CMA, URSSAF, APESA, 60 000 Rebonds — le canal au meilleur rendement | ⬜ |
 | Experts-comptables & avocats | Page `/pro` + kit prescripteur (PDF + email type) | ⬜ |
 | Partage in-app | « Envoyer cette fiche à un proche » (magic link ✅ existant) + partage natif sur les calculateurs | ⬜ |
@@ -40,7 +40,7 @@ Le dirigeant final ne paie jamais. Exclusions par design : pas de publicité dis
 - **Visiteurs et sources de trafic** : à instrumenter (Plausible prévu, inactif)
 - **Questionnaire mené jusqu'à la fiche** : à instrumenter
 - **Liens magiques délivrés** : à vérifier dans la console Resend
-- **Pages indexées par Google** : 28 sur 69 suivies (relevé du Studio, 12 octobre 2026)
+- **Pages indexées par Google** : 78 sur 91 suivies (relevé du Studio, 19 octobre 2026)
 - **Liens entrants de prescripteurs** : aucun connu
 
 ## Calendrier
@@ -56,5 +56,5 @@ Le dirigeant final ne paie jamais. Exclusions par design : pas de publicité dis
 ## Les 3 priorités
 
 - Vérifier en production le parcours complet : création d'une fiche, lien magique reçu (et pas en indésirables) depuis Resend, rappel du cron, avocats locaux — et confirmer que solelis@toakeur.com reçoit bien les messages, puisque c'est l'adresse de suppression des fiches (RGPD)
-- Faire indexer par Google les pages encore absentes : seules 28 pages sur 69 suivies y figurent, et les 20 articles Conseils, entrés dans le sitemap (90 adresses), ne sont pas encore suivis dans l'onglet Indexation du Studio
+- Faire indexer par Google les 13 pages encore absentes sur 91 suivies : 8 découvertes mais non indexées, 5 inconnues (surtout des outils et des courriers, plus deux articles Conseils)
 - Activer la mesure d'audience (Plausible : souscrire puis définir `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`) avant tout effort d'acquisition

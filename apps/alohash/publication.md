@@ -1,12 +1,12 @@
 # PUBLICATION — état de la mise en ligne
 
-> Mis à jour le 19 octobre 2026. Aucun secret ici.
+> Mis à jour le 20 octobre 2026. Aucun secret ici.
 
 ## En bref
 
-- **Production** : https://keurcook.com, ouvert au public, publié le 13 octobre 2026
+- **Production** : https://keurcook.com, ouvert au public, publié le 20 octobre 2026
 - **Domaine & SSL** : keurcook.com chez Cloudflare, HTTPS géré, www redirigé
-- **Visibilité** : Search Console, IndexNow, Pinterest ; sitemap de 201 adresses
+- **Visibilité** : Search Console, IndexNow, Pinterest ; sitemap de 260 adresses
 - **Monétisation** : affiliation Amazon (keurcookfr-21) et annonces AdSense
 - **Contact** : keurcook@toakeur.com
 
@@ -35,7 +35,7 @@
 
 | Version | En production ? | URL | Hébergeur |
 | --- | --- | --- | --- |
-| Web — Keur Cook (recettes, conseils, boutique) | **En ligne, ouvert au public** (maintenance désactivée) ; dernière publication réussie le 13 octobre 2026 ; annonces AdSense en ligne depuis le 12 octobre 2026 | https://keurcook.com (`www` redirigé) | Cloudflare Pages (projet `keurcook`) |
+| Web — Keur Cook (recettes, conseils, boutique) | **En ligne, ouvert au public** (maintenance désactivée) ; dernière publication réussie le 20 octobre 2026 ; annonces AdSense en ligne depuis le 12 octobre 2026 | https://keurcook.com (`www` redirigé) | Cloudflare Pages (projet `keurcook`) |
 
 Site 100 % statique (Next.js `output: "export"`, dossier `out/`), sans serveur ni base de données. Il est construit et publié par GitHub Actions (`.github/workflows/deploy.yml`, « Publier le site ») :
 
@@ -46,7 +46,7 @@ Site 100 % statique (Next.js `output: "export"`, dossier `out/`), sans serveur n
 
 Étapes : lint, types, tests, build, puis `wrangler pages deploy out --project-name=keurcook`. Sans les secrets GitHub `CLOUDFLARE_API_TOKEN` et `CLOUDFLARE_ACCOUNT_ID`, le workflow affiche un avertissement et ne publie rien.
 
-Contenu en ligne : 52 recettes (16 pays), 36 articles « Conseils » publiés et 31 programmés jusqu'au 28 décembre 2026, 91 produits en 8 gammes dont les boutons « Acheter · prix » mènent à Amazon.fr (tag `keurcookfr-21`, prix indicatifs relevés le 27 septembre 2026), et des annonces Google AdSense sur les recettes, les articles et les pages pays (`public/ads.txt` en ligne). Le site ne vend rien lui-même.
+Contenu en ligne : 58 recettes (16 pays), 37 articles « Conseils » publiés et 30 programmés jusqu'au 28 décembre 2026, 10 « Top 10 » de produits, 131 produits en 9 gammes dont les boutons « Acheter · prix » mènent à Amazon.fr (tag `keurcookfr-21`, prix indicatifs relevés le 27 septembre 2026), et des annonces Google AdSense sur les recettes, les articles et les pages pays (`public/ads.txt` en ligne). Le site ne vend rien lui-même.
 
 ### Maintenance
 
@@ -59,15 +59,15 @@ Pendant une maintenance : écran « On prépare la marmite », pages en `noindex
 - **Domaine** : `keurcook.com` chez Cloudflare, relié au projet Pages `keurcook` ; `www.keurcook.com` redirigé vers `keurcook.com` (301). Adresse technique : https://keurcook.pages.dev.
 - **SSL** : certificat HTTPS géré par Cloudflare ; en-têtes de sécurité (CSP, HSTS…) dans `public/_headers`, la CSP n'ouvrant que les adresses Google d'AdSense et du consentement, et celles de Cloudflare Web Analytics.
 - **E-mail** : `keurcook@toakeur.com` (Cloudflare Email Routing de toakeur.com), affichée sur le site ; l'ancienne `contact@keurcook.com` arrive au même endroit.
-- **Ancien domaine** : `alohash.fr` (IONOS) ne sert plus au site ; il expire le 16 octobre 2026, renouvellement à décider.
+- **Ancien domaine** : `alohash.fr` (IONOS) ne sert plus au site ; renouvelé automatiquement, il expire désormais le 16 octobre 2027.
 - **Redirections** : `public/_redirects` (`/cgv`, `/categorie/<gamme>` (une règle par gamme), anciennes pages `/panier`, `/commande`, `/admin`…).
 
 ## Visibilité
 
-- **Référencement** : sitemap en ligne (`/sitemap.xml`, 201 adresses : recettes, pays, produits, articles publiés, pages légales), robots.txt, métadonnées Open Graph et données JSON-LD (Recipe, Product). Le build de production utilise `NEXT_PUBLIC_SITE_URL=https://keurcook.com`.
+- **Référencement** : sitemap en ligne (`/sitemap.xml`, 260 adresses au 20 octobre 2026 : recettes, pays, produits, articles publiés, Top 10, pages légales), robots.txt, balise robots « max-image-preview:large », métadonnées Open Graph et données JSON-LD (Recipe, Article, BreadcrumbList, FAQPage, ItemList, WebSite et Organization ; pas de Product sur les fiches produit). Journal des retouches page par page : `docs/referencement.md` (premières retouches le 20 octobre 2026). Le build de production utilise `NEXT_PUBLIC_SITE_URL=https://keurcook.com`.
 - **Google Search Console** : propriété de domaine `keurcook.com` déclarée ; 189 pages indexées et 31 non indexées au relevé du 7 octobre 2026 (motifs jugés normaux ou temporaires). Une routine (`keurcook-demandes-indexation`) sert à demander l'indexation des nouvelles recettes.
-- **IndexNow** : sitemap signalé chaque lundi (`.github/workflows/indexnow.yml`) ; dernier envoi réussi le 12 octobre 2026.
-- **Pinterest** : site revendiqué sur le compte « Keur Cook » ; 40 recettes épinglées du 2 au 12 octobre 2026.
+- **IndexNow** : sitemap signalé chaque lundi (`.github/workflows/indexnow.yml`) ; dernier envoi réussi le 19 octobre 2026.
+- **Pinterest** : site revendiqué sur le compte « Keur Cook » ; 52 recettes épinglées du 2 au 14 octobre 2026 ; les six recettes de boissons du 19 octobre restent à épingler.
 - **Publicité** : Google AdSense en ligne depuis le 12 octobre 2026 ; approbation du site à vérifier dans la console.
 - **Analytics** : Cloudflare Web Analytics (sans cookie), balise constatée en ligne le 14 octobre 2026, chiffres à vérifier dans la console ; consentement aux cookies publicitaires recueilli par le message de Google, rouvert par le lien « Cookies » du pied de page.
 - **Newsletter** : aucune.

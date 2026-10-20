@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 19 octobre 2026. Un canal n'est coché que s'il est prouvé (compte branché et
+Mis à jour le 20 octobre 2026. Un canal n'est coché que s'il est prouvé (compte branché et
 publications réelles, ou routine qui publie).
 
 ## Positionnement
@@ -16,13 +16,13 @@ publications réelles, ou routine qui publie).
 
 - [fait] **Aujourd'hui** : affiliation Amazon Partenaires (tag `keurbookfr-21`) et publicité AdSense depuis le 12 octobre ; le site ne vend rien.
 - [en cours] **Validation AdSense** : Google examine le site avant d'y mettre des annonces ; état à vérifier dans la console.
-- **Liens Amazon directs** : remplacer les recherches par des fiches produit vérifiées (ASIN), qui convertissent mieux.
+- **Liens Amazon directs** : 91 livres (ceux des Top 10) mènent déjà à leur fiche Amazon ; étendre ces ASIN vérifiés aux autres, qui gardent une recherche.
 - **Partenariats** : mises en avant payées par des éditeurs ou libraires, une fois l'audience mesurée.
 
 ## Points forts
 
 - 📚 **Catalogue ciblé** : 675 livres et 122 BD d'auteurs d'Afrique subsaharienne et de la diaspora, introuvables ensemble ailleurs.
-- 🌍 **Entrée par auteurs et pays** : 92 fiches d'auteurs et 26 pages pays relient chaque livre à son contexte.
+- 🌍 **Entrée par auteurs, pays et Top 10** : 92 fiches d'auteurs, 26 pages pays et 11 Top 10 thématiques relient chaque livre à son contexte.
 - ✍️ **Textes maison** : résumés écrits par nous et articles Conseils trois fois par semaine, sans ISBN ni prix inventés.
 
 ## Canaux
@@ -30,7 +30,7 @@ publications réelles, ou routine qui publie).
 - ✅ Site en ligne sur `keurbook.com`.
 - ✅ Référencement naturel : sitemap envoyé à Google Search Console (propriété `keurbook.com`),
   IndexNow chaque lundi, articles Conseils publiés trois fois par semaine (lundi, mercredi,
-  vendredi). Au 16 octobre 2026 : 36 articles publiés, 25 en attente ; le rythme régulier va
+  vendredi). Au 20 octobre 2026 : 37 articles publiés, 24 programmés ; le rythme régulier va
   jusqu'au 7 décembre (11 articles ajoutés le 15 octobre), puis seuls des articles de saison sont programmés. La routine « Écrire les
   articles Conseils » repasse le 1er et le 15 de chaque mois.
 - ⬜ Pinterest : aucun compte Keurbook.
@@ -41,8 +41,9 @@ publications réelles, ou routine qui publie).
 
 ## Mesures
 
-- **Pages indexées par Google** : 663 sur 960 (Search Console, 19 octobre 2026)
-- **Pages pas encore indexées** : 297, dont 160 inconnues de Google et 137 détectées non explorées
+- **Pages indexées par Google** : 673 sur 971 (Search Console, 20 octobre 2026)
+- **Pages pas encore indexées** : 298, dont 159 inconnues de Google et 139 détectées non explorées
+- **Liens Amazon directs** : 91 livres et BD sur 797 (ASIN vérifiés le 19 octobre 2026)
 - **Articles Conseils** : 37 publiés, 24 programmés
 - **Visites** : à vérifier dans la console Cloudflare Web Analytics (mesure active depuis le 13 octobre 2026)
 - **Clics et revenus Amazon** : à vérifier dans la console
@@ -50,10 +51,10 @@ publications réelles, ou routine qui publie).
 
 ## Les 3 priorités
 
-- Faire indexer par Google les 297 pages qui ne le sont pas encore (BD, pages auteurs, livres,
+- Faire indexer par Google les 298 pages qui ne le sont pas encore (BD, pages auteurs, livres,
   pays et pages de liste) : renforcer les liens internes vers elles et suivre leur
   évolution dans l'onglet Indexation du Studio.
-- Remplacer les recherches Amazon par des liens directs vers des fiches produit vérifiées (ASIN),
-  en commençant par les livres les plus vus dans Cloudflare Web Analytics.
+- Étendre les liens Amazon directs (ASIN vérifiés) au-delà des 91 livres des Top 10, en commençant
+  par les livres les plus vus dans Cloudflare Web Analytics.
 - Ouvrir un premier canal social pour Keurbook — un compte Pinterest Keurbook pour les couvertures
   et les portraits d'auteurs, comme Keur Cook et Keur Déco — et le brancher au Planning du Studio.

@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 19 octobre 2026 d'après le dépôt et le site en ligne. Cette fiche, avec MARKETING.md et PUBLICATION.md, est désormais la source : le Studio la recopie.
+Mis à jour le 20 octobre 2026 d'après le dépôt et le site en ligne. Cette fiche, avec MARKETING.md et PUBLICATION.md, est désormais la source : le Studio la recopie.
 
 ## En bref
 
@@ -14,8 +14,8 @@ Mis à jour le 19 octobre 2026 d'après le dépôt et le site en ligne. Cette fi
 ## Parcours
 
 - 🌐 **Web** : 🐙 GitHub — main · pages.yml au vert [ok] → 📄 Hébergement web — GitHub Pages, HTTPS imposé [ok] → 🌍 Nom de domaine — keurdeco.com chez Cloudflare [ok] → 🔎 Google et Bing — indexation en cours [à faire]
-- 🛒 **Affiliation** : 📝 Articles — 21 en ligne, 16 programmés [ok] → 🛍️ Affiliation — Amazon Partenaires, tag keurdecofr-21 [ok] → 💶 Commissions — à vérifier dans la console [pas encore]
-- 📌 **Contenu** : 🖼️ Épingles — générées au build [ok] → 📥 Import CSV — lot jusqu'au 1er novembre [ok] → 🤖 API Pinterest — secrets posés, accès standard attendu [bloquant]
+- 🛒 **Affiliation** : 📝 Articles — 24 en ligne, 15 programmés [ok] → 🛍️ Affiliation — Amazon Partenaires, tag keurdecofr-21 [ok] → 💶 Commissions — à vérifier dans la console [pas encore]
+- 📌 **Contenu** : 🖼️ Épingles — générées au build [ok] → 📥 Import CSV — lot jusqu'au 18 novembre [ok] → 🤖 API Pinterest — 0 épingle retenue, jeton à renouveler [bloquant]
 - 📰 **Publicité** : 📄 Pages de lecture — emplacements In-Article [ok] → 📰 AdSense (publicité web) — validation à vérifier [à faire]
 
 ## Vue d'ensemble
@@ -23,12 +23,12 @@ Mis à jour le 19 octobre 2026 d'après le dépôt et le site en ligne. Cette fi
 - **Plateforme** : site web éditorial en français sur la décoration africaine — statique multipage, mobile d'abord, installable (manifeste + service worker), lisible sans JavaScript.
 - **Stack** : Vite + TypeScript (Node ≥ 22.18), aucun backend — articles et conseils en Markdown + YAML (`contenu/articles/`, `contenu/conseils/`), données en JSON (`src/data/`), polices Fraunces et Source Sans 3 hébergées avec le site, tests Vitest + test de bout en bout Chromium.
 - **Distribution** : GitHub Pages par le workflow `pages.yml` — à chaque push sur `main`, chaque lundi à 5 h UTC (publication des articles programmés) et à la demande ; adresse `https://www.keurdeco.com/`.
-- **Images** : images d'ambiance créées avec OpenArt pendant les séances de rédaction (pas d'appel depuis le site) ; les 37 articles portent `image_ia: true` et la mention correspondante. Les vignettes des produits sont découpées dans ces images (`npm run vignettes`), jamais de photo Amazon.
-- **Particularités** : trois types d'articles (ambiance avec points cliquables vers les produits, top classé, guide) publiés à leur date et rangés sans mélange ; onglet Conseils (une question par page, données structurées FAQ) ; glossaire des matières ; nuancier animé ; animations coupées par « Réduire les animations » ; rapport de build (articles à venir, produits à vérifier) ; annonces Google AdSense sur les pages de lecture depuis le 12 octobre 2026.
+- **Images** : images d'ambiance créées avec OpenArt pendant les séances de rédaction (pas d'appel depuis le site) ; les 39 articles portent `image_ia: true` et la mention correspondante. Les vignettes des produits sont découpées dans ces images (`npm run vignettes`), jamais de photo Amazon.
+- **Particularités** : trois types d'articles (ambiance avec points cliquables vers les produits, top classé, guide) publiés à leur date et rangés sans mélange ; page « Top 10 » à onglets depuis le 19 octobre 2026 (10 sujets, une page par sujet sous `/top-10/<sujet>`, `build/top10.ts`, produits classés selon la note moyenne relevée sur Amazon.fr, note jamais affichée) ; onglet Conseils (une question par page, données structurées FAQ) ; glossaire des matières ; nuancier animé ; animations coupées par « Réduire les animations » ; rapport de build (articles à venir, produits à vérifier) ; annonces Google AdSense sur les pages de lecture depuis le 12 octobre 2026.
 
 ## GitHub
 
-- **Rôle** : code et deux workflows. `pages.yml` : tests, build (épingles comprises), test de bout en bout, déploiement, puis, hors push, signalement des pages à Bing par IndexNow (`scripts/indexnow.mjs`). Le test de bout en bout refuse tout script externe sauf ceux de `pagead2.googlesyndication.com` (AdSense). `pinterest.yml` : chaque jour à 7 h 17 UTC, publication des épingles par l'API Pinterest — sans les secrets, il tourne à blanc (constaté sur les exécutions du 5 au 12 octobre 2026 : « Mode à blanc »).
+- **Rôle** : code et deux workflows. `pages.yml` : tests, build (épingles comprises), test de bout en bout, déploiement, puis, hors push, signalement des pages à Bing par IndexNow (`scripts/indexnow.mjs`). Le test de bout en bout refuse tout script externe sauf ceux de `pagead2.googlesyndication.com` (AdSense). `pinterest.yml` : chaque jour à 7 h 17 UTC, publication des épingles par l'API Pinterest — il tournait à blanc sans les secrets (exécutions du 5 au 12 octobre 2026) ; depuis qu'ils sont posés, il appelle l'API réelle mais l'exécution du 19 octobre a retenu 0 épingle sur 213 : la variable `PINTEREST_MAX`, non définie, arrive vide et le script la lit comme un maximum de 0 au lieu des 5 de `config/` (défaut à signaler dans le code). Pinterest a aussi renvoyé un nouveau refresh token : le ticket GitHub n° 1 (ouvert le 19 octobre) demande de mettre à jour le secret.
 - **Console** : https://github.com/teiki5320/Keurdeco
 - **Identifiants publics** : compte `teiki5320`, dépôt public, branche `main` (pas d'autre branche).
 - **Secrets** : secrets Actions attendus `PINTEREST_APP_ID`, `PINTEREST_APP_SECRET`, `PINTEREST_REFRESH_TOKEN` (définis le 19 octobre 2026). Variables sans secret : `SITE_URL`, `CLOUDFLARE_WEB_ANALYTICS`, `PINTEREST_VERIFY`, `GOOGLE_VERIFY`, et facultatives `PINTEREST_SANDBOX`, `PINTEREST_MAX`.
@@ -61,7 +61,7 @@ Mis à jour le 19 octobre 2026 d'après le dépôt et le site en ligne. Cette fi
 
 ## Affiliation (Amazon Partenaires)
 
-- **Rôle** : rémunération du site — liens `https://www.amazon.fr/dp/<ASIN>?tag=keurdecofr-21`, tag défini dans `src/amazon.ts` et nulle part ailleurs. 163 produits relevés à la main sur Amazon.fr (`src/data/produits.json`), sans API : jamais d'ASIN, de note, d'avis ni de prix inventés, aucune photo Amazon, mention Partenaires près des liens, en pied de page et dans les mentions légales. `npm run verifier-produits` contrôle la disponibilité ; après les passages des 13, 14 et 15 octobre 2026 et le remplacement de `bannette-courrier-jonc` le 16 octobre, 158 produits actifs et 5 indisponibles (`jarre-terre-cuite-toscane`, `plaid-tricot-chenille`, `lampadaire-rotin-boheme`, `sphere-terre-cuite-etoiles` et `suspension-paille-parasol`, retirés de l'affichage, à remplacer).
+- **Rôle** : rémunération du site — liens `https://www.amazon.fr/dp/<ASIN>?tag=keurdecofr-21`, tag défini dans `src/amazon.ts` et nulle part ailleurs. 235 produits relevés à la main sur Amazon.fr (`src/data/produits.json`), sans API : jamais d'ASIN, de note, d'avis ni de prix inventés, aucune photo Amazon, mention Partenaires près des liens, en pied de page et dans les mentions légales. `npm run verifier-produits` contrôle la disponibilité ; au 19 octobre 2026, 229 produits actifs et 6 indisponibles (`jarre-terre-cuite-toscane`, `plaid-tricot-chenille`, `lampadaire-rotin-boheme`, `sphere-terre-cuite-etoiles`, `suspension-paille-parasol` et `paniers-muraux-jacinthe-lot-7`, retirés de l'affichage ; le dernier est déjà remplacé par un lot de 10).
 - **Console** : https://partenaires.amazon.fr (compte Amazon Partenaires de Jean ; keurdeco.com fait partie des sites déclarés).
 - **Identifiants publics** : tag `keurdecofr-21`.
 - **Secrets** : aucun dans le dépôt.
@@ -69,7 +69,7 @@ Mis à jour le 19 octobre 2026 d'après le dépôt et le site en ligne. Cette fi
 
 ## Réseaux sociaux (Pinterest)
 
-- **Rôle** : canal de trafic principal. Le build génère les épingles 1000 × 1500 (une par titre d'article, 4 gabarits, manifeste `epingles.json`, 174 épingles au 11 octobre). Tant que l'accès API n'est pas accordé, elles s'importent à la main par lots de 30 jours : `npm run pinterest:lot` prépare le CSV, `npm run pinterest:lot -- --confirmer` les note dans `data/pinterest-etat.json`. Rich Pins par Open Graph et données structurées, bouton « Épingler » sans script externe, balise `p:domain_verify` en ligne.
+- **Rôle** : canal de trafic principal. Le build génère les épingles 1000 × 1500 (une par titre d'article, 4 gabarits, manifeste `epingles.json`, 213 épingles au manifeste le 19 octobre). Tant que l'accès API n'est pas accordé, elles s'importent à la main par lots de 30 jours : `npm run pinterest:lot` prépare le CSV, `npm run pinterest:lot -- --confirmer` les note dans `data/pinterest-etat.json`. Rich Pins par Open Graph et données structurées, bouton « Épingler » sans script externe, balise `p:domain_verify` en ligne.
 - **Console** : https://www.pinterest.fr (compte professionnel « Keur Déco », keurdeco@toakeur.com) ; application sur developers.pinterest.com ; parcours OAuth local par `npm run pinterest:auth` (voir `docs/pinterest.md`).
 - **Identifiants publics** : balise `p:domain_verify` (variable `PINTEREST_VERIFY`) ; tableaux dans `config/tableaux-pinterest.json` (`board_id` des 20 tableaux renseignés le 16 octobre 2026).
 - **Secrets** : voir GitHub (secrets Actions Pinterest).
@@ -77,7 +77,7 @@ Mis à jour le 19 octobre 2026 d'après le dépôt et le site en ligne. Cette fi
 
 ## AdSense (publicité web)
 
-- **Rôle** : second revenu du site, mis en place le 12 octobre 2026. Le code AdSense est ajouté par le marqueur commun `<!--#head-->` sur les pages qui peuvent porter une annonce, Confidentialité comprise (son lien « Gérer mes cookies » rouvre la fenêtre de Google) ; depuis le 13 octobre 2026, il n'est plus chargé sur l'accueil, les Tops, À propos, Mentions légales ni la 404 (`pageAvecAdsense` dans `build/site.ts`) ; `public/ads.txt` est servi à la racine (réponse 200 le 13 octobre 2026). Un bloc In-Article « Keur Déco - dans le texte » est placé au build par `build/annonces.ts` : 2 au plus par article, 1 pour un conseil, une fiche du glossaire ou une page de pièce, matière, occasion ou guides ; devant un intertitre, jamais contre un encadré Amazon, signalé « Annonce ». Aucune annonce sur l'accueil, les Tops, À propos, Confidentialité, Mentions légales ni la 404 ; un emplacement non rempli est masqué.
+- **Rôle** : second revenu du site, mis en place le 12 octobre 2026. Le code AdSense est ajouté par le marqueur commun `<!--#head-->` sur les pages qui peuvent porter une annonce, Confidentialité comprise (son lien « Gérer mes cookies » rouvre la fenêtre de Google) ; depuis le 13 octobre 2026, il n'est plus chargé sur l'accueil, les Tops (pages Top 10 comprises), À propos, Mentions légales ni la 404 (`pageAvecAdsense` dans `build/site.ts`) ; `public/ads.txt` est servi à la racine (réponse 200 le 13 octobre 2026). Un bloc In-Article « Keur Déco - dans le texte » est placé au build par `build/annonces.ts` : 2 au plus par article, 1 pour un conseil, une fiche du glossaire ou une page de pièce, matière, occasion ou guides ; devant un intertitre, jamais contre un encadré Amazon, signalé « Annonce ». Aucune annonce sur l'accueil, les Tops, À propos, Confidentialité, Mentions légales ni la 404 ; un emplacement non rempli est masqué.
 - **Consentement** : fenêtre de choix de Google (Autoriser, Refuser, Gérer les options) ; cookies publicitaires seulement avec accord ; lien « Gérer mes cookies » en bas de chaque page. Confidentialité et mentions légales le décrivent.
 - **Console** : https://adsense.google.com (compte Google de Jean) — validation du site et revenus à vérifier dans la console.
 - **Identifiants publics** : identifiant éditeur et identifiant du bloc d'annonces, définis une seule fois dans `build/config.ts` (publics, l'éditeur figure aussi dans `ads.txt`).

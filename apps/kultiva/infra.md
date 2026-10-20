@@ -20,7 +20,7 @@ Mis à jour le 19 octobre 2026 d'après le dépôt, la base Supabase et le site 
 - 🤖 **Android** : 🐙 GitHub — CI construit l'App Bundle [ok] → 🔑 Keystore Android — clé locale, valable 2053 [ok] → 🛍️ Google Play Console — fiche à créer [à faire] → 📱 Google Play — pas publiée [pas encore]
 - 🗄️ **Comptes** : 📱 App — mode invité sans compte [ok] → 🗄️ Supabase — projet en pause [bloquant] → 🔐 Connexion utilisateurs — clés Google à recréer [à faire]
 - 🌐 **Web** : 🐙 GitHub — dossier landing/ [ok] → 📄 GitHub Pages — publié par site.yml [ok] → 🌐 Nom de domaine — kultiva.toakeur.com, HTTPS [ok] → ⬇️ Boutons « Télécharger » — encore sans lien [pas encore]
-- 🛒 **Affiliation** : 📚 Catalogue — 159 liens tag kultiva-21 [ok] → 🛒 Amazon Partenaires (affiliation) — compte du tag fermé le 18/10 [bloquant] → 📱 Utilisateurs — app pas publiée [pas encore]
+- 🛒 **Affiliation** : 📚 Catalogue — liens Amazon retirés le 20/10 [aucun] → 🛒 Amazon Partenaires (affiliation) — ancien compte fermé le 18/10, pas d'identifiant pour l'app [à faire si on les remet] → 📱 Utilisateurs — app pas publiée [pas encore]
 
 ## Vue d'ensemble
 
@@ -151,9 +151,9 @@ Mis à jour le 19 octobre 2026 d'après le dépôt, la base Supabase et le site 
 
 ### 15. Affiliation (Amazon Partenaires)
 
-- **Rôle** : liens « graines » sur les fiches légumes, tag `kultiva-21` (`lib/data/vegetables_base.dart`), mention « Lien partenaire » affichée. Marché France uniquement (masqué en Afrique de l'Ouest, remplacé par les conseils d'achat au marché). ⚠️ Le code utilise toujours `kultiva-21`, mais le compte Amazon Partenaires qui portait ce tag a été fermé par Amazon le 18 octobre 2026 ; les sites ont reçu des identifiants d'un nouveau compte, pas encore l'app. Il faudra créer un identifiant dans le nouveau compte et le mettre dans `lib/data/vegetables_base.dart` avant toute publication. Une routine quotidienne vérifie que les produits cités restent achetables.
+- **Rôle** : il n'y a plus de lien Amazon dans l'app. Les 159 liens « Acheter » du catalogue (tag `kultiva-21`, rattaché au compte Amazon Partenaires fermé par Amazon le 18 octobre 2026) ont été retirés le 20 octobre 2026, à la demande de Jean ; les boutons « Acheter » ne s'affichent donc plus (ils n'apparaissent que si `amazonUrl` est renseigné). Pour les remettre : créer un identifiant pour l'app dans le nouveau compte, puis renseigner `amazonUrl` dans `lib/data/vegetables_base.dart`.
 - **Console** : <https://partenaires.amazon.fr> (nouveau compte depuis le 18 octobre 2026)
-- **Identifiants publics** : tag `kultiva-21` dans le code, rattaché au compte fermé.
+- **Identifiants publics** : aucun tag Amazon dans le code depuis le 20 octobre 2026.
 - **Secrets** : identifiants du compte → gestionnaire de mots de passe.
 - **Coût** : gratuit (rémunérateur). Implique le statut « trader » (DSA) pour la distribution UE — décidé le 24 août 2026.
 

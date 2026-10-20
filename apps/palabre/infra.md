@@ -35,7 +35,7 @@ Mis à jour le 13 octobre 2026 d'après le dépôt et la page en ligne. Pour met
 - **Rôle** : dépôt du code et de tout le contenu, intégration continue, et publication de la page de confidentialité (GitHub Pages, voir plus bas). C'est la source unique — Xcode Cloud clone depuis ici.
 - **Console** : https://github.com/teiki5320/palabre
 - **Identifiants publics** : propriétaire `teiki5320`, dépôt `palabre` (public), branche par défaut `main`. Un tag historique, `palabre-final`, marque l'application précédente qui occupait ce dépôt.
-- **Secrets** : aucun secret n'est requis par le workflow. `.github/workflows/ci.yml` n'utilise ni `secrets.*` ni variable d'environnement chiffrée — il ne fait qu'analyser et tester (dernier passage vert le 13 octobre 2026).
+- **Secrets** : aucun secret n'est requis par le workflow. `.github/workflows/ci.yml` n'utilise ni `secrets.*` ni variable d'environnement chiffrée — il ne fait qu'analyser et tester (dernier passage vert le 14 octobre 2026).
 - **Coût** : GitHub Actions sur `ubuntu-latest`, dans le quota gratuit des dépôts publics.
 
 ### 2. Apple Developer Program
