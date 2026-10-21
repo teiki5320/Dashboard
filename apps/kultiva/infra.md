@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 19 octobre 2026 d'après le dépôt, la base Supabase et le site en ligne. Pour mettre à jour : relancer ce même prompt.
+Mis à jour le 21 octobre 2026 d'après le dépôt, la base Supabase et le site en ligne. Pour mettre à jour : relancer ce même prompt.
 
 > Aucun secret, clé ni jeton dans ce fichier — uniquement des références
 > (nom de variable, endroit où le secret vit, lien vers la console).
@@ -20,23 +20,23 @@ Mis à jour le 19 octobre 2026 d'après le dépôt, la base Supabase et le site 
 - 🤖 **Android** : 🐙 GitHub — CI construit l'App Bundle [ok] → 🔑 Keystore Android — clé locale, valable 2053 [ok] → 🛍️ Google Play Console — fiche à créer [à faire] → 📱 Google Play — pas publiée [pas encore]
 - 🗄️ **Comptes** : 📱 App — mode invité sans compte [ok] → 🗄️ Supabase — projet en pause [bloquant] → 🔐 Connexion utilisateurs — clés Google à recréer [à faire]
 - 🌐 **Web** : 🐙 GitHub — dossier landing/ [ok] → 📄 GitHub Pages — publié par site.yml [ok] → 🌐 Nom de domaine — kultiva.toakeur.com, HTTPS [ok] → ⬇️ Boutons « Télécharger » — encore sans lien [pas encore]
-- 🛒 **Affiliation** : 📚 Catalogue — liens Amazon retirés le 20/10 [aucun] → 🛒 Amazon Partenaires (affiliation) — ancien compte fermé le 18/10, pas d'identifiant pour l'app [à faire si on les remet] → 📱 Utilisateurs — app pas publiée [pas encore]
 
 ## Vue d'ensemble
 
 - **Plateforme** : iOS + Android (Flutter ≥ 3.38), portrait, iPhone + iPad — app `com.toa.kultiva`, v1.0.0+5
 - **Stack** : Flutter/Dart Material 3, local-first (SharedPreferences + services singletons, `ValueNotifier`, sans framework d'état)
-- **Backend** : Supabase (auth, Postgres RLS, Storage, 2 edge functions) — facultatif, l'app fonctionne hors ligne. ⚠️ **Le projet est en pause** (vérifié le 13 octobre 2026) : tant qu'il n'est pas rallumé, ni connexion ni synchronisation ; le mode invité, lui, marche.
-- **Distribution** : App Store via Xcode Cloud + Play Store (AAB signé) — jamais soumise, textes des fiches prêts (`docs/store-listings.md`)
+- **Backend** : Supabase (auth, Postgres RLS, Storage, 2 edge functions) — facultatif, l'app fonctionne hors ligne. ⚠️ **Le projet est en pause** (état inactif, vérifié le 20 octobre 2026) : tant qu'il n'est pas rallumé, ni connexion ni synchronisation ; le mode invité, lui, marche.
+- **Distribution** : App Store via Xcode Cloud + Play Store (AAB signé) — jamais soumise (un script local `update-testflight.command` construit aussi l'IPA à envoyer par Transporter), textes des fiches prêts (`docs/store-listings.md`)
 - **Site** : <https://kultiva.toakeur.com> (présentation + confidentialité), en ligne depuis le 7 octobre 2026
 - **Marchés** : bi-marché France + 8 pays francophones d'Afrique de l'Ouest, détection du pays et de la sous-zone climatique
 - **Particularités** : météo Open-Meteo sans clé d'API, notifications locales uniquement, tutos et contenu 100 % hors ligne
+- **Monétisation** : aucune. Les liens Amazon du catalogue ont été retirés le 20 octobre 2026 ; le bouton « Acheter » reste dans le code (`amazonUrl`) mais ne s'affiche plus, faute de lien. La mention « Partenaire Amazon » a été ôtée de `landing/index.html` le 21 octobre 2026.
 
 ## Services externes
 
 ### 1. GitHub
 
-- **Rôle** : dépôt du code + CI GitHub Actions — `ci.yml` (analyze + tests + builds Android AAB/APK), `sync-catalog.yml` (export du catalogue vers Supabase pour le projet sœur Kultivaprix) et `site.yml` (publication du dossier `landing/`, voir plus bas).
+- **Rôle** : dépôt du code + CI GitHub Actions — `ci.yml` (analyze + tests + builds Android AAB/APK), `sync-catalog.yml` (export du catalogue vers Supabase pour le projet sœur Kultivaprix, lancé quand le catalogue change — en échec le 20 octobre 2026, l'adresse Supabase en pause ne répondant pas) et `site.yml` (publication du dossier `landing/`, voir plus bas).
 - **Console** : <https://github.com/teiki5320/Kultiva> (branche par défaut : `main`)
 - **Identifiants publics** : —
 - **Secrets** : `KULTIVA_SEED_SECRET` dans repo → Settings → Secrets → Actions (même valeur configurée côté edge function `seed-species`).
@@ -45,7 +45,7 @@ Mis à jour le 19 octobre 2026 d'après le dépôt, la base Supabase et le site 
 ### 2. Supabase
 
 - **Rôle** : backend — auth (e-mail + Google + Apple), Postgres sous RLS (`profiles`, `plantations`, `unlocked_badges`, `preferences`, `challenge_posts`, `post_likes`, `post_reports`, `user_xp`, `news_items`, `species`), Storage (`plant-photos`, `news-images`), edge functions `seed-species` et `delete-account` (suppression de compte in-app). Migrations `supabase/migrations/001 → 016`, appliquées manuellement via le SQL Editor.
-- **État** : ⏸️ **en pause, pas supprimé.** Le 13 octobre 2026, le compte Supabase liste toujours le projet « Kultiva » (`vkiwkeknfzwdvufcqbrp`, région `eu-west-1`) avec l'état *inactif* ; il se rallume depuis la console. Pendant la pause, son adresse ne résout plus du tout — c'est ce qui avait fait croire, le 3 octobre, à une suppression. Conséquence : sans rallumage, pas de connexion, pas de synchronisation, pas de suppression de compte in-app. Le mode invité et tout le contenu hors ligne fonctionnent.
+- **État** : ⏸️ **en pause, pas supprimé.** Le 20 octobre 2026, le compte Supabase liste toujours le projet « Kultiva » (`vkiwkeknfzwdvufcqbrp`, région `eu-west-1`) avec l'état *inactif* ; son adresse ne résout toujours pas le 21 octobre ; il se rallume depuis la console. Pendant la pause, son adresse ne résout plus du tout — c'est ce qui avait fait croire, le 3 octobre, à une suppression. Conséquence : sans rallumage, pas de connexion, pas de synchronisation, pas de suppression de compte in-app. Le mode invité et tout le contenu hors ligne fonctionnent.
 - **Console** : <https://supabase.com/dashboard/project/vkiwkeknfzwdvufcqbrp>
 - **Identifiants publics** : adresse du projet `vkiwkeknfzwdvufcqbrp` (elle ne répond plus tant que le projet est en pause) + `anonKey`, commitées dans `lib/config/supabase_config.dart` — publiques par design, la sécurité repose sur les policies RLS.
 - **Secrets** : clé `service_role` — dashboard uniquement (Settings → API), jamais dans le code ni le dépôt.
@@ -111,7 +111,7 @@ Mis à jour le 19 octobre 2026 d'après le dépôt, la base Supabase et le site 
 ### 10. Hébergement web (GitHub Pages / Cloudflare Pages)
 
 - **Rôle** : site de présentation `landing/` (`index.html` + `privacy.html` + images WebP), publié sur **GitHub Pages** par le workflow `.github/workflows/site.yml` à chaque modification de `landing/`. Fournit l'URL d'assistance, l'URL marketing et l'URL de confidentialité exigées par les stores.
-- **État** : en ligne — <https://kultiva.toakeur.com> et `/privacy.html` répondent (vérifié le 13 octobre 2026). Les boutons « Télécharger » pointent encore vers `#` (app non publiée).
+- **État** : en ligne — <https://kultiva.toakeur.com> et `/privacy.html` répondent (vérifié le 21 octobre 2026). Les boutons « Télécharger » pointent encore vers `#` (app non publiée).
 - **Console** : <https://github.com/teiki5320/Kultiva/settings/pages>
 - **Identifiants publics** : adresse du site.
 - **Secrets** : aucun (jeton GitHub automatique du workflow).
@@ -149,16 +149,8 @@ Mis à jour le 19 octobre 2026 d'après le dépôt, la base Supabase et le site 
 - **Secrets** : aucun.
 - **Coût** : gratuit.
 
-### 15. Affiliation (Amazon Partenaires)
-
-- **Rôle** : il n'y a plus de lien Amazon dans l'app. Les 159 liens « Acheter » du catalogue (tag `kultiva-21`, rattaché au compte Amazon Partenaires fermé par Amazon le 18 octobre 2026) ont été retirés le 20 octobre 2026, à la demande de Jean ; les boutons « Acheter » ne s'affichent donc plus (ils n'apparaissent que si `amazonUrl` est renseigné). Pour les remettre : créer un identifiant pour l'app dans le nouveau compte, puis renseigner `amazonUrl` dans `lib/data/vegetables_base.dart`.
-- **Console** : <https://partenaires.amazon.fr> (nouveau compte depuis le 18 octobre 2026)
-- **Identifiants publics** : aucun tag Amazon dans le code depuis le 20 octobre 2026.
-- **Secrets** : identifiants du compte → gestionnaire de mots de passe.
-- **Coût** : gratuit (rémunérateur). Implique le statut « trader » (DSA) pour la distribution UE — décidé le 24 août 2026.
-
 ## Notes
 
-- Valeurs **publiques par design** (leur présence dans le code est normale) : URL + `anonKey` Supabase, client IDs Google OAuth, DSN Sentry, tag Amazon.
+- Valeurs **publiques par design** (leur présence dans le code est normale) : URL + `anonKey` Supabase, client IDs Google OAuth, DSN Sentry. Plus aucun tag Amazon dans le code depuis le 20 octobre 2026.
 - E-mail de support public : `kultiva@toakeur.com` (site, politique de confidentialité en ligne et dans l'app).
 - Reprise sur machine neuve : cloner le dépôt, Flutter ≥ 3.38, `flutter pub get` puis `flutter run` — aucun secret requis côté client ; release Android = keystore + `key.properties` depuis le coffre-fort ; release iOS = accès au compte Apple.

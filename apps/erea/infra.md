@@ -1,11 +1,11 @@
 # INFRA — fiche technique
 
 > Généré le 20 août 2026 par un scan du dépôt, mis à jour le
-> 20 octobre 2026. Pour mettre à jour : relancer ce même prompt.
+> 21 octobre 2026. Pour mettre à jour : relancer ce même prompt.
 
 ## En bref
 
-- **Plateforme** : iOS 15+ en ligne · Android en examen · site vitrine
+- **Plateforme** : iOS 15+ et Android en ligne · site vitrine
 - **Stack** : Flutter (Dart ≥ 3.6), version `1.0.5+6` dans le code
 - **Backend** : aucun — tout reste sur l'appareil, jeu hors ligne
 - **Distribution** : Xcode Cloud vers l'App Store · App Bundle signé en local
@@ -15,13 +15,13 @@
 ## Parcours
 
 - 🍎 **iOS** : 🐙 GitHub — main, 1.0.5 dans le code [ok] → ☁️ Xcode Cloud — build à chaque poussée sur main [ok] → 🛍️ App Store Connect — 1.0.4 (build 182) approuvée le 15 octobre [ok] → 📱 App Store — 1.0.4 en ligne depuis le 15 octobre [ok]
-- 🤖 **Android** : 🐙 GitHub — main, 1.0.5 dans le code [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — production accordée, 1.0.4 en examen [en cours] → 🛒 Google Play — pas en production [pas encore]
+- 🤖 **Android** : 🐙 GitHub — main, 1.0.5 dans le code [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — production accordée le 17 octobre [ok] → 🛒 Google Play — 1.0.4 en ligne depuis le 20 octobre [ok]
 - 🌐 **Web** : 🐙 GitHub — racine de main, sans CNAME [ok] → 📄 Hébergement web (GitHub Pages / Cloudflare Pages) — GitHub Pages [ok] → 🏷️ Nom de domaine — erea.toakeur.com via Cloudflare [ok] → 🌐 Site — vitrine, jeu, support, confidentialité [ok]
 - 🎬 **Contenu** : 🎬 Studio — neuf pubs vidéo produites le 5 octobre [ok] → 🗓️ Planning — aucune publication programmée [à faire] → 📣 Réseaux sociaux & influenceurs — YouTube et TikTok branchés, rien publié [pas encore]
 
 ## Vue d'ensemble
 
-- **Plateforme** : iOS 15+ (1.0.4 en ligne sur l'App Store depuis le 15 octobre 2026) · Android : production accordée le 17 octobre 2026, release 1.0.4 en examen · site vitrine `erea.toakeur.com`
+- **Plateforme** : iOS 15+ (1.0.4 en ligne sur l'App Store depuis le 15 octobre 2026) · Android : 1.0.4 en ligne sur Google Play depuis le 20 octobre 2026 · site vitrine `erea.toakeur.com`
 - **Stack** : Flutter (Dart ≥ 3.6), version `1.0.5+6` dans le code, 167 tests, aucun serveur applicatif
 - **Backend** : aucun — tout l'état du joueur vit sur l'appareil (`shared_preferences`)
 - **Distribution** : App Store via Xcode Cloud · Play Store via App Bundle signé localement
@@ -310,17 +310,23 @@ passe par le compte Google (+ double facteur).
 
 | | |
 |---|---|
-| Rôle | Distribution Android — production accordée, première release en examen |
+| Rôle | Distribution Android — 1.0.4 en production depuis le 20 octobre 2026 |
 | Console | <https://play.google.com/console> |
 | Compte propriétaire | Compte développeur **personnel**, créé le 20 août 2026, sur le compte Google de gestion |
 | Coût | 25 $ une seule fois |
 
 **État réel :**
 - Application ID `com.teiki.erea`, identique à iOS (`android/app/build.gradle.kts`).
-- Test fermé « Alpha » : release `4 (1.0.3)` servie aux testeurs depuis le 16 septembre 2026 ; release `5 (1.0.4)` en examen depuis le 14 octobre. Les **douze testeurs pendant quatorze jours** exigés d'un compte personnel ont été tenus du 8 au 22 septembre (service Testers Community, §14).
-- **Accès à la production demandé le 14 octobre 2026 à 18 h 39, accordé le 17 octobre** ; la release de production `5 (1.0.4)`, promue depuis la piste Alpha, est en examen depuis le 17 octobre vers 8 h 25. D'ici l'approbation, la fiche publique `play.google.com/store/apps/details?id=com.teiki.erea` répond 404.
+- Test fermé « Alpha » : release `4 (1.0.3)` servie aux testeurs à partir du 16 septembre 2026, puis release `5 (1.0.4)` envoyée le 14 octobre. Les **douze testeurs pendant quatorze jours** exigés d'un compte personnel ont été tenus du 8 au 22 septembre (voir « Testeurs » plus bas).
+- **Accès à la production demandé le 14 octobre 2026 à 18 h 39, accordé le 17 octobre** ; la release de production `5 (1.0.4)`, promue depuis la piste Alpha et envoyée le 17 octobre vers 8 h 25, est **en ligne depuis le 20 octobre 2026 à 16 h 07**. La fiche publique `play.google.com/store/apps/details?id=com.teiki.erea` répond (vérifié le 21 octobre 2026).
 - Achat intégré actif (voir « StoreKit / Play Billing »). Classements Play Games non configurés (voir « Game Center / Play Games »).
 - Appareil physique de vérification : un Pixel 8a, utilisé pour les tests du 16 septembre.
+
+**Testeurs** : le service payant Testers Community (plan Starter,
+15 testeurs, 14 € une fois, souscrit le 8 septembre 2026, groupe Google
+`testers-community@googlegroups.com` ajouté au test fermé) a fourni les
+douze testeurs. Test tenu du 8 au 22 septembre 2026 ; plus rien n'en
+dépend. Le rapport du 15 septembre est dans `docs/erea_feedback.pdf`.
 
 La marche à suivre complète est dans `docs/FICHE_PLAY_STORE.md`.
 
@@ -360,7 +366,7 @@ uniquement.
 Proposée après un PERFECT, un record ou trois défis d'affilée, une seule
 fois, jamais au lancement ; le système décide de l'affichage. Le même
 fichier fournit le lien de boutique ajouté aux grilles partagées : App
-Store sur iOS, Play Store sur Android depuis la 1.0.4. Au 16 octobre
+Store sur iOS, Play Store sur Android depuis la 1.0.4. Au 21 octobre
 2026, l'App Store compte 0 note.
 
 **Où vivent les secrets :** aucun.
@@ -380,21 +386,6 @@ jeu web (`jeu.html`), `support.html` et `confidentialite.html` — pas
 seulement le prototype. L'app Flutter n'en dépend pas : les mêmes
 polices sont embarquées dans `erea_flutter/assets/fonts/`, licence
 SIL OFL incluse, justement pour que l'app fonctionne hors ligne.
-
----
-
-### 14. Testers Community (test fermé Android)
-
-| | |
-|---|---|
-| Rôle | Fournir les douze testeurs pendant quatorze jours exigés d'un compte Play personnel |
-| Compte | souscrit le 8 septembre 2026, plan Starter, 15 testeurs, groupe Google `testers-community@googlegroups.com` ajouté au test fermé |
-| Coût | 14 €, une fois |
-
-Test tenu du 8 au 22 septembre 2026. Le rapport du 15 septembre est dans
-`docs/erea_feedback.pdf`.
-
-**Où vivent les secrets :** aucun dans le dépôt.
 
 ---
 

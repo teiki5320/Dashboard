@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 20 octobre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
+Mis à jour le 21 octobre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
 
 ## En bref
 
@@ -14,13 +14,13 @@ Mis à jour le 20 octobre 2026 par un scan du dépôt. Pour mettre à jour : rel
 ## Parcours
 
 - 🌐 **Web** : 🐙 GitHub — main · publication au vert [ok] → ☁️ Hébergement web — Cloudflare Pages, projet keurcook [ok] → 🔗 Nom de domaine — keurcook.com, SSL Cloudflare [ok] → 👥 Visiteurs — site ouvert au public [ok]
-- 📝 **Contenu** : 🐙 GitHub — 30 articles programmés [ok] → ⏰ GitHub Actions — publication lun., mer., ven. [ok] → 🌐 keurcook.com — 37 articles en ligne [ok] → ✍️ Réserve — vide le 28 décembre 2026 [à faire]
+- 📝 **Contenu** : 🐙 GitHub — 29 articles programmés [ok] → ⏰ GitHub Actions — publication lun., mer., ven. [ok] → 🌐 keurcook.com — 38 articles en ligne [ok] → ✍️ Réserve — vide le 28 décembre 2026 [à faire]
 - 🛒 **Affiliation** : 🌐 keurcook.com — boutons « Acheter · prix » [ok] → 🤝 Affiliation — Amazon Partenaires, tag keurcookfr-21 [ok] → 📦 Amazon.fr — Amazon encaisse et livre [ok]
-- 📢 **Publicité** : 🌐 keurcook.com — cinq emplacements « Publicité » [ok] → 💰 AdSense (publicité web) — approbation à vérifier [à faire]
+- 📢 **Publicité** : 🌐 keurcook.com — cinq emplacements « Publicité » [ok] → 💰 AdSense (publicité web) — en examen depuis le 12 octobre, aucune annonce [à faire]
 
 ## Vue d'ensemble
 
-- **Plateforme** : site web en français **Keur Cook** (anciennement Alohash) de recettes de plats africains (58 recettes, dont six thés, cafés et infusions, de 16 pays), rubrique « Conseils » (articles Markdown dans `content/conseils/`, trois par semaine : lundi, mercredi, vendredi, publication programmée) boutique de 131 produits en 9 gammes dont les boutons « Acheter · prix » mènent à Amazon.fr (programme Partenaires), et rubrique « Top 10 » (10 classements de produits, `/top-10/<sujet>`, selon la note moyenne des acheteurs sur Amazon.fr, relevé du 19 octobre 2026). Depuis le 12 octobre 2026, des annonces Google AdSense s'affichent aussi sur les recettes, les articles et les pages pays. Le site ne vend rien lui-même. Éditeur : ALOHASH (SAS), nom commercial TOA CORP.
+- **Plateforme** : site web en français **Keur Cook** (anciennement Alohash) de recettes de plats africains (58 recettes, dont six thés, cafés et infusions, de 16 pays), rubrique « Conseils » (articles Markdown dans `content/conseils/`, trois par semaine : lundi, mercredi, vendredi, publication programmée) boutique de 131 produits en 9 gammes dont les boutons « Acheter · prix » mènent à Amazon.fr (programme Partenaires), et rubrique « Top 10 » (10 classements de produits, `/top-10/<sujet>`, selon la note moyenne des acheteurs sur Amazon.fr, relevé du 19 octobre 2026, sauf l'onglet Farines classé selon le nombre de recettes ; au moins 10 évaluations, sauf l'onglet Livres ; notes jamais affichées). Emplacements Google AdSense prêts sur les recettes, les articles et les pages pays depuis le 12 octobre 2026, mais le site est encore en examen chez Google : aucune annonce ne s'affiche pour l'instant. Le site ne vend rien lui-même. Éditeur : ALOHASH (SAS), nom commercial TOA CORP.
 - **Stack** : Next.js 16 (App Router, `output: "export"`) · React 19 · TypeScript · Tailwind CSS 4 · Three.js (carte de l'Afrique en particules) · Marked (articles Markdown) · sharp (images de partage et d'épingles au build).
 - **Backend** : aucun. Site 100 % statique (dossier `out/`) : pas de serveur, pas de base de données, pas d'espace admin. Recettes, produits et Top 10 dans `src/lib/demo/`, articles dans `content/conseils/`, mode maintenance dans `content/maintenance.json` (lu au build ; désactivé aujourd'hui).
 - **Distribution** : une seule version, https://keurcook.com (`www` redirigé), publiée sur Cloudflare Pages par GitHub Actions depuis la branche `main`.
@@ -88,11 +88,11 @@ Mis à jour le 20 octobre 2026 par un scan du dépôt. Pour mettre à jour : rel
 
 ## 7. AdSense (publicité web)
 
-- **Rôle** : annonces display Google sur cinq emplacements titrés « Publicité » (`src/components/ads/AdSlot.tsx`, `src/lib/ads.ts`) : au milieu et en fin de recette, au milieu et en fin d'article « Conseils », et sur les pages pays ; un seul bloc d'annonces « Keur Cook » sert les cinq. Script `adsbygoogle.js` et balise `google-adsense-account` dans `src/app/layout.tsx`, fichier `public/ads.txt`. Le message de consentement de Google (Confidentialité et messages) gère les cookies publicitaires. Mis en ligne le 12 octobre 2026.
-- **Console** : https://adsense.google.com (compte Google de gestion).
+- **Rôle** : annonces display Google sur cinq emplacements titrés « Publicité » (`src/components/ads/AdSlot.tsx`, `src/lib/ads.ts`) : au milieu et en fin de recette, au milieu et en fin d'article « Conseils », et sur les pages pays ; un seul bloc d'annonces « Keur Cook » sert les cinq. Script `adsbygoogle.js` et balise `google-adsense-account` dans `src/app/layout.tsx`, fichier `public/ads.txt`. Le message de consentement de Google (Confidentialité et messages) gère les cookies publicitaires. Mis en place le 12 octobre 2026 (demande d'examen le même jour) ; le site est encore en examen, aucune annonce ne s'affiche pour l'instant.
+- **Console** : https://adsense.google.com (compte `pub-2680784147246798`, géré avec `admin@toakeur.com`).
 - **Identifiants publics** : identifiant d'éditeur `ca-pub-…` et numéro de bloc d'annonces dans `src/lib/ads.ts` et `public/ads.txt` (publics par nature).
 - **Secrets** : aucun.
-- **Coût** : gratuit ; Google verse une part des revenus publicitaires. Approbation du site et revenus : à vérifier dans la console.
+- **Coût** : gratuit ; Google verse une part des revenus publicitaires. Pas de revenus tant que le site n'est pas validé.
 
 ## 8. Analytics (mesure d'usage)
 

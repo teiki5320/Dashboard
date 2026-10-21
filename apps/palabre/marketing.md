@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 14 octobre 2026. Compagnon de INFRA.md. Pour l'actualiser : relancer le même prompt.
+Mis à jour le 21 octobre 2026. Compagnon de INFRA.md. Pour l'actualiser : relancer le même prompt.
 
 ## Positionnement
 
@@ -26,7 +26,7 @@ Trois choses que les concurrents directs n'ont pas :
 
 ## Modèle de rémunération
 
-**État réel du code au 13 octobre 2026 : aucune monétisation n'est implémentée.** Le scan est sans ambiguïté — `pubspec.yaml` ne déclare ni `google_mobile_ads`, ni `in_app_purchase`, ni aucun SDK publicitaire ou de paiement ; `lib/` ne contient aucun code de publicité ni d'achat intégré ; l'application ne fait aucun appel réseau. Le jeu est aujourd'hui **entièrement jouable hors ligne, sans aucune source de revenu**.
+**État réel du code au 21 octobre 2026 : aucune monétisation n'est implémentée.** Le scan est sans ambiguïté — `pubspec.yaml` ne déclare ni `google_mobile_ads`, ni `in_app_purchase`, ni aucun SDK publicitaire ou de paiement ; `lib/` ne contient aucun code de publicité ni d'achat intégré ; l'application ne fait aucun appel réseau. Le jeu est aujourd'hui **entièrement jouable hors ligne, sans aucune source de revenu**.
 
 Le levier envisagé à ce stade est la paire habituelle du genre — publicité interstitielle plus un achat unique « Sans pub » — mais **la décision est explicitement reportée** : la question de la publicité mobile en Afrique de l'Ouest (remplissage, valeur du mille, moyens de paiement disponibles) n'est pas tranchée, et rien ne doit être câblé avant qu'elle le soit.
 
@@ -50,7 +50,7 @@ Le jeu n'est publié sur aucune boutique et aucune publication ne le concerne à
 - ⬜ **Réseaux sociaux.** Depuis le 13 octobre 2026, le Studio range les chaînes par app : TikTok « Afrotok » n'est rattachée à aucune, YouTube « toa.afrotok » à Erea seule. Aucun compte n'est donc branché pour Palabre, et aucune publication n'est faite. Les portraits et les plaques du palais sont l'argument visuel : ils se partagent seuls, sans expliquer le jeu.
 - ⬜ **Communautés de jeux narratifs**, en français et en anglais — les joueurs de *Reigns* sont identifiables et demandeurs.
 - ⬜ **Presse et créateurs francophones**, d'abord spécialisés jeu vidéo, ensuite généralistes si l'angle du décor prend.
-- ⬜ **TestFlight**, boucle de retours fermée avant l'ouverture publique : aucune build visible depuis le dépôt — à vérifier dans la console.
+- ⬜ **TestFlight**, boucle de retours fermée avant l'ouverture publique : Xcode Cloud archive bien l'app (flux « palabre-testflight », réussi le 20 octobre 2026), mais les builds n'arrivent pas seules dans TestFlight : Jean les y envoie à la main, comme d'habitude (aucune au 21 octobre 2026).
 - ✅ **Site** `palabre.toakeur.com` : en ligne depuis le 12 octobre 2026, il présente le jeu mais ne renvoie vers aucune boutique.
 
 Aucune campagne payante n'est prévue tant que le modèle de rémunération n'est pas tranché : on ne paie pas pour acquérir des joueurs qui ne rapportent rien.

@@ -1,6 +1,6 @@
 # PUBLICATION — état de la mise en ligne
 
-> Généré le 20 octobre 2026. Aucun secret ici.
+> Généré le 21 octobre 2026. Aucun secret ici.
 
 ## En bref
 
@@ -13,6 +13,7 @@
 
 | | 🌐 Site |
 |---|---|
+| État | [ok] En ligne, réponse 200 le 21 octobre 2026 |
 | Hébergement | [ok] GitHub Pages, publication automatique par GitHub Actions |
 | Domaine | [ok] www.kultiled.com (Cloudflare), optiled.fr renvoie vers lui |
 | SSL | [ok] certificat GitHub Pages, HTTPS forcé |
@@ -24,16 +25,16 @@
 1. ✅ **Site en ligne** : www.kultiled.com publié par GitHub Pages, HTTPS forcé, anciennes adresses redirigées.
 2. ✅ **Revenus branchés** : affiliation Amazon et publicité AdSense en ligne, mentions légales à jour.
 3. **Validation AdSense** : obtenir l'accord de Google pour kultiled.com, examen demandé le 16 octobre.
-4. **Indexation complète** : faire entrer dans Google les 98 adresses du plan du site sous le nouveau domaine.
+4. **Indexation complète** : faire entrer dans Google les 99 adresses du plan du site sous le nouveau domaine.
 
-## Vue d'ensemble
+## Web · Production
 
-- **Web · Production** : ✅ en ligne (réponse 200 constatée le 20 octobre 2026)
+- **État** : ✅ en ligne (réponse 200 constatée le 21 octobre 2026)
 - **URL** : https://www.kultiled.com/
 - **Hébergeur** : GitHub Pages, publication automatique à chaque envoi sur `main` et chaque lundi, mercredi et vendredi pour les articles programmés (`.github/workflows/pages.yml` : tests unitaires, build, test de bout en bout, puis mise en ligne). Aucune action manuelle.
 - **Anciennes adresses** : https://teiki5320.github.io/optiled/ et `kultiled.com` redirigent vers `www.kultiled.com` (301) ; `www.optiled.fr` affiche une page « Kultiled a déménagé » qui renvoie aussitôt vers le nouveau domaine (dépôt `teiki5320/optiled-redirection`).
 - **Dernière mise en production** : 19 octobre 2026, publication réussie (pages « Top 10 ») ; le 16 octobre, le site est devenu Kultiled (nom, logo, contact) et a changé de domaine.
-- **Articles de conseil** : 37 en ligne, 37 programmés (le prochain le 21 octobre 2026).
+- **Articles de conseil** : 38 en ligne, 36 programmés jusqu'au 7 juin 2027 (le prochain le 23 octobre 2026).
 - **Contact affiché** : `kultiled@toakeur.com` (mentions légales et « À propos »).
 
 ## Domaine & SSL
@@ -47,7 +48,7 @@
 
 ## Visibilité
 
-- **Référencement** : sitemap (`sitemap.xml`, 98 adresses le 20 octobre 2026) et `robots.txt` générés au build, adresses canoniques, balises Open Graph et Twitter Card avec une image de partage par page, données structurées schema.org sur toutes les pages.
+- **Référencement** : sitemap (`sitemap.xml`, 99 adresses le 21 octobre 2026) et `robots.txt` générés au build, adresses canoniques, balises Open Graph et Twitter Card avec une image de partage par page, données structurées schema.org sur toutes les pages.
 - **Google Search Console** : `kultiled.com` ajouté le 16 octobre 2026, comme dans Bing Webmaster Tools ; l'ancienne propriété `optiled.fr` reste vérifiée.
 - **Pages indexées** : à vérifier dans la console pour le nouveau domaine (62 des 86 adresses sous `optiled.fr` au 12 octobre 2026).
 - **IndexNow** : pages signalées chaque lundi à Bing et aux autres moteurs (dernier passage réussi le 19 octobre 2026).

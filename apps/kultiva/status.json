@@ -2,9 +2,9 @@
   "release": null,
   "ci": {
     "status": "completed",
-    "conclusion": "failure",
-    "updatedAt": "2026-10-20T07:53:27Z",
-    "url": "https://github.com/teiki5320/Kultiva/actions/runs/39389495310"
+    "conclusion": "success",
+    "updatedAt": "2026-10-21T08:26:25Z",
+    "url": "https://github.com/teiki5320/Kultiva/actions/runs/39568102414"
   },
-  "fetchedAt": "2026-10-20T10:56:16.194Z"
+  "fetchedAt": "2026-10-21T11:10:56.765Z"
 }

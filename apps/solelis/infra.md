@@ -1,34 +1,34 @@
 # INFRA — fiche technique
 
-> Mise à jour le 20 octobre 2026 (indexation Google : 78 pages sur 91 suivies ; rubrique Conseils publiée par date, pages Conseils et sitemap mises en cache 1 h par le Worker ; mesure d'audience toujours inactive en production).
+> Mise à jour le 21 octobre 2026 (mise en ligne manuelle avec `npm run cf:deploy`, la CI ne déploie pas ; indexation Google : 79 pages sur 92 suivies ; correctif SOS Amitié du 21 octobre pas encore mis en ligne ; rubrique Conseils publiée par date, pages Conseils et sitemap mises en cache 1 h par le Worker ; mesure d'audience toujours inactive en production).
 > Aucun secret dans cette fiche — uniquement des références (noms de variables, consoles).
 
 ## En bref
 
 - **Plateforme** : site web, en pause mais en ligne sur solelis.com
-- **Stack** : Next.js 15.5 · React 19 · TypeScript · Tailwind 3.4
+- **Stack** : Next.js 16.4 · React 19 · TypeScript · Tailwind 3.4
 - **Backend** : Worker Cloudflare (OpenNext) · base D1 « solelis » (UE)
-- **Distribution** : Cloudflare Workers, déployé depuis `main`
+- **Distribution** : Cloudflare Workers, mise en ligne à la main (`npm run cf:deploy`)
 - **Site** : https://solelis.com (www redirige)
 - **IA et outils** : aucune IA · Resend, API Recherche d'entreprises, BODACC
 
 ## Parcours
 
-- 🌐 **Web** : 🐙 GitHub — main · CI au vert [ok] → 🌐 Hébergement web — Worker Cloudflare « solelis » [ok] → 🏷️ Nom de domaine — solelis.com, SSL auto [ok] → 🔎 Google — 78 pages indexées sur 91 [à faire]
-- 📝 **Contenu** : 🐙 GitHub — articles Markdown des Conseils [ok] → ⚙️ Build — génération des articles [ok] → 🕒 Publication — à sa date, sans redéploiement [ok] → 📣 Réseaux sociaux — comptes branchés, rien publié [pas encore]
+- 🌐 **Web** : 🐙 GitHub — main · CI au vert [ok] → 🌐 Hébergement web — Worker Cloudflare « solelis » [ok] → 🏷️ Nom de domaine — solelis.com, SSL auto [ok] → 🔎 Google — 79 pages indexées sur 92 [à faire]
+- 📝 **Contenu** : 🐙 GitHub — articles Markdown des Conseils [ok] → ⚙️ Build — génération des articles [ok] → 🕒 Publication — à sa date, sans redéploiement [ok] → 📣 Réseaux sociaux — aucun compte rattaché [pas encore]
 
 ## Vue d'ensemble
 
 - **État** : ⏸️ projet en pause, mais le site répond sur https://solelis.com
-- **Stack** : Next.js 15.5 (App Router) · React 19 · TypeScript · Tailwind 3.4 · Node 22
-- **Hébergement** : Cloudflare Workers — Worker « solelis », site Next.js adapté par OpenNext (`@opennextjs/cloudflare`), déployé depuis la branche `main`
+- **Stack** : Next.js 16.4 (App Router) · React 19 · TypeScript · Tailwind 3.4 · Node 22
+- **Hébergement** : Cloudflare Workers — Worker « solelis », site Next.js adapté par OpenNext (`@opennextjs/cloudflare`), mis en ligne à la main avec `npm run cf:deploy` (un envoi sur `main` ne déploie rien)
 - **Domaine** : solelis.com, enregistré chez Cloudflare (www.solelis.com redirige vers solelis.com, voir `worker.ts`)
 - **Base de données** : Cloudflare D1 « solelis » (juridiction UE), binding `DB`, schéma dans `migrations/`
 - **E-mail** : Resend (liens magiques + rappels quotidiens)
 - **Données d'entreprise** : API Recherche d'entreprises (serveur et navigateur), BODACC, INSEE Sirene en secours, Google Places pour les avocats
 - **Contenus** : rubrique Conseils — articles Markdown dans `content/conseils/`, convertis au build par `scripts/generer-conseils.ts` (lancé avant `dev`, `build`, `test` et dans la CI) ; `/conseils`, `/conseils/rss.xml` et `/sitemap.xml` sont rendus à la requête et n'affichent que les articles dont la date est passée (heure de Paris), ce qui publie les articles programmés sans redéploiement. Ces pages et le sitemap sont mis en cache 1 h par le Worker (clé liée à la version déployée, `worker.ts`) : un article programmé paraît au plus une heure après sa date. Aucun service externe
 - **Tâche planifiée** : Cron Trigger Cloudflare chaque jour à 7 h UTC → `GET /api/cron/rappels`
-- **CI** : GitHub Actions (génération des Conseils → lint → TypeScript → build → tests → build OpenNext) à chaque push/PR vers `main`
+- **CI** : GitHub Actions (génération des Conseils → lint → TypeScript → build → tests → build OpenNext) à chaque push/PR vers `main` ; elle vérifie seulement, elle ne met rien en ligne
 
 ## GitHub
 
