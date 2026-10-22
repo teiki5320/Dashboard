@@ -42,7 +42,7 @@ Mis à jour le 21 octobre 2026 par un scan du dépôt. Pour mettre à jour : rel
   - `.github/workflows/maintenance.yml` (« Maintenance ») : choix Oui/Non et message facultatif ; modifie `content/maintenance.json`, l'enregistre sur `main` et relance la publication.
 - **Console** : https://github.com/teiki5320/keurcook (Actions, Settings → Secrets and variables → Actions).
 - **Identifiants publics** : dépôt `teiki5320/keurcook` (anciennement `teiki5320/alohash`).
-- **Secrets** : `CLOUDFLARE_API_TOKEN` (jeton API Cloudflare, droit Cloudflare Pages : Edit) et `CLOUDFLARE_ACCOUNT_ID`, dans les secrets Actions du dépôt. Sans eux, le workflow affiche un avertissement et ne publie pas.
+- **Secrets** : `CLOUDFLARE_API_TOKEN` (jeton API Cloudflare, droit Cloudflare Pages : Edit) et `CLOUDFLARE_ACCOUNT_ID`, dans les secrets Actions du dépôt. Sans eux, le workflow échoue (en rouge) sans rien publier ; GitHub envoie un e-mail à chaque échec.
 - **Coût** : à vérifier dans la console.
 
 ## 2. Hébergement web (GitHub Pages / Cloudflare Pages)

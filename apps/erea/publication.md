@@ -11,7 +11,7 @@
 
 ## En bref
 
-- **Version commune** : `1.0.4` sur les deux boutiques (App Store le 15 octobre, Google Play le 20 octobre 2026) ; `1.0.5+6` dans le code
+- **Version commune** : **`1.0.5` en ligne sur les deux boutiques depuis le 21 octobre 2026** (Google Play à 15 h 30, App Store à 17 h 44) ; `1.0.6+7` dans le code
 - **Identifiant de bundle** : `com.teiki.erea`, identique sur iOS et Android
 - **Monétisation** : pub AdMob + achat unique « Erea sans publicité », 3,99 €
 - **Confidentialité** : six types déclarés (SDK AdMob), consentement RGPD et ATT
@@ -21,7 +21,7 @@
 
 | | 🍎 App Store | 🤖 Google Play |
 |---|---|---|
-| État | [ok] 1.0.4 en ligne depuis le 15 octobre 2026 | [ok] 1.0.4 en ligne depuis le 20 octobre 2026 |
+| État | [ok] 1.0.5 en ligne depuis le 21 octobre 2026 | [ok] 1.0.5 en ligne depuis le 21 octobre 2026 |
 | Construction | [ok] Xcode Cloud, à chaque poussée sur `main` | [ok] App Bundle construit sur le Mac |
 | Signature | [ok] automatique, gérée par Apple | [ok] keystore `CN=Toa`, copie de secours |
 | Classification | [ok] 4+ | [ok] questionnaire rempli, note à vérifier dans la console |
@@ -33,7 +33,7 @@
 
 - **iOS** : **1.0.4 (build 182) en ligne depuis le 15 octobre 2026 à 14 h 01**, soumise à 12 h 51 et publiée automatiquement à l'approbation ; nouveau nom « Erea : Quiz d'histoire & frise »
 - **Android** : **accès à la production accordé le 17 octobre 2026** (demandé le 14 octobre à 18 h 39) ; **release de production `5 (1.0.4)` envoyée pour examen le 17 octobre vers 8 h 25**, promue depuis la piste Alpha, déploiement complet, publication gérée désactivée ; **en ligne sur Google Play depuis le 20 octobre 2026 à 16 h 07**
-- **Version dans le code** : `1.0.5+6` depuis le 16 octobre 2026, pour que Xcode Cloud ne bute plus sur la 1.0.4 approuvée (build 187 refusé, ITMS-90186) ; même code que la 1.0.4, envoyée à Google le 14 octobre et à Apple le 15 octobre ; le bundle Android de production reste celui de la 1.0.4 (`versionCode 5`)
+- **Version dans le code** : `1.0.6+7` depuis le 21 octobre au soir (le build 196, encore en 1.0.5, a été refusé après l'approbation) ; la `1.0.5+6` a été envoyée le 21 octobre 2026 (build iOS `195`, bundle Android `versionCode 6`, copie dans iCloud → Erea) : la bonne année en grand à la révélation, Facile par défaut et niveau retenu, succès sous la carte de niveau en fin de partie, icône adaptative Android, notification en silhouette, logo au démarrage ; Flutter figé à 3.47.3 sur Xcode Cloud
 - **Identifiant** : `com.teiki.erea`, identique sur les deux plateformes
 - **Achat intégré** : `com.teiki.erea.sanspub` « Erea sans publicité », 3,99 €, non consommable — **approuvé** sur l'App Store, **actif** sur Google Play
 - **Monétisation** : interstitielle AdMob une partie sur deux, consentement RGPD publié le 3 septembre 2026
@@ -43,7 +43,8 @@ La 1.0.4 est en ligne sur l'App Store depuis le 15 octobre, avec le nom
 long et les captures légendées, après deux builds refusés à l'import pour
 le manifeste de confidentialité. Sur Google Play, la même 1.0.4
 est en production depuis le 20 octobre. Erea est disponible sur les deux
-boutiques.
+boutiques. La 1.0.5, envoyée le 21 octobre, est en ligne sur les deux
+boutiques le jour même.
 
 ---
 
@@ -51,11 +52,12 @@ boutiques.
 
 | | |
 |---|---|
-| État | **1.0.4 (build 182) en ligne depuis le 15 octobre 2026 à 14 h 01** |
+| État | **1.0.5 (build 195) en ligne depuis le 21 octobre 2026 à 17 h 44** — la 1.0.4 (build 182) l'était depuis le 15 octobre |
 | Console | <https://appstoreconnect.apple.com> |
 | Fiche publique | identifiant App Store `6794918301` |
 | Version publiée | `1.0.4`, build `182`, en ligne depuis le 15 octobre 2026 à 14 h 01 — remplace la `1.0.2` (build `150`) du 8 septembre, qui remplaçait la `1.0.0` du 3 septembre |
-| Dernier build connu | `182` (`1.0.4`), publié ; les builds suivants viennent de commits de documentation, même code |
+| Dernier build connu | `195` (`1.0.5`), soumis ; le `187` (1.0.4, refusé par ITMS-90186 au lendemain de l'approbation) a imposé le passage du code en 1.0.5 |
+| Dernière soumission | `1.0.5`, build `195`, envoyée le 21 octobre 2026 à 15 h 11, **approuvée à 17 h 44** (fiche publique `https://apps.apple.com/app/erea-quiz-dhistoire-frise/id6794918301`) ; publication automatique, notes App Review du §0 de `APP_REVIEW.md` |
 | Dernière soumission | `1.0.4`, build `182`, le 15 octobre 2026 à 12 h 51, approuvée le jour même — les builds `176` et `180` ont été refusés à l'import (ITMS-91064) : le validateur n'accepte ni « suivi à vrai, liste de domaines vide » ni « suivi à vrai, sans clé » ; le 182 porte « suivi à faux, sans clé » (commit 6e981b6) ; nom « Erea : Quiz d'histoire & frise », mots-clés sans « quiz/frise/histoire » (déjà dans le nom), captures iPhone légendées écran moyen et grand écran (iPad : celles d'août), adresses passées sur `erea.toakeur.com` (assistance, site, confidentialité), notes App Review réécrites (AdMob, consentement, achat intégré) |
 | Notes / avis | 0 / 0 au 21 octobre 2026 |
 | Achat intégré | `com.teiki.erea.sanspub` « Erea sans publicité », non consommable, **approuvé** le 8 septembre avec la 1.0.2 |
@@ -111,9 +113,10 @@ Le contact public de l'app est `erea@toakeur.com` depuis le 7 octobre
 
 | | |
 |---|---|
-| État | **Release de production `5 (1.0.4)` en ligne depuis le 20 octobre 2026 à 16 h 07** — envoyée le 17 octobre vers 8 h 25, accès accordé le 17 octobre (demandé le 14) ; fiche publique `https://play.google.com/store/apps/details?id=com.teiki.erea` |
+| État | **Release de production `6 (1.0.5)` en ligne depuis le 21 octobre 2026 à 15 h 30** — la première, `5 (1.0.4)`, l'était depuis le 20 octobre (accès à la production accordé le 17, demandé le 14) ; fiche publique `https://play.google.com/store/apps/details?id=com.teiki.erea` |
 | Console | <https://play.google.com/console> |
-| Version publiée | `5 (1.0.4)`, en production depuis le 20 octobre 2026 à 16 h 07 |
+| Version publiée | `6 (1.0.5)`, **disponible sur Google Play depuis le 21 octobre 2026 à 15 h 30** (envoyée vers 15 h, déploiement complet) — remplace la `5 (1.0.4)` du 20 octobre |
+| Actions recommandées | bord à bord (`LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES` dans `B.1.r`) et sous-échantillonnage (`F1.s.run`) : code du moteur Flutter et des bibliothèques, pas le nôtre ; R8 : « réduction optimisée des ressources » à activer (`android.r8.optimizedResourceShrinking`), plug-in Android Gradle 9 à attendre de Flutter |
 | Canal en cours | production — release `5 (1.0.4)` (consentement attendu, achats restaurés, lien Play, classement masqué), promue depuis le test fermé « Alpha », qui servait la `4 (1.0.3)` depuis le 16 septembre |
 | Accès à la production | demandable depuis le 22 septembre ; demandé le 14 octobre à 18 h 39, **accordé le 17 octobre 2026** |
 | Examen | envoyé le 8 septembre 2026 à 9 h 07 (release 1.0.2, testeurs, description corrigée), approuvé à 9 h 38 |
@@ -165,8 +168,9 @@ le 17 octobre ; la release de production est en ligne depuis le
 4. ✅ **App Review de la 1.0.4** : approuvée et en ligne le 15 octobre 2026, le jour de l'envoi.
 5. ✅ **Site et page d'aiguillage** passés sur Google Play le 21 octobre 2026 : badge sur la vitrine, `PLAY_OUVERT` à `true`.
 6. **Lancer la pub TikTok** vers `https://erea.toakeur.com/telecharger/?src=tiktok` : les deux boutiques sont en ligne.
-7. **DSA** : Jean a demandé le passage du compte Apple en compte entreprise (octobre 2026) ; se déclarer trader une fois le compte converti et le complément d'adresse nettoyé.
-8. **Élucider les builds Xcode Cloud 141 et 142** : échoués le 4 septembre sur des commits de documentation.
+7. ✅ **1.0.5** en ligne sur les deux boutiques le 21 octobre 2026 (Google Play 15 h 30, App Store 17 h 44).
+8. **DSA** : Jean a demandé le passage du compte Apple en compte entreprise (octobre 2026), toujours en cours au 21 octobre — « TOA CORP » n'est que le nom affiché du compte ; se déclarer trader une fois le compte converti et le complément d'adresse nettoyé.
+9. **Élucider les builds Xcode Cloud 141 et 142** : échoués le 4 septembre sur des commits de documentation.
 
 ---
 
