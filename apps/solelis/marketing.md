@@ -23,7 +23,7 @@ Le dirigeant final ne paie jamais. Exclusions par design : pas de publicité dis
 
 | Canal | Détail | Statut |
 |---|---|---|
-| SEO organique | Métadonnées par page, sitemap (92 adresses), robots, JSON-LD (site, FAQ, articles), image OG dynamique ; pages longue traîne (17 courriers, 11 calculateurs, 4 annuaires, FAQ, glossaire) et rubrique Conseils (22 articles publiés, 8 programmés du 23 octobre au 9 novembre 2026, flux RSS) | ✅ base technique |
+| SEO organique | Métadonnées par page, sitemap (92 adresses), robots, JSON-LD (site, FAQ, articles), image OG dynamique, aperçu en grande image autorisé pour Google Discover et IndexNow pour Bing (ajoutés le 23 octobre 2026, pas encore en ligne) ; pages longue traîne (17 courriers, 11 calculateurs, 4 annuaires, FAQ, glossaire) et rubrique Conseils (22 articles publiés, 8 programmés du 23 octobre au 9 novembre 2026, flux RSS) | ✅ base technique |
 | Search Console | solelis.com déclaré, sitemap envoyé le 12 octobre 2026 et renvoyé le 20 octobre ; 79 pages indexées sur 92 suivies (onglet Indexation du Studio) | ✅ |
 | Prescripteurs institutionnels | Référencement par CIP, greffes, CCI/CMA, URSSAF, APESA, 60 000 Rebonds — le canal au meilleur rendement | ⬜ |
 | Experts-comptables & avocats | Page `/pro` + kit prescripteur (PDF + email type) | ⬜ |

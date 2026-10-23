@@ -38,7 +38,7 @@
 | État | **En ligne** sur https://www.keurdeco.com/ (réponse 200 le 21 octobre 2026) ; `keurdeco.com` redirige vers `www` |
 | Hébergeur | GitHub Pages, déploiement par le workflow `pages.yml` (tests, build, test de bout en bout, publication) |
 | Dernier changement du site | 21 octobre 2026 à 7 h 58 UTC, déploiement réussi (journal du référencement et vérification des produits Amazon du jour) |
-| Rythme | à chaque push sur `main`, chaque lundi à 5 h UTC (articles programmés) et à la demande |
+| Rythme | à chaque push sur `main`, chaque lundi, mercredi et vendredi à 5 h UTC (articles programmés) et à la demande |
 | Contact affiché | keurdeco@toakeur.com (À propos, mentions légales, confidentialité, `security.txt`) |
 | Éditeur | ALOHASH (SAS) — voir `mentions-legales.html` |
 

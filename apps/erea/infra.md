@@ -1,7 +1,7 @@
 # INFRA — fiche technique
 
 > Généré le 20 août 2026 par un scan du dépôt, mis à jour le
-> 21 octobre 2026. Pour mettre à jour : relancer ce même prompt.
+> 22 octobre 2026. Pour mettre à jour : relancer ce même prompt.
 
 ## En bref
 
@@ -14,14 +14,14 @@
 
 ## Parcours
 
-- 🍎 **iOS** : 🐙 GitHub — main, 1.0.5 dans le code [ok] → ☁️ Xcode Cloud — build à chaque poussée sur main [ok] → 🛍️ App Store Connect — 1.0.4 (build 182) approuvée le 15 octobre [ok] → 📱 App Store — 1.0.4 en ligne depuis le 15 octobre [ok]
-- 🤖 **Android** : 🐙 GitHub — main, 1.0.5 dans le code [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — production accordée le 17 octobre [ok] → 🛒 Google Play — 1.0.4 en ligne depuis le 20 octobre [ok]
+- 🍎 **iOS** : 🐙 GitHub — main, 1.0.6 dans le code [ok] → ☁️ Xcode Cloud — build à chaque poussée sur main [ok] → 🛍️ App Store Connect — 1.0.5 (build 195) approuvée le 21 octobre [ok] → 📱 App Store — 1.0.5 en ligne depuis le 21 octobre [ok]
+- 🤖 **Android** : 🐙 GitHub — main, 1.0.6 dans le code [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — production accordée le 17 octobre, 1.0.6 envoyée le 22 octobre [ok] → 🛒 Google Play — 1.0.6 en ligne depuis le 22 octobre [ok]
 - 🌐 **Web** : 🐙 GitHub — racine de main, sans CNAME [ok] → 📄 Hébergement web (GitHub Pages / Cloudflare Pages) — GitHub Pages [ok] → 🏷️ Nom de domaine — erea.toakeur.com via Cloudflare [ok] → 🌐 Site — vitrine, jeu, support, confidentialité [ok]
 - 🎬 **Contenu** : 🎬 Studio — neuf pubs vidéo produites le 5 octobre [ok] → 🗓️ Planning — aucune publication programmée [à faire] → 📣 Réseaux sociaux & influenceurs — YouTube et TikTok branchés, rien publié [pas encore]
 
 ## Vue d'ensemble
 
-- **Plateforme** : iOS 15+ (1.0.4 en ligne sur l'App Store depuis le 15 octobre 2026) · Android : 1.0.4 en ligne sur Google Play depuis le 20 octobre 2026 · site vitrine `erea.toakeur.com`
+- **Plateforme** : iOS 15+ (1.0.5 en ligne sur l'App Store depuis le 21 octobre 2026) · Android : 1.0.6 en ligne sur Google Play depuis le 22 octobre 2026 (première version en ligne : 1.0.4, le 20 octobre) · site vitrine `erea.toakeur.com`
 - **Stack** : Flutter (Dart ≥ 3.6), version `1.0.6+7` dans le code, 170 tests, aucun serveur applicatif
 - **Backend** : aucun — tout l'état du joueur vit sur l'appareil (`shared_preferences`)
 - **Distribution** : App Store via Xcode Cloud · Play Store via App Bundle signé localement
@@ -310,7 +310,7 @@ passe par le compte Google (+ double facteur).
 
 | | |
 |---|---|
-| Rôle | Distribution Android — 1.0.4 en production depuis le 20 octobre 2026 |
+| Rôle | Distribution Android — 1.0.6 en ligne depuis le 22 octobre 2026 (première mise en production le 20 octobre) |
 | Console | <https://play.google.com/console> |
 | Compte propriétaire | Compte développeur **personnel**, créé le 20 août 2026, sur le compte Google de gestion |
 | Coût | 25 $ une seule fois |
@@ -389,6 +389,30 @@ SIL OFL incluse, justement pour que l'app fonctionne hors ligne.
 
 ---
 
+### 14. TikTok For Business (Ads Manager)
+
+| | |
+|---|---|
+| Rôle | Régie publicitaire de TikTok ; le compte pub existe mais ne sert pas |
+| Console | <https://ads.tiktok.com> |
+| Compte | identité annonceur créée le 22 octobre 2026 sur `admin@toakeur.com`, compte pub `ALOHASH_adv` (`aadvid=7699469128796635142`), relié à TikTok « erea.jeu » |
+| Coût | aucun : aucun moyen de paiement saisi, aucune campagne |
+
+Le mode guidé ne propose que des campagnes « Trafic » de 245 à 385 € par
+semaine. Jean a préféré booster les vidéos par « Promouvoir », dans
+l'application TikTok, avec quelques dizaines d'euros. Le lien de
+téléchargement à suivre par TikTok est
+`https://erea.toakeur.com/telecharger/?src=tiktok`. Sur un compte
+personnel, TikTok n'affiche pas de lien dans la bio, et le compte
+Entreprise passe désormais par une vérification de l'entreprise, qui
+publie l'adresse sur le profil : ce choix attend la même décision que le
+DSA chez Apple.
+
+**Où vivent les secrets :** aucun ; la connexion se fait par un code
+envoyé à `admin@toakeur.com`.
+
+---
+
 ## Récapitulatif : où vit chaque secret
 
 | Secret | Où il vit | Dans le dépôt ? |
@@ -399,6 +423,7 @@ SIL OFL incluse, justement pour que l'app fonctionne hors ligne.
 | Keystore de signature Android | `erea_flutter/android/erea-upload.jks` + `android/key.properties`, ignorés par git ; **copie de secours dans iCloud Drive → `Sauvegardes/erea-keystore/`** (29 septembre 2026) | Non |
 | Mot de passe du keystore | `android/key.properties`, hors dépôt | Non |
 | Accès Google Play Console / AdMob | Compte Google de gestion (+ 2FA) | Non |
+| Accès TikTok For Business | Code de connexion envoyé à `admin@toakeur.com` | Non |
 | Coordonnées bancaires | Saisies chez Apple ; chez Google après les premières recettes | Non |
 | Clés d'API tierces | **Il n'y en a aucune** — les identifiants AdMob sont publics par design | — |
 

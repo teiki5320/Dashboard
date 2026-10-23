@@ -72,10 +72,10 @@ Mis à jour le 21 octobre 2026 par un scan du dépôt. Pour mettre à jour : rel
 
 ## 5. Réseaux sociaux & influenceurs (Pinterest)
 
-- **Rôle** : compte Pinterest **Keur Cook**. Le site est revendiqué sur ce compte (balise `p:domain_verify` dans `src/app/layout.tsx`) ; chaque recette a un bouton « Épingler sur Pinterest » (`src/components/recipe/RecipeActions.tsx`) qui utilise une image verticale 1000×1500 générée par `scripts/pin-images.mjs` (`public/pins/`, 52 images). Les 52 recettes qui ont une image ont été épinglées du 2 au 14 octobre 2026 ; les six recettes de boissons ajoutées le 19 octobre n'ont pas encore d'image d'épingle.
+- **Rôle** : compte Pinterest **Keur Cook**. Le site est revendiqué sur ce compte (balise `p:domain_verify` dans `src/app/layout.tsx`) ; chaque recette a un bouton « Épingler sur Pinterest » (`src/components/recipe/RecipeActions.tsx`) qui utilise une image verticale 1000×1500 générée par `scripts/pin-images.mjs` (`public/pins/`, 58 images ; celles des six boissons ajoutées le 19 octobre ont été faites le 23 octobre). 52 recettes ont été épinglées du 2 au 14 octobre 2026 par la routine Claude `keurcook-epingles-pinterest` (navigateur). Depuis le 23 octobre 2026, la publication automatique de Keur Déco est en place ici aussi : manifeste `epingles.json` fait au build (`scripts/epingles.ts`, une épingle par recette qui a son image), workflow `.github/workflows/pinterest.yml` chaque jour à 4 h 17 UTC, 5 épingles par passage au plus, jamais deux de la même recette le même jour, tableaux par région (`config/pinterest.json`), état `data/pinterest-etat.json` (les 52 déjà épinglées y sont notées). Elle ne publie rien tant que la clé du compte n'est pas créée (procédure : `docs/PINTEREST.md`).
 - **Console** : https://fr.pinterest.com (compte Keur Cook, rattaché à `keurcook@toakeur.com`).
-- **Identifiants publics** : compte Pinterest « Keur Cook ».
-- **Secrets** : aucun dans le dépôt.
+- **Identifiants publics** : compte Pinterest « Keur Cook » ; application Pinterest « TOA CORP publication » (accès standard, partagée avec Keur Déco).
+- **Secrets** : `PINTEREST_APP_ID`, `PINTEREST_APP_SECRET` et `PINTEREST_REFRESH_TOKEN` (clé du compte Keur Cook, valable environ 60 jours), à créer dans les secrets GitHub du dépôt avec `npm run pinterest:auth` puis `npm run pinterest:secrets` ; pas encore créés au 23 octobre 2026. Jamais dans le dépôt.
 - **Coût** : gratuit.
 
 ## 6. API d'IA (OpenArt, photos)

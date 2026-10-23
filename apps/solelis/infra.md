@@ -8,7 +8,7 @@
 - **Plateforme** : site web, en pause mais en ligne sur solelis.com
 - **Stack** : Next.js 16.4 · React 19 · TypeScript · Tailwind 3.4
 - **Backend** : Worker Cloudflare (OpenNext) · base D1 « solelis » (UE)
-- **Distribution** : Cloudflare Workers, mise en ligne à la main (`npm run cf:deploy`)
+- **Distribution** : Cloudflare Workers, mise en ligne automatique par la CI GitHub à chaque envoi sur `main` dès que les secrets Cloudflare sont réglés (en attente au 23 octobre 2026 ; d'ici là `npm run cf:deploy`)
 - **Site** : https://solelis.com (www redirige)
 - **IA et outils** : aucune IA · Resend, API Recherche d'entreprises, BODACC
 
@@ -21,12 +21,13 @@
 
 - **État** : ⏸️ projet en pause, mais le site répond sur https://solelis.com
 - **Stack** : Next.js 16.4 (App Router) · React 19 · TypeScript · Tailwind 3.4 · Node 22
-- **Hébergement** : Cloudflare Workers — Worker « solelis », site Next.js adapté par OpenNext (`@opennextjs/cloudflare`), mis en ligne à la main avec `npm run cf:deploy` (un envoi sur `main` ne déploie rien)
+- **Hébergement** : Cloudflare Workers — Worker « solelis », site Next.js adapté par OpenNext (`@opennextjs/cloudflare`), mis en ligne par la CI GitHub à chaque envoi sur `main` dès que les secrets Cloudflare sont réglés (d'ici là `npm run cf:deploy`)
 - **Domaine** : solelis.com, enregistré chez Cloudflare (www.solelis.com redirige vers solelis.com, voir `worker.ts`)
 - **Base de données** : Cloudflare D1 « solelis » (juridiction UE), binding `DB`, schéma dans `migrations/`
 - **E-mail** : Resend (liens magiques + rappels quotidiens)
 - **Données d'entreprise** : API Recherche d'entreprises (serveur et navigateur), BODACC, INSEE Sirene en secours, Google Places pour les avocats
 - **Contenus** : rubrique Conseils — articles Markdown dans `content/conseils/`, convertis au build par `scripts/generer-conseils.ts` (lancé avant `dev`, `build`, `test` et dans la CI) ; `/conseils`, `/conseils/rss.xml` et `/sitemap.xml` sont rendus à la requête et n'affichent que les articles dont la date est passée (heure de Paris), ce qui publie les articles programmés sans redéploiement. Ces pages et le sitemap sont mis en cache 1 h par le Worker (clé liée à la version déployée, `worker.ts`) : un article programmé paraît au plus une heure après sa date. Aucun service externe
+- **IndexNow** (Bing, DuckDuckGo, Ecosia…) : clé publique servie par `public/6420c222dd7200cc295dd43a6324ec71.txt` ; `node scripts/indexnow.mjs` signale les pages du sitemap — à lancer après chaque `npm run cf:deploy` (ajouté le 23 octobre 2026, pas encore en ligne)
 - **Tâche planifiée** : Cron Trigger Cloudflare chaque jour à 7 h UTC → `GET /api/cron/rappels`
 - **CI** : GitHub Actions (génération des Conseils → lint → TypeScript → build → tests → build OpenNext) à chaque push/PR vers `main` ; elle vérifie seulement, elle ne met rien en ligne
 
