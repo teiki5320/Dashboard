@@ -1,6 +1,6 @@
 # PUBLICATION — état des boutiques
 
-> Mis à jour le 21 octobre 2026. Pour mettre à jour :
+> Mis à jour le 24 octobre 2026. Pour mettre à jour :
 > relancer ce même prompt.
 >
 > **Aucun secret ici** — uniquement des références publiques :
@@ -66,7 +66,7 @@ pause et des champs de formulaire.
 **Ce qui est prêt.** Le texte de la fiche est écrit et les décomptes sont
 vérifiés : nom, sous-titre, texte promotionnel, description
 (2 341/4 000 caractères), mots-clés (98/100 octets), notes au testeur
-(1 645/4 000 caractères). Le questionnaire de confidentialité, celui de
+(1 510/4 000 caractères). Le questionnaire de confidentialité, celui de
 la classification par âge et la déclaration de chiffrement ont leurs
 réponses. Tout est rassemblé dans `docs/FICHE_APP_STORE.md`, prêt à
 coller champ par champ.

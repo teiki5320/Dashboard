@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-> Mise à jour le 21 octobre 2026 (79 pages indexées sur 92 suivies, 22 articles Conseils publiés ; aucun compte de réseau social rattaché à Solelis dans le Studio).
+> Mise à jour le 24 octobre 2026 (82 pages indexées sur 94 suivies, 23 articles Conseils publiés ; aucun compte de réseau social rattaché à Solelis dans le Studio).
 > Aucun chiffre inventé : les valeurs non mesurées sont marquées comme telles.
 
 ## Rémunération par phases
@@ -23,8 +23,8 @@ Le dirigeant final ne paie jamais. Exclusions par design : pas de publicité dis
 
 | Canal | Détail | Statut |
 |---|---|---|
-| SEO organique | Métadonnées par page, sitemap (92 adresses), robots, JSON-LD (site, FAQ, articles), image OG dynamique, aperçu en grande image autorisé pour Google Discover et IndexNow pour Bing (ajoutés le 23 octobre 2026, pas encore en ligne) ; pages longue traîne (17 courriers, 11 calculateurs, 4 annuaires, FAQ, glossaire) et rubrique Conseils (22 articles publiés, 8 programmés du 23 octobre au 9 novembre 2026, flux RSS) | ✅ base technique |
-| Search Console | solelis.com déclaré, sitemap envoyé le 12 octobre 2026 et renvoyé le 20 octobre ; 79 pages indexées sur 92 suivies (onglet Indexation du Studio) | ✅ |
+| SEO organique | Métadonnées par page, sitemap (94 adresses), robots, JSON-LD (site, FAQ, articles), image OG dynamique, aperçu en grande image autorisé pour Google Discover et IndexNow pour Bing (en ligne depuis le 23 octobre 2026, IndexNow prévenu par la CI à chaque mise en ligne) ; pages longue traîne (17 courriers, 11 calculateurs, 4 annuaires, FAQ, glossaire, page « Dettes fiscales et sociales ») et rubrique Conseils (23 articles publiés, 7 programmés du 26 octobre au 9 novembre 2026, flux RSS) | ✅ base technique |
+| Search Console | solelis.com déclaré, sitemap envoyé le 12 octobre 2026 et renvoyé le 20 octobre (relu par Google le 22 octobre) ; 82 pages indexées sur 94 suivies (onglet Indexation du Studio) | ✅ |
 | Prescripteurs institutionnels | Référencement par CIP, greffes, CCI/CMA, URSSAF, APESA, 60 000 Rebonds — le canal au meilleur rendement | ⬜ |
 | Experts-comptables & avocats | Page `/pro` + kit prescripteur (PDF + email type) | ⬜ |
 | Partage in-app | « Envoyer cette fiche à un proche » (magic link ✅ existant) + partage natif sur les calculateurs | ⬜ |
@@ -40,7 +40,8 @@ Le dirigeant final ne paie jamais. Exclusions par design : pas de publicité dis
 - **Visiteurs et sources de trafic** : à instrumenter (Plausible prévu, inactif)
 - **Questionnaire mené jusqu'à la fiche** : à instrumenter
 - **Liens magiques délivrés** : à vérifier dans la console Resend
-- **Pages indexées par Google** : 79 sur 92 suivies (relevé du Studio, 21 octobre 2026)
+- **Pages indexées par Google** : 82 sur 94 suivies (relevé du Studio, 24 octobre 2026)
+- **Articles Conseils publiés** : 23, 7 autres programmés jusqu'au 9 novembre 2026 (sitemap du 24 octobre)
 - **Liens entrants de prescripteurs** : aucun connu
 
 ## Calendrier
@@ -55,6 +56,6 @@ Le dirigeant final ne paie jamais. Exclusions par design : pas de publicité dis
 
 ## Les 3 priorités
 
-- Mettre en ligne (`npm run cf:deploy`) le correctif du 21 octobre : l'article « dirigeant en détresse » renvoie encore vers l'ancienne adresse de SOS Amitié sur solelis.com
 - Vérifier en production le parcours complet : création d'une fiche, lien magique reçu (et pas en indésirables) depuis Resend, rappel du cron, avocats locaux — et confirmer que solelis@toakeur.com reçoit bien les messages, puisque c'est l'adresse de suppression des fiches (RGPD)
-- Faire indexer par Google les 13 pages encore absentes sur 92 suivies : 11 inconnues, 2 découvertes mais non indexées (surtout des outils et des courriers, plus trois articles Conseils)
+- Faire indexer par Google les 12 pages encore absentes sur 94 suivies : 10 inconnues, 2 découvertes mais non indexées (relevé du 24 octobre 2026)
+- Préparer la sortie de pause : refonte Solelis (logo, design, nom partout), puis relance des canaux, en commençant par les prescripteurs institutionnels

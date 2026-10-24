@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-> Mise à jour le 21 octobre 2026 (mise en ligne manuelle avec `npm run cf:deploy`, la CI ne déploie pas ; indexation Google : 79 pages sur 92 suivies ; correctif SOS Amitié du 21 octobre pas encore mis en ligne ; rubrique Conseils publiée par date, pages Conseils et sitemap mises en cache 1 h par le Worker ; mesure d'audience toujours inactive en production).
+> Mise à jour le 24 octobre 2026 (mise en ligne automatique par la CI GitHub depuis le 23 octobre 2026 : secrets Cloudflare réglés, première publication par la CI réussie ; correctif SOS Amitié, page « Dettes fiscales et sociales » et IndexNow en ligne ; indexation Google : 82 pages sur 94 suivies ; rubrique Conseils publiée par date, pages Conseils et sitemap mises en cache 1 h par le Worker ; mesure d'audience toujours inactive en production).
 > Aucun secret dans cette fiche — uniquement des références (noms de variables, consoles).
 
 ## En bref
@@ -8,32 +8,33 @@
 - **Plateforme** : site web, en pause mais en ligne sur solelis.com
 - **Stack** : Next.js 16.4 · React 19 · TypeScript · Tailwind 3.4
 - **Backend** : Worker Cloudflare (OpenNext) · base D1 « solelis » (UE)
-- **Distribution** : Cloudflare Workers, mise en ligne automatique par la CI GitHub à chaque envoi sur `main` dès que les secrets Cloudflare sont réglés (en attente au 23 octobre 2026 ; d'ici là `npm run cf:deploy`)
+- **Distribution** : Cloudflare Workers, mise en ligne automatique par la CI GitHub à chaque envoi sur `main` (depuis le 23 octobre 2026)
 - **Site** : https://solelis.com (www redirige)
 - **IA et outils** : aucune IA · Resend, API Recherche d'entreprises, BODACC
 
 ## Parcours
 
-- 🌐 **Web** : 🐙 GitHub — main · CI au vert [ok] → 🌐 Hébergement web — Worker Cloudflare « solelis » [ok] → 🏷️ Nom de domaine — solelis.com, SSL auto [ok] → 🔎 Google — 79 pages indexées sur 92 [à faire]
+- 🌐 **Web** : 🐙 GitHub — main · CI au vert, publie à chaque envoi [ok] → 🌐 Hébergement web — Worker Cloudflare « solelis » [ok] → 🏷️ Nom de domaine — solelis.com, SSL auto [ok] → 🔎 Google — 82 pages indexées sur 94 [à faire]
 - 📝 **Contenu** : 🐙 GitHub — articles Markdown des Conseils [ok] → ⚙️ Build — génération des articles [ok] → 🕒 Publication — à sa date, sans redéploiement [ok] → 📣 Réseaux sociaux — aucun compte rattaché [pas encore]
 
 ## Vue d'ensemble
 
 - **État** : ⏸️ projet en pause, mais le site répond sur https://solelis.com
 - **Stack** : Next.js 16.4 (App Router) · React 19 · TypeScript · Tailwind 3.4 · Node 22
-- **Hébergement** : Cloudflare Workers — Worker « solelis », site Next.js adapté par OpenNext (`@opennextjs/cloudflare`), mis en ligne par la CI GitHub à chaque envoi sur `main` dès que les secrets Cloudflare sont réglés (d'ici là `npm run cf:deploy`)
+- **Hébergement** : Cloudflare Workers — Worker « solelis », site Next.js adapté par OpenNext (`@opennextjs/cloudflare`), mis en ligne par la CI GitHub à chaque envoi sur `main` depuis le 23 octobre 2026 (avant cette date, à la main avec `npm run cf:deploy`, qui reste possible en secours)
 - **Domaine** : solelis.com, enregistré chez Cloudflare (www.solelis.com redirige vers solelis.com, voir `worker.ts`)
 - **Base de données** : Cloudflare D1 « solelis » (juridiction UE), binding `DB`, schéma dans `migrations/`
 - **E-mail** : Resend (liens magiques + rappels quotidiens)
 - **Données d'entreprise** : API Recherche d'entreprises (serveur et navigateur), BODACC, INSEE Sirene en secours, Google Places pour les avocats
 - **Contenus** : rubrique Conseils — articles Markdown dans `content/conseils/`, convertis au build par `scripts/generer-conseils.ts` (lancé avant `dev`, `build`, `test` et dans la CI) ; `/conseils`, `/conseils/rss.xml` et `/sitemap.xml` sont rendus à la requête et n'affichent que les articles dont la date est passée (heure de Paris), ce qui publie les articles programmés sans redéploiement. Ces pages et le sitemap sont mis en cache 1 h par le Worker (clé liée à la version déployée, `worker.ts`) : un article programmé paraît au plus une heure après sa date. Aucun service externe
-- **IndexNow** (Bing, DuckDuckGo, Ecosia…) : clé publique servie par `public/6420c222dd7200cc295dd43a6324ec71.txt` ; `node scripts/indexnow.mjs` signale les pages du sitemap — à lancer après chaque `npm run cf:deploy` (ajouté le 23 octobre 2026, pas encore en ligne)
+- **IndexNow** (Bing, DuckDuckGo, Ecosia…) : clé publique servie par `public/6420c222dd7200cc295dd43a6324ec71.txt` ; `node scripts/indexnow.mjs` signale les pages du sitemap — lancé par la CI après chaque mise en ligne (en ligne depuis le 23 octobre 2026 ; à lancer à la main après un `npm run cf:deploy` de secours)
 - **Tâche planifiée** : Cron Trigger Cloudflare chaque jour à 7 h UTC → `GET /api/cron/rappels`
-- **CI** : GitHub Actions (génération des Conseils → lint → TypeScript → build → tests → build OpenNext) à chaque push/PR vers `main` ; elle vérifie seulement, elle ne met rien en ligne
+- **CI** : GitHub Actions (génération des Conseils → lint → TypeScript → build → tests → build OpenNext) à chaque push/PR vers `main` ; sur un envoi sur `main`, elle publie ensuite sur Cloudflare puis prévient IndexNow (depuis le 23 octobre 2026 ; avant, elle vérifiait seulement)
 
 ## GitHub
 
-- **Rôle** : hébergement du code (`teiki5320/Solelis`, branche `main`) + CI GitHub Actions (`.github/workflows/ci.yml`) — sans aucun secret
+- **Rôle** : hébergement du code (`teiki5320/Solelis`, branche `main`) + CI GitHub Actions (`.github/workflows/ci.yml`), qui vérifie puis publie sur Cloudflare
+- **Secrets** : `CLOUDFLARE_API_TOKEN` et `CLOUDFLARE_ACCOUNT_ID` dans les secrets du dépôt (réglés le 23 octobre 2026)
 - **Console** : https://github.com/teiki5320/Solelis
 - **Coût** : gratuit
 
@@ -44,7 +45,7 @@
 - **Console** : dash.cloudflare.com → Workers & Pages → « solelis »
 - **Identifiants publics** : nom du Worker `solelis`, domaines `solelis.com` / `www.solelis.com`
 - **Secrets** : variables et secrets de production dans la console (Worker → Paramètres → Variables et secrets) ou via `npx wrangler secret put <NOM>` : `RESEND_API_KEY`, `RESEND_FROM`, `NEXT_PUBLIC_BASE_URL`, `CRON_SECRET`, `INSEE_API_KEY`, `GOOGLE_PLACES_API_KEY`, `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`. Les `NEXT_PUBLIC_*` doivent aussi exister au moment du build
-- **Commandes** : `npm run cf:preview` (aperçu local, port 8787), `npm run cf:deploy` (build + mise en ligne)
+- **Commandes** : `npm run cf:preview` (aperçu local, port 8787), `npm run cf:deploy` (build + mise en ligne à la main, en secours de la CI)
 - **Journaux** : observabilité activée (`wrangler.jsonc`) — console Cloudflare → Worker → Journaux, ou `npx wrangler tail`
 - **Coût** : offre Workers gratuite ou payante selon le volume (à vérifier dans la console)
 

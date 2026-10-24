@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 21 octobre 2026. Compagnon de INFRA.md.
+Mis à jour le 24 octobre 2026. Compagnon de INFRA.md.
 
 ## Positionnement
 
@@ -8,8 +8,8 @@ Mis à jour le 21 octobre 2026. Compagnon de INFRA.md.
 - **Promesse** : « Recettes africaines & produits rares » (`src/lib/config.ts`). Les grands plats d'Afrique expliqués pas à pas, et les ingrédients introuvables en grande surface pour les réussir chez soi.
 - **Contenu** :
   - 58 recettes de 16 pays (Afrique de l'Ouest, centrale, de l'Est, australe et Madagascar), dont six thés, cafés et infusions (ataya, kinkeliba, chai kényan, rooibos glacé, buna, kahawa chungu) depuis le 19 octobre 2026, avec histoire du plat, ingrédients, étapes, astuces et valeurs nutritionnelles estimées ; une section « La cuisine de … » sur chaque page pays ;
-  - rubrique « Conseils » : 67 articles, dont 38 publiés et 29 programmés, trois par semaine (lundi, mercredi, vendredi) jusqu'au 28 décembre 2026 (`content/conseils/`, `docs/CONSEILS.md`, `docs/CONSEILS-CALENDRIER.md`) ;
-  - boutique de 131 produits en 9 gammes : Épices & aromates, Farines & céréales, Feuilles & fleurs séchées, Poissons & fumés, Huiles & pâtes, Snacks & fruits secs, Cafés & thés, Ustensiles (dont mortiers, marmites, mixeurs et objets de service), Livres de cuisine. Produits retenus : plus de 3,5 étoiles sur Amazon ;
+  - rubrique « Conseils » : 67 articles, dont 39 publiés et 28 programmés, trois par semaine (lundi, mercredi, vendredi) jusqu'au 28 décembre 2026 (`content/conseils/`, `docs/CONSEILS.md`, `docs/CONSEILS-CALENDRIER.md`) ;
+  - boutique de 128 produits en 9 gammes : Épices & aromates, Farines & céréales, Feuilles & fleurs séchées, Poissons & fumés, Huiles & pâtes, Snacks & fruits secs, Cafés & thés, Ustensiles (dont mortiers, marmites, mixeurs et objets de service), Livres de cuisine. Produits retenus : plus de 3,5 étoiles sur Amazon ;
   - « Top 10 » (depuis le 19 octobre 2026) : 10 classements de produits (ustensiles, ingrédients pour débuter, mortiers, marmites, mixeurs, épices, farines, livres, thés et cafés, service et thé), selon la note moyenne des acheteurs sur Amazon.fr, chacun relié aux recettes concernées.
 - **Lien recettes → boutique** : chaque ingrédient disponible en boutique est signalé « Produit rare » dans la recette, avec un bouton d'achat Amazon ; chaque fiche produit liste les recettes qui l'utilisent.
 - **Ton et image** : thème sombre « Braise », carte de l'Afrique en particules sur l'accueil (« Seize pays, une seule table. »), grandes photos, carrousels par type de plat.
@@ -26,7 +26,7 @@ Les recettes et les conseils sont gratuits et attirent les visiteurs. Prix affic
 
 ## Rémunération par phases
 
-- [fait] **Aujourd'hui** : affiliation Amazon sur 131 produits et 10 Top 10, AdSense en place mais encore en examen (aucune annonce), audience mesurée depuis le 13
+- [fait] **Aujourd'hui** : affiliation Amazon sur 128 produits et 10 Top 10, AdSense en place mais encore en examen (aucune annonce), audience mesurée depuis le 13
 - [en cours] **Mesurer** : lire dans Cloudflare Web Analytics quelles pages attirent et rapportent
 - **Fidéliser** : newsletter « la recette de la semaine », outil à choisir
 - **Élargir** : vidéos de recettes sur TikTok et YouTube, comptes à rattacher à Keur Cook dans le Studio
@@ -41,7 +41,7 @@ Les recettes et les conseils sont gratuits et attirent les visiteurs. Prix affic
 
 - **Référencement naturel** : sitemap (recettes, pays, produits, articles publiés, Top 10), données structurées (Recipe, Article, FAQPage, fil d'Ariane), textes alternatifs, titres et descriptions calibrés. Domaine déclaré dans Google Search Console (232 pages indexées sur 261 au relevé du 21 octobre 2026) ; pages signalées chaque lundi à Bing et aux autres moteurs par IndexNow ; depuis le 20 octobre 2026, titres, descriptions et FAQ retravaillés page par page d'après Search Console (journal `docs/referencement.md`). ✅
 - **Contenu régulier** : trois articles « Conseils » par semaine (lundi, mercredi, vendredi), publiés automatiquement. ✅
-- **Pinterest** : compte « Keur Cook » branché, site revendiqué, bouton « Épingler » sur chaque recette. 52 recettes épinglées du 2 au 14 octobre 2026 dans les tableaux par région par la routine `keurcook-epingles-pinterest`. Publication automatique par l'API (comme Keur Déco, 5 épingles par jour au plus) en place depuis le 23 octobre 2026, en attente de la clé du compte Keur Cook ; les six boissons du 19 octobre (images faites le 23 octobre) partiront en premier. 🟡
+- **Pinterest** : compte « Keur Cook » branché, site revendiqué, bouton « Épingler » sur chaque recette. 52 recettes épinglées du 2 au 14 octobre 2026 dans les tableaux par région par l'ancienne routine `keurcook-epingles-pinterest` (plus programmée). Publication automatique par l'API (comme Keur Déco, 5 épingles par jour au plus) : clé du compte créée le 23 octobre 2026, premières épingles parties le 24 octobre (5 boissons), 57 recettes sur 58 épinglées ; le rooibos glacé part au prochain passage. ✅
 - **Partage** : boutons « Partager sur WhatsApp » et « Épingler sur Pinterest », version imprimable sur chaque recette. ✅
 - **TikTok et YouTube** : TikTok « Afrotok » est branché au Studio mais rattaché à aucune app, YouTube « toa.afrotok » à Erea seule ; aucune publication Keur Cook prévue. ⬜
 - **E-mail** : pas de newsletter (outil à choisir). ⬜
@@ -50,14 +50,14 @@ Les recettes et les conseils sont gratuits et attirent les visiteurs. Prix affic
 ## Mesures
 
 - **Pages indexées par Google** : 232 sur 261 ; 29 pas encore, dont 17 inconnues de Google et 12 détectées non explorées (Search Console, 21 octobre 2026)
-- **Adresses du sitemap** : 261 (21 octobre 2026)
+- **Adresses du sitemap** : 259 (24 octobre 2026)
 - **Clics, achats et commissions Amazon** : à vérifier dans la console (partenaires.amazon.fr)
 - **Affichages et revenus des annonces** : aucun, site encore en examen chez Google (adsense.google.com)
-- **Épingles Pinterest** : 52 recettes épinglées ; impressions et clics à vérifier dans la console
+- **Épingles Pinterest** : 57 recettes sur 58 épinglées (24 octobre 2026) ; impressions et clics à vérifier dans la console
 - **Visites et pages les plus vues** : à vérifier dans la console Cloudflare Web Analytics (mesure active depuis le 13 octobre 2026)
 
 ## Les 3 priorités
 
-- Écrire de nouveaux articles « Conseils » : il en reste 29 en réserve, la réserve passe sous 20 vers le 13 novembre et se vide le 28 décembre 2026.
+- Écrire de nouveaux articles « Conseils » : il en reste 28 en réserve, la réserve passe sous 20 vers le 13 novembre et se vide le 28 décembre 2026.
 - Relever à nouveau les prix indicatifs affichés : la date de relevé indiquée sur le site reste le 27 septembre 2026 et rien ne le refait automatiquement.
-- Créer la clé Pinterest du compte Keur Cook (`npm run pinterest:auth` puis `npm run pinterest:secrets`, voir `docs/PINTEREST.md`) pour lancer la publication automatique, puis arrêter la routine `keurcook-epingles-pinterest`.
+- Faire indexer les pages manquantes : 29 adresses du sitemap n'étaient pas encore indexées par Google au 21 octobre (17 inconnues, 12 détectées non explorées) ; demander leur indexation dans Search Console.

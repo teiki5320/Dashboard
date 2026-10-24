@@ -1,7 +1,7 @@
 # INFRA — fiche technique
 
 > Généré le 20 août 2026 par un scan du dépôt, mis à jour le
-> 22 octobre 2026. Pour mettre à jour : relancer ce même prompt.
+> 24 octobre 2026. Pour mettre à jour : relancer ce même prompt.
 
 ## En bref
 
@@ -14,10 +14,10 @@
 
 ## Parcours
 
-- 🍎 **iOS** : 🐙 GitHub — main, 1.0.6 dans le code [ok] → ☁️ Xcode Cloud — build à chaque poussée sur main [ok] → 🛍️ App Store Connect — 1.0.5 (build 195) approuvée le 21 octobre [ok] → 📱 App Store — 1.0.5 en ligne depuis le 21 octobre [ok]
-- 🤖 **Android** : 🐙 GitHub — main, 1.0.6 dans le code [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — production accordée le 17 octobre, 1.0.6 envoyée le 22 octobre [ok] → 🛒 Google Play — 1.0.6 en ligne depuis le 22 octobre [ok]
+- 🍎 **iOS** : 🐙 GitHub — main, 1.0.6 dans le code, CI au vert [ok] → ☁️ Xcode Cloud — build à chaque poussée sur main [ok] → 🛍️ App Store Connect — 1.0.5 (build 195) approuvée le 21 octobre [ok] → 📱 App Store — 1.0.5 en ligne depuis le 21 octobre [ok]
+- 🤖 **Android** : 🐙 GitHub — main, 1.0.6 dans le code, CI au vert [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — production accordée le 17 octobre, 1.0.6 envoyée le 22 octobre [ok] → 🛒 Google Play — 1.0.6 en ligne depuis le 22 octobre [ok]
 - 🌐 **Web** : 🐙 GitHub — racine de main, sans CNAME [ok] → 📄 Hébergement web (GitHub Pages / Cloudflare Pages) — GitHub Pages [ok] → 🏷️ Nom de domaine — erea.toakeur.com via Cloudflare [ok] → 🌐 Site — vitrine, jeu, support, confidentialité [ok]
-- 🎬 **Contenu** : 🎬 Studio — neuf pubs vidéo produites le 5 octobre [ok] → 🗓️ Planning — aucune publication programmée [à faire] → 📣 Réseaux sociaux & influenceurs — YouTube et TikTok branchés, rien publié [pas encore]
+- 🎬 **Contenu** : 🎬 Studio — pubs vidéo des 5, 22 et 23 octobre, 12 à valider [ok] → 🗓️ Planning — aucune publication programmée [à faire] → 📣 Réseaux sociaux & influenceurs — YouTube et TikTok branchés, rien publié [pas encore]
 
 ## Vue d'ensemble
 
@@ -141,10 +141,12 @@ art. 12 à 0 %). L'achat intégré lui-même est décrit plus bas, section
 re-soumission (détail dans `docs/APP_REVIEW.md`). La **`1.0.2` (build
 150) est sortie le 8 septembre 2026**, avec la publicité et
 l'achat intégré. Le build 161 (`1.0.3`) est resté sur TestFlight sans
-être soumis. La **`1.0.4` (build 182), soumise le 15 octobre 2026, est
-en ligne depuis le même jour à 14 h 01** (publication automatique) ; les
+être soumis. La `1.0.4` (build 182), soumise le 15 octobre 2026, a été
+mise en ligne le même jour à 14 h 01 (publication automatique) ; les
 builds 176 et 180 avaient été refusés à l'import (ITMS-91064, manifeste
-de confidentialité).
+de confidentialité). La **`1.0.5` (build 195), soumise le 21 octobre
+2026 à 15 h 11, est en ligne depuis le même jour à 17 h 44**. Aucune
+1.0.6 n'est soumise sur l'App Store : elle ne change rien sur iPhone.
 
 **Où vivent les secrets :** aucun côté dépôt. L'authentification est
 celle du compte Apple (+ double facteur).
@@ -318,7 +320,7 @@ passe par le compte Google (+ double facteur).
 **État réel :**
 - Application ID `com.teiki.erea`, identique à iOS (`android/app/build.gradle.kts`).
 - Test fermé « Alpha » : release `4 (1.0.3)` servie aux testeurs à partir du 16 septembre 2026, puis release `5 (1.0.4)` envoyée le 14 octobre. Les **douze testeurs pendant quatorze jours** exigés d'un compte personnel ont été tenus du 8 au 22 septembre (voir « Testeurs » plus bas).
-- **Accès à la production demandé le 14 octobre 2026 à 18 h 39, accordé le 17 octobre** ; la release de production `5 (1.0.4)`, promue depuis la piste Alpha et envoyée le 17 octobre vers 8 h 25, est **en ligne depuis le 20 octobre 2026 à 16 h 07**. La fiche publique `play.google.com/store/apps/details?id=com.teiki.erea` répond (vérifié le 21 octobre 2026).
+- **Accès à la production demandé le 14 octobre 2026 à 18 h 39, accordé le 17 octobre** ; la release de production `5 (1.0.4)`, promue depuis la piste Alpha et envoyée le 17 octobre vers 8 h 25, a été mise en ligne le 20 octobre 2026 à 16 h 07 ; la `6 (1.0.5)` l'a remplacée le 21 octobre, et la **`7 (1.0.6)` est en ligne depuis le 22 octobre 2026**. La fiche publique `play.google.com/store/apps/details?id=com.teiki.erea` répond (vérifié le 21 octobre 2026).
 - Achat intégré actif (voir « StoreKit / Play Billing »). Classements Play Games non configurés (voir « Game Center / Play Games »).
 - Appareil physique de vérification : un Pixel 8a, utilisé pour les tests du 16 septembre.
 
@@ -366,7 +368,7 @@ uniquement.
 Proposée après un PERFECT, un record ou trois défis d'affilée, une seule
 fois, jamais au lancement ; le système décide de l'affichage. Le même
 fichier fournit le lien de boutique ajouté aux grilles partagées : App
-Store sur iOS, Play Store sur Android depuis la 1.0.4. Au 21 octobre
+Store sur iOS, Play Store sur Android depuis la 1.0.4. Au 24 octobre
 2026, l'App Store compte 0 note.
 
 **Où vivent les secrets :** aucun.
@@ -445,7 +447,7 @@ Le dépôt peut être public sans risque : il ne contient aucun secret.
 1. `git clone https://github.com/teiki5320/erea.git`
 2. Installer Flutter stable (≥ 3.6) — <https://docs.flutter.dev/get-started>
 3. `cd erea/erea_flutter && flutter pub get`
-4. `flutter analyze && flutter test` — 167 tests, la suite doit être verte
+4. `flutter analyze && flutter test` — 170 tests, la suite doit être verte
 5. `flutter run`
 
 **Construire pour iOS, sur Mac uniquement :**

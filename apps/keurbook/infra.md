@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 21 octobre 2026, d'après le code du dépôt et le site en ligne. Aucun secret ici :
+Mis à jour le 24 octobre 2026, d'après le code du dépôt et le site en ligne. Aucun secret ici :
 uniquement des noms de variables et de consoles.
 
 ## En bref
@@ -9,15 +9,15 @@ uniquement des noms de variables et de consoles.
 - **Stack** : Next.js 16 en export statique, React 19, Tailwind CSS 4
 - **Backend** : aucun — site statique, sans base ni compte
 - **Distribution** : Cloudflare Pages, publié par GitHub Actions
-- **Site** : keurbook.com (972 adresses dans le sitemap)
+- **Site** : keurbook.com (973 adresses dans le sitemap)
 - **IA et outils** : routine « Écrire les articles Conseils », IndexNow, Cloudflare Web Analytics
 
 ## Parcours
 
 - 🌐 **Web** : 🐙 GitHub — main · publication au vert [ok] → ⚙️ GitHub Actions — lint, types, tests, build [ok] → ☁️ Cloudflare Pages — projet keurbook [ok] → 🌍 keurbook.com — en ligne, réponse 200 [ok]
-- 📝 **Contenu** : ✍️ Articles Conseils — 38 publiés, 23 programmés [ok] → ⚙️ GitHub Actions — publie lundi, mercredi, vendredi [ok] → 📡 IndexNow — sitemap signalé chaque lundi [ok] → 🔍 Google — 673 pages indexées sur 971 [à faire]
-- 🛒 **Affiliation** : 📚 Fiche livre ou BD — bouton « Acheter sur Amazon » [ok] → 🛒 Amazon Partenaires (affiliation) — tag keurbookfr-21 [ok] → 🔗 Liens directs — 91 ASIN sur 796 livres et BD [à faire]
-- 📰 **Publicité** : 📰 AdSense (publicité web) — script et 4 blocs en place [ok] → ✅ Validation du site — en examen depuis le 12 octobre, aucune annonce [pas encore] → 💶 Revenus — aucun constaté [pas encore]
+- 📝 **Contenu** : ✍️ Articles Conseils — 39 publiés, 22 programmés [ok] → ⚙️ GitHub Actions — publie lundi, mercredi, vendredi [ok] → 📡 IndexNow — sitemap signalé chaque lundi [ok] → 🔍 Google — 673 pages indexées sur 971 [à faire]
+- 🛒 **Affiliation** : 📚 Fiche livre ou BD — bouton « Acheter sur Amazon » [ok] → 🛒 Amazon Partenaires (affiliation) — tag keurbookfr-21 [ok] → 🔗 Liens directs — 90 ASIN sur 796 livres et BD [à faire]
+- 📰 **Publicité** : 📰 AdSense (publicité web) — script et 4 blocs en place [ok] → ✅ Validation du site — refusée le 21/10, réexamen demandé le 22/10 [pas encore] → 💶 Revenus — aucun constaté [pas encore]
 
 ## Vue d'ensemble
 
@@ -29,8 +29,8 @@ uniquement des noms de variables et de consoles.
 - **Backend** : aucun. Site entièrement statique (dossier `out/`), sans base de données, sans
   compte. La pile à lire reste dans le navigateur du visiteur. Seuls cookies : ceux de Google AdSense,
   après accord dans le bandeau de consentement de Google (voir docs/PUBLICITE.md).
-- **Taille** : 972 adresses dans le sitemap au 21 octobre 2026 (675 livres, 121 BD, 92 auteurs,
-  26 pays, 38 articles Conseils publiés, 11 pages Top 10, pages de liste et pages légales).
+- **Taille** : 973 adresses dans le sitemap au 24 octobre 2026 (675 livres, 121 BD, 92 auteurs,
+  26 pays, 39 articles Conseils publiés, 11 pages Top 10, pages de liste et pages légales).
 - **Particularités** : interrupteur de maintenance dans `content/maintenance.json` (désactivé),
   tests de cohérence des contenus dans `tests/`, signalement IndexNow chaque lundi.
 
@@ -69,9 +69,10 @@ uniquement des noms de variables et de consoles.
 ## Amazon Partenaires (affiliation)
 
 - **Rôle** : les boutons « Acheter sur Amazon » mènent à Amazon.fr avec le tag `keurbookfr-21`
-  (construits par `src/lib/amazon.ts`, réglable par `NEXT_PUBLIC_AMAZON_TAG`). 91 livres et BD (ceux
+  (construits par `src/lib/amazon.ts`, réglable par `NEXT_PUBLIC_AMAZON_TAG`). 90 livres et BD (ceux
   des pages Top 10) ont un ASIN vérifié à la main le 19 octobre 2026 (`src/lib/demo/amazon-asins.ts`)
-  et mènent directement à leur fiche Amazon ; les autres ouvrent une recherche Amazon (ISBN ou
+  et mènent directement à leur fiche Amazon (91 jusqu'au 24 octobre 2026 : L'Empire peul du Macina, épuisé et
+  indisponible sur Amazon.fr, est revenu à la recherche) ; les autres ouvrent une recherche Amazon (ISBN ou
   titre + auteur, rayon Livres).
 - **Site déclaré** : `keurbook.com` est déclaré sur le nouveau compte Amazon Partenaires (ouvert le 18 octobre 2026, tag `keurbookfr-21`).
 - **Contrôle** : une routine quotidienne (Keur Cook, Keurbook, Keur Foot, Keur Kado) vérifie
@@ -80,8 +81,7 @@ uniquement des noms de variables et de consoles.
 
 ## AdSense (publicité web)
 
-- **Rôle** : annonces Google sur le site, une fois le site validé. Demande d'examen faite le
-  12 octobre 2026 : le site est encore en examen, **aucune annonce ne s'affiche pour l'instant**. Script AdSense et balise
+- **Rôle** : annonces Google sur le site, une fois le site validé. Historique : première demande d'examen le 12 octobre 2026, refusée le 21 octobre 2026 (« contenu à faible valeur informative ») ; les 796 fiches ont été rallongées le 21 octobre et l'examen a été redemandé le 22 octobre 2026. État du nouvel examen : à vérifier dans la console ; **aucune annonce ne s'affiche pour l'instant**. Script AdSense et balise
   `google-adsense-account` chargés dans `src/app/layout.tsx` ; identifiant d'éditeur dans
   `src/lib/config.ts` (`ADSENSE_CLIENT`, réglable par `NEXT_PUBLIC_ADSENSE_CLIENT` ; laissée vide,
   plus aucun script Google ne serait chargé). `public/ads.txt` est publié et répond.
@@ -94,7 +94,7 @@ uniquement des noms de variables et de consoles.
   européennes), lien « Gérer mes cookies » en pied de page ; la politique de sécurité de
   `public/_headers` n'ouvre que les domaines Google nécessaires.
 - **Détail** : docs/PUBLICITE.md.
-- **Validation du site et revenus** : en examen chez Google ; aucun revenu tant que le site n'est pas validé.
+- **Validation du site et revenus** : refusée le 21 octobre 2026, nouvel examen demandé le 22 octobre 2026 (état à vérifier dans la console) ; aucun revenu tant que le site n'est pas validé.
 - **Console** : https://adsense.google.com (compte `pub-2680784147246798`, géré avec `admin@toakeur.com`).
 
 ## Analytics (mesure d'usage)

@@ -1,6 +1,6 @@
 # Erea — plan marketing & rémunération
 
-> Généré le 3 août 2026, mis à jour le 21 octobre 2026. Le modèle de
+> Généré le 3 août 2026, mis à jour le 24 octobre 2026. Le modèle de
 > rémunération est en ligne sur l'App Store depuis la 1.0.2 et sur Google
 > Play depuis le 20 octobre 2026 (publicité + achat unique qui la retire). Pour le mettre à jour : relancer ce même prompt. Aucun secret
 > ici.
@@ -62,10 +62,10 @@ publicité fait elle-même la promotion de l'achat.
 
 | Pièce | Détail | Statut |
 |---|---|---|
-| Interstitielle AdMob | À la sortie de l'écran de fin, une partie sur deux, jamais dans le Défi du jour (`lib/core/pub.dart`) | ✅ en ligne sur iOS depuis la 1.0.2 (8 septembre 2026) |
+| Interstitielle AdMob | À la sortie de l'écran de fin, une partie sur deux, jamais dans le Défi du jour (`lib/core/pub.dart`) | ✅ en ligne sur iOS depuis la 1.0.2 (8 septembre 2026), sur Android depuis le 20 octobre 2026 |
 | « Erea sans publicité » | Achat unique non consommable `com.teiki.erea.sanspub`, **3,99 €** — il ne débloque rien, le jeu est déjà complet | ✅ approuvé sur l'App Store le 8 septembre, actif sur Google Play |
 | Consentement | Formulaire UMP de Google + ATT sur iOS, révocable depuis les réglages ; message RGPD et message IDFA publiés dans AdMob | ✅ |
-| Android | Même modèle, release de production 1.0.4 en ligne sur Google Play depuis le 20 octobre 2026 | ✅ |
+| Android | Même modèle, sur Google Play depuis le 20 octobre 2026 (1.0.4) ; 1.0.6 en ligne depuis le 22 octobre 2026 | ✅ |
 
 **Ce que ça a coûté, en connaissance de cause :** le badge « Aucune
 donnée collectée » (la fiche de confidentialité de l'App Store a changé
@@ -119,10 +119,10 @@ pas encore faite.
 | Badges des boutiques | Badge officiel d'Apple sur la vitrine, en tête et en bas de page, vers la fiche `id6794918301`, depuis le 12 octobre 2026 ; badge officiel « Disponible sur Google Play » à côté et page `/telecharger/` ouverte à Android depuis le 21 octobre 2026 | ✅ |
 | Enseignants & parents | Dossier d'une page « Erea en classe » (repères du brevet couverts, mode Facile, sans compte ni inscription) à envoyer aux profs d'histoire-géo, groupes Facebook de profs, La Salle des Maîtres | ⬜ |
 | Afrique de l'Ouest | Mise en avant du pack Afrique auprès des communautés éducatives francophones (Sénégal, Côte d'Ivoire…) ; presse tech locale ; créateurs de contenu éducation | ⬜ |
-| Réseaux sociaux | YouTube « toa.afrotok » et TikTok « erea.jeu » rattachés à Erea dans le Studio ; TikTok « Afrotok » branché mais rattaché à aucune app. Pubs vidéo produites par le Studio le 5 octobre 2026 (« le temps qui bugue ») : une validée le 6 octobre, huit à valider. **Aucune publication** : le Planning est vide | ⬜ |
+| Réseaux sociaux | YouTube « toa.afrotok » et TikTok « erea.jeu » rattachés à Erea dans le Studio ; TikTok « Afrotok » branché mais rattaché à aucune app. Pubs vidéo produites par le Studio les 5, 22 et 23 octobre 2026, au format « documentaire qui déraille » validé par Jean le 5 octobre : douze vidéos attendent sa validation dans iCloud. **Aucune publication** : le Planning est vide | ⬜ |
 | Presse & sites spécialisés | App du jour (iPhon.fr, iGen, Frandroid), sites parents (Geek Junior, Super Julie — références du jeu éducatif) | ⬜ |
 | Featuring Apple | Formulaire « App Store featuring » : app famille, française, hors ligne, avec Game Center — bon dossier, même si l'argument « sans pub » est tombé avec la 1.0.2 | ⬜ |
-| Play Store | Second magasin, donc second public : les douze testeurs ont tenu quatorze jours (22 septembre), l'accès à la production a été accordé le 17 octobre 2026 et la 1.0.4 est en ligne depuis le 20 octobre (`docs/PUBLICATION.md`) | ✅ |
+| Play Store | Second magasin, donc second public : les douze testeurs ont tenu quatorze jours (22 septembre), l'accès à la production a été accordé le 17 octobre 2026, la 1.0.4 a été mise en ligne le 20 octobre et la 1.0.6 est en ligne depuis le 22 octobre (`docs/PUBLICATION.md`) | ✅ |
 
 ---
 
@@ -142,7 +142,7 @@ pas encore faite.
 ## Mesures
 
 - **Téléchargements** : à vérifier dans la console (App Store Connect et Play Console)
-- **Note App Store** : aucune note au 21 octobre 2026
+- **Note App Store** : aucune note au 24 octobre 2026
 - **Note Google Play** : à vérifier dans la console (en ligne depuis le 20 octobre 2026)
 - **Rétention J1 et J7** : à vérifier dans la console
 - **Participants au Défi du jour** : à vérifier dans la console (classement `erea.daily`)
@@ -179,7 +179,7 @@ une collecte à la fiche de confidentialité.
 
 ## Les 3 priorités
 
-- **Publier la pub vidéo validée** du Studio sur YouTube « toa.afrotok » et TikTok « erea.jeu » par le Planning, avec le lien `https://erea.toakeur.com/telecharger/?src=tiktok` qui mène désormais aux deux boutiques, puis trier les huit vidéos en attente : aucune publication n'a encore eu lieu.
+- **Valider et publier les pubs vidéo** du Studio (douze en attente) sur YouTube « toa.afrotok » et TikTok « erea.jeu » par le Planning, avec le lien `https://erea.toakeur.com/telecharger/?src=tiktok` qui mène aux deux boutiques : aucune publication n'a encore eu lieu.
 - **Envoyer le dossier « Erea en classe »** aux professeurs d'histoire-géographie et à leurs groupes : c'est le public naturel d'un jeu familial calé sur les repères du brevet, et rien ne lui a encore été adressé.
 - **Se déclarer trader (DSA)** sur l'App Store et Google Play : l'app rapporte maintenant sur les deux boutiques, et la déclaration « non-trader » ne tient plus ; à faire dès que le compte Apple est converti en compte entreprise.
 
@@ -194,7 +194,8 @@ une collecte à la fiche de confidentialité.
 - ✅ **Badge App Store sur la vitrine** — fini « Bientôt sur l'App Store », 12 octobre 2026.
 - ✅ **Douze testeurs Android pendant quatorze jours** — du 8 au 22 septembre 2026.
 - ✅ **Accès à la production Google Play demandé** — 14 octobre 2026, accordé le 17 octobre.
-- ✅ **1.0.4 en ligne sur Google Play** — envoyée le 17 octobre, en production depuis le 20 octobre 2026.
+- ✅ **Première version sur Google Play** — la 1.0.4, envoyée le 17 octobre, mise en production le 20 octobre 2026.
 - ✅ **Badge Google Play sur la vitrine et page `/telecharger/` ouverte à Android** — 21 octobre 2026.
-- ✅ **1.0.4 en ligne sur l'App Store** sous le nom long, captures légendées — 15 octobre 2026.
+- ✅ **1.0.4 sur l'App Store** sous le nom long, captures légendées — mise en ligne le 15 octobre 2026.
+- ✅ **1.0.5 en ligne sur les deux boutiques** — 21 octobre 2026 ; 1.0.6 (Android seul) sur Google Play le 22 octobre.
 - ✅ **Adresse et contact propres** — `erea.toakeur.com` et `erea@toakeur.com`, 7 octobre 2026.
