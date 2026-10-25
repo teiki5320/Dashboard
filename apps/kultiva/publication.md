@@ -1,6 +1,6 @@
 # PUBLICATION — état des boutiques
 
-> Mis à jour le 24 octobre 2026. Pour mettre à jour :
+> Mis à jour le 25 octobre 2026. Pour mettre à jour :
 > relancer ce même prompt.
 >
 > **Aucun secret ici** — uniquement des références publiques :
@@ -26,16 +26,16 @@
 | | 🍎 App Store | 🤖 Google Play |
 |---|---|---|
 | État | [pas encore] jamais soumise ; fiche ASC à vérifier dans la console | [pas encore] jamais envoyée ; fiche à vérifier dans la console |
-| Construction | [ok] Xcode Cloud (`ci_post_clone.sh`, Flutter 3.41.6) | [ok] App Bundle construit par la CI GitHub Actions |
+| Construction | [à faire] Xcode Cloud (`ci_post_clone.sh`, Flutter 3.41.6) : build 94 en échec le 24 octobre 2026, corrigé le 25 octobre ; build suivant à vérifier dans la console | [ok] App Bundle construit par la CI GitHub Actions |
 | Signature | [ok] gérée par Xcode Cloud, équipe `K597U7X3FZ` | [ok] keystore local, valable jusqu'en 2053 |
 | Classification | [à faire] 4+ attendu, questionnaire prêt à reporter | [à faire] questionnaire de contenu à remplir |
-| Cible | [ok] iOS 13.0 et plus, iPhone et iPad, portrait | [ok] valeurs par défaut de Flutter, rien de figé dans le dépôt |
+| Cible | [ok] iOS 15.0 et plus (depuis le 25 octobre 2026 : Xcode et les pods, dont Sentry, l’exigent ; avant : 13.0), iPhone et iPad, portrait | [ok] valeurs par défaut de Flutter, rien de figé dans le dépôt |
 | Permissions | [ok] caméra, photos, localisation (textes en français) | [ok] localisation, notifications, alarmes exactes |
 | Poids | [pas encore] à mesurer au premier envoi (35 Mo d'assets) | [pas encore] à mesurer au premier envoi (35 Mo d'assets) |
 
 ## Vue d'ensemble
 
-- **iOS** : jamais soumise — la fiche est rédigée, le build Xcode Cloud est configuré et l'URL de confidentialité existe
+- **iOS** : jamais soumise — la fiche est rédigée et l'URL de confidentialité existe ; le build Xcode Cloud 94 a échoué le 24 octobre 2026 (cible iOS trop basse), corrigé le 25 octobre, build suivant à vérifier dans la console
 - **Android** : jamais envoyée à Play — le bundle release est signé et vérifié localement ; l'existence d'une fiche Play reste à vérifier dans la console
 - **Web** : site de présentation en ligne sur <https://kultiva.toakeur.com> depuis le 7 octobre 2026
 - **Backend** : projet Supabase **en pause** (état inactif, vérifié le 20 octobre 2026) — connexion et synchronisation hors service tant qu'il n'est pas rallumé
@@ -59,7 +59,7 @@ pause et des champs de formulaire.
 | Console | <https://appstoreconnect.apple.com> |
 | Version publiée | aucune — l'app n'est jamais sortie |
 | Version en cours | `1.0.0` (build `5`) — aucune soumission ; l'existence d'une fiche ASC est **à vérifier dans la console** |
-| Distribution | Xcode Cloud, script `ios/ci_scripts/ci_post_clone.sh` — équipe `K597U7X3FZ` |
+| Distribution | Xcode Cloud, script `ios/ci_scripts/ci_post_clone.sh` — équipe `K597U7X3FZ` ; build 94 en échec le 24 octobre 2026, cible iOS relevée à 15.0 le 25 octobre, build suivant à vérifier dans la console |
 | Familles d'appareils | `TARGETED_DEVICE_FAMILY = "1,2"` → iPhone **et** iPad |
 | Orientation | portrait seul, `UIRequiresFullScreen = true` (renonce au multitâche iPad) |
 

@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 24 octobre 2026 d'après le dépôt et le site en ligne. Cette fiche, avec MARKETING.md et PUBLICATION.md, est désormais la source : le Studio la recopie.
+Mis à jour le 25 octobre 2026 d'après le dépôt et le site en ligne. Cette fiche, avec MARKETING.md et PUBLICATION.md, est désormais la source : le Studio la recopie.
 
 ## En bref
 
@@ -61,7 +61,7 @@ Mis à jour le 24 octobre 2026 d'après le dépôt et le site en ligne. Cette fi
 
 ## Affiliation (Amazon Partenaires)
 
-- **Rôle** : rémunération du site — liens `https://www.amazon.fr/dp/<ASIN>?tag=keurdecofr-21`, tag défini dans `src/amazon.ts` et nulle part ailleurs. 238 produits relevés à la main sur Amazon.fr (`src/data/produits.json`), sans API : jamais d'ASIN, de note, d'avis ni de prix inventés, aucune photo Amazon, mention Partenaires près des liens, en pied de page et dans les mentions légales. `npm run verifier-produits` contrôle la disponibilité ; au 24 octobre 2026, 230 produits actifs et 8 indisponibles (`jarre-terre-cuite-toscane`, `coussin-femme-africaine-jute`, `plaid-tricot-chenille`, `lampadaire-rotin-boheme`, `sphere-terre-cuite-etoiles`, `suspension-paille-parasol`, `plateaux-tresses-lot-2` et `paniers-muraux-jacinthe-lot-7`, retirés de l'affichage ; le dernier est déjà remplacé par un lot de 10).
+- **Rôle** : rémunération du site — liens `https://www.amazon.fr/dp/<ASIN>?tag=keurdecofr-21`, tag défini dans `src/amazon.ts` et nulle part ailleurs. 238 produits relevés à la main sur Amazon.fr (`src/data/produits.json`), sans API : jamais d'ASIN, de note, d'avis ni de prix inventés, aucune photo Amazon, mention Partenaires près des liens, en pied de page et dans les mentions légales. `npm run verifier-produits` contrôle la disponibilité ; au 25 octobre 2026, 229 produits actifs et 9 indisponibles (`jarre-terre-cuite-toscane`, `coussin-femme-africaine-jute`, `plaid-tricot-chenille`, `lampadaire-rotin-boheme`, `sphere-terre-cuite-etoiles`, `suspension-paille-parasol`, `plateaux-tresses-lot-2`, `paniers-muraux-jacinthe-lot-7` et `tissu-bogolan-indigo-fleches`, devenu indisponible à la vérification du 25 octobre ; tous retirés de l'affichage, `paniers-muraux-jacinthe-lot-7` est déjà remplacé par un lot de 10).
 - **Console** : https://partenaires.amazon.fr (nouveau compte Amazon Partenaires ouvert le 18 octobre 2026, géré avec admin@toakeur.com ; keurdeco.com fait partie des sites déclarés).
 - **Identifiants publics** : tag `keurdecofr-21`.
 - **Secrets** : aucun dans le dépôt.
@@ -69,7 +69,7 @@ Mis à jour le 24 octobre 2026 d'après le dépôt et le site en ligne. Cette fi
 
 ## Réseaux sociaux (Pinterest)
 
-- **Rôle** : canal de trafic principal. Le build génère les épingles 1000 × 1500 (une par titre d'article, 4 gabarits, manifeste `epingles.json`, 219 épingles au manifeste le 24 octobre). Deux voies de publication : l'API Pinterest (accès standard accordé, workflow `pinterest.yml`, 5 épingles par passage, premières épingles publiées le 20 octobre 2026, 20 publiées au 24 octobre) et l'import CSV par lots de 30 jours, 2 épingles par jour (`npm run pinterest:lot` prépare le CSV, `npm run pinterest:lot -- --confirmer` les note dans `data/pinterest-etat.json` ; lot en cours jusqu'au 18 novembre). Rich Pins par Open Graph et données structurées, bouton « Épingler » sans script externe, balise `p:domain_verify` en ligne.
+- **Rôle** : canal de trafic principal. Le build génère les épingles 1000 × 1500 (une par titre d'article, 4 gabarits, manifeste `epingles.json`, 219 épingles au manifeste le 24 octobre). Deux voies de publication : l'API Pinterest (accès standard accordé, workflow `pinterest.yml`, 5 épingles par passage, premières épingles publiées le 20 octobre 2026, 30 publiées au 25 octobre) et l'import CSV par lots de 30 jours, 2 épingles par jour (`npm run pinterest:lot` prépare le CSV, `npm run pinterest:lot -- --confirmer` les note dans `data/pinterest-etat.json` ; lot en cours jusqu'au 18 novembre). Rich Pins par Open Graph et données structurées, bouton « Épingler » sans script externe, balise `p:domain_verify` en ligne.
 - **Console** : https://www.pinterest.fr (compte professionnel « Keur Déco », keurdeco@toakeur.com) ; application sur developers.pinterest.com ; parcours OAuth local par `npm run pinterest:auth` (voir `docs/pinterest.md`).
 - **Identifiants publics** : balise `p:domain_verify` (variable `PINTEREST_VERIFY`) ; tableaux dans `config/tableaux-pinterest.json` (`board_id` des 20 tableaux renseignés le 16 octobre 2026).
 - **Secrets** : voir GitHub (secrets Actions Pinterest).

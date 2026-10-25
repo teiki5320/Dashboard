@@ -23,7 +23,7 @@ Le dirigeant final ne paie jamais. Exclusions par design : pas de publicité dis
 
 | Canal | Détail | Statut |
 |---|---|---|
-| SEO organique | Métadonnées par page, sitemap (94 adresses), robots, JSON-LD (site, FAQ, articles), image OG dynamique, aperçu en grande image autorisé pour Google Discover et IndexNow pour Bing (en ligne depuis le 23 octobre 2026, IndexNow prévenu par la CI à chaque mise en ligne) ; pages longue traîne (17 courriers, 11 calculateurs, 4 annuaires, FAQ, glossaire, page « Dettes fiscales et sociales ») et rubrique Conseils (23 articles publiés, 7 programmés du 26 octobre au 9 novembre 2026, flux RSS) | ✅ base technique |
+| SEO organique | Métadonnées par page, sitemap (94 adresses), robots, JSON-LD (site, FAQ, articles), image OG dynamique, aperçu en grande image autorisé pour Google Discover et IndexNow pour Bing (en ligne depuis le 23 octobre 2026, IndexNow prévenu par la CI à chaque mise en ligne) ; pages longue traîne (17 courriers, 11 calculateurs, 4 annuaires, FAQ, glossaire, page « Dettes fiscales et sociales ») et rubrique Conseils (23 articles publiés, 19 programmés du 26 octobre au 7 décembre 2026 dont 12 ajoutés le 25 octobre, flux RSS) | ✅ base technique |
 | Search Console | solelis.com déclaré, sitemap envoyé le 12 octobre 2026 et renvoyé le 20 octobre (relu par Google le 22 octobre) ; 82 pages indexées sur 94 suivies (onglet Indexation du Studio) | ✅ |
 | Prescripteurs institutionnels | Référencement par CIP, greffes, CCI/CMA, URSSAF, APESA, 60 000 Rebonds — le canal au meilleur rendement | ⬜ |
 | Experts-comptables & avocats | Page `/pro` + kit prescripteur (PDF + email type) | ⬜ |
@@ -41,7 +41,7 @@ Le dirigeant final ne paie jamais. Exclusions par design : pas de publicité dis
 - **Questionnaire mené jusqu'à la fiche** : à instrumenter
 - **Liens magiques délivrés** : à vérifier dans la console Resend
 - **Pages indexées par Google** : 82 sur 94 suivies (relevé du Studio, 24 octobre 2026)
-- **Articles Conseils publiés** : 23, 7 autres programmés jusqu'au 9 novembre 2026 (sitemap du 24 octobre)
+- **Articles Conseils publiés** : 23 (sitemap du 24 octobre), 19 autres programmés jusqu’au 7 décembre 2026 (12 ajoutés le 25 octobre 2026 ; avant, 7 programmés jusqu’au 9 novembre)
 - **Liens entrants de prescripteurs** : aucun connu
 
 ## Calendrier

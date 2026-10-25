@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 21 octobre 2026 d'après le dépôt, la base Supabase et le site en ligne. Pour mettre à jour : relancer ce même prompt.
+Mis à jour le 25 octobre 2026 d'après le dépôt, la base Supabase et le site en ligne. Pour mettre à jour : relancer ce même prompt.
 
 > Aucun secret, clé ni jeton dans ce fichier — uniquement des références
 > (nom de variable, endroit où le secret vit, lien vers la console).
@@ -16,7 +16,7 @@ Mis à jour le 21 octobre 2026 d'après le dépôt, la base Supabase et le site 
 
 ## Parcours
 
-- 🍎 **iOS** : 🐙 GitHub — main · CI au vert [ok] → ☁️ Xcode Cloud — script ci_post_clone prêt [ok] → 🛍️ App Store Connect — fiche à remplir [à faire] → 📱 App Store — pas publiée [pas encore]
+- 🍎 **iOS** : 🐙 GitHub — main · CI au vert [ok] → ☁️ Xcode Cloud — build 94 en échec, corrigé le 25/10 [à faire] → 🛍️ App Store Connect — fiche à remplir [à faire] → 📱 App Store — pas publiée [pas encore]
 - 🤖 **Android** : 🐙 GitHub — CI construit l'App Bundle [ok] → 🔑 Keystore Android — clé locale, valable 2053 [ok] → 🛍️ Google Play Console — fiche à créer [à faire] → 📱 Google Play — pas publiée [pas encore]
 - 🗄️ **Comptes** : 📱 App — mode invité sans compte [ok] → 🗄️ Supabase — projet en pause [bloquant] → 🔐 Connexion utilisateurs — clés Google à recréer [à faire]
 - 🌐 **Web** : 🐙 GitHub — dossier landing/ [ok] → 📄 GitHub Pages — publié par site.yml [ok] → 🌐 Nom de domaine — kultiva.toakeur.com, HTTPS [ok] → ⬇️ Boutons « Télécharger » — encore sans lien [pas encore]
@@ -86,7 +86,8 @@ Mis à jour le 21 octobre 2026 d'après le dépôt, la base Supabase et le site 
 
 ### 7. Xcode Cloud
 
-- **Rôle** : CI iOS — build automatique via `ios/ci_scripts/ci_post_clone.sh` (Flutter épinglé 3.41.6, SPM désactivé, `--config-only` avant `pod install`).
+- **Rôle** : CI iOS — build automatique via `ios/ci_scripts/ci_post_clone.sh` (Flutter épinglé 3.41.6, SPM désactivé, `--config-only` avant `pod install`). Cible minimale iOS 15.0 pour l'appli et tous les pods (`ios/Podfile`) depuis le 25 octobre 2026 ; avant : 13.0.
+- **État** : le build 94 a échoué le 24 octobre 2026 (Sentry et d'autres pods visaient une version d'iOS trop basse) ; correctif poussé le 25 octobre 2026 (construction iOS vérifiée en local). Le résultat du build suivant est à vérifier dans la console.
 - **Console** : App Store Connect → onglet Xcode Cloud.
 - **Identifiants publics** : —
 - **Secrets** : aucun secret dans le dépôt (signature gérée par Apple).
