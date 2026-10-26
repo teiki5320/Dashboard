@@ -1,6 +1,6 @@
 # PUBLICATION — état de la mise en ligne
 
-> Mis à jour le 25 octobre 2026, d'après le site en ligne, la Search Console et les exécutions GitHub Actions.
+> Mis à jour le 26 octobre 2026, d'après le site en ligne, la Search Console et les exécutions GitHub Actions.
 >
 > Aucun secret ici — uniquement des références.
 
@@ -37,12 +37,12 @@
 
 | | |
 |---|---|
-| Adresse | **En ligne** sur https://keurbook.com (vérifié le 25 octobre 2026 : réponse 200) |
+| Adresse | **En ligne** sur https://keurbook.com (vérifié le 26 octobre 2026 : réponse 200) |
 | Hébergeur | Cloudflare Pages (projet `keurbook`), workflow `deploy.yml` |
 | Dernière publication | 24 octobre 2026 (4 h 43 UTC), publication réussie ; celle du 23 octobre (1 h 32 UTC) a mis en ligne le dernier article Conseils paru |
 | Mise en ligne | 1er octobre 2026 |
 | Dépôt | https://github.com/teiki5320/keurbook |
-| Taille publiée | 973 adresses dans le sitemap (25 octobre 2026) |
+| Taille publiée | 974 adresses dans le sitemap (26 octobre 2026) |
 | Contact affiché | `keurbook@toakeur.com` |
 | Maintenance | désactivée (`content/maintenance.json`) |
 
@@ -56,7 +56,7 @@
 
 ## Visibilité
 
-- **Sitemap** : https://keurbook.com/sitemap.xml répond (973 adresses le 25 octobre 2026) ; `robots.txt` autorise
+- **Sitemap** : https://keurbook.com/sitemap.xml répond (974 adresses le 26 octobre 2026) ; `robots.txt` autorise
   tout et cite le sitemap.
 - **Google Search Console** : propriété de domaine `keurbook.com`, sitemap envoyé le 1er octobre
   2026, renvoyé le 16 puis le 20 octobre, lu par Google le 24 octobre (aucune erreur). Search Console

@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 25 octobre 2026, d'après le code du dépôt et le site en ligne. Aucun secret ici :
+Mis à jour le 26 octobre 2026, d'après le code du dépôt et le site en ligne. Aucun secret ici :
 uniquement des noms de variables et de consoles.
 
 ## En bref
@@ -9,13 +9,13 @@ uniquement des noms de variables et de consoles.
 - **Stack** : Next.js 16 en export statique, React 19, Tailwind CSS 4
 - **Backend** : aucun — site statique, sans base ni compte
 - **Distribution** : Cloudflare Pages, publié par GitHub Actions
-- **Site** : keurbook.com (973 adresses dans le sitemap)
+- **Site** : keurbook.com (974 adresses dans le sitemap)
 - **IA et outils** : routine « Écrire les articles Conseils », IndexNow, Cloudflare Web Analytics
 
 ## Parcours
 
 - 🌐 **Web** : 🐙 GitHub — main · publication au vert [ok] → ⚙️ GitHub Actions — lint, types, tests, build [ok] → ☁️ Cloudflare Pages — projet keurbook [ok] → 🌍 keurbook.com — en ligne, réponse 200 [ok]
-- 📝 **Contenu** : ✍️ Articles Conseils — 39 publiés, 22 programmés [ok] → ⚙️ GitHub Actions — publie lundi, mercredi, vendredi [ok] → 📡 IndexNow — sitemap signalé chaque lundi [ok] → 🔍 Google — 678 pages indexées sur 973 [à faire]
+- 📝 **Contenu** : ✍️ Articles Conseils — 40 publiés, 21 programmés [ok] → ⚙️ GitHub Actions — publie lundi, mercredi, vendredi [ok] → 📡 IndexNow — sitemap signalé chaque lundi [ok] → 🔍 Google — 678 pages indexées sur 973 [à faire]
 - 🛒 **Affiliation** : 📚 Fiche livre ou BD — bouton « Acheter sur Amazon » [ok] → 🛒 Amazon Partenaires (affiliation) — tag keurbookfr-21 [ok] → 🔗 Liens directs — 90 ASIN sur 796 livres et BD [à faire]
 - 📰 **Publicité** : 📰 AdSense (publicité web) — script et 4 blocs en place [ok] → ✅ Validation du site — refusée le 21/10, réexamen demandé le 22/10 [pas encore] → 💶 Revenus — aucun constaté [pas encore]
 
@@ -29,8 +29,8 @@ uniquement des noms de variables et de consoles.
 - **Backend** : aucun. Site entièrement statique (dossier `out/`), sans base de données, sans
   compte. La pile à lire reste dans le navigateur du visiteur. Seuls cookies : ceux de Google AdSense,
   après accord dans le bandeau de consentement de Google (voir docs/PUBLICITE.md).
-- **Taille** : 973 adresses dans le sitemap au 24 octobre 2026 (675 livres, 121 BD, 92 auteurs,
-  26 pays, 39 articles Conseils publiés, 11 pages Top 10, pages de liste et pages légales).
+- **Taille** : 974 adresses dans le sitemap au 26 octobre 2026 (675 livres, 121 BD, 92 auteurs,
+  26 pays, 40 articles Conseils publiés, 11 pages Top 10, pages de liste et pages légales).
 - **Particularités** : interrupteur de maintenance dans `content/maintenance.json` (désactivé),
   tests de cohérence des contenus dans `tests/`, signalement IndexNow chaque lundi.
 

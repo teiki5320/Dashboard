@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Généré le 21 octobre 2026, mis à jour le 25 octobre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
+Généré le 21 octobre 2026, mis à jour le 26 octobre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
 
 > Aucun secret dans cette fiche — uniquement des références (noms de variables, consoles).
 
@@ -15,9 +15,9 @@ Généré le 21 octobre 2026, mis à jour le 25 octobre 2026 par un scan du dép
 
 ## Parcours
 
-- 🌐 **Web** : 🐙 GitHub — main, CI au vert le 25 octobre [ok] → ⚙️ GitHub Actions — tests, build et test de bout en bout [ok] → 🏠 GitHub Pages — hébergement du site [ok] → 🔗 Nom de domaine — www.kultiled.com depuis le 16 octobre [ok] → 🔎 Google — nouveau domaine à faire indexer [à faire]
-- 📝 **Contenu** : ✍️ Articles de conseil — 74 rédigés [ok] → ⏰ GitHub Actions — publication lundi, mercredi, vendredi [ok] → 📰 Rubrique Conseils — 39 en ligne, 35 programmés [ok] → 📌 Pinterest — 12 épingles prêtes, aucun compte [pas encore]
-- 🛒 **Affiliation** : 💡 Sélection de lampes — 16 lampes, une indisponible [ok] → 🔁 Routine de vérification — dernier passage le 25 octobre [ok] → 🏆 Top 10 — 9 onglets de 10 produits depuis le 19 octobre [ok] → 🛍️ Affiliation — liens Amazon.fr kultiledfr-21 [ok]
+- 🌐 **Web** : 🐙 GitHub — main, CI au vert le 26 octobre [ok] → ⚙️ GitHub Actions — tests, build et test de bout en bout [ok] → 🏠 GitHub Pages — hébergement du site [ok] → 🔗 Nom de domaine — www.kultiled.com depuis le 16 octobre [ok] → 🔎 Google — nouveau domaine à faire indexer [à faire]
+- 📝 **Contenu** : ✍️ Articles de conseil — 74 rédigés [ok] → ⏰ GitHub Actions — publication lundi, mercredi, vendredi [ok] → 📰 Rubrique Conseils — 40 en ligne, 34 programmés [ok] → 📌 Pinterest — 12 épingles prêtes, aucun compte [pas encore]
+- 🛒 **Affiliation** : 💡 Sélection de lampes — 16 lampes, une indisponible [ok] → 🔁 Routine de vérification — dernier passage le 26 octobre [ok] → 🏆 Top 10 — 9 onglets de 10 produits depuis le 19 octobre [ok] → 🛍️ Affiliation — liens Amazon.fr kultiledfr-21 [ok]
 - 📢 **Publicité** : 📰 Pages de lecture — deux emplacements au plus [ok] → 🍪 Consentement — bandeau de Google en ligne [ok] → 💰 AdSense (publicité web) — examen de kultiled.com demandé [à faire]
 
 ## Vue d'ensemble
@@ -34,11 +34,11 @@ Généré le 21 octobre 2026, mis à jour le 25 octobre 2026 par un scan du dép
   - La chaîne de publication refuse de publier si les tests unitaires, le build ou le test de bout en bout échouent (ce qui a bloqué toute mise en ligne du 7 au 12 octobre 2026).
   - Publicité Google AdSense depuis le 12 octobre 2026 (`build/annonces.ts`, fichier `public/ads.txt`) : script et bandeau de consentement de Google sur toutes les pages publiées, sauf le calculateur intégré sur d'autres sites ; annonces seulement dans les guides, conseils, fiches des cultures, parcours et glossaire.
   - Signalement hebdomadaire des pages à Bing et aux autres moteurs par IndexNow (`.github/workflows/indexnow.yml`, le lundi à 7 h UTC ; clé publique dans `public/`).
-  - Routines Claude Code (console https://claude.ai/code/routines) : `optiled-verification-lampes`, chaque jour (lampes et fourchettes de prix, envoi sur `main`), de nouveau active depuis le 13 octobre 2026 (dernier envoi le 25 octobre 2026) après une interruption depuis le 1er octobre ; `optiled-nouvelle-serie-conseils`, rappel unique le 16 novembre 2026 pour préparer la série suivante d'articles.
+  - Routines Claude Code (console https://claude.ai/code/routines) : `optiled-verification-lampes`, chaque jour (lampes et fourchettes de prix, envoi sur `main`), de nouveau active depuis le 13 octobre 2026 (dernier envoi le 26 octobre 2026) après une interruption depuis le 1er octobre ; `optiled-nouvelle-serie-conseils`, rappel unique le 16 novembre 2026 pour préparer la série suivante d'articles.
 
 ## GitHub
 
-- **Rôle** : hébergement du code (`teiki5320/optiled`, branche unique `main`) et chaîne de publication GitHub Actions : `npm ci` → `npm test` → `npm run build` → installation de Chromium → `npm run test:e2e` → envoi de `dist/` vers GitHub Pages. Dernière publication réussie le 25 octobre 2026. Second workflow : IndexNow (dernier passage réussi le 19 octobre 2026).
+- **Rôle** : hébergement du code (`teiki5320/optiled`, branche unique `main`) et chaîne de publication GitHub Actions : `npm ci` → `npm test` → `npm run build` → installation de Chromium → `npm run test:e2e` → envoi de `dist/` vers GitHub Pages. Dernière publication réussie le 26 octobre 2026. Second workflow : IndexNow (dernier passage réussi le 19 octobre 2026).
 - **Console** : https://github.com/teiki5320/optiled (onglet *Actions* pour le suivi des publications).
 - **Identifiants publics** : nom du dépôt `teiki5320/optiled`.
 - **Secrets** : aucun secret ni variable de dépôt. Le workflow n'utilise que les autorisations fournies par GitHub (`pages: write`, `id-token: write`).
@@ -78,7 +78,7 @@ Généré le 21 octobre 2026, mis à jour le 25 octobre 2026 par un scan du dép
 
 ## AdSense (publicité web)
 
-- **Rôle** : annonces display de Google dans les pages de lecture, ajoutées le 12 octobre 2026 (`build/annonces.ts`). Au plus deux par page (milieu et fin de l'article), signalées « Publicité », jamais dans le calculateur, le carnet de suivi ni les pages de lampes, jamais à côté d'un lien Amazon ; l'emplacement reste replié tant que Google ne fournit pas d'annonce. Le bandeau de consentement est celui de Google (Autoriser, Refuser, Gérer les options), rouvert par le lien « Gérer les cookies » du pied de page ; les mentions légales et la page « À propos » décrivent la publicité et ses cookies. Le calculateur intégré sur d'autres sites ne charge pas le code de Google. Script et `ads.txt` constatés en ligne le 13 octobre 2026 ; examen du nouveau domaine `kultiled.com` demandé le 16 octobre 2026 ; l'ancien site `optiled.fr` a été supprimé du compte AdSense le 22 octobre 2026. Identifiant d'éditeur `ca-pub-…` et `ads.txt` constatés en ligne sur kultiled.com le 25 octobre 2026.
+- **Rôle** : annonces display de Google dans les pages de lecture, ajoutées le 12 octobre 2026 (`build/annonces.ts`). Au plus deux par page (milieu et fin de l'article), signalées « Publicité », jamais dans le calculateur, le carnet de suivi ni les pages de lampes, jamais à côté d'un lien Amazon ; l'emplacement reste replié tant que Google ne fournit pas d'annonce. Le bandeau de consentement est celui de Google (Autoriser, Refuser, Gérer les options), rouvert par le lien « Gérer les cookies » du pied de page ; les mentions légales et la page « À propos » décrivent la publicité et ses cookies. Le calculateur intégré sur d'autres sites ne charge pas le code de Google. Script et `ads.txt` constatés en ligne le 13 octobre 2026 ; examen du nouveau domaine `kultiled.com` demandé le 16 octobre 2026 ; l'ancien site `optiled.fr` a été supprimé du compte AdSense le 22 octobre 2026. Identifiant d'éditeur `ca-pub-…` et `ads.txt` constatés en ligne sur kultiled.com le 26 octobre 2026.
 - **Console** : https://adsense.google.com (examen de `kultiled.com` et diffusion des annonces : à vérifier dans la console).
 - **Identifiants publics** : identifiant d'éditeur (constante `CLIENT_ADSENSE`) et bloc d'annonces « Kultiled - articles » (constante `BLOC_ARTICLES`), dans `build/annonces.ts` ; ligne de déclaration dans `public/ads.txt`.
 - **Secrets** : aucun dans le dépôt ; compte et informations de paiement uniquement dans la console AdSense.

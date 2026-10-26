@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 25 octobre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
+Mis à jour le 26 octobre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
 
 ## En bref
 
@@ -14,7 +14,7 @@ Mis à jour le 25 octobre 2026 par un scan du dépôt. Pour mettre à jour : rel
 ## Parcours
 
 - 🌐 **Web** : 🐙 GitHub — main · publication au vert [ok] → ☁️ Hébergement web — Cloudflare Pages, projet keurcook [ok] → 🔗 Nom de domaine — keurcook.com, SSL Cloudflare [ok] → 👥 Visiteurs — site ouvert au public [ok]
-- 📝 **Contenu** : 🐙 GitHub — 28 articles programmés [ok] → ⏰ GitHub Actions — publication lun., mer., ven. [ok] → 🌐 keurcook.com — 39 articles en ligne [ok] → ✍️ Réserve — vide le 28 décembre 2026 [à faire]
+- 📝 **Contenu** : 🐙 GitHub — 27 articles programmés [ok] → ⏰ GitHub Actions — publication lun., mer., ven. [ok] → 🌐 keurcook.com — 40 articles en ligne [ok] → ✍️ Réserve — vide le 28 décembre 2026 [à faire]
 - 🛒 **Affiliation** : 🌐 keurcook.com — boutons « Acheter · prix » [ok] → 🤝 Affiliation — Amazon Partenaires, tag keurcookfr-21 [ok] → 📦 Amazon.fr — Amazon encaisse et livre [ok]
 - 📢 **Publicité** : 🌐 keurcook.com — cinq emplacements « Publicité » [ok] → 💰 AdSense (publicité web) — en examen depuis le 12 octobre, aucune annonce [à faire]
 

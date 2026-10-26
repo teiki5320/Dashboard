@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-> Mise à jour le 24 octobre 2026 (82 pages indexées sur 94 suivies, 23 articles Conseils publiés ; aucun compte de réseau social rattaché à Solelis dans le Studio).
+> Mise à jour le 26 octobre 2026 (82 pages indexées sur 94 suivies, 24 articles Conseils publiés, sitemap de 95 adresses ; aucun compte de réseau social rattaché à Solelis dans le Studio).
 > Aucun chiffre inventé : les valeurs non mesurées sont marquées comme telles.
 
 ## Rémunération par phases
@@ -23,7 +23,7 @@ Le dirigeant final ne paie jamais. Exclusions par design : pas de publicité dis
 
 | Canal | Détail | Statut |
 |---|---|---|
-| SEO organique | Métadonnées par page, sitemap (94 adresses), robots, JSON-LD (site, FAQ, articles), image OG dynamique, aperçu en grande image autorisé pour Google Discover et IndexNow pour Bing (en ligne depuis le 23 octobre 2026, IndexNow prévenu par la CI à chaque mise en ligne) ; pages longue traîne (17 courriers, 11 calculateurs, 4 annuaires, FAQ, glossaire, page « Dettes fiscales et sociales ») et rubrique Conseils (23 articles publiés, 19 programmés du 26 octobre au 7 décembre 2026 dont 12 ajoutés le 25 octobre, flux RSS) | ✅ base technique |
+| SEO organique | Métadonnées par page, sitemap (95 adresses le 26 octobre 2026), robots, JSON-LD (site, FAQ, articles), image OG dynamique, aperçu en grande image autorisé pour Google Discover et IndexNow pour Bing (en ligne depuis le 23 octobre 2026, IndexNow prévenu par la CI à chaque mise en ligne) ; pages longue traîne (17 courriers, 11 calculateurs, 4 annuaires, FAQ, glossaire, page « Dettes fiscales et sociales ») et rubrique Conseils (24 articles publiés, 18 programmés du 28 octobre au 7 décembre 2026 dont 12 ajoutés le 25 octobre, flux RSS) | ✅ base technique |
 | Search Console | solelis.com déclaré, sitemap envoyé le 12 octobre 2026 et renvoyé le 20 octobre (relu par Google le 22 octobre) ; 82 pages indexées sur 94 suivies (onglet Indexation du Studio) | ✅ |
 | Prescripteurs institutionnels | Référencement par CIP, greffes, CCI/CMA, URSSAF, APESA, 60 000 Rebonds — le canal au meilleur rendement | ⬜ |
 | Experts-comptables & avocats | Page `/pro` + kit prescripteur (PDF + email type) | ⬜ |
@@ -41,7 +41,7 @@ Le dirigeant final ne paie jamais. Exclusions par design : pas de publicité dis
 - **Questionnaire mené jusqu'à la fiche** : à instrumenter
 - **Liens magiques délivrés** : à vérifier dans la console Resend
 - **Pages indexées par Google** : 82 sur 94 suivies (relevé du Studio, 24 octobre 2026)
-- **Articles Conseils publiés** : 23 (sitemap du 24 octobre), 19 autres programmés jusqu’au 7 décembre 2026 (12 ajoutés le 25 octobre 2026 ; avant, 7 programmés jusqu’au 9 novembre)
+- **Articles Conseils publiés** : 24 (sitemap du 26 octobre), 18 autres programmés jusqu’au 7 décembre 2026 (12 ajoutés le 25 octobre 2026 ; avant, 7 programmés jusqu’au 9 novembre)
 - **Liens entrants de prescripteurs** : aucun connu
 
 ## Calendrier

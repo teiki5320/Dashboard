@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 25 octobre 2026. Un canal n'est coché que s'il est prouvé (compte branché et
+Mis à jour le 26 octobre 2026. Un canal n'est coché que s'il est prouvé (compte branché et
 publications réelles, ou routine qui publie).
 
 ## Positionnement
@@ -30,7 +30,7 @@ publications réelles, ou routine qui publie).
 - ✅ Site en ligne sur `keurbook.com`.
 - ✅ Référencement naturel : sitemap envoyé à Google Search Console (propriété `keurbook.com`),
   IndexNow chaque lundi, articles Conseils publiés trois fois par semaine (lundi, mercredi,
-  vendredi). Au 25 octobre 2026 : 39 articles publiés, 22 programmés ; le rythme régulier va
+  vendredi). Au 26 octobre 2026 : 40 articles publiés, 21 programmés ; le rythme régulier va
   jusqu'au 7 décembre (11 articles ajoutés le 15 octobre), puis seuls des articles de saison sont programmés. La routine « Écrire les
   articles Conseils » repasse le 1er et le 15 de chaque mois.
 - ⬜ Pinterest : aucun compte Keurbook.
@@ -44,7 +44,7 @@ publications réelles, ou routine qui publie).
 - **Pages indexées par Google** : 678 sur 973 (Search Console, onglet Indexation du Studio, 25 octobre 2026 ; 673 sur 971 le 20 octobre)
 - **Pages pas encore indexées** : 295, dont 151 inconnues de Google et 144 détectées non explorées
 - **Liens Amazon directs** : 90 livres et BD sur 796 (ASIN vérifiés le 19 octobre 2026 ; 91 jusqu'au 24 octobre, L'Empire peul du Macina étant devenu indisponible)
-- **Articles Conseils** : 39 publiés, 22 programmés (25 octobre 2026)
+- **Articles Conseils** : 40 publiés, 21 programmés (26 octobre 2026)
 - **Visites** : à vérifier dans la console Cloudflare Web Analytics (mesure active depuis le 13 octobre 2026)
 - **Clics et revenus Amazon** : à vérifier dans la console
 - **Revenus AdSense** : aucun ; site refusé le 21 octobre 2026, nouvel examen demandé le 22 octobre (état à vérifier dans la console)
