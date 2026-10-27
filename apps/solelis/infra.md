@@ -1,32 +1,34 @@
 # INFRA — fiche technique
 
-> Mise à jour le 24 octobre 2026 (mise en ligne automatique par la CI GitHub depuis le 23 octobre 2026 : secrets Cloudflare réglés, première publication par la CI réussie ; correctif SOS Amitié, page « Dettes fiscales et sociales » et IndexNow en ligne ; indexation Google : 82 pages sur 94 suivies ; rubrique Conseils publiée par date, pages Conseils et sitemap mises en cache 1 h par le Worker ; mesure d'audience toujours inactive en production).
+> Mise à jour le 27 octobre 2026 (Solelis n'est plus en pause : refonte faite, site actif ; veille actus lue depuis teiki5320.github.io sur la page /actus et les pages situation, aucune actu sur l'accueil ; images des conseils et des guides rangées dans le dépôt. Auparavant, le 24 octobre 2026 : mise en ligne automatique par la CI GitHub depuis le 23 octobre 2026 : secrets Cloudflare réglés, première publication par la CI réussie ; correctif SOS Amitié, page « Dettes fiscales et sociales » et IndexNow en ligne ; indexation Google : 82 pages sur 94 suivies ; rubrique Conseils publiée par date, pages Conseils et sitemap mises en cache 1 h par le Worker ; mesure d'audience toujours inactive en production).
 > Aucun secret dans cette fiche — uniquement des références (noms de variables, consoles).
 
 ## En bref
 
-- **Plateforme** : site web, en pause mais en ligne sur solelis.com
+- **Plateforme** : site web, actif et en ligne sur solelis.com
 - **Stack** : Next.js 16.4 · React 19 · TypeScript · Tailwind 3.4
 - **Backend** : Worker Cloudflare (OpenNext) · base D1 « solelis » (UE)
 - **Distribution** : Cloudflare Workers, mise en ligne automatique par la CI GitHub à chaque envoi sur `main` (depuis le 23 octobre 2026)
 - **Site** : https://solelis.com (www redirige)
-- **IA et outils** : aucune IA · Resend, API Recherche d'entreprises, BODACC
+- **IA et outils** : aucune IA sur le site · Resend, API Recherche d'entreprises, BODACC, veille actus (fichier préparé par une tâche Claude, lu dans le navigateur)
 
 ## Parcours
 
 - 🌐 **Web** : 🐙 GitHub — main · CI au vert, publie à chaque envoi [ok] → 🌐 Hébergement web — Worker Cloudflare « solelis » [ok] → 🏷️ Nom de domaine — solelis.com, SSL auto [ok] → 🔎 Google — 82 pages indexées sur 94 [à faire]
 - 📝 **Contenu** : 🐙 GitHub — articles Markdown des Conseils [ok] → ⚙️ Build — génération des articles [ok] → 🕒 Publication — à sa date, sans redéploiement [ok] → 📣 Réseaux sociaux — aucun compte rattaché [pas encore]
+- 📰 **Actus** : 🤖 Tâche de veille — 12 h et 19 h [ok] → 🐙 GitHub Pages — teiki5320.github.io/veille/actus/solelis.json [ok] → 🌐 Site — /actus et pages situation, jamais l'accueil [ok]
 
 ## Vue d'ensemble
 
-- **État** : ⏸️ projet en pause, mais le site répond sur https://solelis.com
+- **État** : ✅ actif, en ligne sur https://solelis.com (refonte faite : nom Solelis, logo, design)
 - **Stack** : Next.js 16.4 (App Router) · React 19 · TypeScript · Tailwind 3.4 · Node 22
 - **Hébergement** : Cloudflare Workers — Worker « solelis », site Next.js adapté par OpenNext (`@opennextjs/cloudflare`), mis en ligne par la CI GitHub à chaque envoi sur `main` depuis le 23 octobre 2026 (avant cette date, à la main avec `npm run cf:deploy`, qui reste possible en secours)
 - **Domaine** : solelis.com, enregistré chez Cloudflare (www.solelis.com redirige vers solelis.com, voir `worker.ts`)
 - **Base de données** : Cloudflare D1 « solelis » (juridiction UE), binding `DB`, schéma dans `migrations/`
 - **E-mail** : Resend (liens magiques + rappels quotidiens)
 - **Données d'entreprise** : API Recherche d'entreprises (serveur et navigateur), BODACC, INSEE Sirene en secours, Google Places pour les avocats
-- **Contenus** : rubrique Conseils — articles Markdown dans `content/conseils/`, convertis au build par `scripts/generer-conseils.ts` (lancé avant `dev`, `build`, `test` et dans la CI) ; `/conseils`, `/conseils/rss.xml` et `/sitemap.xml` sont rendus à la requête et n'affichent que les articles dont la date est passée (heure de Paris), ce qui publie les articles programmés sans redéploiement. Ces pages et le sitemap sont mis en cache 1 h par le Worker (clé liée à la version déployée, `worker.ts`) : un article programmé paraît au plus une heure après sa date. Aucun service externe
+- **Contenus** : rubrique Conseils — articles Markdown dans `content/conseils/`, convertis au build par `scripts/generer-conseils.ts` (lancé avant `dev`, `build`, `test` et dans la CI) ; `/conseils`, `/conseils/rss.xml` et `/sitemap.xml` sont rendus à la requête et n'affichent que les articles dont la date est passée (heure de Paris), ce qui publie les articles programmés sans redéploiement. Ces pages et le sitemap sont mis en cache 1 h par le Worker (clé liée à la version déployée, `worker.ts`) : un article programmé paraît au plus une heure après sa date. Aucun service externe. Chaque conseil et chaque guide (pages situation) a une image copiée dans le dépôt (`public/illustrations/`, WebP), avec son crédit dans `data/illustrations.json` (photos Wikimedia Commons ou Openverse en licence libre, sinon carte « Illustration : Solelis ») ; `node scripts/illustrations.mjs` complète seulement les pages qui n'en ont pas
+- **Veille actus** : la page https://solelis.com/actus (20 actus) et un bloc « Dans l'actualité » (3 actus) en bas des 4 pages situation lisent, dans le navigateur du visiteur, `https://teiki5320.github.io/veille/actus/solelis.json` (dépôt public `teiki5320/veille`, mis à jour à 12 h et 19 h par une tâche Claude) — `lib/veille.ts`, `components/actus/`. Délai 8 s, cache 15 min, rien d'affiché en cas d'erreur ; aucune actu sur l'accueil (consigne de Jean), ni dans la fiche ou le questionnaire ; aucune donnée de dirigeant envoyée. Les images des actus sont servies par teiki5320.github.io. Le site expose ses situations à la veille sur https://solelis.com/veille/entites.json (généré depuis `lib/situations.ts`). France uniquement. Gratuit, aucune clé
 - **IndexNow** (Bing, DuckDuckGo, Ecosia…) : clé publique servie par `public/6420c222dd7200cc295dd43a6324ec71.txt` ; `node scripts/indexnow.mjs` signale les pages du sitemap — lancé par la CI après chaque mise en ligne (en ligne depuis le 23 octobre 2026 ; à lancer à la main après un `npm run cf:deploy` de secours)
 - **Tâche planifiée** : Cron Trigger Cloudflare chaque jour à 7 h UTC → `GET /api/cron/rappels`
 - **CI** : GitHub Actions (génération des Conseils → lint → TypeScript → build → tests → build OpenNext) à chaque push/PR vers `main` ; sur un envoi sur `main`, elle publie ensuite sur Cloudflare puis prévient IndexNow (depuis le 23 octobre 2026 ; avant, elle vérifiait seulement)

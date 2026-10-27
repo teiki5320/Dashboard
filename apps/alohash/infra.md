@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 26 octobre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
+Mis à jour le 27 octobre 2026 (veille actus) ; dernier scan complet du dépôt le 26 octobre 2026. Pour mettre à jour : relancer ce même prompt.
 
 ## En bref
 
@@ -9,18 +9,19 @@ Mis à jour le 26 octobre 2026 par un scan du dépôt. Pour mettre à jour : rel
 - **Backend** : aucun, site 100 % statique sans base de données
 - **Distribution** : Cloudflare Pages, publié par GitHub Actions
 - **Site** : https://keurcook.com (www redirigé)
-- **IA et outils** : photos OpenArt · Amazon Partenaires · AdSense · Cloudflare Web Analytics
+- **IA et outils** : photos OpenArt · Amazon Partenaires · AdSense · Cloudflare Web Analytics · veille actus (2 passages par jour)
 
 ## Parcours
 
 - 🌐 **Web** : 🐙 GitHub — main · publication au vert [ok] → ☁️ Hébergement web — Cloudflare Pages, projet keurcook [ok] → 🔗 Nom de domaine — keurcook.com, SSL Cloudflare [ok] → 👥 Visiteurs — site ouvert au public [ok]
 - 📝 **Contenu** : 🐙 GitHub — 27 articles programmés [ok] → ⏰ GitHub Actions — publication lun., mer., ven. [ok] → 🌐 keurcook.com — 40 articles en ligne [ok] → ✍️ Réserve — vide le 28 décembre 2026 [à faire]
 - 🛒 **Affiliation** : 🌐 keurcook.com — boutons « Acheter · prix » [ok] → 🤝 Affiliation — Amazon Partenaires, tag keurcookfr-21 [ok] → 📦 Amazon.fr — Amazon encaisse et livre [ok]
-- 📢 **Publicité** : 🌐 keurcook.com — cinq emplacements « Publicité » [ok] → 💰 AdSense (publicité web) — en examen depuis le 12 octobre, aucune annonce [à faire]
+- 📰 **Veille actus** : 📡 Tâche de veille — 12 h et 19 h, 15 flux RSS [ok] → 🐙 Dépôt veille — actus/keurcook.json sur GitHub Pages [ok] → 🌍 keurcook.com — accueil (4), /actus (20), pages pays (3) [ok]
+- 📢 **Publicité** : 🌐 keurcook.com — cinq emplacements « Publicité » [ok] → 💰 AdSense (publicité web) — « En préparation » au 27 octobre (examen demandé le 12 octobre), aucune annonce [à faire]
 
 ## Vue d'ensemble
 
-- **Plateforme** : site web en français **Keur Cook** (anciennement Alohash) de recettes de plats africains (58 recettes, dont six thés, cafés et infusions, de 16 pays), rubrique « Conseils » (articles Markdown dans `content/conseils/`, trois par semaine : lundi, mercredi, vendredi, publication programmée) boutique de 127 produits en 9 gammes dont les boutons « Acheter · prix » mènent à Amazon.fr (programme Partenaires), et rubrique « Top 10 » (10 classements de produits, `/top-10/<sujet>`, selon la note moyenne des acheteurs sur Amazon.fr, relevé du 19 octobre 2026, sauf l'onglet Farines classé selon le nombre de recettes ; au moins 10 évaluations, sauf l'onglet Livres ; notes jamais affichées). Emplacements Google AdSense prêts sur les recettes, les articles et les pages pays depuis le 12 octobre 2026, mais le site est encore en examen chez Google : aucune annonce ne s'affiche pour l'instant. Le site ne vend rien lui-même. Éditeur : ALOHASH (SAS), nom commercial TOA CORP.
+- **Plateforme** : site web en français **Keur Cook** (anciennement Alohash) de recettes de plats africains (58 recettes, dont six thés, cafés et infusions, de 16 pays), rubrique « Conseils » (articles Markdown dans `content/conseils/`, trois par semaine : lundi, mercredi, vendredi, publication programmée) boutique de 127 produits en 9 gammes dont les boutons « Acheter · prix » mènent à Amazon.fr (programme Partenaires), et rubrique « Top 10 » (10 classements de produits, `/top-10/<sujet>`, selon la note moyenne des acheteurs sur Amazon.fr, relevé du 19 octobre 2026, sauf l'onglet Farines classé selon le nombre de recettes ; au moins 10 évaluations, sauf l'onglet Livres ; notes jamais affichées), et, depuis le 27 octobre 2026, « Actus de la cuisine africaine » lues en direct depuis la veille actus (`/actus`, accueil, pages pays ; voir section 9). Emplacements Google AdSense prêts sur les recettes, les articles et les pages pays depuis le 12 octobre 2026, mais le site est encore en examen chez Google : aucune annonce ne s'affiche pour l'instant. Le site ne vend rien lui-même. Éditeur : ALOHASH (SAS), nom commercial TOA CORP.
 - **Stack** : Next.js 16 (App Router, `output: "export"`) · React 19 · TypeScript · Tailwind CSS 4 · Three.js (carte de l'Afrique en particules) · Marked (articles Markdown) · sharp (images de partage et d'épingles au build).
 - **Backend** : aucun. Site 100 % statique (dossier `out/`) : pas de serveur, pas de base de données, pas d'espace admin. Recettes, produits et Top 10 dans `src/lib/demo/`, articles dans `content/conseils/`, mode maintenance dans `content/maintenance.json` (lu au build ; désactivé aujourd'hui).
 - **Distribution** : une seule version, https://keurcook.com (`www` redirigé), publiée sur Cloudflare Pages par GitHub Actions depuis la branche `main`.
@@ -30,7 +31,7 @@ Mis à jour le 26 octobre 2026 par un scan du dépôt. Pour mettre à jour : rel
   - liste des allégations de santé interdites (`src/lib/compliance.ts`) ;
   - étiquetage alimentaire sur chaque produit (ingrédients, allergènes, conservation) ;
   - mode maintenance piloté par le bouton « Maintenance » de GitHub Actions ; en maintenance, pages en `noindex` et sitemap vide ;
-  - en-têtes de sécurité (CSP, HSTS, `X-Frame-Options`, `nosniff`…) dans `public/_headers` ; la CSP n'ouvre que les adresses Google d'AdSense et du consentement, et celles de Cloudflare Web Analytics ; redirections (`/cgv`, `/categorie/<gamme>` (une règle par gamme), anciennes pages `/panier`, `/commande`, `/admin`…) dans `public/_redirects` ;
+  - en-têtes de sécurité (CSP, HSTS, `X-Frame-Options`, `nosniff`…) dans `public/_headers` ; la CSP n'ouvre que les adresses Google d'AdSense et du consentement, celles de Cloudflare Web Analytics et, depuis le 27 octobre 2026, `teiki5320.github.io` pour la veille actus (`connect-src` et `img-src` seulement) ; redirections (`/cgv`, `/categorie/<gamme>` (une règle par gamme), anciennes pages `/panier`, `/commande`, `/admin`…) dans `public/_redirects` ;
   - favoris stockés dans le navigateur (aucun compte) ;
   - liens Amazon construits par `src/lib/amazon.ts` (tag `keurcookfr-21`, champ `amazonAsin` rempli depuis les offres de `src/lib/demo/catalog*.ts`) ; prix indicatifs relevés le 27 septembre 2026 (`AMAZON_PRICES_CHECKED_ON`).
 
@@ -101,3 +102,11 @@ Mis à jour le 26 octobre 2026 par un scan du dépôt. Pour mettre à jour : rel
 - **Identifiants publics** : aucun dans le dépôt.
 - **Secrets** : aucun.
 - **Coût** : gratuit.
+
+## 9. Veille actus
+
+- **Rôle** : actus de la cuisine africaine (titre reformulé, résumé réécrit, lien vers la source, image libre de droits avec son crédit), en ligne depuis le 27 octobre 2026. Une tâche Claude sur le Mac mini les prépare 2 fois par jour (12 h et 19 h) à partir de 15 flux RSS, dans le dépôt public `teiki5320/veille` ; jamais d'actu santé ni de vocabulaire de vente.
+- **Lecture** : le site lit `https://teiki5320.github.io/veille/actus/keurcook.json` (schéma v3) directement dans le navigateur du visiteur, sans reconstruction (`src/lib/veille.ts` : délai de 8 s, cache de 15 min dans `sessionStorage`). Fichier injoignable ou vide : aucun bloc ne s'affiche, la page reste intacte. Images servies par `teiki5320.github.io` (photos WebP 16:9 et carrées, ou carte générée).
+- **Emplacements** : bloc « Actus de la cuisine africaine » sur l'accueil (4 actus, après « Cuisiner par pays »), page `/actus` (20 actus, dans le menu, le pied de page et le sitemap), bloc « L'actu de la cuisine du … » sur chaque page pays (3 actus dont le champ `pays` contient le code du pays ; absent s'il n'y en a pas), placé après « La cuisine du … », un bloc après l'annonce. Composants dans `src/components/actus/`. Jamais de lien Amazon, de bouton d'achat ni de produit de la boutique dans ces blocs.
+- **Console** : https://github.com/teiki5320/veille (aucune clé, aucun secret).
+- **Coût** : gratuit (GitHub Pages et abonnement Claude existant).

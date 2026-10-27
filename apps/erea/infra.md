@@ -1,7 +1,7 @@
 # INFRA — fiche technique
 
 > Généré le 20 août 2026 par un scan du dépôt, mis à jour le
-> 24 octobre 2026. Pour mettre à jour : relancer ce même prompt.
+> 27 octobre 2026. Pour mettre à jour : relancer ce même prompt.
 
 ## En bref
 
@@ -17,7 +17,7 @@
 - 🍎 **iOS** : 🐙 GitHub — main, 1.0.6 dans le code, CI au vert [ok] → ☁️ Xcode Cloud — build à chaque poussée sur main [ok] → 🛍️ App Store Connect — 1.0.5 (build 195) approuvée le 21 octobre [ok] → 📱 App Store — 1.0.5 en ligne depuis le 21 octobre [ok]
 - 🤖 **Android** : 🐙 GitHub — main, 1.0.6 dans le code, CI au vert [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — production accordée le 17 octobre, 1.0.6 envoyée le 22 octobre [ok] → 🛒 Google Play — 1.0.6 en ligne depuis le 22 octobre [ok]
 - 🌐 **Web** : 🐙 GitHub — racine de main, sans CNAME [ok] → 📄 Hébergement web (GitHub Pages / Cloudflare Pages) — GitHub Pages [ok] → 🏷️ Nom de domaine — erea.toakeur.com via Cloudflare [ok] → 🌐 Site — vitrine, jeu, support, confidentialité [ok]
-- 🎬 **Contenu** : 🎬 Studio — pubs vidéo des 5, 22 et 23 octobre, 12 à valider [ok] → 🗓️ Planning — aucune publication programmée [à faire] → 📣 Réseaux sociaux & influenceurs — YouTube et TikTok branchés, rien publié [pas encore]
+- 🎬 **Contenu** : 🎬 Studio — 28 pubs vidéo du 5 au 26 octobre, la première « Avant ou après ? » validée le 26 octobre [ok] → 🗓️ Planning — aucune publication programmée [à faire] → 📣 Réseaux sociaux & influenceurs — YouTube et TikTok branchés, rien publié [pas encore]
 
 ## Vue d'ensemble
 
@@ -295,7 +295,7 @@ Confidentialité. `NSPrivacyTracking` y reste à faux, sans clé de
 domaines : c'est la seule combinaison acceptée à l'import (build 182) ;
 le suivi reste déclaré dans la fiche Confidentialité.
 
-**Paiements (état au 18 août 2026, à vérifier dans la console)** : seuil de versement 70 €, mensuel
+**Paiements (dernier état connu, au 18 août 2026 ; non revérifié le 27 octobre 2026, à vérifier dans la console)** : seuil de versement 70 €, mensuel
 vers le 21. L'IBAN ne peut pas encore être saisi — Google n'ouvre
 « Gérer les modes de paiement » qu'après un premier seuil de recettes
 (environ 10 €). Suivront le courrier postal avec code PIN, à saisir sous

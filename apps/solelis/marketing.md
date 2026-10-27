@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-> Mise à jour le 26 octobre 2026 (82 pages indexées sur 94 suivies, 24 articles Conseils publiés, sitemap de 95 adresses ; aucun compte de réseau social rattaché à Solelis dans le Studio).
+> Mise à jour le 27 octobre 2026 (Solelis n'est plus en pause ; rubrique Actus en ligne sur /actus, sitemap de 96 adresses ; images sur les conseils et les guides. Auparavant, le 26 octobre 2026 : 82 pages indexées sur 94 suivies, 24 articles Conseils publiés, sitemap de 95 adresses ; aucun compte de réseau social rattaché à Solelis dans le Studio).
 > Aucun chiffre inventé : les valeurs non mesurées sont marquées comme telles.
 
 ## Rémunération par phases
@@ -23,7 +23,8 @@ Le dirigeant final ne paie jamais. Exclusions par design : pas de publicité dis
 
 | Canal | Détail | Statut |
 |---|---|---|
-| SEO organique | Métadonnées par page, sitemap (95 adresses le 26 octobre 2026), robots, JSON-LD (site, FAQ, articles), image OG dynamique, aperçu en grande image autorisé pour Google Discover et IndexNow pour Bing (en ligne depuis le 23 octobre 2026, IndexNow prévenu par la CI à chaque mise en ligne) ; pages longue traîne (17 courriers, 11 calculateurs, 4 annuaires, FAQ, glossaire, page « Dettes fiscales et sociales ») et rubrique Conseils (24 articles publiés, 18 programmés du 28 octobre au 7 décembre 2026 dont 12 ajoutés le 25 octobre, flux RSS) | ✅ base technique |
+| SEO organique | Métadonnées par page, sitemap (96 adresses le 27 octobre 2026 avec la page Actus ; 95 le 26 octobre), robots, JSON-LD (site, FAQ, articles), image OG dynamique, aperçu en grande image autorisé pour Google Discover et IndexNow pour Bing (en ligne depuis le 23 octobre 2026, IndexNow prévenu par la CI à chaque mise en ligne) ; pages longue traîne (17 courriers, 11 calculateurs, 4 annuaires, FAQ, glossaire, page « Dettes fiscales et sociales ») et rubrique Conseils (24 articles publiés, 18 programmés du 28 octobre au 7 décembre 2026 dont 12 ajoutés le 25 octobre, flux RSS) | ✅ base technique |
+| Actus (veille) | Page https://solelis.com/actus : 20 actus des entreprises en difficulté en France (titres et résumés réécrits, source et crédit toujours visibles), mises à jour à 12 h et 19 h ; 3 actus « Dans l'actualité » en bas des pages situation quand elles sont liées. Aucune actu sur l'accueil (ton rassurant). Lien dans le menu et le pied de page, page dans le sitemap | ✅ depuis le 27 octobre 2026 |
 | Search Console | solelis.com déclaré, sitemap envoyé le 12 octobre 2026 et renvoyé le 20 octobre (relu par Google le 22 octobre) ; 82 pages indexées sur 94 suivies (onglet Indexation du Studio) | ✅ |
 | Prescripteurs institutionnels | Référencement par CIP, greffes, CCI/CMA, URSSAF, APESA, 60 000 Rebonds — le canal au meilleur rendement | ⬜ |
 | Experts-comptables & avocats | Page `/pro` + kit prescripteur (PDF + email type) | ⬜ |
@@ -58,4 +59,4 @@ Le dirigeant final ne paie jamais. Exclusions par design : pas de publicité dis
 
 - Vérifier en production le parcours complet : création d'une fiche, lien magique reçu (et pas en indésirables) depuis Resend, rappel du cron, avocats locaux — et confirmer que solelis@toakeur.com reçoit bien les messages, puisque c'est l'adresse de suppression des fiches (RGPD)
 - Faire indexer par Google les 12 pages encore absentes sur 94 suivies : 10 inconnues, 2 découvertes mais non indexées (relevé du 24 octobre 2026)
-- Préparer la sortie de pause : refonte Solelis (logo, design, nom partout), puis relance des canaux, en commençant par les prescripteurs institutionnels
+- Relance des canaux (prescripteurs institutionnels d'abord)

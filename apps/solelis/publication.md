@@ -1,12 +1,12 @@
 # PUBLICATION — état de la mise en ligne
 
-> Mise à jour le 26 octobre 2026 (mise en ligne automatique par la CI GitHub depuis le 23 octobre 2026, dernière publication le 25 octobre ; lien SOS Amitié corrigé et page « Dettes fiscales et sociales » en ligne ; 82 pages indexées sur 94 suivies, sitemap de 95 adresses, 24 articles Conseils publiés, contrôle en ligne du 26 octobre 2026).
+> Mise à jour le 27 octobre 2026 (Solelis actif, plus en pause ; page Actus et images des conseils et guides mises en ligne le 27 octobre ; mise en ligne automatique par la CI GitHub depuis le 23 octobre 2026, dernière publication le 27 octobre ; lien SOS Amitié corrigé et page « Dettes fiscales et sociales » en ligne ; 82 pages indexées sur 94 suivies, sitemap de 96 adresses, 24 articles Conseils publiés, contrôle en ligne du 27 octobre 2026).
 
 ## En bref
 
-- **Production** : https://solelis.com répond, projet en pause
+- **Production** : https://solelis.com répond, site actif
 - **Domaine & SSL** : solelis.com chez Cloudflare, SSL automatique
-- **Visibilité** : 82 pages indexées sur 94 suivies, sitemap de 95 adresses
+- **Visibilité** : 82 pages indexées sur 94 suivies, sitemap de 96 adresses
 - **Monétisation** : aucune, gratuit intégral
 - **Contact** : solelis@toakeur.com
 
@@ -14,7 +14,7 @@
 
 | | 🌐 Site |
 |---|---|
-| État | [ok] En ligne, projet en pause |
+| État | [ok] Actif, en ligne |
 | Hébergement | [ok] Cloudflare Workers, publié par la CI à chaque envoi |
 | Domaine | [ok] solelis.com, www et avelor.toakeur.com redirigent |
 | SSL | [ok] Certificat automatique Cloudflare |
@@ -29,18 +29,18 @@
 4. **Parcours en production** : vérifier fiche, lien magique Resend, rappel du cron et boîte solelis@toakeur.com.
 5. **Indexation** : faire entrer dans Google les 12 pages encore absentes sur 94.
 6. **Mesure d'audience** : souscrire Plausible et définir `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`.
-7. **Sortie de pause** : refonte Solelis (logo, design, nom partout), puis relance des canaux.
+7. **Relance des canaux** : prescripteurs institutionnels d'abord.
 
 ## Vue d'ensemble
 
-- **État** : ⏸️ projet en pause — le site reste en ligne et répond (contrôle du 26 octobre 2026)
+- **État** : ✅ actif, en ligne (refonte faite : nom Solelis, logo, design ; contrôle du 27 octobre 2026)
 - **URL publique** : https://solelis.com (titre « Solelis — Aide aux chefs d'entreprise en difficulté »)
 - **Hébergeur** : Cloudflare Workers (Worker « solelis », adaptateur OpenNext)
 - **Base** : Cloudflare D1 « solelis » (UE)
 - **Domaine + SSL** : solelis.com, enregistré chez Cloudflare, déclaré comme domaine personnalisé du Worker (`wrangler.jsonc`) ; certificat géré automatiquement par Cloudflare
 - **Contact public** : solelis@toakeur.com (mentions légales, confidentialité, politique de données, accessibilité, témoignages)
 - **Ancienne adresse** : avelor.toakeur.com redirige (301) vers https://solelis.com (constaté le 21 octobre 2026)
-- **Dernière mise en production** : 25 octobre 2026, par la CI GitHub (envoi « Fiches du 25/10 », publication réussie, juste après l'envoi « Conseils : 12 articles programmés du 11 novembre au 7 décembre 2026 ») — la première publication par la CI date du 23 octobre 2026 ; détail dans la console Cloudflare (Worker → Déploiements)
+- **Dernière mise en production** : 27 octobre 2026, par la CI GitHub (page Actus, images des conseils et des guides) ; la précédente date du 26 octobre 2026 (envoi « Fiches du 26/10 ») — la première publication par la CI date du 23 octobre 2026 ; détail dans la console Cloudflare (Worker → Déploiements)
 
 ### 1. Web · Production
 
@@ -59,8 +59,9 @@
 
 ### 3. Visibilité
 
-- **Indexation** : `app/sitemap.ts` (servi sur `/sitemap.xml`, rendu à la requête : 95 adresses le 26 octobre 2026, dont 25 pour la rubrique Conseils (la page d'accueil de la rubrique et 24 articles) ; page « Dettes fiscales et sociales » en ligne depuis le 23 octobre) et `app/robots.ts` (bloque `/api/` et `/fiche/`, autorise `/api/og`)
+- **Indexation** : `app/sitemap.ts` (servi sur `/sitemap.xml`, rendu à la requête : 96 adresses le 27 octobre 2026 (95 le 26 octobre, puis la page /actus), dont 25 pour la rubrique Conseils (la page d'accueil de la rubrique et 24 articles) ; page « Dettes fiscales et sociales » en ligne depuis le 23 octobre) et `app/robots.ts` (bloque `/api/` et `/fiche/`, autorise `/api/og`)
 - **Google Search Console** : domaine solelis.com déclaré, sitemap envoyé le 12 octobre 2026 et renvoyé le 20 octobre (lu, sans erreur) ; relu par Google le 22 octobre ; 82 pages indexées sur 94 suivies, 2 découvertes mais non indexées, 10 inconnues de Google (relevé du Studio du 24 octobre, onglet Indexation)
+- **Actus** : https://solelis.com/actus (20 actus lues en direct depuis la veille, dans le sitemap) et https://solelis.com/veille/entites.json (les 4 situations, pour la veille), en ligne depuis le 27 octobre 2026 ; aucune actu sur l'accueil
 - **Rubrique Conseils** : https://solelis.com/conseils et son flux https://solelis.com/conseils/rss.xml répondent ; 24 articles publiés (20 le 12 octobre 2026, 1 le 19 octobre, 1 le 21 octobre, 1 le 23 octobre, 1 le 26 octobre), 18 programmés du 28 octobre au 7 décembre 2026 (dont 12 ajoutés le 25 octobre 2026), qui paraîtront d’eux-mêmes à leur date ; le lien SOS Amitié corrigé le 21 octobre est en ligne depuis la mise en ligne du 23 octobre (sosamitie.org, constaté le 24 octobre)
 - **Balises de partage** : Open Graph + Twitter Card par page (titre et description propres à chaque page), image générée dynamiquement par `/api/og` (runtime Node), URL canonique sur les pages qui la déclarent (`ogMeta({ chemin })`), JSON-LD Organization + WebSite (+ FAQPage, fil d'Ariane)
 - **Mesure d'audience** : aucune en production — Plausible est prévu dans le code mais ne se charge que si `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` est définie, ce qui n'est pas le cas

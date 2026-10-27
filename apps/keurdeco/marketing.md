@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 26 octobre 2026. Compagnon de INFRA.md.
+Mis à jour le 27 octobre 2026. Compagnon de INFRA.md.
 
 ## Positionnement
 
@@ -10,8 +10,8 @@ Mis à jour le 26 octobre 2026. Compagnon de INFRA.md.
 
 ## Rémunération par phases
 
-- [fait] **Aujourd'hui** : liens Amazon Partenaires (tag `keurdecofr-21` depuis le 18 octobre 2026, l'ancien compte ayant été fermé par Amazon ; 228 produits actifs sur 238 relevés au 26 octobre 2026).
-- [en cours] **Validation AdSense** : code et `ads.txt` en place, examen demandé le 16 octobre 2026 ; aucune annonce ne s'affiche tant que Google n'a pas validé le site.
+- [fait] **Aujourd'hui** : liens Amazon Partenaires (tag `keurdecofr-21` depuis le 18 octobre 2026, l'ancien compte ayant été fermé par Amazon ; 226 produits actifs sur 238 relevés au 27 octobre 2026).
+- [en cours] **Validation AdSense** : code et `ads.txt` en place, examen demandé le 16 octobre 2026, « En préparation » dans la console AdSense, ni validé ni refusé (vérifié le 27 octobre 2026) ; aucune annonce ne s'affiche tant que Google n'a pas validé le site.
 - [en cours] **Trafic Pinterest automatique** : accès standard accordé, publication quotidienne par l'API (5 épingles par passage) depuis le 20 octobre 2026.
 - **Trafic de recherche** : pages indexées par Google et Bing, qui font vivre les deux revenus.
 
@@ -19,32 +19,39 @@ Mis à jour le 26 octobre 2026. Compagnon de INFRA.md.
 
 - 🧵 **Matières expliquées** : nuancier animé et glossaire de 15 matières (wax, bogolan, kente, indigo, raphia…).
 - 🛋️ **Ambiances cliquables** : chaque image d'ambiance a des points qui mènent aux produits, classés sans mélange par pièce, matière ou occasion.
+- 📰 **Actus de la déco africaine** : depuis le 27 octobre 2026, 4 actus sur l'accueil, 20 sur la page Actus et 3 par page matière, mises à jour 2 fois par jour par la veille (titres et résumés réécrits, source et crédit photo toujours affichés, aucun lien Amazon).
 - ✅ **Produits vérifiés à la main** : aucun prix, aucune photo Amazon, mention IA sur les images et mention Partenaires affichée.
 
 ## Canaux
 
-- ✅ **Pinterest « Keur Déco »** (principal) : compte branché au Planning du Studio ; 96 épingles importées par CSV (2 par jour, du 2 octobre au 18 novembre 2026, `data/pinterest-etat.json`). Publication par l'API : accès standard accordé, 20 tableaux reliés, 5 épingles par passage ; maximum corrigé et secret renouvelé le 20 octobre, 5 premières épingles publiées par l'API le même jour, 40 au 26 octobre.
-- ✅ **Google** : Search Console vérifiée (propriété de domaine) ; au relevé du 7 octobre 2026, 71 pages indexées et 27 non indexées, demandes d'indexation faites les 7 et 8 octobre. Le 21 octobre, la routine « Référencement du jour » a retravaillé 5 pages (titres, descriptions, liens internes), à relire à partir du 18 novembre ; le 22 octobre, 3 pages presque en première page retravaillées, à relire à partir du 19 novembre (`docs/referencement.md`).
+- ✅ **Pinterest « Keur Déco »** (principal) : compte branché au Planning du Studio ; 96 épingles importées par CSV (2 par jour, du 2 octobre au 18 novembre 2026, `data/pinterest-etat.json`). Publication par l'API : accès standard accordé, 20 tableaux reliés, 5 épingles par passage ; maximum corrigé et secret renouvelé le 20 octobre, 5 premières épingles publiées par l'API le même jour, 50 au 27 octobre.
+- ✅ **Google** : Search Console vérifiée (propriété de domaine) ; 104 pages indexées sur 120 au relevé du Studio du 27 octobre 2026 (71 au 7 octobre ; demandes d'indexation faites les 7 et 8 octobre). Le 21 octobre, la routine « Référencement du jour » a retravaillé 5 pages (titres, descriptions, liens internes), à relire à partir du 18 novembre ; le 22 octobre, 3 pages presque en première page retravaillées, à relire à partir du 19 novembre (`docs/referencement.md`).
 - ✅ **Bing** : pages signalées par IndexNow après chaque reconstruction programmée (lundi, mercredi, vendredi).
 - ⬜ **TikTok et YouTube** : TikTok « Afrotok » est branché au Studio mais rattaché à aucune app, YouTube « toa.afrotok » à Erea seule (Studio, 13 octobre 2026) ; aucune publication pour Keur Déco.
+
+## Rubrique Actus
+
+- **Où** : bloc « Actus de la déco africaine » sur l'accueil (4), page `actus.html` (20, dans le menu et le pied de page, au sitemap), bloc « L'actu du [matière] » sur chaque page matière (3, absent s'il n'y en a pas).
+- **Quoi** : designers, artisans, textiles, vannerie, poterie, bois sculpté, perles, salons et expositions ; 15 flux RSS ; titres et résumés réécrits par Claude, lien vers chaque source, crédit de chaque image.
+- **Règles** : aucun lien Partenaires ni prix dans les actus, aucune épingle Pinterest tirée des actus, pas d'annonce AdSense sur la page Actus.
 
 ## Mesures
 
 - **Audience** : Cloudflare Web Analytics (sans cookie) — à vérifier dans la console.
-- **Pages indexées** : 71 indexées et 27 non indexées au 7 octobre 2026 (Search Console).
-- **Épingles** : 96 importées par CSV (programmées jusqu'au 18 novembre 2026) et 40 publiées par l'API du 20 au 26 octobre 2026 (`data/pinterest-etat.json`).
+- **Pages indexées** : 104 sur 120 au 27 octobre 2026 (relevé du Studio) : 9 détectées non explorées, 3 inconnues de Google, 4 exclues volontairement par `noindex`.
+- **Épingles** : 96 importées par CSV (programmées jusqu'au 18 novembre 2026) et 50 publiées par l'API du 20 au 27 octobre 2026 (`data/pinterest-etat.json`).
 - **Statistiques Pinterest** : à vérifier dans la console Pinterest.
 - **Commissions Amazon** : à vérifier dans la console Amazon Partenaires.
 - **Revenus AdSense** : aucun, site encore en examen chez Google.
 
 ## Calendrier
 
-- Articles et conseils **publiés à leur date** (en-tête `publie_le`), le site étant reconstruit à chaque push et chaque lundi, mercredi et vendredi à 5 h UTC. Au 26 octobre 2026 : 39 articles, dont 25 en ligne et 14 programmés, un par lundi jusqu'au 25 janvier 2027, puis le balcon le 26 avril 2027. Page « Top 10 » à onglets (10 sujets) en ligne depuis le 19 octobre.
-- Conseils : 62, dont 40 en ligne au 26 octobre 2026 et 22 programmés (lundi, mercredi, vendredi) jusqu'au 16 décembre 2026 (12 ajoutés le 26 octobre par la routine « Articles », pour l'instant sans photo : la carte affiche le motif du thème en attendant l'accord de Jean pour les images). Depuis le 23 octobre 2026, le site est reconstruit le lundi, le mercredi et le vendredi (`pages.yml`, cron `0 5 * * 1,3,5`) et à chaque push : chaque conseil paraît le jour de sa date.
+- Articles et conseils **publiés à leur date** (en-tête `publie_le`), le site étant reconstruit à chaque push et chaque lundi, mercredi et vendredi à 5 h UTC. Au 27 octobre 2026 : 39 articles, dont 25 en ligne et 14 programmés, un par lundi jusqu'au 25 janvier 2027, puis le balcon le 26 avril 2027. Page « Top 10 » à onglets (10 sujets) en ligne depuis le 19 octobre.
+- Conseils : 62, dont 40 en ligne au 27 octobre 2026 et 22 programmés (lundi, mercredi, vendredi) jusqu'au 16 décembre 2026 (12 ajoutés le 26 octobre par la routine « Articles », restés sans image jusqu'au 27 octobre : Jean a choisi de les compléter, 6 avec une photo libre de Wikimedia Commons créditée et 6 avec une carte générée aux couleurs du site ; les 50 images IA déjà en place sont gardées). Depuis le 23 octobre 2026, le site est reconstruit le lundi, le mercredi et le vendredi (`pages.yml`, cron `0 5 * * 1,3,5`) et à chaque push : chaque conseil paraît le jour de sa date.
 - Épingles : import CSV par lots de 30 jours, 2 par jour (lot en cours jusqu'au 18 novembre) ; en plus, l'API publie 5 épingles par passage du workflow quotidien.
 
 ## Les 3 priorités
 
 - Garder la publication Pinterest par l'API en marche : quand GitHub ouvre un ticket « mettre à jour le secret PINTEREST_REFRESH_TOKEN », recopier le nouveau jeton dans le secret (Pinterest en renvoie un nouveau à chaque renouvellement ; le jeton actuel reste valable environ 60 jours).
-- Relever le nombre de pages indexées dans la Search Console (dernier relevé : 7 octobre) et faire indexer les pages encore absentes, dont les 10 pages Top 10.
-- Remplacer les 9 produits Amazon indisponibles et sans remplaçant (jarre toscane, coussin femme africaine en jute, plaid chenille, lampadaire rotin, sphère étoiles, suspension parasol, plateaux tressés lot de 2, tissu bogolan indigo à flèches devenu indisponible le 25 octobre, chemin de table paisley 40 × 225 cm devenu indisponible le 26 octobre).
+- Faire indexer les 12 pages encore absentes (9 détectées non explorées, 3 inconnues de Google au 27 octobre 2026) ; les 10 pages Top 10 sont déjà indexées.
+- Remplacer les 11 produits Amazon indisponibles et sans remplaçant (jarre toscane, coussin femme africaine en jute, plaid chenille, lampadaire rotin, sphère étoiles, suspension parasol, plateaux tressés lot de 2, tissu bogolan indigo à flèches, chemin de table paisley 40 × 225 cm, tapis berbère rouge 140 × 200 et coussin wax vert baobab, ces deux derniers devenus indisponibles le 27 octobre).
