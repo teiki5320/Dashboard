@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 27 octobre 2026. Compagnon de INFRA.md.
+Mis à jour le 28 octobre 2026. Compagnon de INFRA.md.
 
 ## Positionnement
 
@@ -8,9 +8,9 @@ Mis à jour le 27 octobre 2026. Compagnon de INFRA.md.
 - **Promesse** : « Recettes africaines & produits rares » (`src/lib/config.ts`). Les grands plats d'Afrique expliqués pas à pas, et les ingrédients introuvables en grande surface pour les réussir chez soi.
 - **Contenu** :
   - 58 recettes de 16 pays (Afrique de l'Ouest, centrale, de l'Est, australe et Madagascar), dont six thés, cafés et infusions (ataya, kinkeliba, chai kényan, rooibos glacé, buna, kahawa chungu) depuis le 19 octobre 2026, avec histoire du plat, ingrédients, étapes, astuces et valeurs nutritionnelles estimées ; une section « La cuisine de … » sur chaque page pays ;
-  - rubrique « Conseils » : 67 articles, dont 40 publiés et 27 programmés, trois par semaine (lundi, mercredi, vendredi) jusqu'au 28 décembre 2026 (`content/conseils/`, `docs/CONSEILS.md`, `docs/CONSEILS-CALENDRIER.md`) ;
+  - rubrique « Conseils » : 67 articles, dont 41 publiés et 26 programmés, trois par semaine (lundi, mercredi, vendredi) jusqu'au 28 décembre 2026 (`content/conseils/`, `docs/CONSEILS.md`, `docs/CONSEILS-CALENDRIER.md`) ;
   - boutique de 127 produits en 9 gammes : Épices & aromates, Farines & céréales, Feuilles & fleurs séchées, Poissons & fumés, Huiles & pâtes, Snacks & fruits secs, Cafés & thés, Ustensiles (dont mortiers, marmites, mixeurs et objets de service), Livres de cuisine. Produits retenus : plus de 3,5 étoiles sur Amazon ;
-  - « Actus de la cuisine africaine » (depuis le 27 octobre 2026) : page `/actus` (20 actus), bloc de 4 actus sur l'accueil et 3 actus du pays sur chaque page pays, mis à jour 2 fois par jour (12 h et 19 h) par la veille actus ; chaque actu est résumée par nous, avec le lien vers sa source et le crédit de l'image ; jamais d'actu santé ni de vocabulaire de vente ;
+  - « Actus de la cuisine africaine » (depuis le 27 octobre 2026) : page `/actus` (20 actus), bloc de 4 actus sur l'accueil et 3 actus du pays sur chaque page pays, mis à jour 2 fois par jour (12 h et 19 h) par la veille actus ; chaque actu est résumée par nous, avec le lien vers sa source et le crédit de l'image ; depuis le 28 octobre 2026, toucher une actu ouvre son article complet (300 à 450 mots) sur sa propre page du site (`/actus/<adresse>`, trouvable par Google) ; jamais d'actu santé ni de vocabulaire de vente ;
   - « Top 10 » (depuis le 19 octobre 2026) : 10 classements de produits (ustensiles, ingrédients pour débuter, mortiers, marmites, mixeurs, épices, farines, livres, thés et cafés, service et thé), selon la note moyenne des acheteurs sur Amazon.fr, chacun relié aux recettes concernées.
 - **Lien recettes → boutique** : chaque ingrédient disponible en boutique est signalé « Produit rare » dans la recette, avec un bouton d'achat Amazon ; chaque fiche produit liste les recettes qui l'utilisent.
 - **Ton et image** : thème sombre « Braise », carte de l'Afrique en particules sur l'accueil (« Seize pays, une seule table. »), grandes photos, carrousels par type de plat.
@@ -20,8 +20,8 @@ Mis à jour le 27 octobre 2026. Compagnon de INFRA.md.
 
 Deux sources, sans rien vendre soi-même :
 
-- **Affiliation Amazon Partenaires** : les boutons « Acheter · prix » mènent à Amazon.fr (tag `keurcookfr-21`, `src/lib/amazon.ts`) ; Amazon encaisse, livre et verse une commission sur les achats.
-- **Publicité Google AdSense** (en examen depuis le 12 octobre 2026 ; « En préparation » dans la console AdSense, ni validé ni refusé (vérifié le 27 octobre 2026)) : emplacements titrés « Publicité » prêts sur les recettes, les articles « Conseils » et les pages pays ; aucune annonce ne s'affiche tant que Google n'a pas validé le site ; consentement recueilli par le message de Google.
+- **Affiliation Amazon Partenaires** : les boutons « Voir sur Amazon » mènent à Amazon.fr (tag `keurcookfr-21`, `src/lib/amazon.ts`) ; Amazon encaisse, livre et verse une commission sur les achats.
+- **Publicité Google AdSense** (en examen depuis le 12 octobre 2026 ; « En préparation » dans la console AdSense, ni validé ni refusé (vérifié le 28 octobre 2026)) : emplacements titrés « Publicité » prêts sur les recettes, les articles « Conseils », les articles d'actus (depuis le 28 octobre 2026) et les pages pays ; aucune annonce ne s'affiche tant que Google n'a pas validé le site ; consentement recueilli par le message de Google.
 
 Les recettes et les conseils sont gratuits et attirent les visiteurs. Prix affichés indicatifs, relevés le 27 septembre 2026.
 
@@ -36,14 +36,13 @@ Les recettes et les conseils sont gratuits et attirent les visiteurs. Prix affic
 
 - 🌍 **Seize pays, une seule table** : 58 recettes de 16 pays, avec l'histoire du plat, les étapes et les valeurs nutritionnelles.
 - 🛒 **De la recette au produit** : chaque ingrédient rare est signalé dans la recette et s'achète en un clic sur Amazon.fr.
-- 📰 **Des actus fraîches** : l'actualité de la cuisine africaine (plats, chefs, produits, festivals) résumée deux fois par jour, avec la source de chaque actu.
-- 📝 **Un contenu qui paraît seul** : trois articles « Conseils » par semaine, publiés automatiquement par GitHub Actions.
+- 📰 **Des actus fraîches** : l'actualité de la cuisine africaine (plats, chefs, produits, festivals) deux fois par jour, en articles complets à lire sur le site, avec la source de chaque actu.
 
 ## Canaux
 
 - **Référencement naturel** : sitemap (recettes, pays, produits, articles publiés, Top 10), données structurées (Recipe, Article, FAQPage, fil d'Ariane), textes alternatifs, titres et descriptions calibrés. Domaine déclaré dans Google Search Console (248 pages indexées sur 259 au relevé du Studio du 27 octobre 2026) ; pages signalées chaque lundi à Bing et aux autres moteurs par IndexNow ; depuis le 20 octobre 2026, titres, descriptions et FAQ retravaillés page par page d'après Search Console (journal `docs/referencement.md`). ✅
 - **Contenu régulier** : trois articles « Conseils » par semaine (lundi, mercredi, vendredi), publiés automatiquement. ✅
-- **Actus** : depuis le 27 octobre 2026, rubrique « Actus de la cuisine africaine » (`/actus`), bloc sur l'accueil et sur chaque page pays, mis à jour 2 fois par jour par la veille actus ; contenu frais sans reconstruire le site. ✅
+- **Actus** : depuis le 27 octobre 2026, rubrique « Actus de la cuisine africaine » (`/actus`), bloc sur l'accueil et sur chaque page pays, mis à jour 2 fois par jour par la veille actus ; contenu frais sans reconstruire le site ; depuis le 28 octobre 2026, chaque actu a son article complet sur sa propre page (site reconstruit 2 fois par jour, à 12 h 50 et 19 h 50). ✅
 - **Pinterest** : compte « Keur Cook » branché, site revendiqué, bouton « Épingler » sur chaque recette. 52 recettes épinglées du 2 au 14 octobre 2026 dans les tableaux par région par l'ancienne routine `keurcook-epingles-pinterest` (plus programmée). Publication automatique par l'API (comme Keur Déco, 5 épingles par jour au plus) : clé du compte créée le 23 octobre 2026, les six boissons épinglées le 24 octobre, les 58 recettes sont épinglées. ✅
 - **Partage** : boutons « Partager sur WhatsApp » et « Épingler sur Pinterest », version imprimable sur chaque recette. ✅
 - **TikTok et YouTube** : TikTok « Afrotok » est branché au Studio mais rattaché à aucune app, YouTube « toa.afrotok » à Erea seule ; aucune publication Keur Cook prévue. ⬜
@@ -53,7 +52,7 @@ Les recettes et les conseils sont gratuits et attirent les visiteurs. Prix affic
 ## Mesures
 
 - **Pages indexées par Google** : 248 sur 259 ; 11 pas encore, dont 7 inconnues de Google et 4 détectées non explorées (relevé du Studio, 27 octobre 2026)
-- **Adresses du sitemap** : 260 (27 octobre 2026, avec la page Actus ; 259 le 26 octobre)
+- **Adresses du sitemap** : 264 (28 octobre 2026, avec les 3 premiers articles d'actus ; 260 le 27 octobre, 259 le 26 octobre) ; le nombre grandit 2 fois par jour avec les nouveaux articles d'actus
 - **Clics, achats et commissions Amazon** : à vérifier dans la console (partenaires.amazon.fr)
 - **Affichages et revenus des annonces** : aucun, site encore en examen chez Google (adsense.google.com)
 - **Épingles Pinterest** : 58 recettes sur 58 épinglées (24 octobre 2026) ; impressions et clics à vérifier dans la console
@@ -61,6 +60,5 @@ Les recettes et les conseils sont gratuits et attirent les visiteurs. Prix affic
 
 ## Les 3 priorités
 
-- Écrire de nouveaux articles « Conseils » : il en reste 27 en réserve, la réserve passe sous 20 vers le 13 novembre et se vide le 28 décembre 2026.
-- Relever à nouveau les prix indicatifs affichés : la date de relevé indiquée sur le site reste le 27 septembre 2026 et rien ne le refait automatiquement.
+- Écrire de nouveaux articles « Conseils » : il en reste 26 en réserve, la réserve passe sous 20 vers le 13 novembre et se vide le 28 décembre 2026.
 - Faire indexer les 11 pages manquantes (7 inconnues de Google, 4 détectées non explorées au 27 octobre 2026) ; demander leur indexation dans Search Console.

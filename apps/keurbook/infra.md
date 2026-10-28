@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 27 octobre 2026, d'après le code du dépôt et le site en ligne. Aucun secret ici :
+Mis à jour le 28 octobre 2026, d'après le code du dépôt et le site en ligne. Aucun secret ici :
 uniquement des noms de variables et de consoles.
 
 ## En bref
@@ -9,16 +9,16 @@ uniquement des noms de variables et de consoles.
 - **Stack** : Next.js 16 en export statique, React 19, Tailwind CSS 4
 - **Backend** : aucun — site statique, sans base ni compte
 - **Distribution** : Cloudflare Pages, publié par GitHub Actions
-- **Site** : keurbook.com (975 adresses dans le sitemap)
+- **Site** : keurbook.com (980 adresses dans le sitemap)
 - **IA et outils** : routine « Écrire les articles Conseils », veille actus (2 passages par jour), IndexNow, Cloudflare Web Analytics
 
 ## Parcours
 
 - 🌐 **Web** : 🐙 GitHub — main · publication au vert [ok] → ⚙️ GitHub Actions — lint, types, tests, build [ok] → ☁️ Cloudflare Pages — projet keurbook [ok] → 🌍 keurbook.com — en ligne, réponse 200 [ok]
-- 📝 **Contenu** : ✍️ Articles Conseils — 40 publiés, 21 programmés [ok] → ⚙️ GitHub Actions — publie lundi, mercredi, vendredi [ok] → 📡 IndexNow — sitemap signalé chaque lundi [ok] → 🔍 Google — 679 pages indexées sur 975 [à faire]
+- 📝 **Contenu** : ✍️ Articles Conseils — 41 publiés, 20 programmés [ok] → ⚙️ GitHub Actions — publie lundi, mercredi, vendredi [ok] → 📡 IndexNow — sitemap signalé chaque lundi [ok] → 🔍 Google — 680 pages indexées sur 980 [à faire]
 - 📰 **Veille actus** : 📡 Tâche de veille — 12 h et 19 h, 10 flux RSS [ok] → 🐙 Dépôt veille — actus/keurbook.json sur GitHub Pages [ok] → 🌍 keurbook.com — accueil (4), /actus (20), fiches auteur (3) [ok]
-- 🛒 **Affiliation** : 📚 Fiche livre ou BD — bouton « Acheter sur Amazon » [ok] → 🛒 Amazon Partenaires (affiliation) — tag keurbookfr-21 [ok] → 🔗 Liens directs — 90 ASIN sur 796 livres et BD [à faire]
-- 📰 **Publicité** : 📰 AdSense (publicité web) — script et 4 blocs en place [ok] → ✅ Validation du site — refusée le 21/10, réexamen demandé le 22/10, « En préparation » au 27/10 [pas encore] → 💶 Revenus — aucun constaté [pas encore]
+- 🛒 **Affiliation** : 📚 Fiche livre ou BD — bouton « Voir sur Amazon » [ok] → 🛒 Amazon Partenaires (affiliation) — tag keurbookfr-21 [ok] → 🔗 Liens directs — 90 ASIN sur 796 livres et BD [à faire]
+- 📰 **Publicité** : 📰 AdSense (publicité web) — script et 4 blocs en place [ok] → ✅ Validation du site — refusée le 21/10, réexamen demandé le 22/10, « En préparation » au 28/10 [pas encore] → 💶 Revenus — aucun constaté [pas encore]
 
 ## Vue d'ensemble
 
@@ -30,9 +30,9 @@ uniquement des noms de variables et de consoles.
 - **Backend** : aucun. Site entièrement statique (dossier `out/`), sans base de données, sans
   compte. La pile à lire reste dans le navigateur du visiteur. Seuls cookies : ceux de Google AdSense,
   après accord dans le bandeau de consentement de Google (voir docs/PUBLICITE.md).
-- **Taille** : 975 adresses dans le sitemap au 27 octobre 2026 (675 livres, 121 BD, 92 auteurs,
-  26 pays, 40 articles Conseils publiés, 11 pages Top 10, la page Actus, pages de liste et pages légales ;
-  974 jusqu'au 26 octobre 2026, avant la page Actus).
+- **Taille** : 980 adresses dans le sitemap au 28 octobre 2026 (675 livres, 121 BD, 92 auteurs,
+  26 pays, 41 articles Conseils publiés, 11 pages Top 10, la page Actus, 4 articles d'actus, pages de liste
+  et pages légales ; 975 le 27 octobre, avant les articles d'actus, et 974 jusqu'au 26 octobre, avant la page Actus).
 - **Particularités** : interrupteur de maintenance dans `content/maintenance.json` (désactivé),
   tests de cohérence des contenus dans `tests/`, signalement IndexNow chaque lundi.
 
@@ -41,7 +41,8 @@ uniquement des noms de variables et de consoles.
 - **Rôle** : dépôt du code et des contenus, et trois workflows :
   - `deploy.yml` (« Publier le site ») : lint, types, tests, build, puis publication sur
     Cloudflare Pages à chaque push sur `main`, chaque lundi, mercredi et vendredi à 23 h 15 UTC la
-    veille (articles programmés) et à la main ;
+    veille (articles programmés), chaque jour à 11 h 50 et 18 h 50 UTC (pages des articles d'actus,
+    depuis le 28 octobre 2026) et à la main ;
   - `indexnow.yml` : signale toutes les pages du sitemap publié à IndexNow (Bing, Yandex…) chaque
     lundi à 2 h UTC et à la demande ;
   - `maintenance.yml` : met le site en pause ou le rouvre, puis republie.
@@ -71,7 +72,7 @@ uniquement des noms de variables et de consoles.
 
 ## Amazon Partenaires (affiliation)
 
-- **Rôle** : les boutons « Acheter sur Amazon » mènent à Amazon.fr avec le tag `keurbookfr-21`
+- **Rôle** : les boutons « Voir sur Amazon » mènent à Amazon.fr avec le tag `keurbookfr-21`
   (construits par `src/lib/amazon.ts`, réglable par `NEXT_PUBLIC_AMAZON_TAG`). 90 livres et BD (ceux
   des pages Top 10) ont un ASIN vérifié à la main le 19 octobre 2026 (`src/lib/demo/amazon-asins.ts`)
   et mènent directement à leur fiche Amazon (91 jusqu'au 24 octobre 2026 : L'Empire peul du Macina, épuisé et
@@ -84,10 +85,10 @@ uniquement des noms de variables et de consoles.
 
 ## AdSense (publicité web)
 
-- **Rôle** : annonces Google sur le site, une fois le site validé. Historique : première demande d'examen le 12 octobre 2026, refusée le 21 octobre 2026 (« contenu à faible valeur informative ») ; les 796 fiches ont été rallongées le 21 octobre et l'examen a été redemandé le 22 octobre 2026. État du nouvel examen : « En préparation » dans la console, ni validé ni refusé (vérifié le 27 octobre 2026) ; **aucune annonce ne s'affiche pour l'instant**. Script AdSense et balise
+- **Rôle** : annonces Google sur le site, une fois le site validé. Historique : première demande d'examen le 12 octobre 2026, refusée le 21 octobre 2026 (« contenu à faible valeur informative ») ; les 796 fiches ont été rallongées le 21 octobre et l'examen a été redemandé le 22 octobre 2026. État du nouvel examen : « En préparation » dans la console, ni validé ni refusé (vérifié le 28 octobre 2026) ; **aucune annonce ne s'affiche pour l'instant**. Script AdSense et balise
   `google-adsense-account` chargés dans `src/app/layout.tsx` ; identifiant d'éditeur dans
   `src/lib/config.ts` (`ADSENSE_CLIENT`, réglable par `NEXT_PUBLIC_ADSENSE_CLIENT` ; laissée vide,
-  plus aucun script Google ne serait chargé). `public/ads.txt` est publié et répond.
+  plus aucun script Google ne serait chargé). `public/ads.txt` est publié et répond (la console AdSense l'affiche encore « Introuvable » au 28 octobre 2026).
 - **Emplacements choisis** (annonces automatiques désactivées), composant `AdSlot`, mention
   « Publicité » visible : 1 en fin de fiche livre ou BD, 1 après la biographie d'un auteur, 1 sur
   les pages pays, 2 dans les articles Conseils. Aucune sur l'accueil, les listes, les Top 10, la pile à lire
@@ -97,7 +98,7 @@ uniquement des noms de variables et de consoles.
   européennes), lien « Gérer mes cookies » en pied de page ; la politique de sécurité de
   `public/_headers` n'ouvre que les domaines Google nécessaires.
 - **Détail** : docs/PUBLICITE.md.
-- **Validation du site et revenus** : refusée le 21 octobre 2026, nouvel examen demandé le 22 octobre 2026 (état à vérifier dans la console) ; aucun revenu tant que le site n'est pas validé.
+- **Validation du site et revenus** : refusée le 21 octobre 2026, nouvel examen demandé le 22 octobre 2026, « En préparation » dans la console (vérifié le 28 octobre 2026) ; aucun revenu tant que le site n'est pas validé.
 - **Console** : https://adsense.google.com (compte `pub-2680784147246798`, géré avec `admin@toakeur.com`).
 
 ## Analytics (mesure d'usage)
@@ -122,6 +123,15 @@ uniquement des noms de variables et de consoles.
 - **Emplacements** : bloc « Actus du livre » sur l'accueil (4 actus), page `/actus` (20 actus, dans le
   menu et le sitemap), bloc « L'actu de … » sur chaque fiche auteur (3 actus liées à l'auteur ; absent
   s'il n'y en a pas). Composants dans `src/components/actus/`. Jamais de lien Amazon dans ces blocs.
+- **Articles complets** (depuis le 28 octobre 2026) : chaque actu a son article de 300 à 450 mots, écrit
+  par la veille (`articles/keurbook/<id>.json`, schéma article v1), jamais supprimé ensuite. Au build,
+  `scripts/veille-articles.mjs` lit l'index de tous les articles (`articles/keurbook/index.json`) et les actus
+  récentes (fichier `.veille/articles.json`, non suivi ; veille injoignable = 0 page, build intact) et le site construit une page `/actus/<adresse>` par article (fil d'Ariane, chapô, image et
+  crédit, intertitres, encadré « Sources », liens vers les fiches auteurs, 3 autres actus, 1 annonce
+  AdSense « article »), avec `NewsArticle` en JSON-LD, dans le sitemap (et donc IndexNow). Reconstruction
+  2 fois par jour (11 h 50 et 18 h 50 UTC) par `deploy.yml`. Les articles parus entre deux constructions
+  s'ouvrent dans la page de secours `/actus/article?id=<id>` (lue dans le navigateur, `noindex`, hors
+  sitemap). Toute la carte d'une actu ouvre l'article sur le site ; sans article, elle ouvre la source.
 - **Fiches pour la veille** : `public/veille/entites.json` (92 auteurs : tag `auteur:<slug>`, nom
   public, variantes sans accents, pays), généré à chaque build par `scripts/veille-entites.mjs`
   et publié sur `https://keurbook.com/veille/entites.json`. La tâche de veille s'en sert pour relier une

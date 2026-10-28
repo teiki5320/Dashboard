@@ -1,6 +1,6 @@
 # Erea — plan marketing & rémunération
 
-> Généré le 3 août 2026, mis à jour le 27 octobre 2026. Le modèle de
+> Généré le 3 août 2026, mis à jour le 28 octobre 2026. Le modèle de
 > rémunération est en ligne sur l'App Store depuis la 1.0.2 et sur Google
 > Play depuis le 20 octobre 2026 (publicité + achat unique qui la retire). Pour le mettre à jour : relancer ce même prompt. Aucun secret
 > ici.
@@ -42,7 +42,7 @@ classiques :
 ## Rémunération par phases
 
 - [fait] **Aujourd'hui** : pub AdMob une partie sur deux, achat unique 3,99 € qui la retire, sur iOS et sur Android depuis le 20 octobre 2026
-- [en attente de Jean] **Statut trader (DSA)** : obligatoire dès qu'on tire un revenu de l'app, sur les deux boutiques ; passage du compte Apple en compte organisation demandé en octobre 2026, Apple prêt à le lancer (réponse du 23 octobre 2026), à faire quand Jean lui répond
+- [en cours] **Statut trader (DSA)** : obligatoire sur les deux boutiques ; Apple prêt à passer le compte en organisation (23 octobre), réponse de Jean attendue
 - **Premiers versements AdMob** : seuil de 70 €, puis code PIN postal et vérification d'identité
 - **Licence éducation** : seulement si un établissement se présente de lui-même
 
@@ -116,10 +116,10 @@ pas encore faite.
 | Défi du jour + rappel | Mêmes questions pour tous, une tentative/jour, rappel local 18 h 30 (`lib/core/rappels.dart`) — le moteur de rétention qui alimente le partage | ✅ |
 | Classements mondiaux | Game Center : défi, série, Classique ×3, Chrono (`lib/core/classement.dart`) — actifs sur iOS ; Play Games pas configuré, classements masqués sur Android | ✅ iOS · ⬜ Android |
 | Vitrine web | `erea.toakeur.com` (depuis le 7 octobre 2026) : page de présentation dédiée, le jeu jouable sur `/jeu.html`, Smart App Banner sur les pages | ✅ |
-| Badges des boutiques | Badge officiel d'Apple sur la vitrine, en tête et en bas de page, vers la fiche `id6794918301`, depuis le 12 octobre 2026 ; badge officiel « Disponible sur Google Play » à côté et page `/telecharger/` ouverte à Android depuis le 21 octobre 2026 | ✅ |
+| Badges des boutiques | Badge officiel d'Apple sur la vitrine, en tête et en bas de page, vers la fiche `id6794918301`, depuis le 12 octobre 2026 ; badge officiel Google Play à côté et page `/telecharger/` ouverte à Android depuis le 21 octobre 2026 | ✅ |
 | Enseignants & parents | Dossier d'une page « Erea en classe » (repères du brevet couverts, mode Facile, sans compte ni inscription) à envoyer aux profs d'histoire-géo, groupes Facebook de profs, La Salle des Maîtres | ⬜ |
 | Afrique de l'Ouest | Mise en avant du pack Afrique auprès des communautés éducatives francophones (Sénégal, Côte d'Ivoire…) ; presse tech locale ; créateurs de contenu éducation | ⬜ |
-| Réseaux sociaux | YouTube « toa.afrotok » et TikTok « erea.jeu » rattachés à Erea dans le Studio ; TikTok « Afrotok » branché mais rattaché à aucune app. Pubs vidéo produites par le Studio du 5 au 26 octobre 2026 : le format « documentaire qui déraille » validé par Jean le 5 octobre, puis, depuis le 26 octobre, « Avant ou après ? », « Interro surprise » et « Le défi en famille » ; la première « Avant ou après ? » a été validée par Jean le 26 octobre ; les autres vidéos attendent sa validation dans iCloud (dossier « À valider »). **Aucune publication** : le Planning est vide | ⬜ |
+| Réseaux sociaux | YouTube « toa.afrotok » et TikTok « erea.jeu » rattachés à Erea dans le Studio ; TikTok « Afrotok » branché mais rattaché à aucune app. Trente-cinq pubs vidéo produites par le Studio du 5 au 28 octobre 2026 : le format « documentaire qui déraille » validé par Jean le 5 octobre, puis, depuis le 26 octobre, « Avant ou après ? », « Interro surprise », « Petite histoire » et « Le défi en famille » (retiré du menu le 26 octobre, sa pub déjà faite reste) ; au 28 octobre, les trente-cinq attendent la validation de Jean (dossier « À valider », « Validées » vide). **Aucune publication** : le Planning est vide (vérifié le 28 octobre 2026) | ⬜ |
 | Presse & sites spécialisés | App du jour (iPhon.fr, iGen, Frandroid), sites parents (Geek Junior, Super Julie — références du jeu éducatif) | ⬜ |
 | Featuring Apple | Formulaire « App Store featuring » : app famille, française, hors ligne, avec Game Center — bon dossier, même si l'argument « sans pub » est tombé avec la 1.0.2 | ⬜ |
 | Play Store | Second magasin, donc second public : les douze testeurs ont tenu quatorze jours (22 septembre), l'accès à la production a été accordé le 17 octobre 2026, la 1.0.4 a été mise en ligne le 20 octobre et la 1.0.6 est en ligne depuis le 22 octobre (`docs/PUBLICATION.md`) | ✅ |
@@ -142,7 +142,7 @@ pas encore faite.
 ## Mesures
 
 - **Téléchargements** : à vérifier dans la console (App Store Connect et Play Console)
-- **Note App Store** : aucune note au 24 octobre 2026
+- **Note App Store** : aucune note au 28 octobre 2026
 - **Note Google Play** : à vérifier dans la console (en ligne depuis le 20 octobre 2026)
 - **Rétention J1 et J7** : à vérifier dans la console
 - **Participants au Défi du jour** : à vérifier dans la console (classement `erea.daily`)
@@ -179,9 +179,9 @@ une collecte à la fiche de confidentialité.
 
 ## Les 3 priorités
 
-- **Valider et publier les pubs vidéo** du Studio (vingt-huit produites du 5 au 26 octobre ; la première « Avant ou après ? » validée par Jean le 26 octobre, les autres attendent sa validation) sur YouTube « toa.afrotok » et TikTok « erea.jeu » par le Planning, avec le lien `https://erea.toakeur.com/telecharger/?src=tiktok` qui mène aux deux boutiques : aucune publication n'a encore eu lieu.
+- **Valider et publier les pubs vidéo** du Studio (trente-cinq produites du 5 au 28 octobre, toutes en attente de sa validation au 28 octobre) sur YouTube « toa.afrotok » et TikTok « erea.jeu » par le Planning, avec le lien `https://erea.toakeur.com/telecharger/?src=tiktok` qui mène aux deux boutiques : aucune publication n'a encore eu lieu.
 - **Envoyer le dossier « Erea en classe »** aux professeurs d'histoire-géographie et à leurs groupes : c'est le public naturel d'un jeu familial calé sur les repères du brevet, et rien ne lui a encore été adressé.
-- **Se déclarer trader (DSA)** sur l'App Store et Google Play : l'app rapporte maintenant sur les deux boutiques, et la déclaration « non-trader » ne tient plus ; à faire dès que le compte Apple est converti en compte organisation (Apple attend la réponse de Jean depuis le 23 octobre 2026).
+- **Se déclarer trader (DSA)** sur l'App Store et Google Play : l'app rapporte maintenant sur les deux boutiques, et la déclaration « non-trader » ne tient plus ; à faire dès que le compte Apple est converti en compte organisation (Apple attend la réponse de Jean depuis le 23 octobre 2026, toujours sans réponse le 28 octobre).
 
 ## Déjà fait
 

@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 21 octobre 2026. Compagnon de `INFRA.md` : là où INFRA répertorie
+Mis à jour le 28 octobre 2026. Compagnon de `INFRA.md` : là où INFRA répertorie
 la technique, ce fichier suit la stratégie marketing et de rémunération.
 Pour l'actualiser : relancer le même prompt.
 
@@ -19,7 +19,7 @@ Pour l'actualiser : relancer le même prompt.
 ## Rémunération par phases
 
 - [fait] **Aujourd'hui** : app gratuite, sans aucune rémunération : les liens Amazon du catalogue ont été retirés le 20 octobre 2026 (leur tag dépendait du compte fermé par Amazon le 18 octobre).
-- [en cours] **Relance et lancement** : décider si Kultiva repart (backend en pause), publier, et trancher la vidéo récompensée AdMob liée au Tamassi (« une pub → un boost d'XP »).
+- [en cours] **Relance et lancement** : décider si Kultiva repart (projet en pause, choix de Jean ; backend en pause aussi), publier, et trancher la vidéo récompensée AdMob liée au Tamassi (« une pub → un boost d'XP »).
 - **Affiliation, si on la remet** : un identifiant Amazon du nouveau compte, à renseigner dans le catalogue (France seulement).
 - **Rétention prouvée** : abonnement Kultiva Plus via RevenueCat (jardins illimités, export PDF, variantes du Tamassi), France d'abord.
 - **Afrique de l'Ouest** : sponsoring par des ONG et programmes agricoles qui financent la diffusion de conseils.
@@ -78,5 +78,5 @@ n'est branché (Sentry ne suit que les crashs).
 ## Les 3 priorités
 
 - Décider si Kultiva repart : rallumer le projet Supabase (en pause) et recréer les clés Google « Se connecter », sinon la connexion et la synchronisation restent hors service.
-- Remplir la fiche App Store avec les adresses de `kultiva.toakeur.com` et `kultiva@toakeur.com`, puis compte de démo et captures, trancher le statut de trader (DSA) maintenant que l'affiliation est retirée, et soumettre.
+- Compléter la fiche App Store déjà créée (adresses de `kultiva.toakeur.com` et `kultiva@toakeur.com`, compte de démo, captures, statut de trader DSA à revoir), ajouter la clé de localisation réclamée par Apple, puis soumettre.
 - Créer la fiche Google Play et lancer tout de suite le test fermé (douze testeurs pendant quatorze jours si le compte est personnel).

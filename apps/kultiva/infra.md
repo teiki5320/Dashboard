@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 25 octobre 2026 d'après le dépôt, la base Supabase et le site en ligne. Pour mettre à jour : relancer ce même prompt.
+Mis à jour le 28 octobre 2026 d'après le dépôt, la base Supabase et le site en ligne. Pour mettre à jour : relancer ce même prompt.
 
 > Aucun secret, clé ni jeton dans ce fichier — uniquement des références
 > (nom de variable, endroit où le secret vit, lien vers la console).
@@ -16,16 +16,17 @@ Mis à jour le 25 octobre 2026 d'après le dépôt, la base Supabase et le site 
 
 ## Parcours
 
-- 🍎 **iOS** : 🐙 GitHub — main · CI au vert [ok] → ☁️ Xcode Cloud — builds 95 et 96 réussis le 25/10 [ok] → 🛍️ App Store Connect — fiche à remplir [à faire] → 📱 App Store — pas publiée [pas encore]
+- 🍎 **iOS** : 🐙 GitHub — main · CI au vert [ok] → ☁️ Xcode Cloud — builds 95 à 97 réussis, envoyés à ASC [ok] → 🛍️ App Store Connect — fiche créée, à compléter [à faire] → 📱 App Store — pas publiée [pas encore]
 - 🤖 **Android** : 🐙 GitHub — CI construit l'App Bundle [ok] → 🔑 Keystore Android — clé locale, valable 2053 [ok] → 🛍️ Google Play Console — fiche à créer [à faire] → 📱 Google Play — pas publiée [pas encore]
 - 🗄️ **Comptes** : 📱 App — mode invité sans compte [ok] → 🗄️ Supabase — projet en pause [bloquant] → 🔐 Connexion utilisateurs — clés Google à recréer [à faire]
 - 🌐 **Web** : 🐙 GitHub — dossier landing/ [ok] → 📄 GitHub Pages — publié par site.yml [ok] → 🌐 Nom de domaine — kultiva.toakeur.com, HTTPS [ok] → ⬇️ Boutons « Télécharger » — encore sans lien [pas encore]
 
 ## Vue d'ensemble
 
+- **État du projet** : en pause (choix de Jean) — rien n'est soumis aux boutiques.
 - **Plateforme** : iOS + Android (Flutter ≥ 3.38), portrait, iPhone + iPad — app `com.toa.kultiva`, v1.0.0+5
 - **Stack** : Flutter/Dart Material 3, local-first (SharedPreferences + services singletons, `ValueNotifier`, sans framework d'état)
-- **Backend** : Supabase (auth, Postgres RLS, Storage, 2 edge functions) — facultatif, l'app fonctionne hors ligne. ⚠️ **Le projet est en pause** (état inactif, vérifié le 20 et le 27 octobre 2026) : tant qu'il n'est pas rallumé, ni connexion ni synchronisation ; le mode invité, lui, marche.
+- **Backend** : Supabase (auth, Postgres RLS, Storage, 2 edge functions) — facultatif, l'app fonctionne hors ligne. ⚠️ **Le projet Supabase est en pause** (état inactif, vérifié le 20, le 27 et le 28 octobre 2026) : tant qu'il n'est pas rallumé, ni connexion ni synchronisation ; le mode invité, lui, marche.
 - **Distribution** : App Store via Xcode Cloud + Play Store (AAB signé) — jamais soumise (un script local `update-testflight.command` construit aussi l'IPA à envoyer par Transporter), textes des fiches prêts (`docs/store-listings.md`)
 - **Site** : <https://kultiva.toakeur.com> (présentation + confidentialité), en ligne depuis le 7 octobre 2026
 - **Marchés** : bi-marché France + 8 pays francophones d'Afrique de l'Ouest, détection du pays et de la sous-zone climatique
@@ -45,7 +46,7 @@ Mis à jour le 25 octobre 2026 d'après le dépôt, la base Supabase et le site 
 ### 2. Supabase
 
 - **Rôle** : backend — auth (e-mail + Google + Apple), Postgres sous RLS (`profiles`, `plantations`, `unlocked_badges`, `preferences`, `challenge_posts`, `post_likes`, `post_reports`, `user_xp`, `news_items`, `species`), Storage (`plant-photos`, `news-images`), edge functions `seed-species` et `delete-account` (suppression de compte in-app). Migrations `supabase/migrations/001 → 016`, appliquées manuellement via le SQL Editor.
-- **État** : ⏸️ **en pause, pas supprimé.** Le 27 octobre 2026 (comme le 20), l'API Supabase donne toujours le projet « Kultiva » (`vkiwkeknfzwdvufcqbrp`, région `eu-west-1`) avec l'état *inactif* ; son adresse ne résout toujours pas le 21 octobre ; il se rallume depuis la console. Pendant la pause, son adresse ne résout plus du tout — c'est ce qui avait fait croire, le 3 octobre, à une suppression. Conséquence : sans rallumage, pas de connexion, pas de synchronisation, pas de suppression de compte in-app. Le mode invité et tout le contenu hors ligne fonctionnent.
+- **État** : ⏸️ **en pause, pas supprimé.** Le 28 octobre 2026 (comme le 20 et le 27), l'API Supabase donne toujours le projet « Kultiva » (`vkiwkeknfzwdvufcqbrp`, région `eu-west-1`) avec l'état *inactif* ; son adresse ne résout toujours pas le 21 octobre ; il se rallume depuis la console. Pendant la pause, son adresse ne résout plus du tout — c'est ce qui avait fait croire, le 3 octobre, à une suppression. Conséquence : sans rallumage, pas de connexion, pas de synchronisation, pas de suppression de compte in-app. Le mode invité et tout le contenu hors ligne fonctionnent.
 - **Console** : <https://supabase.com/dashboard/project/vkiwkeknfzwdvufcqbrp>
 - **Identifiants publics** : adresse du projet `vkiwkeknfzwdvufcqbrp` (elle ne répond plus tant que le projet est en pause) + `anonKey`, commitées dans `lib/config/supabase_config.dart` — publiques par design, la sécurité repose sur les policies RLS.
 - **Secrets** : clé `service_role` — dashboard uniquement (Settings → API), jamais dans le code ni le dépôt.
@@ -80,14 +81,15 @@ Mis à jour le 25 octobre 2026 d'après le dépôt, la base Supabase et le site 
 
 - **Rôle** : fiche App Store, TestFlight, soumission à la review. Textes prêts à coller dans `docs/FICHE_APP_STORE.md` et `docs/store-listings.md`.
 - **Console** : <https://appstoreconnect.apple.com>
-- **Identifiants publics** : bundle `com.toa.kultiva`, version 1.0.0 (build 5). Conformité chiffrement déclarée dans l'`Info.plist` (`ITSAppUsesNonExemptEncryption = false`).
+- **État** : la fiche existe (App Apple ID `6762550020`) et reçoit les builds de Xcode Cloud (95, 96 et 97, vérifié le 28 octobre 2026 dans les mails d'Apple) ; aucune soumission à la review.
+- **Identifiants publics** : bundle `com.toa.kultiva`, App Apple ID `6762550020`, version 1.0.0 (build 5 dans `pubspec.yaml`, numéros de build Xcode Cloud à part). Conformité chiffrement déclarée dans l'`Info.plist` (`ITSAppUsesNonExemptEncryption = false`).
 - **Secrets** : — (accès via le compte Apple Developer).
 - **Coût** : inclus dans l'adhésion Apple Developer.
 
 ### 7. Xcode Cloud
 
 - **Rôle** : CI iOS — build automatique via `ios/ci_scripts/ci_post_clone.sh` (Flutter épinglé 3.41.6, SPM désactivé, `--config-only` avant `pod install`). Cible minimale iOS 15.0 pour l'appli et tous les pods (`ios/Podfile`) depuis le 25 octobre 2026 ; avant : 13.0.
-- **État** : les builds 95 et 96 ont réussi le 25 octobre 2026, avec l'étape « TestFlight internes - iOS » (vérifié le 27 octobre 2026). Le build 94 avait échoué le 24 octobre 2026 (Sentry et d'autres pods visaient une version d'iOS trop basse), corrigé le 25 octobre.
+- **État** : les builds 95 et 96 ont réussi le 25 octobre 2026 et le build 97 le 27 octobre 2026, chacun avec l'étape « TestFlight internes - iOS » (vérifié le 28 octobre 2026). À chaque envoi, Apple signale l'avertissement ITMS-90683 : la clé `NSLocationAlwaysAndWhenInUseUsageDescription` manque dans `ios/Runner/Info.plist` (envoi accepté quand même). Le build 94 avait échoué le 24 octobre 2026 (Sentry et d'autres pods visaient une version d'iOS trop basse), corrigé le 25 octobre.
 - **Console** : App Store Connect → onglet Xcode Cloud.
 - **Identifiants publics** : —
 - **Secrets** : aucun secret dans le dépôt (signature gérée par Apple).
@@ -112,7 +114,7 @@ Mis à jour le 25 octobre 2026 d'après le dépôt, la base Supabase et le site 
 ### 10. Hébergement web (GitHub Pages / Cloudflare Pages)
 
 - **Rôle** : site de présentation `landing/` (`index.html` + `privacy.html` + images WebP), publié sur **GitHub Pages** par le workflow `.github/workflows/site.yml` à chaque modification de `landing/`. Fournit l'URL d'assistance, l'URL marketing et l'URL de confidentialité exigées par les stores.
-- **État** : en ligne — <https://kultiva.toakeur.com> et `/privacy.html` répondent (vérifié le 21 octobre 2026). Les boutons « Télécharger » pointent encore vers `#` (app non publiée).
+- **État** : en ligne — <https://kultiva.toakeur.com> et `/privacy.html` répondent (vérifié le 28 octobre 2026), via Cloudflare devant GitHub Pages. Les boutons « Télécharger » pointent encore vers `#` (app non publiée).
 - **Console** : <https://github.com/teiki5320/Kultiva/settings/pages>
 - **Identifiants publics** : adresse du site.
 - **Secrets** : aucun (jeton GitHub automatique du workflow).
@@ -144,7 +146,7 @@ Mis à jour le 25 octobre 2026 d'après le dépôt, la base Supabase et le site 
 
 ### 14. Géolocalisation native
 
-- **Rôle** : position de l'appareil (`geolocator`) et nom de ville (`geocoding`) pour la météo, la région de culture et la configuration du jardin (`lib/services/geolocation_service.dart`, `weather_service.dart`, `garden_plan_config_sheet.dart`). Permission demandée en français (`Info.plist`), repli sur Paris ou la capitale du pays si refusée.
+- **Rôle** : position de l'appareil (`geolocator`) et nom de ville (`geocoding`) pour la météo, la région de culture et la configuration du jardin (`lib/services/geolocation_service.dart`, `weather_service.dart`, `garden_plan_config_sheet.dart`). Permission demandée en français (`NSLocationWhenInUseUsageDescription` dans `Info.plist` ; la clé `NSLocationAlwaysAndWhenInUseUsageDescription`, réclamée par Apple depuis le build 95, manque encore), repli sur Paris ou la capitale du pays si refusée.
 - **Console** : aucune — services du système.
 - **Identifiants publics** : —
 - **Secrets** : aucun.

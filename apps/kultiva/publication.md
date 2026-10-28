@@ -1,6 +1,6 @@
 # PUBLICATION — état des boutiques
 
-> Mis à jour le 25 octobre 2026. Pour mettre à jour :
+> Mis à jour le 28 octobre 2026. Pour mettre à jour :
 > relancer ce même prompt.
 >
 > **Aucun secret ici** — uniquement des références publiques :
@@ -25,26 +25,28 @@
 
 | | 🍎 App Store | 🤖 Google Play |
 |---|---|---|
-| État | [pas encore] jamais soumise ; fiche ASC à vérifier dans la console | [pas encore] jamais envoyée ; fiche à vérifier dans la console |
-| Construction | [ok] Xcode Cloud (`ci_post_clone.sh`, Flutter 3.41.6) : builds 95 et 96 réussis le 25 octobre 2026, avec l'étape « TestFlight internes - iOS » (vérifié le 27 octobre 2026) ; le build 94 avait échoué le 24 octobre | [ok] App Bundle construit par la CI GitHub Actions |
+| État | [pas encore] jamais soumise ; fiche App Store Connect créée (Apple ID `6762550020`), builds 95 à 97 reçus | [pas encore] jamais envoyée ; fiche à vérifier dans la console |
+| Construction | [ok] Xcode Cloud (`ci_post_clone.sh`, Flutter 3.41.6) : builds 95 et 96 réussis le 25 octobre 2026, build 97 le 27 octobre, avec l'étape « TestFlight internes - iOS » (vérifié le 28 octobre 2026) ; le build 94 avait échoué le 24 octobre | [ok] App Bundle construit par la CI GitHub Actions |
 | Signature | [ok] gérée par Xcode Cloud, équipe `K597U7X3FZ` | [ok] keystore local, valable jusqu'en 2053 |
 | Classification | [à faire] 4+ attendu, questionnaire prêt à reporter | [à faire] questionnaire de contenu à remplir |
 | Cible | [ok] iOS 15.0 et plus (depuis le 25 octobre 2026 : Xcode et les pods, dont Sentry, l’exigent ; avant : 13.0), iPhone et iPad, portrait | [ok] valeurs par défaut de Flutter, rien de figé dans le dépôt |
-| Permissions | [ok] caméra, photos, localisation (textes en français) | [ok] localisation, notifications, alarmes exactes |
+| Permissions | [à faire] caméra, photos, localisation en français ; clé `NSLocationAlwaysAndWhenInUseUsageDescription` à ajouter (avertissement Apple ITMS-90683) | [ok] localisation, notifications, alarmes exactes |
 | Poids | [pas encore] à mesurer au premier envoi (35 Mo d'assets) | [pas encore] à mesurer au premier envoi (35 Mo d'assets) |
 
 ## Vue d'ensemble
 
-- **iOS** : jamais soumise — la fiche est rédigée et l'URL de confidentialité existe ; le build Xcode Cloud 94 a échoué le 24 octobre 2026 (cible iOS trop basse), corrigé le 25 octobre ; les builds 95 et 96 ont réussi le 25 octobre 2026, avec l'étape « TestFlight internes - iOS » (vérifié le 27 octobre 2026)
+- **État du projet** : en pause (choix de Jean) — rien n'est soumis aux boutiques
+- **iOS** : jamais soumise — la fiche App Store Connect existe (Apple ID `6762550020`), ses textes sont rédigés et l'URL de confidentialité existe ; le build Xcode Cloud 94 a échoué le 24 octobre 2026 (cible iOS trop basse), corrigé le 25 octobre ; les builds 95 et 96 ont réussi le 25 octobre 2026 et le build 97 le 27 octobre 2026, avec l'étape « TestFlight internes - iOS » (vérifié le 28 octobre 2026) ; Apple signale à chaque envoi la clé de localisation `NSLocationAlwaysAndWhenInUseUsageDescription` manquante (ITMS-90683)
 - **Android** : jamais envoyée à Play — le bundle release est signé et vérifié localement ; l'existence d'une fiche Play reste à vérifier dans la console
 - **Web** : site de présentation en ligne sur <https://kultiva.toakeur.com> depuis le 7 octobre 2026
-- **Backend** : projet Supabase **en pause** (état inactif, vérifié le 20 et le 27 octobre 2026) — connexion et synchronisation hors service tant qu'il n'est pas rallumé
+- **Backend** : projet Supabase **en pause** (état inactif, vérifié le 20, le 27 et le 28 octobre 2026) — connexion et synchronisation hors service tant qu'il n'est pas rallumé
 - **Monétisation** : aucune — les 159 liens d'affiliation Amazon (tag rattaché au compte fermé par Amazon le 18 octobre) ont été retirés le 20 octobre 2026. Le statut **trader** au sens du DSA, décidé le 24 août 2026 à cause de ces liens, est donc à revoir
 - **Classification attendue** : **4+** depuis le retrait du feed communautaire — plus aucun contenu généré par les utilisateurs
-- **Chemin critique** : rallumer Supabase → compléter la fiche App Store → soumettre iOS
+- **Chemin critique** : rallumer Supabase → ajouter la clé de localisation manquante → compléter la fiche App Store → soumettre iOS
 
-Les deux boutiques sont au même point de départ : rien n'a jamais été
-envoyé. Ce n'est pas le code qui retient la soumission — l'app compile,
+Aucune boutique n'a reçu de soumission : côté Apple, seuls des builds
+TestFlight internes sont arrivés dans la fiche ; côté Google, rien n'a
+été téléversé. Ce n'est pas le code qui retient la soumission — l'app compile,
 passe l'analyse et ses tests sont verts. L'URL de confidentialité qui
 bloquait tout existe depuis le 7 octobre 2026 ; restent le backend en
 pause et des champs de formulaire.
@@ -58,8 +60,8 @@ pause et des champs de formulaire.
 | État | **Jamais soumise — bloquée par le backend en pause** |
 | Console | <https://appstoreconnect.apple.com> |
 | Version publiée | aucune — l'app n'est jamais sortie |
-| Version en cours | `1.0.0` (build `5`) — aucune soumission ; l'existence d'une fiche ASC est **à vérifier dans la console** |
-| Distribution | Xcode Cloud, script `ios/ci_scripts/ci_post_clone.sh` — équipe `K597U7X3FZ` ; build 94 en échec le 24 octobre 2026, cible iOS relevée à 15.0 le 25 octobre ; builds 95 et 96 réussis le 25 octobre 2026 avec l'étape « TestFlight internes - iOS » |
+| Version en cours | `1.0.0` — fiche App Store Connect créée (Apple ID `6762550020`), builds Xcode Cloud 95, 96 et 97 reçus (vérifié le 28 octobre 2026 dans les mails d'Apple) ; aucune soumission |
+| Distribution | Xcode Cloud, script `ios/ci_scripts/ci_post_clone.sh` — équipe `K597U7X3FZ` ; build 94 en échec le 24 octobre 2026, cible iOS relevée à 15.0 le 25 octobre ; builds 95 et 96 réussis le 25 octobre 2026 et build 97 le 27 octobre, avec l'étape « TestFlight internes - iOS » |
 | Familles d'appareils | `TARGETED_DEVICE_FAMILY = "1,2"` → iPhone **et** iPad |
 | Orientation | portrait seul, `UIRequiresFullScreen = true` (renonce au multitâche iPad) |
 
@@ -98,9 +100,17 @@ invité livré le 24 août 2026 : le testeur accède à tout via « Continuer
 sans compte ». En fournir un reste utile pour qu'il vérifie la
 synchronisation cloud et la suppression de compte.
 
-**À vérifier dans la console** : qu'une fiche existe bien pour
-`com.toa.kultiva`, qu'un build Xcode Cloud y est monté, et l'état du
-contrat *Contenu payant* si la distribution doit couvrir tous les pays.
+**Avertissement d'Apple à corriger.** Les builds 95, 96 et 97 ont été
+acceptés, mais Apple signale à chaque envoi l'erreur ITMS-90683 : il
+manque la clé `NSLocationAlwaysAndWhenInUseUsageDescription` dans
+`ios/Runner/Info.plist` (seule `NSLocationWhenInUseUsageDescription`
+est présente). Une phrase en français suffit, à ajouter avant la
+soumission.
+
+**Vérifié le 28 octobre 2026** (mails d'Apple) : la fiche existe pour
+`com.toa.kultiva` (Apple ID `6762550020`) et reçoit les builds de Xcode
+Cloud. **À vérifier dans la console** : l'état du contrat *Contenu
+payant* si la distribution doit couvrir tous les pays.
 
 ---
 
@@ -155,7 +165,7 @@ la signature d'application par Play est activée.
 
 | | |
 |---|---|
-| Production | **En ligne** — <https://kultiva.toakeur.com> et <https://kultiva.toakeur.com/privacy.html> répondent (vérifié le 21 octobre 2026) |
+| Production | **En ligne** — <https://kultiva.toakeur.com> et <https://kultiva.toakeur.com/privacy.html> répondent (vérifié le 28 octobre 2026) |
 | Domaine & SSL | `kultiva.toakeur.com`, DNS chez Cloudflare (proxy actif), HTTPS valide ; contact affiché `kultiva@toakeur.com` |
 | Visibilité | publié par GitHub Pages via `.github/workflows/site.yml` (dossier `landing/`) depuis le 7 octobre 2026 ; l'ancienne adresse `teiki5320.github.io/Kultiva/` sert la même page |
 
@@ -179,7 +189,7 @@ compte in-app exigée par Apple.
 
 | | |
 |---|---|
-| État | **En pause** — le 27 octobre 2026 (comme le 20), l'API Supabase donne le projet avec l'état *inactif* ; il n'est pas supprimé et se rallume depuis la console |
+| État | **En pause** — le 28 octobre 2026 (comme le 20 et le 27), l'API Supabase donne le projet avec l'état *inactif* ; il n'est pas supprimé et se rallume depuis la console |
 | Console | <https://supabase.com/dashboard/project/vkiwkeknfzwdvufcqbrp> |
 | Projet | `vkiwkeknfzwdvufcqbrp` (région Europe) |
 | Adresse | ne résout plus pendant la pause — ce qui avait été pris, le 3 octobre, pour une suppression |
@@ -198,18 +208,22 @@ Google « Se connecter » ont été laissées à supprimer le 9 octobre 2026 :
 1. ✅ **Site et confidentialité** : `kultiva.toakeur.com` et `/privacy.html` en ligne depuis le 7 octobre 2026.
 2. ✅ **Adresse de contact** : `kultiva@toakeur.com` sur le site, la confidentialité et les textes des fiches.
 3. **Rallumer le backend** : relancer le projet Supabase et recréer les clés Google « Se connecter ».
-4. **Compléter la fiche App Store** : les trois URL, l'adresse de contact, la déclaration DSA (statut de trader à revoir) et le téléphone de revue.
+4. **Compléter la fiche App Store** : fiche créée (Apple ID `6762550020`) ; restent les trois URL, l'adresse de contact, la déclaration DSA (statut de trader à revoir) et le téléphone de revue.
 5. **Compte de démonstration** : 2 ou 3 plantations, une photo et un Tamassi entamé, pour le testeur et les captures.
 6. **Captures d'écran** : 8 en iPhone 6,9″ (1320 × 2868) et 8 en iPad 13″ (2064 × 2752).
 7. ✅ **Liens Amazon retirés** : les 159 liens au tag du compte fermé ont été ôtés du catalogue le 20 octobre 2026.
-8. **Soumettre iOS** : depuis `docs/FICHE_APP_STORE.md`.
-9. **Créer la fiche Google Play** : puis lancer le test fermé sans attendre, ses quatorze jours courent en arrière-plan.
-10. **Relier les boutons « Télécharger »** : remplacer les `href="#"` du site par les liens des boutiques (la mention « Partenaire Amazon » a été ôtée le 21 octobre 2026).
+8. **Clé de localisation** : ajouter `NSLocationAlwaysAndWhenInUseUsageDescription` à `Info.plist` (avertissement ITMS-90683).
+9. **Soumettre iOS** : depuis `docs/FICHE_APP_STORE.md`.
+10. **Créer la fiche Google Play** : puis lancer le test fermé sans attendre, ses quatorze jours courent en arrière-plan.
+11. **Relier les boutons « Télécharger »** : remplacer les `href="#"` du site par les liens des boutiques (la mention « Partenaire Amazon » a été ôtée le 21 octobre 2026).
 
 ---
 
 ## Ce qui a été réglé depuis
 
+- **Builds iOS reçus par App Store Connect** (25 et 27 octobre) — les
+  builds Xcode Cloud 95, 96 et 97 sont arrivés dans la fiche
+  `6762550020` avec l'étape « TestFlight internes - iOS ».
 - **Site en ligne** (7 octobre) — `landing/` publié sur GitHub Pages à
   l'adresse `kultiva.toakeur.com`.
 - **Adresse de contact** (7 octobre) — `kultiva@toakeur.com` partout

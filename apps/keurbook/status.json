@@ -1,10 +1,10 @@
 {
   "release": null,
   "ci": {
-    "status": "completed",
-    "conclusion": "success",
-    "updatedAt": "2026-10-27T09:21:30Z",
-    "url": "https://github.com/teiki5320/keurbook/actions/runs/40479967319"
+    "status": "in_progress",
+    "conclusion": null,
+    "updatedAt": "2026-10-28T12:07:15Z",
+    "url": "https://github.com/teiki5320/keurbook/actions/runs/40685227182"
   },
-  "fetchedAt": "2026-10-27T11:36:44.631Z"
+  "fetchedAt": "2026-10-28T12:07:39.585Z"
 }
