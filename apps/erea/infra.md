@@ -1,7 +1,7 @@
 # INFRA — fiche technique
 
 > Généré le 20 août 2026 par un scan du dépôt, mis à jour le
-> 28 octobre 2026. Pour mettre à jour : relancer ce même prompt.
+> 29 octobre 2026. Pour mettre à jour : relancer ce même prompt.
 
 ## En bref
 
@@ -17,7 +17,7 @@
 - 🍎 **iOS** : 🐙 GitHub — main, 1.0.6 dans le code, CI au vert [ok] → ☁️ Xcode Cloud — build à chaque poussée sur main [ok] → 🛍️ App Store Connect — 1.0.5 (build 195) approuvée le 21 octobre [ok] → 📱 App Store — 1.0.5 en ligne depuis le 21 octobre [ok]
 - 🤖 **Android** : 🐙 GitHub — main, 1.0.6 dans le code, CI au vert [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — production accordée le 17 octobre, 1.0.6 envoyée le 22 octobre [ok] → 🛒 Google Play — 1.0.6 en ligne depuis le 22 octobre [ok]
 - 🌐 **Web** : 🐙 GitHub — racine de main, sans CNAME [ok] → 📄 Hébergement web (GitHub Pages / Cloudflare Pages) — GitHub Pages [ok] → 🏷️ Nom de domaine — erea.toakeur.com via Cloudflare [ok] → 🌐 Site — vitrine, jeu, support, confidentialité [ok]
-- 🎬 **Contenu** : 🎬 Studio — 35 pubs vidéo (5–28 oct.), toutes à valider [à faire] → 🗓️ Planning — aucune publication programmée [à faire] → 📣 Réseaux sociaux & influenceurs — YouTube et TikTok branchés, rien publié [pas encore]
+- 🎬 **Contenu** : 🎬 Studio — 39 pubs vidéo (5–29 oct.), 2 validées, 37 à valider [à faire] → 🗓️ Planning — aucune publication programmée [à faire] → 📣 Réseaux sociaux & influenceurs — YouTube et TikTok branchés, rien publié [pas encore]
 
 ## Vue d'ensemble
 
@@ -295,7 +295,7 @@ Confidentialité. `NSPrivacyTracking` y reste à faux, sans clé de
 domaines : c'est la seule combinaison acceptée à l'import (build 182) ;
 le suivi reste déclaré dans la fiche Confidentialité.
 
-**Paiements (dernier état connu, au 18 août 2026 ; non revérifié le 28 octobre 2026, à vérifier dans la console)** : seuil de versement 70 €, mensuel
+**Paiements (dernier état connu, au 18 août 2026 ; non revérifié le 29 octobre 2026, à vérifier dans la console)** : seuil de versement 70 €, mensuel
 vers le 21. L'IBAN ne peut pas encore être saisi — Google n'ouvre
 « Gérer les modes de paiement » qu'après un premier seuil de recettes
 (environ 10 €). Suivront le courrier postal avec code PIN, à saisir sous
@@ -320,7 +320,7 @@ passe par le compte Google (+ double facteur).
 **État réel :**
 - Application ID `com.teiki.erea`, identique à iOS (`android/app/build.gradle.kts`).
 - Test fermé « Alpha » : release `4 (1.0.3)` servie aux testeurs à partir du 16 septembre 2026, puis release `5 (1.0.4)` envoyée le 14 octobre. Les **douze testeurs pendant quatorze jours** exigés d'un compte personnel ont été tenus du 8 au 22 septembre (voir « Testeurs » plus bas).
-- **Accès à la production demandé le 14 octobre 2026 à 18 h 39, accordé le 17 octobre** ; la release de production `5 (1.0.4)`, promue depuis la piste Alpha et envoyée le 17 octobre vers 8 h 25, a été mise en ligne le 20 octobre 2026 à 16 h 07 ; la `6 (1.0.5)` l'a remplacée le 21 octobre, et la **`7 (1.0.6)` est en ligne depuis le 22 octobre 2026**. La fiche publique `play.google.com/store/apps/details?id=com.teiki.erea` répond (vérifié le 28 octobre 2026).
+- **Accès à la production demandé le 14 octobre 2026 à 18 h 39, accordé le 17 octobre** ; la release de production `5 (1.0.4)`, promue depuis la piste Alpha et envoyée le 17 octobre vers 8 h 25, a été mise en ligne le 20 octobre 2026 à 16 h 07 ; la `6 (1.0.5)` l'a remplacée le 21 octobre, et la **`7 (1.0.6)` est en ligne depuis le 22 octobre 2026**. La fiche publique `play.google.com/store/apps/details?id=com.teiki.erea` répond (vérifié le 29 octobre 2026).
 - Achat intégré actif (voir « StoreKit / Play Billing »). Classements Play Games non configurés (voir « Game Center / Play Games »).
 - Appareil physique de vérification : un Pixel 8a, utilisé pour les tests du 16 septembre.
 
@@ -368,7 +368,7 @@ uniquement.
 Proposée après un PERFECT, un record ou trois défis d'affilée, une seule
 fois, jamais au lancement ; le système décide de l'affichage. Le même
 fichier fournit le lien de boutique ajouté aux grilles partagées : App
-Store sur iOS, Play Store sur Android depuis la 1.0.4. Au 28 octobre
+Store sur iOS, Play Store sur Android depuis la 1.0.4. Au 29 octobre
 2026, l'App Store compte 0 note.
 
 **Où vivent les secrets :** aucun.

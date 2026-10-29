@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 28 octobre 2026, d'après le code du dépôt et le site en ligne. Aucun secret ici :
+Mis à jour le 29 octobre 2026, d'après le code du dépôt et le site en ligne. Aucun secret ici :
 uniquement des noms de variables et de consoles.
 
 ## En bref
@@ -9,16 +9,16 @@ uniquement des noms de variables et de consoles.
 - **Stack** : Next.js 16 en export statique, React 19, Tailwind CSS 4
 - **Backend** : aucun — site statique, sans base ni compte
 - **Distribution** : Cloudflare Pages, publié par GitHub Actions
-- **Site** : keurbook.com (980 adresses dans le sitemap)
+- **Site** : keurbook.com (982 adresses dans le sitemap)
 - **IA et outils** : routine « Écrire les articles Conseils », veille actus (2 passages par jour), IndexNow, Cloudflare Web Analytics
 
 ## Parcours
 
 - 🌐 **Web** : 🐙 GitHub — main · publication au vert [ok] → ⚙️ GitHub Actions — lint, types, tests, build [ok] → ☁️ Cloudflare Pages — projet keurbook [ok] → 🌍 keurbook.com — en ligne, réponse 200 [ok]
-- 📝 **Contenu** : ✍️ Articles Conseils — 41 publiés, 20 programmés [ok] → ⚙️ GitHub Actions — publie lundi, mercredi, vendredi [ok] → 📡 IndexNow — sitemap signalé chaque lundi [ok] → 🔍 Google — 680 pages indexées sur 980 [à faire]
+- 📝 **Contenu** : ✍️ Articles Conseils — 41 publiés, 20 programmés [ok] → ⚙️ GitHub Actions — publie lundi, mercredi, vendredi [ok] → 📡 IndexNow — sitemap signalé après chaque publication et chaque lundi [ok] → 🔍 Google — 680 pages indexées sur 982 [à faire]
 - 📰 **Veille actus** : 📡 Tâche de veille — 12 h et 19 h, 10 flux RSS [ok] → 🐙 Dépôt veille — actus/keurbook.json sur GitHub Pages [ok] → 🌍 keurbook.com — accueil (4), /actus (20), fiches auteur (3) [ok]
-- 🛒 **Affiliation** : 📚 Fiche livre ou BD — bouton « Voir sur Amazon » [ok] → 🛒 Amazon Partenaires (affiliation) — tag keurbookfr-21 [ok] → 🔗 Liens directs — 90 ASIN sur 796 livres et BD [à faire]
-- 📰 **Publicité** : 📰 AdSense (publicité web) — script et 4 blocs en place [ok] → ✅ Validation du site — refusée le 21/10, réexamen demandé le 22/10, « En préparation » au 28/10 [pas encore] → 💶 Revenus — aucun constaté [pas encore]
+- 🛒 **Affiliation** : 📚 Fiche livre ou BD — bouton « Voir sur Amazon » [ok] → 🛒 Amazon Partenaires (affiliation) — tag keurbookfr-21 [ok] → 🔗 Liens directs — 436 ASIN sur 796 livres et BD [en cours]
+- 📰 **Publicité** : 📰 AdSense (publicité web) — script et 4 blocs en place [ok] → ✅ Validation du site — refusée le 21/10, réexamen demandé le 22/10, « En préparation » au 29/10 [pas encore] → 💶 Revenus — aucun constaté [pas encore]
 
 ## Vue d'ensemble
 
@@ -30,21 +30,25 @@ uniquement des noms de variables et de consoles.
 - **Backend** : aucun. Site entièrement statique (dossier `out/`), sans base de données, sans
   compte. La pile à lire reste dans le navigateur du visiteur. Seuls cookies : ceux de Google AdSense,
   après accord dans le bandeau de consentement de Google (voir docs/PUBLICITE.md).
-- **Taille** : 980 adresses dans le sitemap au 28 octobre 2026 (675 livres, 121 BD, 92 auteurs,
-  26 pays, 41 articles Conseils publiés, 11 pages Top 10, la page Actus, 4 articles d'actus, pages de liste
-  et pages légales ; 975 le 27 octobre, avant les articles d'actus, et 974 jusqu'au 26 octobre, avant la page Actus).
+- **Taille** : 982 adresses dans le sitemap au 29 octobre 2026 (675 livres, 121 BD, 92 auteurs,
+  26 pays, 41 articles Conseils publiés, 11 pages Top 10, la page Actus, 6 articles d'actus, pages de liste
+  et pages légales ; 980 le 28 octobre avec 4 articles d'actus, 975 le 27 octobre, avant les articles d'actus, et 974 jusqu'au 26 octobre, avant la page Actus).
 - **Particularités** : interrupteur de maintenance dans `content/maintenance.json` (désactivé),
-  tests de cohérence des contenus dans `tests/`, signalement IndexNow chaque lundi.
+  tests de cohérence des contenus dans `tests/`, contrôle du site construit avant chaque mise en ligne
+  (`tests/sortie/`, depuis le 28 octobre 2026), signalement IndexNow après chaque publication et chaque lundi.
 
 ## GitHub
 
 - **Rôle** : dépôt du code et des contenus, et trois workflows :
-  - `deploy.yml` (« Publier le site ») : lint, types, tests, build, puis publication sur
+  - `deploy.yml` (« Publier le site ») : lint, types, tests, build (dates du plan du site recalculées
+    avant, historique git complet), contrôle du site construit, puis publication sur
     Cloudflare Pages à chaque push sur `main`, chaque lundi, mercredi et vendredi à 23 h 15 UTC la
     veille (articles programmés), chaque jour à 11 h 50 et 18 h 50 UTC (pages des articles d'actus,
-    depuis le 28 octobre 2026) et à la main ;
-  - `indexnow.yml` : signale toutes les pages du sitemap publié à IndexNow (Bing, Yandex…) chaque
-    lundi à 2 h UTC et à la demande ;
+    depuis le 28 octobre 2026) et à la main. Depuis le 28 octobre 2026 : échec en rouge si un secret
+    Cloudflare manque, et vérification (3 minutes au plus) que `https://keurbook.com/version.txt` sert la
+    nouvelle version ;
+  - `indexnow.yml` : signale toutes les pages du sitemap publié à IndexNow (Bing, Yandex…) après
+    chaque publication réussie de `main` (depuis le 28 octobre 2026), chaque lundi à 2 h UTC et à la demande ;
   - `maintenance.yml` : met le site en pause ou le rouvre, puis republie.
 - **Console** : https://github.com/teiki5320/keurbook
 - **Secrets** : `CLOUDFLARE_API_TOKEN` et `CLOUDFLARE_ACCOUNT_ID`, réglés dans les secrets
@@ -55,8 +59,10 @@ uniquement des noms de variables et de consoles.
 - **Fournisseur** : Cloudflare Pages, projet `keurbook`, publié par `wrangler` depuis `deploy.yml`.
 - **En-têtes** : `public/_headers` (politique de sécurité limitée au site lui-même, à Google AdSense,
   à Cloudflare Web Analytics et, depuis le 27 octobre 2026, à `teiki5320.github.io` pour le fichier et les images
-  de la veille actus — `connect-src` et `img-src` seulement —, HSTS, cache des images) ; les adresses techniques `*.pages.dev` sont en `noindex`.
+  de la veille actus — `connect-src` et `img-src` seulement —, HSTS, cache des images) ; les adresses techniques `*.pages.dev` sont en `noindex`, et depuis le 28 octobre 2026
+  les fichiers `.txt` internes de Next.js aussi (sauf `ads.txt`, `robots.txt` et la clé IndexNow).
 - **Redirections** : `public/_redirects`.
+- **Cache des pages** : depuis le 28 octobre 2026, une règle de cache Cloudflare (Caching → Cache Rules, « Pages HTML en cache 10 min ») garde les pages HTML de keurbook.com (adresses sans point) 10 minutes chez Cloudflare ; les erreurs et redirections (codes 300 et plus) ne sont jamais gardées. Une page republiée apparaît donc en 10 minutes au plus. Réponse du serveur : environ 0,2 s au lieu de 0,6 à 2,8 s avant.
 - **Console** : tableau de bord Cloudflare, rubrique Workers & Pages → `keurbook`.
 
 ## Nom de domaine
@@ -72,12 +78,24 @@ uniquement des noms de variables et de consoles.
 
 ## Amazon Partenaires (affiliation)
 
-- **Rôle** : les boutons « Voir sur Amazon » mènent à Amazon.fr avec le tag `keurbookfr-21`
-  (construits par `src/lib/amazon.ts`, réglable par `NEXT_PUBLIC_AMAZON_TAG`). 90 livres et BD (ceux
-  des pages Top 10) ont un ASIN vérifié à la main le 19 octobre 2026 (`src/lib/demo/amazon-asins.ts`)
-  et mènent directement à leur fiche Amazon (91 jusqu'au 24 octobre 2026 : L'Empire peul du Macina, épuisé et
-  indisponible sur Amazon.fr, est revenu à la recherche) ; les autres ouvrent une recherche Amazon (ISBN ou
-  titre + auteur, rayon Livres).
+- **Rôle** : les boutons « Voir sur Amazon » (au moins 44 px de haut) mènent à Amazon.fr avec le tag `keurbookfr-21`
+  (construits par `src/lib/amazon.ts`, réglable par `NEXT_PUBLIC_AMAZON_TAG`). Depuis le 28 octobre 2026, le lien
+  reçoit un emplacement (fiche, top, conseil, rubrique) et prend son code dans une table unique (`AMAZON_TAGS`) :
+  tous les emplacements utilisent encore `keurbookfr-21`. 436 livres et BD sur 796 ont un ASIN vérifié
+  (`src/lib/demo/amazon-asins.json`, date de vérification par livre) et mènent directement à leur fiche Amazon :
+  90 le 19 octobre 2026 (pages Top 10), 359 ajoutés le 28 octobre 2026 (titre et ISBN-13 comparés à la fiche,
+  bouton « Ajouter au panier » présent), puis 16 retirés le même jour car plus vendus neufs (dont Le monde s'effondre,
+  Une si longue lettre, Allah n'est pas obligé dans l'édition de la fiche) ; deux sont revenus le même jour avec
+  une édition neuve en stock, vérifiée (Aya de Yopougon : Gallimard BD 2022 ; L'Intérieur de la nuit : Plon 2005).
+  Le monde s'effondre mène aussi à une édition neuve : la nouvelle traduction de Pierre Girard, « Tout s'effondre »
+  (Les Belles Lettres, 2026), affichée dans la fiche. Le 29 octobre 2026, Éthiopiques est passé à l'Œuvre poétique
+  de Senghor (Points), l'édition Seuil n'étant plus vendue neuve (toujours 436 ASIN vérifiés). Assèze l'Africaine, n° 1 de son Top 10, reste sur la recherche :
+  aucune édition vendue neuve. L'Empire peul du Macina, épuisé, reste
+  sans lien direct depuis le 24 octobre 2026. Les autres ouvrent une recherche Amazon (ISBN ou titre + auteur, rayon Livres).
+- **Vérification de la disponibilité** : `npm run verifier-produits` (sur le Mac, pas sur GitHub ; `--ecrire`,
+  `--lot 30`, `--ids …`) ouvre chaque page Amazon : bouton d'achat présent → date du jour ; sinon le livre passe en
+  « indisponibles » et revient à la recherche. Premier passage le 28 octobre 2026 (54 confirmés, 16 retirés,
+  20 non vérifiés car Amazon a demandé un captcha : à relancer).
 - **Site déclaré** : `keurbook.com` est déclaré sur le nouveau compte Amazon Partenaires (ouvert le 18 octobre 2026, tag `keurbookfr-21`).
 - **Contrôle** : une routine quotidienne (Keur Cook, Keurbook, Keur Foot, Keur Kado) vérifie
   chaque matin que les livres liés sont toujours en vente sur Amazon.
@@ -85,10 +103,10 @@ uniquement des noms de variables et de consoles.
 
 ## AdSense (publicité web)
 
-- **Rôle** : annonces Google sur le site, une fois le site validé. Historique : première demande d'examen le 12 octobre 2026, refusée le 21 octobre 2026 (« contenu à faible valeur informative ») ; les 796 fiches ont été rallongées le 21 octobre et l'examen a été redemandé le 22 octobre 2026. État du nouvel examen : « En préparation » dans la console, ni validé ni refusé (vérifié le 28 octobre 2026) ; **aucune annonce ne s'affiche pour l'instant**. Script AdSense et balise
+- **Rôle** : annonces Google sur le site, une fois le site validé. Historique : première demande d'examen le 12 octobre 2026, refusée le 21 octobre 2026 (« contenu à faible valeur informative ») ; les 796 fiches ont été rallongées le 21 octobre et l'examen a été redemandé le 22 octobre 2026. État du nouvel examen : « En préparation » dans la console, ni validé ni refusé (vérifié le 29 octobre 2026) ; **aucune annonce ne s'affiche pour l'instant**. Script AdSense et balise
   `google-adsense-account` chargés dans `src/app/layout.tsx` ; identifiant d'éditeur dans
   `src/lib/config.ts` (`ADSENSE_CLIENT`, réglable par `NEXT_PUBLIC_ADSENSE_CLIENT` ; laissée vide,
-  plus aucun script Google ne serait chargé). `public/ads.txt` est publié et répond (la console AdSense l'affiche encore « Introuvable » au 28 octobre 2026).
+  plus aucun script Google ne serait chargé). `public/ads.txt` est publié et répond (la console AdSense l'affiche encore « Introuvable » au 29 octobre 2026).
 - **Emplacements choisis** (annonces automatiques désactivées), composant `AdSlot`, mention
   « Publicité » visible : 1 en fin de fiche livre ou BD, 1 après la biographie d'un auteur, 1 sur
   les pages pays, 2 dans les articles Conseils. Aucune sur l'accueil, les listes, les Top 10, la pile à lire
@@ -98,7 +116,7 @@ uniquement des noms de variables et de consoles.
   européennes), lien « Gérer mes cookies » en pied de page ; la politique de sécurité de
   `public/_headers` n'ouvre que les domaines Google nécessaires.
 - **Détail** : docs/PUBLICITE.md.
-- **Validation du site et revenus** : refusée le 21 octobre 2026, nouvel examen demandé le 22 octobre 2026, « En préparation » dans la console (vérifié le 28 octobre 2026) ; aucun revenu tant que le site n'est pas validé.
+- **Validation du site et revenus** : refusée le 21 octobre 2026, nouvel examen demandé le 22 octobre 2026, « En préparation » dans la console (vérifié le 29 octobre 2026) ; aucun revenu tant que le site n'est pas validé.
 - **Console** : https://adsense.google.com (compte `pub-2680784147246798`, géré avec `admin@toakeur.com`).
 
 ## Analytics (mesure d'usage)
