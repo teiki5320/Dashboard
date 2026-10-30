@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 28 octobre 2026 d'après le dépôt, la base Supabase et le site en ligne. Pour mettre à jour : relancer ce même prompt.
+Mis à jour le 30 octobre 2026 d'après le dépôt et le site en ligne. Pour mettre à jour : relancer ce même prompt.
 
 > Aucun secret, clé ni jeton dans ce fichier — uniquement des références
 > (nom de variable, endroit où le secret vit, lien vers la console).
@@ -9,7 +9,7 @@ Mis à jour le 28 octobre 2026 d'après le dépôt, la base Supabase et le site 
 
 - **Plateforme** : iOS + Android (Flutter), iPhone et iPad, portrait
 - **Stack** : Flutter/Dart Material 3, local-first, hors ligne
-- **Backend** : Supabase facultatif — en pause, connexion hors service
+- **Backend** : **aucun** — l'app ne contacte plus aucun serveur
 - **Distribution** : Xcode Cloud + App Bundle signé — jamais soumise
 - **Site** : kultiva.toakeur.com sur GitHub Pages
 - **IA et outils** : météo Open-Meteo, Sentry, aucune IA
@@ -18,7 +18,7 @@ Mis à jour le 28 octobre 2026 d'après le dépôt, la base Supabase et le site 
 
 - 🍎 **iOS** : 🐙 GitHub — main · CI au vert [ok] → ☁️ Xcode Cloud — builds 95 à 97 réussis, envoyés à ASC [ok] → 🛍️ App Store Connect — fiche créée, à compléter [à faire] → 📱 App Store — pas publiée [pas encore]
 - 🤖 **Android** : 🐙 GitHub — CI construit l'App Bundle [ok] → 🔑 Keystore Android — clé locale, valable 2053 [ok] → 🛍️ Google Play Console — fiche à créer [à faire] → 📱 Google Play — pas publiée [pas encore]
-- 🗄️ **Comptes** : 📱 App — mode invité sans compte [ok] → 🗄️ Supabase — projet en pause [bloquant] → 🔐 Connexion utilisateurs — clés Google à recréer [à faire]
+- 🗄️ **Comptes** : 📱 App — aucun compte, tout en local [ok] → 🗄️ Backend — aucun [aucun] → 🔐 Connexion utilisateurs — retirée le 30/10 [aucun]
 - 🌐 **Web** : 🐙 GitHub — dossier landing/ [ok] → 📄 GitHub Pages — publié par site.yml [ok] → 🌐 Nom de domaine — kultiva.toakeur.com, HTTPS [ok] → ⬇️ Boutons « Télécharger » — encore sans lien [pas encore]
 
 ## Vue d'ensemble
@@ -26,7 +26,7 @@ Mis à jour le 28 octobre 2026 d'après le dépôt, la base Supabase et le site 
 - **État du projet** : en pause (choix de Jean) — rien n'est soumis aux boutiques.
 - **Plateforme** : iOS + Android (Flutter ≥ 3.38), portrait, iPhone + iPad — app `com.toa.kultiva`, v1.0.0+5
 - **Stack** : Flutter/Dart Material 3, local-first (SharedPreferences + services singletons, `ValueNotifier`, sans framework d'état)
-- **Backend** : Supabase (auth, Postgres RLS, Storage, 2 edge functions) — facultatif, l'app fonctionne hors ligne. ⚠️ **Le projet Supabase est en pause** (état inactif, vérifié le 20, le 27 et le 28 octobre 2026) : tant qu'il n'est pas rallumé, ni connexion ni synchronisation ; le mode invité, lui, marche.
+- **Backend** : **aucun depuis le 30 octobre 2026.** Les comptes ont été retirés de la v1 : le jardin, les photos, les badges et la créature vivent uniquement sur l'appareil. Les deux seuls appels sortants sont Open-Meteo (météo) et Sentry (plantages).
 - **Distribution** : App Store via Xcode Cloud + Play Store (AAB signé) — jamais soumise (un script local `update-testflight.command` construit aussi l'IPA à envoyer par Transporter), textes des fiches prêts (`docs/store-listings.md`)
 - **Site** : <https://kultiva.toakeur.com> (présentation + confidentialité), en ligne depuis le 7 octobre 2026
 - **Marchés** : bi-marché France + 8 pays francophones d'Afrique de l'Ouest, détection du pays et de la sous-zone climatique
@@ -37,29 +37,28 @@ Mis à jour le 28 octobre 2026 d'après le dépôt, la base Supabase et le site 
 
 ### 1. GitHub
 
-- **Rôle** : dépôt du code + CI GitHub Actions — `ci.yml` (analyze + tests + builds Android AAB/APK), `sync-catalog.yml` (export du catalogue vers Supabase pour le projet sœur Kultivaprix, lancé quand le catalogue change — en échec le 20 octobre 2026, l'adresse Supabase en pause ne répondant pas) et `site.yml` (publication du dossier `landing/`, voir plus bas).
+- **Rôle** : dépôt du code + CI GitHub Actions — `ci.yml` (analyze + tests + builds Android AAB/APK) et `site.yml` (publication du dossier `landing/`, voir plus bas). Le workflow `sync-catalog.yml`, qui exportait le catalogue vers Kultivaprix, a été supprimé le 30 octobre 2026 : les deux projets n'ont plus de lien.
 - **Console** : <https://github.com/teiki5320/Kultiva> (branche par défaut : `main`)
 - **Identifiants publics** : —
-- **Secrets** : `KULTIVA_SEED_SECRET` dans repo → Settings → Secrets → Actions (même valeur configurée côté edge function `seed-species`).
+- **Secrets** : aucun secret de CI n'est plus nécessaire. `KULTIVA_SEED_SECRET` ne sert plus depuis le retrait de la sync Kultivaprix (30 octobre 2026) et peut être supprimé dans repo → Settings → Secrets → Actions.
 - **Coût** : gratuit.
 
-### 2. Supabase
+### 2. Supabase — plus utilisé
 
-- **Rôle** : backend — auth (e-mail + Google + Apple), Postgres sous RLS (`profiles`, `plantations`, `unlocked_badges`, `preferences`, `challenge_posts`, `post_likes`, `post_reports`, `user_xp`, `news_items`, `species`), Storage (`plant-photos`, `news-images`), edge functions `seed-species` et `delete-account` (suppression de compte in-app). Migrations `supabase/migrations/001 → 016`, appliquées manuellement via le SQL Editor.
-- **État** : ⏸️ **en pause, pas supprimé.** Le 28 octobre 2026 (comme le 20 et le 27), l'API Supabase donne toujours le projet « Kultiva » (`vkiwkeknfzwdvufcqbrp`, région `eu-west-1`) avec l'état *inactif* ; son adresse ne résout toujours pas le 21 octobre ; il se rallume depuis la console. Pendant la pause, son adresse ne résout plus du tout — c'est ce qui avait fait croire, le 3 octobre, à une suppression. Conséquence : sans rallumage, pas de connexion, pas de synchronisation, pas de suppression de compte in-app. Le mode invité et tout le contenu hors ligne fonctionnent.
+- **Rôle** : **aucun depuis le 30 octobre 2026.** Le projet portait l'authentification, la synchronisation et la suppression de compte in-app ; tout cela a été retiré de la v1 avec les comptes. Plus aucune ligne de Dart ne le contacte.
+- **Pourquoi** : le plan était **gratuit**, et Supabase met en pause tout projet gratuit après une semaine d'inactivité. Une app non publiée n'a pas de trafic : le projet se rendormait chaque semaine, et le rallumer n'y changeait rien. Payer 25 $/mois pour zéro utilisateur n'avait pas de sens.
+- **État** : ⏸️ **en pause, pas supprimé.** `vkiwkeknfzwdvufcqbrp`, région `eu-west-1`. Données et migrations conservées un an par Supabase — **ne pas supprimer le projet**, mais il ne bloque plus rien.
 - **Console** : <https://supabase.com/dashboard/project/vkiwkeknfzwdvufcqbrp>
-- **Identifiants publics** : adresse du projet `vkiwkeknfzwdvufcqbrp` (elle ne répond plus tant que le projet est en pause) + `anonKey`, commitées dans `lib/config/supabase_config.dart` — publiques par design, la sécurité repose sur les policies RLS.
-- **Secrets** : clé `service_role` — dashboard uniquement (Settings → API), jamais dans le code ni le dépôt.
-- **Coût** : plan gratuit.
+- **À nettoyer à la main, sans urgence** : la table `species` (ne servait qu'à Kultivaprix) et le secret GitHub `KULTIVA_SEED_SECRET`.
+- **Si la synchro revient** : ne pas reprendre Supabase. La piste retenue est **Cloudflare** — un Worker + D1 (données) + R2 (photos), gratuit, qui ne s'endort jamais, avec juridiction EU disponible. En gardant Google + Apple **seulement**, le Worker se contente de vérifier le jeton d'identité : aucun mot de passe à hacher ni à stocker.
+- **Coût** : 0 €.
 
-### 3. Connexion utilisateurs (Apple / Google / e-mail)
+### 3. Connexion utilisateurs — retirée
 
-- **Rôle** : comptes facultatifs, gérés par Supabase Auth (`lib/services/auth_service.dart`) — e-mail + mot de passe avec confirmation, « Se connecter avec Google » (`google_sign_in`), « Se connecter avec Apple » (`sign_in_with_apple`, nonce SHA-256, entitlement `ios/Runner/Runner.entitlements`). « Continuer sans compte » (mode invité) évite la connexion.
-- **État** : inopérante tant que Supabase est en pause. Les clés Google « Se connecter » ont été laissées à supprimer le 9 octobre 2026 (app pas publiée) : à recréer si on relance l'app.
-- **Console** : <https://console.cloud.google.com> (client OAuth Google) ; Supabase → Authentication → Providers.
-- **Identifiants publics** : client IDs Web et iOS dans `lib/config/supabase_config.dart` ; `REVERSED_CLIENT_ID` dans `ios/Runner/Info.plist`.
-- **Secrets** : le client secret OAuth Google vit dans le dashboard Supabase (Authentication → Providers → Google).
-- **Coût** : gratuit. Client OAuth Android (empreinte SHA-1 de la clé de signature) jamais créé.
+- **Rôle** : **aucun depuis le 30 octobre 2026.** L'app n'a plus d'écran de connexion. Supprimés : `lib/screens/auth/`, `auth_service.dart`, `cloud_sync_service.dart`, `supabase_config.dart`, les dépendances `supabase_flutter`, `google_sign_in`, `sign_in_with_apple` et `crypto` (−36 paquets, −70 lignes de `Podfile.lock`), l'entitlement Apple Sign-In et le schéma d'URL Google de `Info.plist`.
+- **Effet sur la soumission** : plus d'obligation Apple de suppression de compte in-app, questionnaire de confidentialité réduit à deux types (localisation, plantages), guideline 4.8 sans objet, et plus de clés Google « Se connecter » à recréer.
+- **Contrepartie assumée** : changer de téléphone fait perdre le jardin. Un export/import de fichier reste à écrire.
+- **Coût** : 0 €.
 
 ### 4. API tierce (météo Open-Meteo)
 
@@ -154,6 +153,6 @@ Mis à jour le 28 octobre 2026 d'après le dépôt, la base Supabase et le site 
 
 ## Notes
 
-- Valeurs **publiques par design** (leur présence dans le code est normale) : URL + `anonKey` Supabase, client IDs Google OAuth, DSN Sentry. Plus aucun tag Amazon dans le code depuis le 20 octobre 2026.
+- Valeur **publique par design** (sa présence dans le code est normale) : le DSN Sentry (`lib/main.dart`). Depuis le 30 octobre 2026, il n'y a plus ni URL Supabase, ni `anonKey`, ni client ID Google dans le code ; et plus aucun tag Amazon depuis le 20 octobre.
 - E-mail de support public : `kultiva@toakeur.com` (site, politique de confidentialité en ligne et dans l'app).
 - Reprise sur machine neuve : cloner le dépôt, Flutter ≥ 3.38, `flutter pub get` puis `flutter run` — aucun secret requis côté client ; release Android = keystore + `key.properties` depuis le coffre-fort ; release iOS = accès au compte Apple.

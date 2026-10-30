@@ -1,12 +1,12 @@
 # INFRA — fiche technique
 
 > Généré le 20 août 2026 par un scan du dépôt, mis à jour le
-> 29 octobre 2026. Pour mettre à jour : relancer ce même prompt.
+> 30 octobre 2026. Pour mettre à jour : relancer ce même prompt.
 
 ## En bref
 
 - **Plateforme** : iOS 15+ et Android en ligne · site vitrine
-- **Stack** : Flutter (Dart ≥ 3.6), version `1.0.6+7` dans le code
+- **Stack** : Flutter (Dart ≥ 3.6), version `1.0.7+8` dans le code
 - **Backend** : aucun — tout reste sur l'appareil, jeu hors ligne
 - **Distribution** : Xcode Cloud vers l'App Store · App Bundle signé en local
 - **Site** : `erea.toakeur.com`, GitHub Pages derrière Cloudflare
@@ -14,15 +14,15 @@
 
 ## Parcours
 
-- 🍎 **iOS** : 🐙 GitHub — main, 1.0.6 dans le code, CI au vert [ok] → ☁️ Xcode Cloud — build à chaque poussée sur main [ok] → 🛍️ App Store Connect — 1.0.5 (build 195) approuvée le 21 octobre [ok] → 📱 App Store — 1.0.5 en ligne depuis le 21 octobre [ok]
-- 🤖 **Android** : 🐙 GitHub — main, 1.0.6 dans le code, CI au vert [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — production accordée le 17 octobre, 1.0.6 envoyée le 22 octobre [ok] → 🛒 Google Play — 1.0.6 en ligne depuis le 22 octobre [ok]
+- 🍎 **iOS** : 🐙 GitHub — main, 1.0.7 dans le code, tests lancés à la main avant chaque commit (aucune CI) [ok] → ☁️ Xcode Cloud — build à chaque poussée sur main [ok] → 🛍️ App Store Connect — 1.0.5 (build 195) approuvée le 21 octobre [ok] → 📱 App Store — 1.0.5 en ligne depuis le 21 octobre [ok]
+- 🤖 **Android** : 🐙 GitHub — main, 1.0.7 dans le code, tests lancés à la main avant chaque commit (aucune CI) [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — production accordée le 17 octobre, 1.0.6 envoyée le 22 octobre [ok] → 🛒 Google Play — 1.0.6 en ligne depuis le 22 octobre [ok]
 - 🌐 **Web** : 🐙 GitHub — racine de main, sans CNAME [ok] → 📄 Hébergement web (GitHub Pages / Cloudflare Pages) — GitHub Pages [ok] → 🏷️ Nom de domaine — erea.toakeur.com via Cloudflare [ok] → 🌐 Site — vitrine, jeu, support, confidentialité [ok]
-- 🎬 **Contenu** : 🎬 Studio — 39 pubs vidéo (5–29 oct.), 2 validées, 37 à valider [à faire] → 🗓️ Planning — aucune publication programmée [à faire] → 📣 Réseaux sociaux & influenceurs — YouTube et TikTok branchés, rien publié [pas encore]
+- 🎬 **Contenu** : 🎬 Studio — 27 pubs vidéo validées, aucune à valider [ok] → 🗓️ Planning — 25 vidéos programmées jusqu'au 6 nov. [ok] → 📣 Réseaux sociaux & influenceurs — TikTok erea.jeu, 2 publiées le 29 oct. [ok]
 
 ## Vue d'ensemble
 
 - **Plateforme** : iOS 15+ (1.0.5 en ligne sur l'App Store depuis le 21 octobre 2026) · Android : 1.0.6 en ligne sur Google Play depuis le 22 octobre 2026 (première version en ligne : 1.0.4, le 20 octobre) · site vitrine `erea.toakeur.com`
-- **Stack** : Flutter (Dart ≥ 3.6), version `1.0.6+7` dans le code, 170 tests, aucun serveur applicatif
+- **Stack** : Flutter (Dart ≥ 3.6), version `1.0.7+8` dans le code, 185 tests, aucun serveur applicatif
 - **Backend** : aucun — tout l'état du joueur vit sur l'appareil (`shared_preferences`)
 - **Distribution** : App Store via Xcode Cloud · Play Store via App Bundle signé localement
 - **Monétisation** : interstitielle AdMob + achat unique 3,99 € qui la retire, en ligne depuis la 1.0.2
@@ -127,7 +127,7 @@ sauvegarder, rien à recopier sur une machine neuve.
 
 **Identifiants publics :**
 - App « Erea », bundle `com.teiki.erea` ; nom « Erea : Quiz d'histoire & frise » à partir de la 1.0.4.
-- Version `1.0.6+7` dans `erea_flutter/pubspec.yaml` depuis le 21 octobre 2026 : la 1.0.5 étant approuvée, Apple refuse tout nouveau build 1.0.5 (build 196). Les builds 1.0.6 vont dans TestFlight ; avant de soumettre, créer la version 1.0.6 dans la console avec **exactement** ce numéro, sinon le build reste non sélectionnable.
+- Version `1.0.7+8` dans `erea_flutter/pubspec.yaml` depuis le 30 octobre 2026 (avant elle, `1.0.6+7` à partir du 21 octobre, quand la 1.0.5 approuvée a fermé son numéro au build 196). Les builds 1.0.7 vont dans TestFlight ; avant de soumettre, créer la version 1.0.7 dans la console avec **exactement** ce numéro, sinon le build reste non sélectionnable.
 - iOS minimum : 15.0 (`IPHONEOS_DEPLOYMENT_TARGET`, `Podfile`).
 - Chiffrement : `ITSAppUsesNonExemptEncryption = false` dans `ios/Runner/Info.plist` — pas de formulaire d'export à chaque build.
 
@@ -146,7 +146,10 @@ mise en ligne le même jour à 14 h 01 (publication automatique) ; les
 builds 176 et 180 avaient été refusés à l'import (ITMS-91064, manifeste
 de confidentialité). La **`1.0.5` (build 195), soumise le 21 octobre
 2026 à 15 h 11, est en ligne depuis le même jour à 17 h 44**. Aucune
-1.0.6 n'est soumise sur l'App Store : elle ne change rien sur iPhone.
+1.0.6 n'est soumise sur l'App Store : elle ne changeait rien sur iPhone.
+La 1.0.7 (rappel du soir, pause du Chrono, consentement, doublon retiré,
+révélation sur iPhone SE en très grande police, Album, icônes dessinées)
+partira sur les deux boutiques.
 
 **Où vivent les secrets :** aucun côté dépôt. L'authentification est
 celle du compte Apple (+ double facteur).
@@ -295,7 +298,7 @@ Confidentialité. `NSPrivacyTracking` y reste à faux, sans clé de
 domaines : c'est la seule combinaison acceptée à l'import (build 182) ;
 le suivi reste déclaré dans la fiche Confidentialité.
 
-**Paiements (dernier état connu, au 18 août 2026 ; non revérifié le 29 octobre 2026, à vérifier dans la console)** : seuil de versement 70 €, mensuel
+**Paiements (dernier état connu, au 18 août 2026 ; non revérifié le 30 octobre 2026, à vérifier dans la console)** : seuil de versement 70 €, mensuel
 vers le 21. L'IBAN ne peut pas encore être saisi — Google n'ouvre
 « Gérer les modes de paiement » qu'après un premier seuil de recettes
 (environ 10 €). Suivront le courrier postal avec code PIN, à saisir sous
@@ -320,7 +323,7 @@ passe par le compte Google (+ double facteur).
 **État réel :**
 - Application ID `com.teiki.erea`, identique à iOS (`android/app/build.gradle.kts`).
 - Test fermé « Alpha » : release `4 (1.0.3)` servie aux testeurs à partir du 16 septembre 2026, puis release `5 (1.0.4)` envoyée le 14 octobre. Les **douze testeurs pendant quatorze jours** exigés d'un compte personnel ont été tenus du 8 au 22 septembre (voir « Testeurs » plus bas).
-- **Accès à la production demandé le 14 octobre 2026 à 18 h 39, accordé le 17 octobre** ; la release de production `5 (1.0.4)`, promue depuis la piste Alpha et envoyée le 17 octobre vers 8 h 25, a été mise en ligne le 20 octobre 2026 à 16 h 07 ; la `6 (1.0.5)` l'a remplacée le 21 octobre, et la **`7 (1.0.6)` est en ligne depuis le 22 octobre 2026**. La fiche publique `play.google.com/store/apps/details?id=com.teiki.erea` répond (vérifié le 29 octobre 2026).
+- **Accès à la production demandé le 14 octobre 2026 à 18 h 39, accordé le 17 octobre** ; la release de production `5 (1.0.4)`, promue depuis la piste Alpha et envoyée le 17 octobre vers 8 h 25, a été mise en ligne le 20 octobre 2026 à 16 h 07 ; la `6 (1.0.5)` l'a remplacée le 21 octobre, et la **`7 (1.0.6)` est en ligne depuis le 22 octobre 2026**. La fiche publique `play.google.com/store/apps/details?id=com.teiki.erea` répond (vérifié le 30 octobre 2026).
 - Achat intégré actif (voir « StoreKit / Play Billing »). Classements Play Games non configurés (voir « Game Center / Play Games »).
 - Appareil physique de vérification : un Pixel 8a, utilisé pour les tests du 16 septembre.
 
@@ -347,9 +350,10 @@ décrite dans la section suivante.
 | Sauvegarde | copie de secours dans iCloud Drive → `Sauvegardes/erea-keystore/` (29 septembre 2026) |
 
 `.gitignore` couvre `android/key.properties`, `*.jks` et `*.keystore`.
-⚠️ Si `key.properties` manque, le build release se rabat en silence sur
-la clé de débogage (`android/app/build.gradle.kts`) et Google refuse
-l'envoi. Perdre la clé interdit toute mise à jour de l'app.
+⚠️ Si `key.properties` manque, `flutter build appbundle` s'arrête sur
+une erreur explicite (`android/app/build.gradle.kts`) plutôt que de
+signer en debug un bundle que Google refuserait. Perdre la clé interdit
+toute mise à jour de l'app.
 
 **Où vivent les secrets :** le keystore et son mot de passe, hors dépôt
 uniquement.
@@ -368,7 +372,7 @@ uniquement.
 Proposée après un PERFECT, un record ou trois défis d'affilée, une seule
 fois, jamais au lancement ; le système décide de l'affichage. Le même
 fichier fournit le lien de boutique ajouté aux grilles partagées : App
-Store sur iOS, Play Store sur Android depuis la 1.0.4. Au 29 octobre
+Store sur iOS, Play Store sur Android depuis la 1.0.4. Au 30 octobre
 2026, l'App Store compte 0 note.
 
 **Où vivent les secrets :** aucun.
@@ -408,7 +412,9 @@ téléchargement à suivre par TikTok est
 personnel, TikTok n'affiche pas de lien dans la bio, et le compte
 Entreprise passe désormais par une vérification de l'entreprise, qui
 publie l'adresse sur le profil : ce choix attend la même décision que le
-DSA chez Apple.
+DSA chez Apple. Les vidéos elles-mêmes sont publiées sans régie, par le
+Planning du Studio via Buffer : les deux premières l'ont été en public
+sur « erea.jeu » le 29 octobre 2026 (vérifié dans Buffer le 30 octobre).
 
 **Où vivent les secrets :** aucun ; la connexion se fait par un code
 envoyé à `admin@toakeur.com`.
@@ -445,9 +451,9 @@ Le dépôt peut être public sans risque : il ne contient aucun secret.
 
 **Jouer et développer, sur n'importe quel système :**
 1. `git clone https://github.com/teiki5320/erea.git`
-2. Installer Flutter stable (≥ 3.6) — <https://docs.flutter.dev/get-started>
+2. Installer Flutter 3.47.3, la version figée sur Xcode Cloud (`ios/ci_scripts/ci_post_clone.sh`) — <https://docs.flutter.dev/get-started>
 3. `cd erea/erea_flutter && flutter pub get`
-4. `flutter analyze && flutter test` — 170 tests, la suite doit être verte
+4. `flutter analyze && flutter test` — 185 tests, la suite doit être verte
 5. `flutter run`
 
 **Construire pour iOS, sur Mac uniquement :**

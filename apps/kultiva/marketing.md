@@ -33,7 +33,7 @@ physiques, dons.
 
 - 🐣 **Tamassi** : une créature virtuelle animée (Poussia, Soleia, Spira) qui grandit avec l'activité réelle au jardin.
 - 🌍 **France et Afrique de l'Ouest** : calendriers par pays et sous-zone climatique, noms locaux, marchés et prix en FCFA.
-- 📴 **Tout hors ligne, sans compte** : 169 fiches, 33 tutoriels, potager et Poussidex utilisables en mode invité.
+- 📴 **Tout hors ligne, sans compte** : 169 fiches, 33 tutoriels, potager et Poussidex. Aucune inscription, aucun serveur, aucune donnée qui sort du téléphone.
 
 ## Canaux
 
@@ -77,6 +77,6 @@ n'est branché (Sentry ne suit que les crashs).
 
 ## Les 3 priorités
 
-- Décider si Kultiva repart : rallumer le projet Supabase (en pause) et recréer les clés Google « Se connecter », sinon la connexion et la synchronisation restent hors service.
-- Compléter la fiche App Store déjà créée (adresses de `kultiva.toakeur.com` et `kultiva@toakeur.com`, compte de démo, captures, statut de trader DSA à revoir), ajouter la clé de localisation réclamée par Apple, puis soumettre.
+- Garnir une installation pour les captures (2-3 plants, une photo, un Tamassi entamé) : il n'y a plus de compte de démonstration à créer.
+- Compléter la fiche App Store déjà créée (adresses de `kultiva.toakeur.com` et `kultiva@toakeur.com`, captures, statut de trader DSA à trancher), puis soumettre. La clé de localisation réclamée par Apple a été ajoutée le 30 octobre 2026.
 - Créer la fiche Google Play et lancer tout de suite le test fermé (douze testeurs pendant quatorze jours si le compte est personnel).

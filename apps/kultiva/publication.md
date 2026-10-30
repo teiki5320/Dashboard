@@ -1,6 +1,6 @@
 # PUBLICATION — état des boutiques
 
-> Mis à jour le 28 octobre 2026. Pour mettre à jour :
+> Mis à jour le 30 octobre 2026. Pour mettre à jour :
 > relancer ce même prompt.
 >
 > **Aucun secret ici** — uniquement des références publiques :
@@ -18,6 +18,7 @@
 - **Version commune** : `1.0.0+5` (`pubspec.yaml`), jamais soumise
 - **Identifiant de bundle** : `com.toa.kultiva` (iOS et Android)
 - **Monétisation** : gratuite ; ni pub, ni achat, ni affiliation (liens Amazon retirés le 20 octobre)
+- **Comptes** : **aucun** depuis le 30 octobre 2026 — ni connexion, ni serveur, ni synchronisation
 - **Confidentialité** : <https://kultiva.toakeur.com/privacy.html> en ligne
 - **Contact** : `kultiva@toakeur.com`
 
@@ -30,19 +31,19 @@
 | Signature | [ok] gérée par Xcode Cloud, équipe `K597U7X3FZ` | [ok] keystore local, valable jusqu'en 2053 |
 | Classification | [à faire] 4+ attendu, questionnaire prêt à reporter | [à faire] questionnaire de contenu à remplir |
 | Cible | [ok] iOS 15.0 et plus (depuis le 25 octobre 2026 : Xcode et les pods, dont Sentry, l’exigent ; avant : 13.0), iPhone et iPad, portrait | [ok] valeurs par défaut de Flutter, rien de figé dans le dépôt |
-| Permissions | [à faire] caméra, photos, localisation en français ; clé `NSLocationAlwaysAndWhenInUseUsageDescription` à ajouter (avertissement Apple ITMS-90683) | [ok] localisation, notifications, alarmes exactes |
+| Permissions | [ok] caméra, photos, localisation en français ; clé `NSLocationAlwaysAndWhenInUseUsageDescription` ajoutée le 30 octobre 2026 (fin de l'avertissement ITMS-90683) | [ok] localisation, notifications, alarmes exactes |
 | Poids | [pas encore] à mesurer au premier envoi (35 Mo d'assets) | [pas encore] à mesurer au premier envoi (35 Mo d'assets) |
 
 ## Vue d'ensemble
 
 - **État du projet** : en pause (choix de Jean) — rien n'est soumis aux boutiques
-- **iOS** : jamais soumise — la fiche App Store Connect existe (Apple ID `6762550020`), ses textes sont rédigés et l'URL de confidentialité existe ; le build Xcode Cloud 94 a échoué le 24 octobre 2026 (cible iOS trop basse), corrigé le 25 octobre ; les builds 95 et 96 ont réussi le 25 octobre 2026 et le build 97 le 27 octobre 2026, avec l'étape « TestFlight internes - iOS » (vérifié le 28 octobre 2026) ; Apple signale à chaque envoi la clé de localisation `NSLocationAlwaysAndWhenInUseUsageDescription` manquante (ITMS-90683)
+- **iOS** : jamais soumise — la fiche App Store Connect existe (Apple ID `6762550020`), ses textes sont rédigés et l'URL de confidentialité existe ; le build Xcode Cloud 94 a échoué le 24 octobre 2026 (cible iOS trop basse), corrigé le 25 octobre ; les builds 95 et 96 ont réussi le 25 octobre 2026 et le build 97 le 27 octobre 2026, avec l'étape « TestFlight internes - iOS » (vérifié le 28 octobre 2026) . La clé de localisation que réclamait Apple (ITMS-90683) a été ajoutée le 30 octobre 2026
 - **Android** : jamais envoyée à Play — le bundle release est signé et vérifié localement ; l'existence d'une fiche Play reste à vérifier dans la console
 - **Web** : site de présentation en ligne sur <https://kultiva.toakeur.com> depuis le 7 octobre 2026
-- **Backend** : projet Supabase **en pause** (état inactif, vérifié le 20, le 27 et le 28 octobre 2026) — connexion et synchronisation hors service tant qu'il n'est pas rallumé
+- **Backend** : **aucun**. Les comptes ont été retirés de la v1 le 30 octobre 2026 — le jardin vit sur l'appareil. Le projet Supabase reste en pause, inutilisé, et ne bloque plus rien
 - **Monétisation** : aucune — les 159 liens d'affiliation Amazon (tag rattaché au compte fermé par Amazon le 18 octobre) ont été retirés le 20 octobre 2026. Le statut **trader** au sens du DSA, décidé le 24 août 2026 à cause de ces liens, est donc à revoir
 - **Classification attendue** : **4+** depuis le retrait du feed communautaire — plus aucun contenu généré par les utilisateurs
-- **Chemin critique** : rallumer Supabase → ajouter la clé de localisation manquante → compléter la fiche App Store → soumettre iOS
+- **Chemin critique** : captures d'écran → trancher la déclaration DSA → compléter la fiche App Store → soumettre iOS
 
 Aucune boutique n'a reçu de soumission : côté Apple, seuls des builds
 TestFlight internes sont arrivés dans la fiche ; côté Google, rien n'a
@@ -77,8 +78,8 @@ coller champ par champ.
 désormais — assistance et marketing `https://kultiva.toakeur.com`,
 confidentialité `https://kultiva.toakeur.com/privacy.html` — et restent à
 coller dans App Store Connect (à vérifier dans la console). Le testeur
-Apple essaiera la connexion et la suppression de compte : le projet
-Supabase doit donc être rallumé avant la soumission. Viennent ensuite
+Le testeur Apple n'a plus ni connexion ni suppression de compte à
+essayer : l'app n'en a plus depuis le 30 octobre 2026. Restent
 le **numéro de téléphone** des informations de revue, les **captures
 d'écran** (8 en iPhone 6,9″ et, l'iPad étant conservé, 8 en iPad 13″ au
 format 2064 × 2752), et la déclaration DSA dans *Entreprise → Accords →
@@ -95,17 +96,23 @@ grille reste figée à 2 colonnes (`lib/screens/home/poussidex/poussidex_stats.d
 ce qui donne deux cartes très larges sur 13 pouces. L'allure générale des
 écrans en 13 pouces n'a pas encore été jugée.
 
-**Compte de démonstration.** Il n'est plus obligatoire depuis le mode
-invité livré le 24 août 2026 : le testeur accède à tout via « Continuer
-sans compte ». En fournir un reste utile pour qu'il vérifie la
-synchronisation cloud et la suppression de compte.
+**Compte de démonstration.** Sans objet depuis le retrait des comptes :
+laisse la case « Connexion requise » décochée dans App Store Connect. Il
+reste à garnir une installation à la main pour les captures (deux ou
+trois plants, une photo, un Tamassi entamé) — des captures sur une app
+vide ne vendent rien.
 
-**Avertissement d'Apple à corriger.** Les builds 95, 96 et 97 ont été
-acceptés, mais Apple signale à chaque envoi l'erreur ITMS-90683 : il
-manque la clé `NSLocationAlwaysAndWhenInUseUsageDescription` dans
-`ios/Runner/Info.plist` (seule `NSLocationWhenInUseUsageDescription`
-est présente). Une phrase en français suffit, à ajouter avant la
-soumission.
+~~Il n'était plus obligatoire depuis le mode
+invité livré le 24 août 2026 : le testeur accède à tout via « Continuer
+sans compte ».~~
+
+**Avertissement d'Apple corrigé.** Les builds 95, 96 et 97 ont été
+acceptés, mais Apple signalait à chaque envoi l'erreur ITMS-90683 : la
+clé `NSLocationAlwaysAndWhenInUseUsageDescription` manquait dans
+`ios/Runner/Info.plist`. Elle a été ajoutée le 30 octobre 2026 —
+`geolocator` embarque les APIs « Always » même si l'app ne s'en sert
+pas, d'où la réclamation. L'avertissement doit disparaître au prochain
+build.
 
 **Vérifié le 28 octobre 2026** (mails d'Apple) : la fiche existe pour
 `com.toa.kultiva` (Apple ID `6762550020`) et reçoit les builds de Xcode
@@ -181,25 +188,32 @@ des boutiques une fois l'app publiée.
 
 ---
 
-## Dépendance commune · Supabase
+## Backend · aucun (décision du 30 octobre 2026)
 
-Ce n'est pas une boutique, mais aucune soumission ne tient sans lui : le
-backend porte l'authentification, la synchronisation et la suppression de
-compte in-app exigée par Apple.
+**L'app ne contacte plus aucun serveur.** Les comptes ont été retirés de
+la v1 : le jardin, les photos, les badges et la créature vivent
+uniquement sur l'appareil. Les deux seuls appels sortants sont Open-Meteo
+(météo, sans clé) et Sentry (plantages).
+
+Le motif est factuel : le plan Supabase gratuit met en pause tout projet
+après **une semaine sans trafic**. Une app non publiée n'a aucun trafic,
+donc le projet se rendormait chaque semaine. Payer 25 $/mois pour zéro
+utilisateur, ou passer deux jours à construire un backend que personne
+n'utilise encore, n'avait pas de sens.
+
+**Ce que ça débloque pour la soumission** : plus d'obligation Apple de
+suppression de compte in-app, questionnaire de confidentialité réduit à
+deux types (localisation, plantages), guideline 4.8 sans objet, et plus
+de clés Google « Se connecter » à recréer.
+
+**Ce que ça coûte** : changer de téléphone fait perdre le jardin. Un
+export/import de fichier reste à écrire.
 
 | | |
 |---|---|
-| État | **En pause** — le 28 octobre 2026 (comme le 20 et le 27), l'API Supabase donne le projet avec l'état *inactif* ; il n'est pas supprimé et se rallume depuis la console |
-| Console | <https://supabase.com/dashboard/project/vkiwkeknfzwdvufcqbrp> |
-| Projet | `vkiwkeknfzwdvufcqbrp` (région Europe) |
-| Adresse | ne résout plus pendant la pause — ce qui avait été pris, le 3 octobre, pour une suppression |
-| Migrations | `001` → `016`, toutes appliquées au 24 août 2026 |
-| Edge function | `delete-account` déployée au 24 août 2026 |
-
-La clé `anon` présente dans `lib/config/supabase_config.dart` est un JWT
-public : c'est son usage normal, elle n'est pas un secret. Les clés
-Google « Se connecter » ont été laissées à supprimer le 9 octobre 2026 :
-à recréer si on relance l'app.
+| Projet Supabase | `vkiwkeknfzwdvufcqbrp` — **en pause, inutilisé.** Données et migrations conservées un an : **ne pas le supprimer**, il ne bloque plus rien |
+| Retiré de l'app | `supabase_flutter`, `google_sign_in`, `sign_in_with_apple`, `crypto` (−36 paquets), l'entitlement Apple Sign-In et le schéma d'URL Google |
+| Si la synchro revient | **Cloudflare** (Worker + D1 + R2) plutôt que Supabase : gratuit, ne s'endort jamais, juridiction EU disponible. Avec Google + Apple seulement, le Worker se contente de vérifier le jeton d'identité — aucun mot de passe à manipuler |
 
 ---
 
@@ -207,12 +221,12 @@ Google « Se connecter » ont été laissées à supprimer le 9 octobre 2026 :
 
 1. ✅ **Site et confidentialité** : `kultiva.toakeur.com` et `/privacy.html` en ligne depuis le 7 octobre 2026.
 2. ✅ **Adresse de contact** : `kultiva@toakeur.com` sur le site, la confidentialité et les textes des fiches.
-3. **Rallumer le backend** : relancer le projet Supabase et recréer les clés Google « Se connecter ».
+3. ✅ **Backend supprimé** : les comptes ont été retirés de la v1 le 30 octobre 2026. Plus rien à rallumer, plus de clés Google à recréer.
 4. **Compléter la fiche App Store** : fiche créée (Apple ID `6762550020`) ; restent les trois URL, l'adresse de contact, la déclaration DSA (statut de trader à revoir) et le téléphone de revue.
-5. **Compte de démonstration** : 2 ou 3 plantations, une photo et un Tamassi entamé, pour le testeur et les captures.
+5. **Garnir une installation pour les captures** : 2 ou 3 plants, une photo, un Tamassi entamé. Plus de compte de démonstration à créer.
 6. **Captures d'écran** : 8 en iPhone 6,9″ (1320 × 2868) et 8 en iPad 13″ (2064 × 2752).
 7. ✅ **Liens Amazon retirés** : les 159 liens au tag du compte fermé ont été ôtés du catalogue le 20 octobre 2026.
-8. **Clé de localisation** : ajouter `NSLocationAlwaysAndWhenInUseUsageDescription` à `Info.plist` (avertissement ITMS-90683).
+8. ✅ **Clé de localisation** : `NSLocationAlwaysAndWhenInUseUsageDescription` ajoutée le 30 octobre 2026 — l'avertissement ITMS-90683 disparaît au prochain build.
 9. **Soumettre iOS** : depuis `docs/FICHE_APP_STORE.md`.
 10. **Créer la fiche Google Play** : puis lancer le test fermé sans attendre, ses quatorze jours courent en arrière-plan.
 11. **Relier les boutons « Télécharger »** : remplacer les `href="#"` du site par les liens des boutiques (la mention « Partenaire Amazon » a été ôtée le 21 octobre 2026).

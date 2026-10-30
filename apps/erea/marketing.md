@@ -1,6 +1,6 @@
 # Erea — plan marketing & rémunération
 
-> Généré le 3 août 2026, mis à jour le 29 octobre 2026. Le modèle de
+> Généré le 3 août 2026, mis à jour le 30 octobre 2026. Le modèle de
 > rémunération est en ligne sur l'App Store depuis la 1.0.2 et sur Google
 > Play depuis le 20 octobre 2026 (publicité + achat unique qui la retire). Pour le mettre à jour : relancer ce même prompt. Aucun secret
 > ici.
@@ -34,7 +34,7 @@ classiques :
 |---|---|---|
 | Familles francophones (parents + 8-15 ans) | Cœur de cible du ton et du mode Facile (268 faits « grand public ») | « Le jeu d'histoire pour toute la famille » |
 | Collégiens / brevet | Le niveau 1 s'appuie sur les repères officiels du brevet | « Révise tes repères sans t'en rendre compte » |
-| Afrique de l'Ouest francophone | Onboarding avec choix du pays (30 pays africains proposés), mélange 50/50 avec le pack Afrique (196 faits) — rare dans le genre | « Enfin un jeu d'histoire qui parle de chez toi » |
+| Afrique de l'Ouest francophone | Onboarding avec choix du pays (29 pays africains proposés, plus la France), mélange 50/50 avec le pack Afrique (202 faits) — rare dans le genre | « Enfin un jeu d'histoire qui parle de chez toi » |
 | Amateurs de culture G / joueurs de quiz | Modes Difficile et Chrono, classements mondiaux | « Tu peux faire mieux que moi ? » |
 
 ---
@@ -42,7 +42,7 @@ classiques :
 ## Rémunération par phases
 
 - [fait] **Aujourd'hui** : pub AdMob une partie sur deux, achat unique 3,99 € qui la retire, sur iOS et sur Android depuis le 20 octobre 2026
-- [en cours] **Statut trader (DSA)** : obligatoire sur les deux boutiques ; Apple prêt à passer le compte en organisation (23 octobre), réponse de Jean attendue
+- [en cours] **Statut trader (DSA)** : obligatoire sur les deux boutiques ; Jean a demandé à Apple le 29 octobre de lancer le passage en organisation, réponse d'Apple attendue
 - **Premiers versements AdMob** : seuil de 70 €, puis code PIN postal et vérification d'identité
 - **Licence éducation** : seulement si un établissement se présente de lui-même
 
@@ -50,7 +50,7 @@ classiques :
 
 - ⏳ **Le geste de la frise** : on place l'événement sur un ruban de −3000 à aujourd'hui, au lieu de choisir entre quatre réponses.
 - 🔥 **Le Défi du jour** : dix questions identiques pour tous, une tentative, une série et une grille emoji à partager.
-- 🌍 **1 831 faits, Afrique comprise** : hors ligne et sans compte, avec choix du pays et un pack Afrique rare dans le genre.
+- 🌍 **1 830 faits, Afrique comprise** : hors ligne et sans compte, avec choix du pays et un pack Afrique rare dans le genre.
 
 ## Modèle de rémunération
 
@@ -74,7 +74,7 @@ avec la 1.0.2), l'argument « sans pub » de la description, et le statut
 pas encore faite.
 
 **Modèles écartés, et pourquoi :**
-- **Abonnement** — le rythme de production de contenu (1 831 faits, mais
+- **Abonnement** — le rythme de production de contenu (1 830 faits, mais
   pas de flux hebdomadaire) ne justifie pas un récurrent ; un abonnement
   mal nourri détruit les notes.
 - **Packs payants / « Erea + » à 4,99 €** (l'ancien plan en phases) —
@@ -119,7 +119,7 @@ pas encore faite.
 | Badges des boutiques | Badge officiel d'Apple sur la vitrine, en tête et en bas de page, vers la fiche `id6794918301`, depuis le 12 octobre 2026 ; badge officiel Google Play à côté et page `/telecharger/` ouverte à Android depuis le 21 octobre 2026 | ✅ |
 | Enseignants & parents | Dossier d'une page « Erea en classe » (repères du brevet couverts, mode Facile, sans compte ni inscription) à envoyer aux profs d'histoire-géo, groupes Facebook de profs, La Salle des Maîtres | ⬜ |
 | Afrique de l'Ouest | Mise en avant du pack Afrique auprès des communautés éducatives francophones (Sénégal, Côte d'Ivoire…) ; presse tech locale ; créateurs de contenu éducation | ⬜ |
-| Réseaux sociaux | YouTube « toa.afrotok » et TikTok « erea.jeu » rattachés à Erea dans le Studio ; TikTok « Afrotok » branché mais rattaché à aucune app. Trente-neuf pubs vidéo produites par le Studio du 5 au 29 octobre 2026 : le format « documentaire qui déraille » validé par Jean le 5 octobre, puis, depuis le 26 octobre, « Avant ou après ? », « Interro surprise », « Petite histoire » et « Le défi en famille » (retiré du menu le 26 octobre, sa pub déjà faite reste) ; deux ont été validées par Jean le 28 octobre (« Blériot, le saut de la Manche » et « Les 33 mineurs chiliens, le petit papier »), les trente-sept autres attendent sa validation (vérifié le 29 octobre 2026). **Aucune publication** : le Planning est vide (vérifié le 29 octobre 2026) | ⬜ |
+| Réseaux sociaux | TikTok « erea.jeu » est le seul compte rattaché à Erea dans le Studio ; YouTube « toa.afrotok » et TikTok « Afrotok » sont branchés mais rattachés à aucune app. Pubs vidéo produites par le Studio depuis le 5 octobre 2026 : le format « documentaire qui déraille » validé par Jean le 5 octobre, puis, depuis le 26 octobre, « Avant ou après ? », « Interro surprise », « Petite histoire » et « Le défi en famille » ; 27 sont validées et aucune n'attend de validation (vérifié le 30 octobre 2026). Publication en public par le Planning via Buffer depuis le 29 octobre 2026 : « Blériot, le saut de la Manche » et « Henry Dunant, la naissance de la Croix-Rouge » publiées ce soir-là, les 25 autres programmées du 30 octobre au 6 novembre (vérifié le 30 octobre 2026) | ✅ |
 | Presse & sites spécialisés | App du jour (iPhon.fr, iGen, Frandroid), sites parents (Geek Junior, Super Julie — références du jeu éducatif) | ⬜ |
 | Featuring Apple | Formulaire « App Store featuring » : app famille, française, hors ligne, avec Game Center — bon dossier, même si l'argument « sans pub » est tombé avec la 1.0.2 | ⬜ |
 | Play Store | Second magasin, donc second public : les douze testeurs ont tenu quatorze jours (22 septembre), l'accès à la production a été accordé le 17 octobre 2026, la 1.0.4 a été mise en ligne le 20 octobre et la 1.0.6 est en ligne depuis le 22 octobre (`docs/PUBLICATION.md`) | ✅ |
@@ -135,14 +135,14 @@ pas encore faite.
 | Janvier | Résolutions « culture générale » | Clip défi du jour, « 1 fait par jour » |
 | Mai–juin | Révisions du brevet | Le pic naturel : dossier profs re-poussé, mots-clés « brevet » dans la fiche |
 | Juillet–août | Vacances, trajets | « Le jeu de la voiture » ; anniversaires historiques de l'été (14 juillet, premiers pas sur la Lune le 21 juillet) |
-| Toute l'année | Anniversaires d'événements du jeu | Le calendrier éditorial est déjà dans `assets/events.json` : 1 831 dates à célébrer |
+| Toute l'année | Anniversaires d'événements du jeu | Le calendrier éditorial est déjà dans `assets/events.json` : 1 830 dates à célébrer |
 
 ---
 
 ## Mesures
 
 - **Téléchargements** : à vérifier dans la console (App Store Connect et Play Console)
-- **Note App Store** : aucune note au 29 octobre 2026
+- **Note App Store** : aucune note au 30 octobre 2026
 - **Note Google Play** : à vérifier dans la console (en ligne depuis le 20 octobre 2026)
 - **Rétention J1 et J7** : à vérifier dans la console
 - **Participants au Défi du jour** : à vérifier dans la console (classement `erea.daily`)
@@ -179,9 +179,9 @@ une collecte à la fiche de confidentialité.
 
 ## Les 3 priorités
 
-- **Publier les deux pubs validées et valider les autres** (trente-neuf produites du 5 au 29 octobre : deux validées le 28 octobre, trente-sept en attente) sur YouTube « toa.afrotok » et TikTok « erea.jeu » par le Planning, avec le lien `https://erea.toakeur.com/telecharger/?src=tiktok` qui mène aux deux boutiques : aucune publication n'a encore eu lieu.
+- **Booster par « Promouvoir » les pubs TikTok qui prennent le mieux** sur « erea.jeu » (deux publiées le 29 octobre, 25 programmées jusqu'au 6 novembre), avec le lien `https://erea.toakeur.com/telecharger/?src=tiktok` qui mène aux deux boutiques : aucune promotion payante n'a encore été lancée.
 - **Envoyer le dossier « Erea en classe »** aux professeurs d'histoire-géographie et à leurs groupes : c'est le public naturel d'un jeu familial calé sur les repères du brevet, et rien ne lui a encore été adressé.
-- **Se déclarer trader (DSA)** sur l'App Store et Google Play : l'app rapporte maintenant sur les deux boutiques, et la déclaration « non-trader » ne tient plus ; à faire dès que le compte Apple est converti en compte organisation (Apple attend la réponse de Jean depuis le 23 octobre 2026, toujours sans réponse le 29 octobre).
+- **Se déclarer trader (DSA)** sur l'App Store et Google Play : l'app rapporte maintenant sur les deux boutiques, et la déclaration « non-trader » ne tient plus ; à faire dès que le compte Apple est converti en compte organisation (Jean a répondu à Apple le 29 octobre 2026 pour lancer la migration ; réponse d'Apple attendue au 30 octobre).
 
 ## Déjà fait
 
@@ -199,3 +199,4 @@ une collecte à la fiche de confidentialité.
 - ✅ **1.0.4 sur l'App Store** sous le nom long, captures légendées — mise en ligne le 15 octobre 2026.
 - ✅ **1.0.5 en ligne sur les deux boutiques** — 21 octobre 2026 ; 1.0.6 (Android seul) sur Google Play le 22 octobre.
 - ✅ **Adresse et contact propres** — `erea.toakeur.com` et `erea@toakeur.com`, 7 octobre 2026.
+- ✅ **Premières pubs publiées sur TikTok « erea.jeu »** — 29 octobre 2026, par le Planning via Buffer.
