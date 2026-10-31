@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 30 octobre 2026. Compagnon de INFRA.md. Pour l'actualiser : relancer le même prompt.
+Mis à jour le 31 octobre 2026. Compagnon de INFRA.md. Pour l'actualiser : relancer le même prompt.
 
 ## Positionnement
 
@@ -10,8 +10,8 @@ Mis à jour le 30 octobre 2026. Compagnon de INFRA.md. Pour l'actualiser : relan
 
 Trois choses que les concurrents directs n'ont pas :
 
-1. **La densité narrative.** 687 cartes, 59 histoires qui s'étalent sur plusieurs cartes et se souviennent de ce qu'on a répondu. Une réponse au jour 12 rouvre une carte au jour 40.
-2. **Le palais.** On l'achète pièce par pièce avec l'argent de l'État, 24 objets, et ce qu'on achète reste d'un mandat à l'autre même après une chute. C'est la progression longue, par-dessus la partie.
+1. **La densité narrative.** 673 cartes, 59 histoires qui s'étalent sur plusieurs cartes et se souviennent de ce qu'on a répondu. Une réponse au jour 12 rouvre une carte au jour 40.
+2. **Le palais.** On l'achète pièce par pièce avec l'argent de l'État, et ce qu'on achète reste d'un mandat à l'autre même après une chute. C'est la progression longue, par-dessus la partie.
 3. **Les romances.** Dix personnes, six crans, et l'attache ne monte jamais toute seule : elle ne bouge que si une réponse la déclare. Ça conduit au mariage, ou à la rupture, et ça change la chambre.
 
 **Les publics.** D'abord les joueurs de *Reigns* et de jeux narratifs courts, qui cherchent exactement cette boucle et n'en ont plus de neuve. Ensuite un public francophone, en Afrique de l'Ouest et dans la diaspora, à qui aucun jeu de ce genre ne parle aujourd'hui dans son décor. Enfin les curieux de politique-fiction, pour qui les arbitrages — payer la solde ou les enseignants, emprunter au fonds ou s'en passer — sont le sujet.
@@ -21,12 +21,12 @@ Trois choses que les concurrents directs n'ont pas :
 ## Points forts
 
 - 🃏 **Un décor neuf** : un palais d'Afrique de l'Ouest inventé, quand le genre vit au Moyen Âge.
-- 📜 **Des histoires qui se souviennent** : 687 cartes, 59 histoires ; une réponse du jour 12 rouvre une carte au jour 40.
-- 🏛️ **Le palais et les romances** : 24 objets gardés d'un mandat à l'autre, dix romances qui ne bougent que sur réponse.
+- 📜 **Des histoires qui se souviennent** : 673 cartes, 59 histoires ; une réponse du jour 12 rouvre une carte au jour 40.
+- 🏛️ **Le palais et les romances** : des objets gardés d'un mandat à l'autre, dix romances qui ne bougent que sur réponse.
 
 ## Modèle de rémunération
 
-**État réel du code au 30 octobre 2026 : aucune monétisation n'est implémentée.** Le scan est sans ambiguïté — `pubspec.yaml` ne déclare ni `google_mobile_ads`, ni `in_app_purchase`, ni aucun SDK publicitaire ou de paiement ; `lib/` ne contient aucun code de publicité ni d'achat intégré ; l'application ne fait aucun appel réseau. Le jeu est aujourd'hui **entièrement jouable hors ligne, sans aucune source de revenu**.
+**État réel du code au 31 octobre 2026 : aucune monétisation n'est implémentée.** Le scan est sans ambiguïté — `pubspec.yaml` ne déclare ni `google_mobile_ads`, ni `in_app_purchase`, ni aucun SDK publicitaire ou de paiement ; `lib/` ne contient aucun code de publicité ni d'achat intégré ; l'application ne fait aucun appel réseau. Le jeu est aujourd'hui **entièrement jouable hors ligne, sans aucune source de revenu**.
 
 Le levier envisagé à ce stade est la paire habituelle du genre — publicité interstitielle plus un achat unique « Sans pub » — mais **la décision est explicitement reportée** : la question de la publicité mobile en Afrique de l'Ouest (remplissage, valeur du mille, moyens de paiement disponibles) n'est pas tranchée, et rien ne doit être câblé avant qu'elle le soit.
 
@@ -44,13 +44,13 @@ Deux garde-fous à tenir quel que soit le modèle retenu : la publicité ne doit
 
 ## Canaux
 
-Le jeu n'est publié sur aucune boutique et aucune publication ne le concerne à ce jour. Canal en place : la page d'accueil du site.
+Le jeu n'est publié sur aucune boutique et aucune publication ne le concerne à ce jour. Canaux en place : la page d'accueil du site et TestFlight.
 
 - ⬜ **Les fiches de boutique elles-mêmes.** Premier canal, et le seul gratuit qui compte au lancement. Textes et captures sont prêts (`docs/BOUTIQUE.md`, `docs/captures/`), rien n'est soumis — à vérifier dans la console. Les captures montrent une carte lisible, pas un écran-titre.
 - ⬜ **Réseaux sociaux.** Depuis le 13 octobre 2026, le Studio range les chaînes par app : TikTok « Afrotok » n'est rattachée à aucune, YouTube « toa.afrotok » à Erea seule. Aucun compte n'est donc branché pour Palabre, et aucune publication n'est faite. Les portraits et les plaques du palais sont l'argument visuel : ils se partagent seuls, sans expliquer le jeu.
 - ⬜ **Communautés de jeux narratifs**, en français et en anglais — les joueurs de *Reigns* sont identifiables et demandeurs.
 - ⬜ **Presse et créateurs francophones**, d'abord spécialisés jeu vidéo, ensuite généralistes si l'angle du décor prend.
-- ⬜ **TestFlight**, boucle de retours fermée avant l'ouverture publique : Xcode Cloud archive l'app (flux « palabre-testflight », dernière réussite le 29 octobre 2026, build 173, après l'échec de la build 172 le 28 octobre ; il ne fait que l'archive, sans étape TestFlight), mais les builds n'arrivent pas seules dans TestFlight : Jean les y envoie à la main, comme d'habitude (aucune au 30 octobre 2026).
+- ✅ **TestFlight**, boucle de retours fermée avant l'ouverture publique : 0.32.0 (178) puis 0.35.0 (181) disponibles au test depuis le 30 octobre 2026 (mails d'Apple). Testeurs invités : à vérifier dans la console.
 - ✅ **Site** `palabre.toakeur.com` : en ligne depuis le 12 octobre 2026, il présente le jeu mais ne renvoie vers aucune boutique.
 
 Aucune campagne payante n'est prévue tant que le modèle de rémunération n'est pas tranché : on ne paie pas pour acquérir des joueurs qui ne rapportent rien.
@@ -68,10 +68,10 @@ L'application n'embarque aucun outil d'analyse et ne fait aucun appel réseau : 
 
 ## Calendrier
 
-Aucune date de sortie n'est arrêtée dans le dépôt. L'ordre est contraint par ce qui bloque quoi : la décision de monétisation conditionne la fiche, la classification et le questionnaire de confidentialité ; la première soumission passe par iOS, la seule chaîne de construction automatisée ; Android suit, une fois la vraie clé posée et le paquet ramené sous la limite de Play.
+Aucune date de sortie n'est arrêtée dans le dépôt. L'ordre est contraint par ce qui bloque quoi : la décision de monétisation conditionne la fiche, la classification et le questionnaire de confidentialité ; la première soumission passe par iOS, la seule chaîne de construction automatisée ; Android suit, une fois la vraie clé posée (le paquet est sous la limite de Play depuis le 30 octobre 2026 : 109,3 Mo).
 
 ## Les 3 priorités
 
 - Trancher le modèle de rémunération (pub, payant d'emblée ou mixte) : il décide de la fiche, de la classification et du questionnaire de confidentialité, et le changer après la soumission obligerait à tout reprendre.
-- Remplir la fiche App Store avec `https://palabre.toakeur.com/` comme site et assistance, `palabre@toakeur.com` comme contact et la page de confidentialité déjà en ligne, répondre aux questionnaires 17+ et confidentialité, puis envoyer une première build Xcode Cloud sur TestFlight.
+- Essayer la 0.35.0 (181), sur TestFlight depuis le 30 octobre, sur un vrai téléphone, puis remplir la fiche App Store (site et assistance `https://palabre.toakeur.com/`, contact `palabre@toakeur.com`, confidentialité déjà en ligne) et répondre aux questionnaires 17+ et confidentialité.
 - Préparer Android : poser la vraie clé de publication (`android/key.properties`, sauvegardée hors du dépôt). Le poids n'est plus un obstacle : le bundle fait 109,3 Mo depuis la recompression des images du 30 octobre 2026.

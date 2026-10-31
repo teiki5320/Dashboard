@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 30 octobre 2026. Compagnon de INFRA.md.
+Mis à jour le 31 octobre 2026. Compagnon de INFRA.md.
 
 ## Positionnement
 
@@ -21,7 +21,7 @@ Mis à jour le 30 octobre 2026. Compagnon de INFRA.md.
 Deux sources, sans rien vendre soi-même :
 
 - **Affiliation Amazon Partenaires** : les boutons « Voir sur Amazon » mènent à Amazon.fr (tag `keurcookfr-21`, `src/lib/amazon.ts`) ; Amazon encaisse, livre et verse une commission sur les achats. Depuis le 28 octobre 2026 : boutons d'au moins 44 px avec texte partout, produits remontés (juste après les ingrédients sur téléphone, en haut des pages pays, après la première partie des conseils), tout le catalogue visible d'emblée en boutique, bloc « Nos coups de cœur » (8 produits en images, reliés à leurs fiches du site, juste après « Cuisiner par pays ») et rangée « Nos Top 10 » sur l'accueil (sans bouton Amazon) et liens internes vers les Top 10 depuis les fiches, recettes, conseils et actus ; codes de suivi par type de page prêts (tous encore `keurcookfr-21`).
-- **Publicité Google AdSense** (en examen depuis le 12 octobre 2026 ; « En préparation » dans la console AdSense, ni validé ni refusé (vérifié le 30 octobre 2026)) : emplacements titrés « Publicité » prêts sur les recettes, les articles « Conseils », les articles d'actus (depuis le 28 octobre 2026) et les pages pays ; aucune annonce ne s'affiche tant que Google n'a pas validé le site ; consentement recueilli par le message de Google.
+- **Publicité Google AdSense** (en examen depuis le 12 octobre 2026 ; « En préparation » dans la console AdSense, ni validé ni refusé (vérifié le 31 octobre 2026)) : emplacements titrés « Publicité » prêts sur les recettes, les articles « Conseils », les articles d'actus (depuis le 28 octobre 2026) et les pages pays ; aucune annonce ne s'affiche tant que Google n'a pas validé le site ; consentement recueilli par le message de Google.
 
 Les recettes et les conseils sont gratuits et attirent les visiteurs. Aucun prix affiché sur le site depuis le 28 octobre 2026 : seul celui d'Amazon fait foi.
 
@@ -52,7 +52,7 @@ Les recettes et les conseils sont gratuits et attirent les visiteurs. Aucun prix
 ## Mesures
 
 - **Pages indexées par Google** : 248 sur 259 ; 11 pas encore, dont 7 inconnues de Google et 4 détectées non explorées (relevé du Studio, 27 octobre 2026)
-- **Adresses du sitemap** : 257 (30 octobre 2026 ; 254 le 29 octobre ; 264 le 28 octobre au matin, avant le retrait des contenus du Maghreb du sitemap le même jour) ; le nombre grandit 2 fois par jour avec les nouveaux articles d'actus
+- **Adresses du sitemap** : 258 (31 octobre 2026 ; 257 le 30 octobre ; 254 le 29 octobre ; 264 le 28 octobre au matin, avant le retrait des contenus du Maghreb du sitemap le même jour) ; le nombre grandit 2 fois par jour avec les nouveaux articles d'actus
 - **Clics, achats et commissions Amazon** : à vérifier dans la console (partenaires.amazon.fr)
 - **Affichages et revenus des annonces** : aucun, site encore en examen chez Google (adsense.google.com)
 - **Épingles Pinterest** : 58 recettes sur 58 épinglées (24 octobre 2026) ; impressions et clics à vérifier dans la console

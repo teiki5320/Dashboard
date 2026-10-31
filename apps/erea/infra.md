@@ -1,7 +1,7 @@
 # INFRA — fiche technique
 
 > Généré le 20 août 2026 par un scan du dépôt, mis à jour le
-> 30 octobre 2026. Pour mettre à jour : relancer ce même prompt.
+> 31 octobre 2026. Pour mettre à jour : relancer ce même prompt.
 
 ## En bref
 
@@ -14,14 +14,14 @@
 
 ## Parcours
 
-- 🍎 **iOS** : 🐙 GitHub — main, 1.0.7 dans le code, tests lancés à la main avant chaque commit (aucune CI) [ok] → ☁️ Xcode Cloud — build à chaque poussée sur main [ok] → 🛍️ App Store Connect — 1.0.5 (build 195) approuvée le 21 octobre [ok] → 📱 App Store — 1.0.5 en ligne depuis le 21 octobre [ok]
-- 🤖 **Android** : 🐙 GitHub — main, 1.0.7 dans le code, tests lancés à la main avant chaque commit (aucune CI) [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — production accordée le 17 octobre, 1.0.6 envoyée le 22 octobre [ok] → 🛒 Google Play — 1.0.6 en ligne depuis le 22 octobre [ok]
+- 🍎 **iOS** : 🐙 GitHub — main, 1.0.7 dans le code, tests lancés à la main avant chaque commit (aucune CI) [ok] → ☁️ Xcode Cloud — build à chaque poussée sur main [ok] → 🛍️ App Store Connect — 1.0.5 (build 195) approuvée le 21 octobre, 1.0.7 (build 210) soumise le 30 octobre, en examen [ok] → 📱 App Store — 1.0.5 en ligne depuis le 21 octobre [ok]
+- 🤖 **Android** : 🐙 GitHub — main, 1.0.7 dans le code, tests lancés à la main avant chaque commit (aucune CI) [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — production accordée le 17 octobre, 1.0.7 envoyée le 30 octobre [ok] → 🛒 Google Play — 1.0.7 en ligne (vérifié le 31 octobre) [ok]
 - 🌐 **Web** : 🐙 GitHub — racine de main, sans CNAME [ok] → 📄 Hébergement web (GitHub Pages / Cloudflare Pages) — GitHub Pages [ok] → 🏷️ Nom de domaine — erea.toakeur.com via Cloudflare [ok] → 🌐 Site — vitrine, jeu, support, confidentialité [ok]
 - 🎬 **Contenu** : 🎬 Studio — 27 pubs vidéo validées, aucune à valider [ok] → 🗓️ Planning — 25 vidéos programmées jusqu'au 6 nov. [ok] → 📣 Réseaux sociaux & influenceurs — TikTok erea.jeu, 2 publiées le 29 oct. [ok]
 
 ## Vue d'ensemble
 
-- **Plateforme** : iOS 15+ (1.0.5 en ligne sur l'App Store depuis le 21 octobre 2026) · Android : 1.0.6 en ligne sur Google Play depuis le 22 octobre 2026 (première version en ligne : 1.0.4, le 20 octobre) · site vitrine `erea.toakeur.com`
+- **Plateforme** : iOS 15+ (1.0.5 en ligne sur l'App Store depuis le 21 octobre 2026) · Android : 1.0.7 en ligne sur Google Play (vérifié le 31 octobre 2026 ; première version en ligne : 1.0.4, le 20 octobre) · site vitrine `erea.toakeur.com`
 - **Stack** : Flutter (Dart ≥ 3.6), version `1.0.7+8` dans le code, 185 tests, aucun serveur applicatif
 - **Backend** : aucun — tout l'état du joueur vit sur l'appareil (`shared_preferences`)
 - **Distribution** : App Store via Xcode Cloud · Play Store via App Bundle signé localement
@@ -127,7 +127,7 @@ sauvegarder, rien à recopier sur une machine neuve.
 
 **Identifiants publics :**
 - App « Erea », bundle `com.teiki.erea` ; nom « Erea : Quiz d'histoire & frise » à partir de la 1.0.4.
-- Version `1.0.7+8` dans `erea_flutter/pubspec.yaml` depuis le 30 octobre 2026 (avant elle, `1.0.6+7` à partir du 21 octobre, quand la 1.0.5 approuvée a fermé son numéro au build 196). Les builds 1.0.7 vont dans TestFlight ; avant de soumettre, créer la version 1.0.7 dans la console avec **exactement** ce numéro, sinon le build reste non sélectionnable.
+- Version `1.0.7+8` dans `erea_flutter/pubspec.yaml` depuis le 30 octobre 2026 (avant elle, `1.0.6+7` à partir du 21 octobre, quand la 1.0.5 approuvée a fermé son numéro au build 196). La 1.0.7 (build 210) a été soumise à Apple le 30 octobre 2026 (toujours en examen au 31 octobre) et est en ligne sur Google Play (vérifié le 31 octobre 2026) ; dès son approbation par Apple, monter à 1.0.8 avant toute poussée.
 - iOS minimum : 15.0 (`IPHONEOS_DEPLOYMENT_TARGET`, `Podfile`).
 - Chiffrement : `ITSAppUsesNonExemptEncryption = false` dans `ios/Runner/Info.plist` — pas de formulaire d'export à chaque build.
 
@@ -148,8 +148,9 @@ de confidentialité). La **`1.0.5` (build 195), soumise le 21 octobre
 2026 à 15 h 11, est en ligne depuis le même jour à 17 h 44**. Aucune
 1.0.6 n'est soumise sur l'App Store : elle ne changeait rien sur iPhone.
 La 1.0.7 (rappel du soir, pause du Chrono, consentement, doublon retiré,
-révélation sur iPhone SE en très grande police, Album, icônes dessinées)
-partira sur les deux boutiques.
+révélation sur iPhone SE en très grande police, Album, icônes dessinées,
+Facile par défaut) a été soumise le 30 octobre 2026 au soir avec le
+build 210 (en examen chez Apple au 31 octobre 2026), et envoyée le même soir sur Google Play, où elle est en ligne (vérifié le 31 octobre 2026).
 
 **Où vivent les secrets :** aucun côté dépôt. L'authentification est
 celle du compte Apple (+ double facteur).
@@ -273,6 +274,11 @@ publics.
 Les quatre valeurs doivent appartenir au même compte, sinon la régie
 refuse de servir.
 
+**app-ads.txt** — publié le 30 octobre 2026 à la racine du dépôt, donc
+servi sur `https://erea.toakeur.com/app-ads.txt` (l'URL marketing de la
+fiche App Store). Une ligne : l'éditeur `pub-2680784147246798` en
+`DIRECT`. Jusque-là, l'adresse répondait 404.
+
 **Consentement RGPD — message publié le 3 septembre 2026.** Jusqu'à
 cette date la console était vide, et le journal Android le disait sans
 détour : `Publisher misconfiguration: no form(s) configured for the
@@ -315,7 +321,7 @@ passe par le compte Google (+ double facteur).
 
 | | |
 |---|---|
-| Rôle | Distribution Android — 1.0.6 en ligne depuis le 22 octobre 2026 (première mise en production le 20 octobre) |
+| Rôle | Distribution Android — 1.0.7 en ligne (vérifié le 31 octobre 2026 ; première mise en production le 20 octobre) |
 | Console | <https://play.google.com/console> |
 | Compte propriétaire | Compte développeur **personnel**, créé le 20 août 2026, sur le compte Google de gestion |
 | Coût | 25 $ une seule fois |
@@ -323,7 +329,7 @@ passe par le compte Google (+ double facteur).
 **État réel :**
 - Application ID `com.teiki.erea`, identique à iOS (`android/app/build.gradle.kts`).
 - Test fermé « Alpha » : release `4 (1.0.3)` servie aux testeurs à partir du 16 septembre 2026, puis release `5 (1.0.4)` envoyée le 14 octobre. Les **douze testeurs pendant quatorze jours** exigés d'un compte personnel ont été tenus du 8 au 22 septembre (voir « Testeurs » plus bas).
-- **Accès à la production demandé le 14 octobre 2026 à 18 h 39, accordé le 17 octobre** ; la release de production `5 (1.0.4)`, promue depuis la piste Alpha et envoyée le 17 octobre vers 8 h 25, a été mise en ligne le 20 octobre 2026 à 16 h 07 ; la `6 (1.0.5)` l'a remplacée le 21 octobre, et la **`7 (1.0.6)` est en ligne depuis le 22 octobre 2026**. La fiche publique `play.google.com/store/apps/details?id=com.teiki.erea` répond (vérifié le 30 octobre 2026).
+- **Accès à la production demandé le 14 octobre 2026 à 18 h 39, accordé le 17 octobre** ; la release de production `5 (1.0.4)`, promue depuis la piste Alpha et envoyée le 17 octobre vers 8 h 25, a été mise en ligne le 20 octobre 2026 à 16 h 07 ; la `6 (1.0.5)` l'a remplacée le 21 octobre, la `7 (1.0.6)` le 22 octobre 2026, et la **`8 (1.0.7)`, envoyée le 30 octobre 2026, est en ligne (vérifié le 31 octobre 2026)**. La fiche publique `play.google.com/store/apps/details?id=com.teiki.erea` répond (vérifié le 31 octobre 2026).
 - Achat intégré actif (voir « StoreKit / Play Billing »). Classements Play Games non configurés (voir « Game Center / Play Games »).
 - Appareil physique de vérification : un Pixel 8a, utilisé pour les tests du 16 septembre.
 

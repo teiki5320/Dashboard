@@ -1,6 +1,6 @@
 # Erea — plan marketing & rémunération
 
-> Généré le 3 août 2026, mis à jour le 30 octobre 2026. Le modèle de
+> Généré le 3 août 2026, mis à jour le 31 octobre 2026. Le modèle de
 > rémunération est en ligne sur l'App Store depuis la 1.0.2 et sur Google
 > Play depuis le 20 octobre 2026 (publicité + achat unique qui la retire). Pour le mettre à jour : relancer ce même prompt. Aucun secret
 > ici.
@@ -65,7 +65,7 @@ publicité fait elle-même la promotion de l'achat.
 | Interstitielle AdMob | À la sortie de l'écran de fin, une partie sur deux, jamais dans le Défi du jour (`lib/core/pub.dart`) | ✅ en ligne sur iOS depuis la 1.0.2 (8 septembre 2026), sur Android depuis le 20 octobre 2026 |
 | « Erea sans publicité » | Achat unique non consommable `com.teiki.erea.sanspub`, **3,99 €** — il ne débloque rien, le jeu est déjà complet | ✅ approuvé sur l'App Store le 8 septembre, actif sur Google Play |
 | Consentement | Formulaire UMP de Google + ATT sur iOS, révocable depuis les réglages ; message RGPD et message IDFA publiés dans AdMob | ✅ |
-| Android | Même modèle, sur Google Play depuis le 20 octobre 2026 (1.0.4) ; 1.0.6 en ligne depuis le 22 octobre 2026 | ✅ |
+| Android | Même modèle, sur Google Play depuis le 20 octobre 2026 (1.0.4) ; 1.0.7 en ligne (vérifié le 31 octobre 2026) | ✅ |
 
 **Ce que ça a coûté, en connaissance de cause :** le badge « Aucune
 donnée collectée » (la fiche de confidentialité de l'App Store a changé
@@ -122,7 +122,7 @@ pas encore faite.
 | Réseaux sociaux | TikTok « erea.jeu » est le seul compte rattaché à Erea dans le Studio ; YouTube « toa.afrotok » et TikTok « Afrotok » sont branchés mais rattachés à aucune app. Pubs vidéo produites par le Studio depuis le 5 octobre 2026 : le format « documentaire qui déraille » validé par Jean le 5 octobre, puis, depuis le 26 octobre, « Avant ou après ? », « Interro surprise », « Petite histoire » et « Le défi en famille » ; 27 sont validées et aucune n'attend de validation (vérifié le 30 octobre 2026). Publication en public par le Planning via Buffer depuis le 29 octobre 2026 : « Blériot, le saut de la Manche » et « Henry Dunant, la naissance de la Croix-Rouge » publiées ce soir-là, les 25 autres programmées du 30 octobre au 6 novembre (vérifié le 30 octobre 2026) | ✅ |
 | Presse & sites spécialisés | App du jour (iPhon.fr, iGen, Frandroid), sites parents (Geek Junior, Super Julie — références du jeu éducatif) | ⬜ |
 | Featuring Apple | Formulaire « App Store featuring » : app famille, française, hors ligne, avec Game Center — bon dossier, même si l'argument « sans pub » est tombé avec la 1.0.2 | ⬜ |
-| Play Store | Second magasin, donc second public : les douze testeurs ont tenu quatorze jours (22 septembre), l'accès à la production a été accordé le 17 octobre 2026, la 1.0.4 a été mise en ligne le 20 octobre et la 1.0.6 est en ligne depuis le 22 octobre (`docs/PUBLICATION.md`) | ✅ |
+| Play Store | Second magasin, donc second public : les douze testeurs ont tenu quatorze jours (22 septembre), l'accès à la production a été accordé le 17 octobre 2026, la 1.0.4 a été mise en ligne le 20 octobre, la 1.0.6 le 22 octobre, et la 1.0.7 est en ligne (vérifié le 31 octobre 2026) (`docs/PUBLICATION.md`) | ✅ |
 
 ---
 
@@ -197,6 +197,7 @@ une collecte à la fiche de confidentialité.
 - ✅ **Première version sur Google Play** — la 1.0.4, envoyée le 17 octobre, mise en production le 20 octobre 2026.
 - ✅ **Badge Google Play sur la vitrine et page `/telecharger/` ouverte à Android** — 21 octobre 2026.
 - ✅ **1.0.4 sur l'App Store** sous le nom long, captures légendées — mise en ligne le 15 octobre 2026.
-- ✅ **1.0.5 en ligne sur les deux boutiques** — 21 octobre 2026 ; 1.0.6 (Android seul) sur Google Play le 22 octobre.
+- ✅ **1.0.5 mise en ligne sur les deux boutiques** — le 21 octobre 2026 ; 1.0.6 (Android seul) mise en ligne sur Google Play le 22 octobre.
+- ⏳ **1.0.7 envoyée aux deux boutiques** — 30 octobre 2026 au soir (Album, Classique en tête de l'accueil, icônes dessinées) : en ligne sur Google Play (vérifié le 31 octobre 2026), en examen chez Apple ; `app-ads.txt` publié le même jour sur `erea.toakeur.com`.
 - ✅ **Adresse et contact propres** — `erea.toakeur.com` et `erea@toakeur.com`, 7 octobre 2026.
 - ✅ **Premières pubs publiées sur TikTok « erea.jeu »** — 29 octobre 2026, par le Planning via Buffer.
