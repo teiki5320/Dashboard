@@ -1,6 +1,6 @@
 # PUBLICATION — état de la mise en ligne
 
-> Généré le 21 octobre 2026, mis à jour le 31 octobre 2026. Aucun secret ici.
+> Généré le 21 octobre 2026, mis à jour le 1er novembre 2026. Aucun secret ici.
 
 ## En bref
 
@@ -13,7 +13,7 @@
 
 | | 🌐 Site |
 |---|---|
-| État | [ok] En ligne, réponse 200 le 31 octobre 2026 |
+| État | [ok] En ligne, réponse 200 le 1er novembre 2026 |
 | Hébergement | [ok] GitHub Pages, publication automatique par GitHub Actions |
 | Domaine | [ok] www.kultiled.com (Cloudflare) depuis le 16 octobre 2026 |
 | SSL | [ok] certificat GitHub Pages, HTTPS forcé |
@@ -29,12 +29,12 @@
 
 ## Web · Production
 
-- **État** : ✅ en ligne (réponse 200 constatée le 31 octobre 2026)
+- **État** : ✅ en ligne (réponse 200 constatée le 1er novembre 2026)
 - **URL** : https://www.kultiled.com/
 - **Hébergeur** : GitHub Pages, publication automatique à chaque envoi sur `main` et chaque lundi, mercredi et vendredi pour les articles programmés, et chaque jour à 11 h 50 et 18 h 50 UTC pour les articles d'actus depuis le 28 octobre 2026 (`.github/workflows/pages.yml` : tests unitaires, build, test de bout en bout, puis mise en ligne ; depuis le 28 octobre 2026, la publication vérifie que www.kultiled.com sert la nouvelle version, via `version.txt`, et échoue sinon). Aucune action manuelle.
-- **Anciennes adresses** : https://teiki5320.github.io/optiled/ et `kultiled.com` redirigent vers `www.kultiled.com` (301) ; `www.optiled.fr`, abandonné le 16 octobre 2026, affichait encore le 31 octobre 2026 une page « Kultiled a déménagé » vers le nouveau domaine (dépôt `teiki5320/optiled-redirection`).
-- **Dernière mise en production** : 31 octobre 2026, publication réussie (les fiches des cultures affichent dès la construction les articles d'actus qui les concernent ; vérification quotidienne des lampes, ViparSpectra Pro P1000 retirée) ; le 30 octobre 2026, le conseil « Pourquoi mes semis ne lèvent-ils pas ? » avait été publié ; le 29 octobre 2026, le conseil « PAR et PPFD » avait été ajouté hors programme ; les pages « Top 10 » ont été mises en ligne le 19 octobre 2026 ; le 16 octobre, le site est devenu Kultiled (nom, logo, contact) et a changé de domaine.
-- **Articles de conseil** : 43 en ligne (dont « PAR et PPFD », ajouté hors programme le 29 octobre 2026, et « Pourquoi mes semis ne lèvent-ils pas ? », publié le 30 octobre 2026), 32 programmés jusqu'au 7 juin 2027 (le prochain le 2 novembre 2026), au 31 octobre 2026.
+- **Anciennes adresses** : https://teiki5320.github.io/optiled/ et `kultiled.com` redirigent vers `www.kultiled.com` (301) ; `www.optiled.fr`, abandonné le 16 octobre 2026, affichait encore le 1er novembre 2026 une page « Kultiled a déménagé » vers le nouveau domaine (dépôt `teiki5320/optiled-redirection`).
+- **Dernière mise en production** : 1er novembre 2026, publication réussie (vérification quotidienne des lampes, 15 lampes toujours disponibles) ; le 31 octobre 2026, les fiches des cultures avaient commencé à afficher dès la construction les articles d'actus qui les concernent et la ViparSpectra Pro P1000 avait été retirée ; le 30 octobre 2026, le conseil « Pourquoi mes semis ne lèvent-ils pas ? » avait été publié ; le 29 octobre 2026, le conseil « PAR et PPFD » avait été ajouté hors programme ; les pages « Top 10 » ont été mises en ligne le 19 octobre 2026 ; le 16 octobre, le site est devenu Kultiled (nom, logo, contact) et a changé de domaine.
+- **Articles de conseil** : 43 en ligne (dont « PAR et PPFD », ajouté hors programme le 29 octobre 2026, et « Pourquoi mes semis ne lèvent-ils pas ? », publié le 30 octobre 2026), 32 programmés jusqu'au 7 juin 2027 (le prochain le 2 novembre 2026), au 1er novembre 2026.
 - **Contact affiché** : `kultiled@toakeur.com` (mentions légales et « À propos »).
 
 ## Domaine & SSL
@@ -43,7 +43,7 @@
 - **DNS** (Cloudflare) : deux CNAME, `@` et `www` → `teiki5320.github.io`, proxy désactivé.
 - **Dans le code** : `public/CNAME` contient `www.kultiled.com` ; `SITE_URL` vaut `https://www.kultiled.com/` (`build/site.ts`).
 - **SSL** : certificat émis et renouvelé automatiquement par GitHub Pages ; HTTPS forcé.
-- **Ancien domaine** : `optiled.fr` (IONOS), abandonné le 16 octobre 2026 et supprimé d'AdSense le 22 octobre 2026 ; il servait encore la page de redirection le 31 octobre 2026, jusqu'à la fin du contrat IONOS en novembre 2026.
+- **Ancien domaine** : `optiled.fr` (IONOS), abandonné le 16 octobre 2026 et supprimé d'AdSense le 22 octobre 2026 ; il servait encore la page de redirection le 1er novembre 2026, jusqu'à la fin du contrat IONOS en novembre 2026.
 - **Échéance de kultiled.com** : à vérifier dans la console Cloudflare.
 
 ## Visibilité

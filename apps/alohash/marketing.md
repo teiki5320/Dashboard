@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 31 octobre 2026. Compagnon de INFRA.md.
+Mis à jour le 1er novembre 2026. Compagnon de INFRA.md.
 
 ## Positionnement
 
@@ -21,14 +21,15 @@ Mis à jour le 31 octobre 2026. Compagnon de INFRA.md.
 Deux sources, sans rien vendre soi-même :
 
 - **Affiliation Amazon Partenaires** : les boutons « Voir sur Amazon » mènent à Amazon.fr (tag `keurcookfr-21`, `src/lib/amazon.ts`) ; Amazon encaisse, livre et verse une commission sur les achats. Depuis le 28 octobre 2026 : boutons d'au moins 44 px avec texte partout, produits remontés (juste après les ingrédients sur téléphone, en haut des pages pays, après la première partie des conseils), tout le catalogue visible d'emblée en boutique, bloc « Nos coups de cœur » (8 produits en images, reliés à leurs fiches du site, juste après « Cuisiner par pays ») et rangée « Nos Top 10 » sur l'accueil (sans bouton Amazon) et liens internes vers les Top 10 depuis les fiches, recettes, conseils et actus ; codes de suivi par type de page prêts (tous encore `keurcookfr-21`).
-- **Publicité Google AdSense** (en examen depuis le 12 octobre 2026 ; « En préparation » dans la console AdSense, ni validé ni refusé (vérifié le 31 octobre 2026)) : emplacements titrés « Publicité » prêts sur les recettes, les articles « Conseils », les articles d'actus (depuis le 28 octobre 2026) et les pages pays ; aucune annonce ne s'affiche tant que Google n'a pas validé le site ; consentement recueilli par le message de Google.
+- **Publicité Google AdSense** (examen demandé le 12 octobre 2026, refusé par Google le 31 octobre 2026 : problèmes à corriger sur le site avant d'afficher des annonces, e-mail AdSense vérifié le 1er novembre 2026) : emplacements titrés « Publicité » prêts sur les recettes, les articles « Conseils », les articles d'actus (depuis le 28 octobre 2026) et les pages pays ; aucune annonce ne s'affiche tant que Google n'a pas validé le site ; consentement recueilli par le message de Google.
 
 Les recettes et les conseils sont gratuits et attirent les visiteurs. Aucun prix affiché sur le site depuis le 28 octobre 2026 : seul celui d'Amazon fait foi.
 
 ## Rémunération par phases
 
-- [fait] **Aujourd'hui** : affiliation Amazon sur 126 produits et 10 Top 10, AdSense en place mais encore en examen (aucune annonce), audience mesurée depuis le 13 octobre
-- [en cours] **Mesurer** : lire dans Cloudflare Web Analytics quelles pages attirent et rapportent
+- [fait] **Aujourd'hui** : affiliation Amazon sur 126 produits et 10 Top 10, AdSense en place mais examen refusé le 31 octobre (aucune annonce), audience mesurée depuis le 13 octobre
+- [en cours] **Faire valider AdSense** : corriger les problèmes signalés le 31 octobre puis redemander l'examen
+- **Mesurer** : lire dans Cloudflare Web Analytics quelles pages attirent et rapportent
 - **Fidéliser** : newsletter « la recette de la semaine », outil à choisir
 - **Élargir** : vidéos de recettes sur TikTok et YouTube, comptes à rattacher à Keur Cook dans le Studio
 
@@ -52,14 +53,14 @@ Les recettes et les conseils sont gratuits et attirent les visiteurs. Aucun prix
 ## Mesures
 
 - **Pages indexées par Google** : 248 sur 259 ; 11 pas encore, dont 7 inconnues de Google et 4 détectées non explorées (relevé du Studio, 27 octobre 2026)
-- **Adresses du sitemap** : 258 (31 octobre 2026 ; 257 le 30 octobre ; 254 le 29 octobre ; 264 le 28 octobre au matin, avant le retrait des contenus du Maghreb du sitemap le même jour) ; le nombre grandit 2 fois par jour avec les nouveaux articles d'actus
+- **Adresses du sitemap** : 258 (1er novembre 2026, comme le 31 octobre ; 257 le 30 octobre ; 254 le 29 octobre ; 264 le 28 octobre au matin, avant le retrait des contenus du Maghreb du sitemap le même jour) ; le nombre grandit 2 fois par jour avec les nouveaux articles d'actus
 - **Clics, achats et commissions Amazon** : à vérifier dans la console (partenaires.amazon.fr)
-- **Affichages et revenus des annonces** : aucun, site encore en examen chez Google (adsense.google.com)
+- **Affichages et revenus des annonces** : aucun, examen AdSense refusé le 31 octobre 2026 (adsense.google.com)
 - **Épingles Pinterest** : 58 recettes sur 58 épinglées (24 octobre 2026) ; impressions et clics à vérifier dans la console
 - **Visites et pages les plus vues** : à vérifier dans la console Cloudflare Web Analytics (mesure active depuis le 13 octobre 2026)
 
 ## Les 3 priorités
 
+- Lire dans AdSense (page Sites) le motif du refus du 31 octobre 2026, corriger le site puis redemander l'examen.
 - Écrire de nouveaux articles « Conseils » : il en reste 25 en réserve, la réserve passe sous 20 vers le 13 novembre et se vide le 28 décembre 2026.
-- Faire indexer les 11 pages manquantes (7 inconnues de Google, 4 détectées non explorées au 27 octobre 2026) ; demander leur indexation dans Search Console.
 - Créer dans Amazon Partenaires un code de suivi par emplacement (recette, conseil, top, fiche, rubrique) : la table `CODES_SUIVI` est prête, tous encore à `keurcookfr-21`.

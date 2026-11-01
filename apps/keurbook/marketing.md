@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 31 octobre 2026. Un canal n'est coché que s'il est prouvé (compte branché et
+Mis à jour le 1er novembre 2026. Un canal n'est coché que s'il est prouvé (compte branché et
 publications réelles, ou routine qui publie).
 
 ## Positionnement
@@ -23,16 +23,14 @@ publications réelles, ou routine qui publie).
 
 - 📚 **Catalogue ciblé** : 675 livres et 121 BD d'auteurs d'Afrique subsaharienne et de la diaspora, introuvables ensemble ailleurs.
 - 🌍 **Entrée par auteurs, pays et Top 10** : 92 fiches d'auteurs, 26 pages pays et 11 Top 10 thématiques relient chaque livre à son contexte.
-- 📚 **Livres dès l'accueil** : depuis le 28 octobre 2026, « Nos coups de cœur » montre 8 livres des Top 10 (couvertures illustrées, liens vers les fiches et les Top 10, sans lien Amazon) dans le 2e écran sur téléphone.
 - 📰 **Actus du livre africain** : prix, sorties, salons et BD, racontés par nous deux fois par jour dans un article complet sur le site, avec la source et le crédit de chaque image.
-- ✍️ **Textes maison** : résumés écrits par nous et articles Conseils trois fois par semaine, sans ISBN ni prix inventés.
 
 ## Canaux
 
 - ✅ Site en ligne sur `keurbook.com`.
 - ✅ Référencement naturel : sitemap envoyé à Google Search Console (propriété `keurbook.com`),
   IndexNow après chaque publication et chaque lundi, articles Conseils publiés trois fois par semaine (lundi, mercredi,
-  vendredi). Au 31 octobre 2026 : 42 articles publiés, 26 programmés ; le rythme régulier va
+  vendredi). Au 1er novembre 2026 : 42 articles publiés, 26 programmés ; le rythme régulier va
   jusqu'au 28 décembre (7 articles ajoutés le 30 octobre ; il s'arrêtait au 7 décembre avant), puis seuls des articles de saison sont programmés
   (1er et 8 février 2027). Depuis fin octobre 2026, la routine « Articles » du Studio vérifie chaque matin l'avance du site
   et complète la série quand il reste moins de 20 articles ou moins de 4 semaines (elle passait avant le 1er et le 15 de chaque mois).
@@ -43,24 +41,24 @@ publications réelles, ou routine qui publie).
   sitemap), avec la source et ses liens ; avant, la carte renvoyait directement vers la source. Contenu frais
   pour le référencement et pour donner une raison de revenir.
 - ⬜ Pinterest : aucun compte Keurbook.
-- ⬜ TikTok et YouTube : TikTok « Afrotok » est branché au Studio mais rattaché à aucune app, YouTube « toa.afrotok » à Erea seule ; une
+- ⬜ TikTok et YouTube : TikTok « Afrotok » et YouTube « toa.afrotok » sont branchés au Studio mais rattachés à aucune app (vérifié le 1er novembre 2026) ; une
   vidéo Keurbook est prête depuis le 5 octobre, mais aucune publication n'est constatée.
 - ⬜ Newsletter : aucune.
 - ✅ Mesure d'audience : Cloudflare Web Analytics, sans cookie, active depuis le 13 octobre 2026.
 
 ## Mesures
 
-- **Pages indexées par Google** : 675 sur 987 (Search Console, onglet Indexation du Studio, 31 octobre 2026 ; 677 sur 984 le 30 octobre, 680 sur 982 le 29 octobre, 680 sur 980 le 28 octobre, 679 sur 975 le 27 octobre, 673 sur 971 le 20 octobre)
-- **Pages pas encore indexées** : 312 (31 octobre 2026), dont 307 inconnues de Google et 5 explorées mais pas indexées (307 le 30 octobre, 302 le 29 octobre)
+- **Pages indexées par Google** : 675 sur 988 (Search Console, onglet Indexation du Studio, 1er novembre 2026 ; 675 sur 987 le 31 octobre, 677 sur 984 le 30 octobre, 680 sur 982 le 29 octobre, 680 sur 980 le 28 octobre, 679 sur 975 le 27 octobre, 673 sur 971 le 20 octobre)
+- **Pages pas encore indexées** : 313 (1er novembre 2026), dont 308 inconnues de Google et 5 explorées mais pas indexées (312 le 31 octobre, 307 le 30 octobre, 302 le 29 octobre)
 - **Liens Amazon directs** : 436 livres et BD sur 796 (29 octobre 2026 ; 90 le 19 octobre, 91 jusqu'au 24 octobre). Fiches qui reçoivent des visites : 38 sur 81 en lien direct (17 avant)
-- **Articles Conseils** : 42 publiés, 26 programmés (31 octobre 2026 ; 41 publiés et 20 programmés le 29 octobre)
+- **Articles Conseils** : 42 publiés, 26 programmés (1er novembre 2026 ; 41 publiés et 20 programmés le 29 octobre)
 - **Visites** : à vérifier dans la console Cloudflare Web Analytics (mesure active depuis le 13 octobre 2026)
 - **Clics et revenus Amazon** : à vérifier dans la console
 - **Revenus AdSense** : aucun ; site refusé le 21 octobre 2026, nouvel examen demandé le 22 octobre, « En préparation » dans la console (vérifié le 31 octobre 2026)
 
 ## Les 3 priorités
 
-- Faire indexer par Google les 312 pages qui ne le sont pas encore (BD, pages auteurs, livres,
+- Faire indexer par Google les 313 pages qui ne le sont pas encore (BD, pages auteurs, livres,
   pays et pages de liste) : renforcer les liens internes vers elles et suivre leur
   évolution dans l'onglet Indexation du Studio.
 - Garder les liens Amazon directs justes : lancer `npm run verifier-produits -- --ecrire --lot 30`

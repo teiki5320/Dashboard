@@ -1,12 +1,12 @@
 # INFRA — fiche technique
 
 > Généré le 20 août 2026 par un scan du dépôt, mis à jour le
-> 31 octobre 2026. Pour mettre à jour : relancer ce même prompt.
+> 1er novembre 2026. Pour mettre à jour : relancer ce même prompt.
 
 ## En bref
 
 - **Plateforme** : iOS 15+ et Android en ligne · site vitrine
-- **Stack** : Flutter (Dart ≥ 3.6), version `1.0.7+8` dans le code
+- **Stack** : Flutter (Dart ≥ 3.6), version `1.0.8+9` dans le code
 - **Backend** : aucun — tout reste sur l'appareil, jeu hors ligne
 - **Distribution** : Xcode Cloud vers l'App Store · App Bundle signé en local
 - **Site** : `erea.toakeur.com`, GitHub Pages derrière Cloudflare
@@ -14,15 +14,15 @@
 
 ## Parcours
 
-- 🍎 **iOS** : 🐙 GitHub — main, 1.0.7 dans le code, tests lancés à la main avant chaque commit (aucune CI) [ok] → ☁️ Xcode Cloud — build à chaque poussée sur main [ok] → 🛍️ App Store Connect — 1.0.5 (build 195) approuvée le 21 octobre, 1.0.7 (build 210) soumise le 30 octobre, en examen [ok] → 📱 App Store — 1.0.5 en ligne depuis le 21 octobre [ok]
-- 🤖 **Android** : 🐙 GitHub — main, 1.0.7 dans le code, tests lancés à la main avant chaque commit (aucune CI) [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — production accordée le 17 octobre, 1.0.7 envoyée le 30 octobre [ok] → 🛒 Google Play — 1.0.7 en ligne (vérifié le 31 octobre) [ok]
+- 🍎 **iOS** : 🐙 GitHub — main, 1.0.8 dans le code, tests lancés à la main avant chaque commit (aucune CI) [ok] → ☁️ Xcode Cloud — build à chaque poussée sur main [ok] → 🛍️ App Store Connect — 1.0.7 (build 210) approuvée le 31 octobre [ok] → 📱 App Store — 1.0.7 en ligne depuis le 31 octobre [ok]
+- 🤖 **Android** : 🐙 GitHub — main, 1.0.8 dans le code, tests lancés à la main avant chaque commit (aucune CI) [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — production accordée le 17 octobre, 1.0.7 envoyée le 30 octobre [ok] → 🛒 Google Play — 1.0.7 en ligne (vérifié le 31 octobre) [ok]
 - 🌐 **Web** : 🐙 GitHub — racine de main, sans CNAME [ok] → 📄 Hébergement web (GitHub Pages / Cloudflare Pages) — GitHub Pages [ok] → 🏷️ Nom de domaine — erea.toakeur.com via Cloudflare [ok] → 🌐 Site — vitrine, jeu, support, confidentialité [ok]
-- 🎬 **Contenu** : 🎬 Studio — 27 pubs vidéo validées, aucune à valider [ok] → 🗓️ Planning — 25 vidéos programmées jusqu'au 6 nov. [ok] → 📣 Réseaux sociaux & influenceurs — TikTok erea.jeu, 2 publiées le 29 oct. [ok]
+- 🎬 **Contenu** : 🎬 Studio — 34 pubs vidéo au Planning [ok] → 🗓️ Planning — 18 vidéos programmées du 1er au 6 nov. [ok] → 📣 Réseaux sociaux & influenceurs — TikTok erea.jeu, 16 publiées du 29 au 31 oct. [ok]
 
 ## Vue d'ensemble
 
-- **Plateforme** : iOS 15+ (1.0.5 en ligne sur l'App Store depuis le 21 octobre 2026) · Android : 1.0.7 en ligne sur Google Play (vérifié le 31 octobre 2026 ; première version en ligne : 1.0.4, le 20 octobre) · site vitrine `erea.toakeur.com`
-- **Stack** : Flutter (Dart ≥ 3.6), version `1.0.7+8` dans le code, 185 tests, aucun serveur applicatif
+- **Plateforme** : iOS 15+ (1.0.7 en ligne sur l'App Store depuis le 31 octobre 2026) · Android : 1.0.7 en ligne sur Google Play (vérifié le 31 octobre 2026 ; première version en ligne : 1.0.4, le 20 octobre) · site vitrine `erea.toakeur.com`
+- **Stack** : Flutter (Dart ≥ 3.6), version `1.0.8+9` dans le code, 185 tests, aucun serveur applicatif
 - **Backend** : aucun — tout l'état du joueur vit sur l'appareil (`shared_preferences`)
 - **Distribution** : App Store via Xcode Cloud · Play Store via App Bundle signé localement
 - **Monétisation** : interstitielle AdMob + achat unique 3,99 € qui la retire, en ligne depuis la 1.0.2
@@ -127,7 +127,7 @@ sauvegarder, rien à recopier sur une machine neuve.
 
 **Identifiants publics :**
 - App « Erea », bundle `com.teiki.erea` ; nom « Erea : Quiz d'histoire & frise » à partir de la 1.0.4.
-- Version `1.0.7+8` dans `erea_flutter/pubspec.yaml` depuis le 30 octobre 2026 (avant elle, `1.0.6+7` à partir du 21 octobre, quand la 1.0.5 approuvée a fermé son numéro au build 196). La 1.0.7 (build 210) a été soumise à Apple le 30 octobre 2026 (toujours en examen au 31 octobre) et est en ligne sur Google Play (vérifié le 31 octobre 2026) ; dès son approbation par Apple, monter à 1.0.8 avant toute poussée.
+- Version `1.0.8+9` dans `erea_flutter/pubspec.yaml` depuis le 1er novembre 2026, montée parce que la 1.0.7 approuvée n'accepte plus de build (avant elle, `1.0.7+8` à partir du 30 octobre, et `1.0.6+7` à partir du 21 octobre, quand la 1.0.5 approuvée a fermé son numéro au build 196). La 1.0.7 (build 210) est en ligne sur l'App Store depuis le 31 octobre 2026 et sur Google Play (vérifié le 31 octobre 2026).
 - iOS minimum : 15.0 (`IPHONEOS_DEPLOYMENT_TARGET`, `Podfile`).
 - Chiffrement : `ITSAppUsesNonExemptEncryption = false` dans `ios/Runner/Info.plist` — pas de formulaire d'export à chaque build.
 
@@ -144,13 +144,17 @@ l'achat intégré. Le build 161 (`1.0.3`) est resté sur TestFlight sans
 être soumis. La `1.0.4` (build 182), soumise le 15 octobre 2026, a été
 mise en ligne le même jour à 14 h 01 (publication automatique) ; les
 builds 176 et 180 avaient été refusés à l'import (ITMS-91064, manifeste
-de confidentialité). La **`1.0.5` (build 195), soumise le 21 octobre
-2026 à 15 h 11, est en ligne depuis le même jour à 17 h 44**. Aucune
+de confidentialité). La `1.0.5` (build 195), soumise le 21 octobre
+2026 à 15 h 11, a été mise en ligne le même jour à 17 h 44. Aucune
 1.0.6 n'est soumise sur l'App Store : elle ne changeait rien sur iPhone.
-La 1.0.7 (rappel du soir, pause du Chrono, consentement, doublon retiré,
+La **`1.0.7`** (rappel du soir, pause du Chrono, consentement, doublon retiré,
 révélation sur iPhone SE en très grande police, Album, icônes dessinées,
 Facile par défaut) a été soumise le 30 octobre 2026 au soir avec le
-build 210 (en examen chez Apple au 31 octobre 2026), et envoyée le même soir sur Google Play, où elle est en ligne (vérifié le 31 octobre 2026).
+build 210 ; l'examen automatique l'a arrêtée le 31 octobre à 9 h 02
+(case « Publicité » de la classification par âge non cochée), elle a été
+renvoyée à 11 h 03, approuvée à 15 h 04 et **est en ligne depuis le
+31 octobre 2026 à 15 h 05** (publication automatique). Envoyée le même soir
+sur Google Play, elle y est en ligne (vérifié le 31 octobre 2026).
 
 **Où vivent les secrets :** aucun côté dépôt. L'authentification est
 celle du compte Apple (+ double facteur).
@@ -378,7 +382,7 @@ uniquement.
 Proposée après un PERFECT, un record ou trois défis d'affilée, une seule
 fois, jamais au lancement ; le système décide de l'affichage. Le même
 fichier fournit le lien de boutique ajouté aux grilles partagées : App
-Store sur iOS, Play Store sur Android depuis la 1.0.4. Au 30 octobre
+Store sur iOS, Play Store sur Android depuis la 1.0.4. Au 1er novembre
 2026, l'App Store compte 0 note.
 
 **Où vivent les secrets :** aucun.
@@ -419,8 +423,8 @@ personnel, TikTok n'affiche pas de lien dans la bio, et le compte
 Entreprise passe désormais par une vérification de l'entreprise, qui
 publie l'adresse sur le profil : ce choix attend la même décision que le
 DSA chez Apple. Les vidéos elles-mêmes sont publiées sans régie, par le
-Planning du Studio via Buffer : les deux premières l'ont été en public
-sur « erea.jeu » le 29 octobre 2026 (vérifié dans Buffer le 30 octobre).
+Planning du Studio via Buffer : seize l'ont été en public
+sur « erea.jeu » du 29 au 31 octobre 2026 (vérifié dans Buffer le 1er novembre 2026).
 
 **Où vivent les secrets :** aucun ; la connexion se fait par un code
 envoyé à `admin@toakeur.com`.
