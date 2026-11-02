@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 1er novembre 2026. Compagnon de INFRA.md.
+Mis à jour le 2 novembre 2026. Compagnon de INFRA.md.
 
 > Aucun chiffre inventé : les valeurs non mesurées sont marquées comme telles.
 
@@ -32,14 +32,14 @@ Mis à jour le 1er novembre 2026. Compagnon de INFRA.md.
 
 | Canal | Détail | Statut |
 |---|---|---|
-| Référencement naturel (base technique) | Sitemap (102 adresses le 27 octobre 2026 avec la page Actus ; 107 le 28 octobre 2026 avec les 4 premiers articles d'actus et le 41e conseil ; 112 le 30 octobre 2026 ; 116 le 31 octobre 2026, nombre qui grandit avec la veille) avec date de dernière modification réelle, robots.txt, adresses canoniques, Open Graph et Twitter Card avec images de partage 1200 × 630, données structurées schema.org sur toutes les pages | ✅ |
+| Référencement naturel (base technique) | Sitemap (102 adresses le 27 octobre 2026 avec la page Actus ; 107 le 28 octobre 2026 avec les 4 premiers articles d'actus et le 41e conseil ; 112 le 30 octobre 2026 ; 116 le 31 octobre 2026 ; 119 le 2 novembre 2026 avec le 44e conseil et 14 pages d'articles d'actus, nombre qui grandit avec la veille) avec date de dernière modification réelle, robots.txt, adresses canoniques, Open Graph et Twitter Card avec images de partage 1200 × 630, données structurées schema.org sur toutes les pages | ✅ |
 | IndexNow (Bing et autres moteurs) | Signalement automatique des pages après chaque publication (depuis le 28 octobre 2026) et chaque lundi (`.github/workflows/indexnow.yml`) | ✅ |
 | Flux RSS et Google Discover | `conseils.xml`, grandes images autorisées (`max-image-preview:large`, sur toutes les pages, une seule balise robots par page depuis le 28 octobre 2026) | ✅ |
 | Calculateur intégrable | `integrer.html` : code à coller pour les blogs, avec lien vers le site | ✅ prêt, aucun blog contacté |
 | Google Search Console et Bing | `kultiled.com` ajouté le 16 octobre 2026 dans les deux consoles ; l'ancienne propriété `optiled.fr` y avait été vérifiée avant le changement de domaine du 16 octobre 2026 | ✅ |
 | Guides d'achat | 3 guides (`led-puissance`, `led-comparer`, `led-semis`) avec tableaux calculés depuis les données du site, sans prix ni liens Amazon dans le texte | ✅ |
 | Pages « Top 10 » | 9 onglets de 10 produits avec liens Amazon (`top-10-<sujet>.html`), en ligne depuis le 19 octobre 2026 | ✅ |
-| Articles de conseil | Rubrique « Conseils » : 43 articles en ligne au 1er novembre 2026 (dont « PAR et PPFD », ajouté hors programme le 29 octobre, et « Pourquoi mes semis ne lèvent-ils pas ? », publié le 30 octobre) et 32 programmés jusqu'au 7 juin 2027 (31 jusqu'au 15 janvier 2027, puis un en juin ; le prochain le 2 novembre 2026), trois par semaine (lundi, mercredi, vendredi, publication automatique) ; rappel le 16 novembre 2026 pour préparer la série suivante | ✅ |
+| Articles de conseil | Rubrique « Conseils » : 44 articles en ligne au 2 novembre 2026 (dont « PAR et PPFD », ajouté hors programme le 29 octobre, « Pourquoi mes semis ne lèvent-ils pas ? », publié le 30 octobre, et « Moisissure blanche sur la terre : est-ce grave ? », publié le 2 novembre) et 31 programmés jusqu'au 7 juin 2027 (30 jusqu'au 15 janvier 2027, puis un en juin ; le prochain le 4 novembre 2026), trois par semaine (lundi, mercredi, vendredi, publication automatique) ; rappel le 16 novembre 2026 pour préparer la série suivante | ✅ |
 | Actus (veille) | Actus de la culture en intérieur lues en direct depuis la veille du Studio (2 passages par jour) : 4 sur l'accueil, page `actus.html` (20), 3 sur chaque page culture concernée ; source et crédit de l'image toujours visibles ; en ligne depuis le 27 octobre 2026. Depuis le 28 octobre 2026, toucher une actu ouvre son article complet sur le site (une page `actus/<slug>/` par article, dans le sitemap, avec données `NewsArticle` ; 4 pages ce jour-là), pages reconstruites deux fois par jour | ✅ |
 | Pages détaillées par culture | 25 pages `legume-<id>.html` (lumière, exemple pour 1 m², lampes, climat, solution nutritive, récolte) | ✅ |
 | Partage par les visiteurs | Bouton « Partager » du calculateur (lien avec les réglages) | ✅ |
@@ -55,7 +55,7 @@ Mis à jour le 1er novembre 2026. Compagnon de INFRA.md.
 - **Clics vers Amazon** : à vérifier dans la console Partenaires Amazon
 - **Commissions Amazon** : à vérifier dans la console Partenaires Amazon
 - **Revenus publicitaires** : à vérifier dans la console AdSense
-- **Articles de conseil** : 43 en ligne, 32 programmés jusqu'au 7 juin 2027 (au 1er novembre 2026)
+- **Articles de conseil** : 44 en ligne, 31 programmés jusqu'au 7 juin 2027 (au 2 novembre 2026)
 
 ## Calendrier
 
@@ -79,7 +79,7 @@ Mis à jour le 1er novembre 2026. Compagnon de INFRA.md.
 
 ## Les 3 priorités
 
-- Réussir le changement de domaine dans Google : faire indexer les dernières adresses de kultiled.com (98 pages dans l'index au 31 octobre 2026, sitemap à 116 adresses le même jour) et signaler le déménagement depuis optiled.fr (outil « Changement d'adresse » de la propriété optiled.fr : pas encore fait au 31 octobre 2026, le bouton « Valider et informer Google » est toujours proposé), avant la fin du contrat IONOS en novembre.
+- **Changement d'adresse : pas encore signalé** (vérifié le 2 novembre 2026 dans la Search Console). Réussir le changement de domaine dans Google : faire indexer les dernières adresses de kultiled.com (98 pages dans l'index au 31 octobre 2026, sitemap à 116 adresses le même jour) et signaler le déménagement depuis optiled.fr (outil « Changement d'adresse » de la propriété optiled.fr : pas encore fait au 2 novembre 2026, le bouton « Valider et informer Google » est toujours proposé ; la routine automatique n'a pas le droit de modifier un réglage du compte Google, c'est donc à Jean de cliquer), avant la fin du contrat IONOS en novembre.
 - Ouvrir un premier canal d'audience : créer et brancher un compte Pinterest Kultiled, puis importer les 12 épingles déjà prêtes (`docs/pinterest.csv`).
 - Obtenir de premiers liens entrants : proposer le calculateur intégrable (`integrer.html`) à quelques blogs et forums de jardinage en intérieur, aucun n'ayant encore été contacté.
 

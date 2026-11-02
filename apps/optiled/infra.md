@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Généré le 21 octobre 2026, mis à jour le 1er novembre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
+Généré le 21 octobre 2026, mis à jour le 2 novembre 2026 par un scan du dépôt. Pour mettre à jour : relancer ce même prompt.
 
 > Aucun secret dans cette fiche — uniquement des références (noms de variables, consoles).
 
@@ -16,7 +16,7 @@ Généré le 21 octobre 2026, mis à jour le 1er novembre 2026 par un scan du d�
 ## Parcours
 
 - 🌐 **Web** : 🐙 GitHub — main, CI au vert le 1er novembre [ok] → ⚙️ GitHub Actions — tests, build et test de bout en bout [ok] → 🏠 GitHub Pages — hébergement du site [ok] → 🔗 Nom de domaine — www.kultiled.com depuis le 16 octobre [ok] → 🔎 Google — 98 pages dans l'index au 31 octobre [ok]
-- 📝 **Contenu** : ✍️ Articles de conseil — 75 rédigés [ok] → ⏰ GitHub Actions — publication lundi, mercredi, vendredi [ok] → 📰 Rubrique Conseils — 43 en ligne, 32 programmés [ok] → 📌 Pinterest — 12 épingles prêtes, aucun compte [pas encore]
+- 📝 **Contenu** : ✍️ Articles de conseil — 75 rédigés [ok] → ⏰ GitHub Actions — publication lundi, mercredi, vendredi [ok] → 📰 Rubrique Conseils — 44 en ligne, 31 programmés [ok] → 📌 Pinterest — 12 épingles prêtes, aucun compte [pas encore]
 - 🛒 **Affiliation** : 💡 Sélection de lampes — 15 lampes, toutes disponibles (ViparSpectra P1000 retirée le 31 octobre) [ok] → 🔁 Routine de vérification — dernier passage le 1er novembre ; `npm run verifier-produits` sur le Mac, tout le catalogue vérifié le 28 octobre (96 produits, 6 indisponibles, 5 remplacés) [ok] → 🏆 Top 10 — 9 onglets de 10 produits depuis le 19 octobre, reliés depuis les conseils, les fiches, l'accueil et le calculateur depuis le 28 octobre [ok] → 🛍️ Affiliation — liens Amazon.fr kultiledfr-21 [ok]
 - 📰 **Actus** : 🤖 Veille du Studio — 2 passages par jour, 12 h et 19 h [ok] → 🐙 Dépôt teiki5320/veille — fichier kultiled.json [ok] → 🌐 kultiled.com — accueil, page Actus et fiches des cultures, depuis le 27 octobre [ok] → 📄 Articles complets — une page par actu (`actus/<slug>/`), reconstruites à 11 h 50 et 18 h 50 UTC, depuis le 28 octobre [ok]
 - 📢 **Publicité** : 📰 Pages de lecture — deux emplacements au plus [ok] → 🍪 Consentement — bandeau de Google en ligne [ok] → 💰 AdSense (publicité web) — examen de kultiled.com demandé le 16 octobre, « En préparation » au 31 octobre [à faire]
