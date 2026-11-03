@@ -1,7 +1,7 @@
 # INFRA — fiche technique
 
 > Généré le 20 août 2026 par un scan du dépôt, mis à jour le
-> 2 novembre 2026. Pour mettre à jour : relancer ce même prompt.
+> 3 novembre 2026. Pour mettre à jour : relancer ce même prompt.
 
 ## En bref
 
@@ -14,10 +14,10 @@
 
 ## Parcours
 
-- 🍎 **iOS** : 🐙 GitHub — main, 1.0.8 dans le code, tests lancés à la main avant chaque commit (aucune CI) [ok] → ☁️ Xcode Cloud — build à chaque poussée sur main [ok] → 🛍️ App Store Connect — 1.0.7 (build 210) approuvée le 31 octobre [ok] → 📱 App Store — 1.0.7 en ligne depuis le 31 octobre [ok]
+- 🍎 **iOS** : 🐙 GitHub — main, 1.0.8 dans le code, tests lancés à la main avant chaque commit (aucune CI) [ok] → ☁️ Xcode Cloud — build 214 réussi le 2 novembre [ok] → 🛍️ App Store Connect — 1.0.7 (build 210) approuvée le 31 octobre [ok] → 📱 App Store — 1.0.7 en ligne depuis le 31 octobre [ok]
 - 🤖 **Android** : 🐙 GitHub — main, 1.0.8 dans le code, tests lancés à la main avant chaque commit (aucune CI) [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — production accordée le 17 octobre, 1.0.7 envoyée le 30 octobre [ok] → 🛒 Google Play — 1.0.7 en ligne (vérifié le 31 octobre) [ok]
 - 🌐 **Web** : 🐙 GitHub — racine de main, sans CNAME [ok] → 📄 Hébergement web (GitHub Pages / Cloudflare Pages) — GitHub Pages [ok] → 🏷️ Nom de domaine — erea.toakeur.com via Cloudflare [ok] → 🌐 Site — vitrine, jeu, support, confidentialité [ok]
-- 🎬 **Contenu** : 🎬 Studio — 34 pubs vidéo au Planning [ok] → 🗓️ Planning — 15 vidéos programmées du 2 au 6 nov. [ok] → 📣 Réseaux sociaux & influenceurs — TikTok erea.jeu, 19 publiées du 29 oct. au 1er nov. [ok]
+- 🎬 **Contenu** : 🎬 Studio — 34 pubs vidéo au Planning [ok] → 🗓️ Planning — 12 vidéos programmées du 3 au 6 nov. [ok] → 📣 Réseaux sociaux & influenceurs — TikTok erea.jeu, 22 publiées du 29 oct. au 2 nov. [ok]
 
 ## Vue d'ensemble
 
@@ -382,7 +382,7 @@ uniquement.
 Proposée après un PERFECT, un record ou trois défis d'affilée, une seule
 fois, jamais au lancement ; le système décide de l'affichage. Le même
 fichier fournit le lien de boutique ajouté aux grilles partagées : App
-Store sur iOS, Play Store sur Android depuis la 1.0.4. Au 2 novembre
+Store sur iOS, Play Store sur Android depuis la 1.0.4. Au 3 novembre
 2026, l'App Store compte 0 note.
 
 **Où vivent les secrets :** aucun.
@@ -423,8 +423,8 @@ personnel, TikTok n'affiche pas de lien dans la bio, et le compte
 Entreprise passe désormais par une vérification de l'entreprise, qui
 publie l'adresse sur le profil : ce choix attend la même décision que le
 DSA chez Apple. Les vidéos elles-mêmes sont publiées sans régie, par le
-Planning du Studio via Buffer : dix-neuf l'ont été en public
-sur « erea.jeu » du 29 octobre au 1er novembre 2026 (vérifié dans Buffer le 2 novembre 2026).
+Planning du Studio via Buffer : vingt-deux l'ont été en public
+sur « erea.jeu » du 29 octobre au 2 novembre 2026 (vérifié dans Buffer le 3 novembre 2026).
 
 **Où vivent les secrets :** aucun ; la connexion se fait par un code
 envoyé à `admin@toakeur.com`.

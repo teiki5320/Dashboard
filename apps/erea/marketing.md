@@ -1,6 +1,6 @@
 # Erea — plan marketing & rémunération
 
-> Généré le 3 août 2026, mis à jour le 2 novembre 2026. Le modèle de
+> Généré le 3 août 2026, mis à jour le 3 novembre 2026. Le modèle de
 > rémunération est en ligne sur l'App Store depuis la 1.0.2 et sur Google
 > Play depuis le 20 octobre 2026 (publicité + achat unique qui la retire). Pour le mettre à jour : relancer ce même prompt. Aucun secret
 > ici.
@@ -42,7 +42,7 @@ classiques :
 ## Rémunération par phases
 
 - [fait] **Aujourd'hui** : pub AdMob une partie sur deux, achat unique 3,99 € qui la retire, sur iOS et sur Android depuis le 20 octobre 2026
-- [en cours] **Statut trader (DSA)** : obligatoire sur les deux boutiques ; Jean a demandé à Apple le 29 octobre de lancer le passage en organisation, sans réponse au 2 novembre
+- [en cours] **Statut trader (DSA)** : obligatoire sur les deux boutiques ; Jean a demandé à Apple le 29 octobre de lancer le passage en organisation et l'a relancé le 2 novembre, sans réponse au 3 novembre
 - **Premiers versements AdMob** : seuil de 70 €, puis code PIN postal et vérification d'identité
 - **Licence éducation** : seulement si un établissement se présente de lui-même
 
@@ -119,7 +119,7 @@ pas encore faite.
 | Badges des boutiques | Badge officiel d'Apple sur la vitrine, en tête et en bas de page, vers la fiche `id6794918301`, depuis le 12 octobre 2026 ; badge officiel Google Play à côté et page `/telecharger/` ouverte à Android depuis le 21 octobre 2026 | ✅ |
 | Enseignants & parents | Dossier d'une page « Erea en classe » (repères du brevet couverts, mode Facile, sans compte ni inscription) à envoyer aux profs d'histoire-géo, groupes Facebook de profs, La Salle des Maîtres | ⬜ |
 | Afrique de l'Ouest | Mise en avant du pack Afrique auprès des communautés éducatives francophones (Sénégal, Côte d'Ivoire…) ; presse tech locale ; créateurs de contenu éducation | ⬜ |
-| Réseaux sociaux | TikTok « erea.jeu » est le seul compte rattaché à Erea dans le Studio ; YouTube « toa.afrotok » et TikTok « Afrotok » sont branchés mais rattachés à aucune app. Pubs vidéo produites par le Studio depuis le 5 octobre 2026 : le format « documentaire qui déraille » validé par Jean le 5 octobre, puis, depuis le 26 octobre, « Avant ou après ? », « Interro surprise », « Petite histoire » et « Le défi en famille » ; 34 sont au Planning. Publication en public par le Planning via Buffer depuis le 29 octobre 2026 (« Blériot, le saut de la Manche » et « Henry Dunant, la naissance de la Croix-Rouge » ce soir-là) : 19 publiées du 29 octobre au 1er novembre, 15 programmées du 2 au 6 novembre (vérifié dans Buffer et le Planning le 2 novembre 2026) | ✅ |
+| Réseaux sociaux | TikTok « erea.jeu » est le seul compte rattaché à Erea dans le Studio ; YouTube « toa.afrotok » et TikTok « Afrotok » sont branchés mais rattachés à aucune app. Pubs vidéo produites par le Studio depuis le 5 octobre 2026 : le format « documentaire qui déraille » validé par Jean le 5 octobre, puis, depuis le 26 octobre, « Avant ou après ? », « Interro surprise », « Petite histoire » et « Le défi en famille » ; 34 sont au Planning. Publication en public par le Planning via Buffer depuis le 29 octobre 2026 (« Blériot, le saut de la Manche » et « Henry Dunant, la naissance de la Croix-Rouge » ce soir-là) : 22 publiées du 29 octobre au 2 novembre, 12 programmées du 3 au 6 novembre (vérifié dans Buffer et le Planning le 3 novembre 2026) | ✅ |
 | Presse & sites spécialisés | App du jour (iPhon.fr, iGen, Frandroid), sites parents (Geek Junior, Super Julie — références du jeu éducatif) | ⬜ |
 | Featuring Apple | Formulaire « App Store featuring » : app famille, française, hors ligne, avec Game Center — bon dossier, même si l'argument « sans pub » est tombé avec la 1.0.2 | ⬜ |
 | Play Store | Second magasin, donc second public : les douze testeurs ont tenu quatorze jours (22 septembre), l'accès à la production a été accordé le 17 octobre 2026, la 1.0.4 a été mise en ligne le 20 octobre, la 1.0.6 le 22 octobre, et la 1.0.7 est en ligne (vérifié le 31 octobre 2026) (`docs/PUBLICATION.md`) | ✅ |
@@ -142,7 +142,7 @@ pas encore faite.
 ## Mesures
 
 - **Téléchargements** : à vérifier dans la console (App Store Connect et Play Console)
-- **Note App Store** : aucune note au 2 novembre 2026
+- **Note App Store** : aucune note au 3 novembre 2026
 - **Note Google Play** : à vérifier dans la console (en ligne depuis le 20 octobre 2026)
 - **Rétention J1 et J7** : à vérifier dans la console
 - **Participants au Défi du jour** : à vérifier dans la console (classement `erea.daily`)
@@ -179,9 +179,9 @@ une collecte à la fiche de confidentialité.
 
 ## Les 3 priorités
 
-- **Booster par « Promouvoir » les pubs TikTok qui prennent le mieux** sur « erea.jeu » (19 publiées du 29 octobre au 1er novembre, 15 programmées jusqu'au 6 novembre), avec le lien `https://erea.toakeur.com/telecharger/?src=tiktok` qui mène aux deux boutiques : aucune promotion payante n'a encore été lancée.
+- **Booster par « Promouvoir » les pubs TikTok qui prennent le mieux** sur « erea.jeu » (22 publiées du 29 octobre au 2 novembre, 12 programmées jusqu'au 6 novembre), avec le lien `https://erea.toakeur.com/telecharger/?src=tiktok` qui mène aux deux boutiques : aucune promotion payante n'a encore été lancée.
 - **Envoyer le dossier « Erea en classe »** aux professeurs d'histoire-géographie et à leurs groupes : c'est le public naturel d'un jeu familial calé sur les repères du brevet, et rien ne lui a encore été adressé.
-- **Se déclarer trader (DSA)** sur l'App Store et Google Play : l'app rapporte maintenant sur les deux boutiques, et la déclaration « non-trader » ne tient plus ; à faire dès que le compte Apple est converti en compte organisation (Jean a répondu à Apple le 29 octobre 2026 pour lancer la migration ; aucune nouvelle réponse d'Apple au 2 novembre 2026).
+- **Se déclarer trader (DSA)** sur l'App Store et Google Play : l'app rapporte maintenant sur les deux boutiques, et la déclaration « non-trader » ne tient plus ; à faire dès que le compte Apple est converti en compte organisation (Jean a répondu à Apple le 29 octobre 2026 pour lancer la migration et l'a relancé le 2 novembre ; aucune réponse d'Apple au 3 novembre 2026).
 
 ## Déjà fait
 

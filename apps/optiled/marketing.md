@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 2 novembre 2026. Compagnon de INFRA.md.
+Mis à jour le 3 novembre 2026. Compagnon de INFRA.md.
 
 > Aucun chiffre inventé : les valeurs non mesurées sont marquées comme telles.
 
@@ -18,8 +18,8 @@ Mis à jour le 2 novembre 2026. Compagnon de INFRA.md.
 
 ## Rémunération par phases
 
-- [fait] **Aujourd'hui** : site gratuit sans compte ; affiliation Amazon (15 lampes, toutes disponibles au 1er novembre 2026, identifiant `kultiledfr-21`, liens `rel="sponsored nofollow noopener"`, ligne « Lien partenaire Amazon » sous chaque bouton, mention dans le pied de page et les mentions légales ; plus d'encadré en haut des pages depuis le 28 octobre 2026 ; depuis le même jour : encadré « Lampe conseillée » sur chaque fiche culture, encadré « Le matériel pour ça » dans 13 conseils, liste d'achat du calculateur et accueil reliés aux Top 10, plus aucun prix de matériel ; depuis le 28 octobre 2026 au soir, bloc « Nos coups de cœur » en haut de l'accueil : 6 produits illustrés des Top 10, liens internes seulement, aucun lien Amazon) et publicité AdSense dans les pages de lecture.
-- [en cours] **Validation AdSense** : examen de kultiled.com demandé le 16 octobre 2026, « En préparation » dans la console AdSense, ni validé ni refusé (vérifié le 31 octobre 2026).
+- [fait] **Aujourd'hui** : site gratuit sans compte ; affiliation Amazon (15 lampes, toutes disponibles au 3 novembre 2026, identifiant `kultiledfr-21`, liens `rel="sponsored nofollow noopener"`, ligne « Lien partenaire Amazon » sous chaque bouton, mention dans le pied de page et les mentions légales ; plus d'encadré en haut des pages depuis le 28 octobre 2026 ; depuis le même jour : encadré « Lampe conseillée » sur chaque fiche culture, encadré « Le matériel pour ça » dans 13 conseils, liste d'achat du calculateur et accueil reliés aux Top 10, plus aucun prix de matériel ; depuis le 28 octobre 2026 au soir, bloc « Nos coups de cœur » en haut de l'accueil : 6 produits illustrés des Top 10, liens internes seulement, aucun lien Amazon) et publicité AdSense dans les pages de lecture.
+- [en cours] **Validation AdSense** : examen de kultiled.com demandé le 16 octobre 2026, « En préparation » dans la console AdSense, ni validé ni refusé (console vérifiée le 31 octobre 2026 ; aucun mail de décision de Google au 3 novembre 2026).
 - **Affiliation élargie** : la liste d'achat du calculateur renvoie depuis le 28 octobre 2026 vers les Top 10 (lampes, minuteries, thermo-hygromètres, tentes, extracteurs) ; reste à créer un code de suivi Amazon par emplacement (table prête dans `src/suivi-amazon.ts`).
 
 ## Points forts
@@ -32,7 +32,7 @@ Mis à jour le 2 novembre 2026. Compagnon de INFRA.md.
 
 | Canal | Détail | Statut |
 |---|---|---|
-| Référencement naturel (base technique) | Sitemap (102 adresses le 27 octobre 2026 avec la page Actus ; 107 le 28 octobre 2026 avec les 4 premiers articles d'actus et le 41e conseil ; 112 le 30 octobre 2026 ; 116 le 31 octobre 2026 ; 119 le 2 novembre 2026 avec le 44e conseil et 14 pages d'articles d'actus, nombre qui grandit avec la veille) avec date de dernière modification réelle, robots.txt, adresses canoniques, Open Graph et Twitter Card avec images de partage 1200 × 630, données structurées schema.org sur toutes les pages | ✅ |
+| Référencement naturel (base technique) | Sitemap (102 adresses le 27 octobre 2026 avec la page Actus ; 107 le 28 octobre 2026 avec les 4 premiers articles d'actus et le 41e conseil ; 112 le 30 octobre 2026 ; 116 le 31 octobre 2026 ; 119 le 2 novembre 2026 avec le 44e conseil et 14 pages d'articles d'actus ; 123 le 3 novembre 2026 avec 18 pages d'articles d'actus, nombre qui grandit avec la veille) avec date de dernière modification réelle, robots.txt, adresses canoniques, Open Graph et Twitter Card avec images de partage 1200 × 630, données structurées schema.org sur toutes les pages | ✅ |
 | IndexNow (Bing et autres moteurs) | Signalement automatique des pages après chaque publication (depuis le 28 octobre 2026) et chaque lundi (`.github/workflows/indexnow.yml`) | ✅ |
 | Flux RSS et Google Discover | `conseils.xml`, grandes images autorisées (`max-image-preview:large`, sur toutes les pages, une seule balise robots par page depuis le 28 octobre 2026) | ✅ |
 | Calculateur intégrable | `integrer.html` : code à coller pour les blogs, avec lien vers le site | ✅ prêt, aucun blog contacté |

@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 2 novembre 2026. Compagnon de `INFRA.md` : là où INFRA répertorie
+Mis à jour le 3 novembre 2026. Compagnon de `INFRA.md` : là où INFRA répertorie
 la technique, ce fichier suit la stratégie marketing et de rémunération.
 Pour l'actualiser : relancer le même prompt.
 
@@ -11,7 +11,7 @@ Pour l'actualiser : relancer le même prompt.
   l'Ouest (pas une déclinaison française).
 - **Publics** : d'abord les jardiniers amateurs de France
   métropolitaine ; les jardiniers et maraîchers des 8 pays
-  francophones d'AO (contenu local : FCFA, marchés, zones climatiques,
+  francophones d'AO (contenu local : noms locaux, achat au marché, zones climatiques,
   cultures locales) ; et, depuis le 1er novembre 2026, les jardiniers
   anglophones et francophones de 73 pays — Europe, Maghreb, Amériques,
   Asie, Océanie, outre-mer français.
@@ -37,7 +37,7 @@ physiques, dons.
 
 - 🫙 **Garder ta récolte** : pour chaque légume, trois conservations (bocal, congélation, séchage, lacto-fermentation…) avec leur durée de garde et un pas-à-pas animé — 736 recettes, dont 448 déroulées étape par étape.
 - 📔 **Cahier de culture** : « à faire aujourd'hui » dit qui a soif, qui est mûr et s'il va faire trop chaud, puis les jardins pleine terre, le suivi par plant et l'avertissement de rotation.
-- 🌍 **73 pays, deux langues, hors ligne** : calendriers par pays et zone climatique (hémisphère sud compris), sans compte ni serveur. **Tout le contenu est traduit en français, en anglais et en espagnol** depuis le 2 novembre 2026 : recettes, tutos, maladies, lexique, badges et défis. **L'interface l'est aussi** depuis le 2 novembre 2026 : tableau de bord, onboarding, réglages, météo, notifications, et les 73 noms de pays. Un utilisateur anglophone ou hispanophone ne voit plus un mot de français.
+- 🌍 **73 pays, trois langues, hors ligne** : calendriers par pays et zone climatique (hémisphère sud compris), sans compte ni serveur. **Tout le contenu est traduit en français, en anglais et en espagnol** depuis le 2 novembre 2026 : recettes, tutos, maladies, lexique, badges et défis. **L'interface l'est aussi** depuis le 2 novembre 2026 : tableau de bord, onboarding, réglages, météo, notifications, et les 73 noms de pays. Un utilisateur anglophone ou hispanophone ne voit plus un mot de français.
 
 ## Canaux
 
@@ -82,5 +82,5 @@ n'est branché (Sentry ne suit que les crashs).
 ## Les 3 priorités
 
 - Garnir une installation pour les captures (2-3 plants, une photo, un jardin dessiné) : il n'y a plus de compte de démonstration à créer.
-- Compléter la fiche App Store déjà créée (adresses de `kultiva.toakeur.com` et `kultiva@toakeur.com`, captures, déclaration de trader DSA), puis soumettre le build 166 déjà en TestFlight.
+- Compléter la fiche App Store déjà créée (adresses de `kultiva.toakeur.com` et `kultiva@toakeur.com`, captures, déclaration de trader DSA), puis soumettre le build 195 déjà en TestFlight.
 - Créer la fiche Google Play et lancer tout de suite le test fermé (douze testeurs pendant quatorze jours si le compte est personnel).

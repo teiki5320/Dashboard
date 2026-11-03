@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 2 novembre 2026 (examen AdSense refusé le 31 octobre 2026, rien de nouveau au 2 novembre ; 43 articles « Conseils » en ligne ; sitemap de 260 adresses ; dernière publication le 2 novembre 2026) ; dernier scan complet du dépôt le 26 octobre 2026. Pour mettre à jour : relancer ce même prompt.
+Mis à jour le 3 novembre 2026 (examen AdSense refusé le 31 octobre 2026, rien de nouveau au 3 novembre ; 43 articles « Conseils » en ligne ; sitemap de 260 adresses ; dernière publication le 3 novembre 2026) ; dernier scan complet du dépôt le 26 octobre 2026. Pour mettre à jour : relancer ce même prompt.
 
 ## En bref
 
@@ -92,7 +92,7 @@ Mis à jour le 2 novembre 2026 (examen AdSense refusé le 31 octobre 2026, rien 
 
 ## 7. AdSense (publicité web)
 
-- **Rôle** : annonces display Google sur six emplacements titrés « Publicité » (`src/components/ads/AdSlot.tsx`, `src/lib/ads.ts`) : au milieu et en fin de recette, au milieu et en fin d'article « Conseils », en fin d'article d'actu (depuis le 28 octobre 2026) et sur les pages pays ; un seul bloc d'annonces « Keur Cook » sert les six. Script `adsbygoogle.js` et balise `google-adsense-account` dans `src/app/layout.tsx`, fichier `public/ads.txt`. Le message de consentement de Google (Confidentialité et messages) gère les cookies publicitaires. Mis en place le 12 octobre 2026 (demande d'examen le même jour) ; examen refusé le 31 octobre 2026 : Google demande de corriger des problèmes sur le site avant d'y diffuser des annonces (e-mail AdSense du 31 octobre 2026, aucun nouvel e-mail au 2 novembre 2026 ; motif détaillé à lire dans la console, page Sites). Aucune annonce ne s'affiche.
+- **Rôle** : annonces display Google sur six emplacements titrés « Publicité » (`src/components/ads/AdSlot.tsx`, `src/lib/ads.ts`) : au milieu et en fin de recette, au milieu et en fin d'article « Conseils », en fin d'article d'actu (depuis le 28 octobre 2026) et sur les pages pays ; un seul bloc d'annonces « Keur Cook » sert les six. Script `adsbygoogle.js` et balise `google-adsense-account` dans `src/app/layout.tsx`, fichier `public/ads.txt`. Le message de consentement de Google (Confidentialité et messages) gère les cookies publicitaires. Mis en place le 12 octobre 2026 (demande d'examen le même jour) ; examen refusé le 31 octobre 2026 : Google demande de corriger des problèmes sur le site avant d'y diffuser des annonces (e-mail AdSense du 31 octobre 2026, aucun nouvel e-mail au 3 novembre 2026 ; motif détaillé à lire dans la console, page Sites). Aucune annonce ne s'affiche.
 - **Console** : https://adsense.google.com (compte `pub-2680784147246798`, géré avec `admin@toakeur.com`).
 - **Identifiants publics** : identifiant d'éditeur `ca-pub-…` et numéro de bloc d'annonces dans `src/lib/ads.ts` et `public/ads.txt` (publics par nature).
 - **Secrets** : aucun.

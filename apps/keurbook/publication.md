@@ -1,6 +1,6 @@
 # PUBLICATION — état de la mise en ligne
 
-> Mis à jour le 2 novembre 2026, d'après le site en ligne, la Search Console et les exécutions GitHub Actions.
+> Mis à jour le 3 novembre 2026, d'après le site en ligne, la Search Console et les exécutions GitHub Actions.
 >
 > Aucun secret ici — uniquement des références.
 
@@ -37,9 +37,9 @@
 
 | | |
 |---|---|
-| Adresse | **En ligne** sur https://keurbook.com (vérifié le 2 novembre 2026 : réponse 200) |
+| Adresse | **En ligne** sur https://keurbook.com (vérifié le 3 novembre 2026 : réponse 200) |
 | Hébergeur | Cloudflare Pages (projet `keurbook`), workflow `deploy.yml` |
-| Dernière publication | 2 novembre 2026 (4 h 33 UTC), publication réussie après l'envoi « Référencement du 02/11/2026 » ; `version.txt` sert cette publication (vérifié le 2 novembre 2026) |
+| Dernière publication | 2 novembre 2026 (lancée à 20 h 53 UTC), publication programmée réussie ; `version.txt` sert cette publication (vérifié le 3 novembre 2026) ; la précédente, le 2 novembre à 4 h 33 UTC, suivait l'envoi « Référencement du 02/11/2026 » |
 | Mise en ligne | 1er octobre 2026 |
 | Dépôt | https://github.com/teiki5320/keurbook |
 | Taille publiée | 991 adresses dans le sitemap (2 novembre 2026 : dont 43 articles Conseils et 13 articles d'actus ; 988 le 1er novembre, 987 le 31 octobre, 984 le 30 octobre, 982 le 29 octobre, 980 le 28 octobre, 975 le 27 octobre, 974 jusqu'au 26 octobre, avant la page Actus) |
@@ -63,7 +63,7 @@
   (onglet Indexation du Studio) au 2 novembre 2026 : 663 pages indexées sur 991, 328 pas encore
   (311 inconnues de Google, 17 explorées mais pas indexées) ; 675 sur 988 le 1er novembre, 675 sur 987 le 31 octobre, 677 sur 984 le 30 octobre, 680 sur 982 le 29 octobre, 680 sur 980 le 28 octobre, 679 sur 975 le 27 octobre, 673 sur 971 le 20 octobre.
 - **IndexNow** (Bing, Yandex…) : tout le sitemap est signalé après chaque publication réussie de `main`
-  (depuis le 28 octobre 2026) et chaque lundi ; dernière exécution du lundi réussie le 26 octobre 2026.
+  (depuis le 28 octobre 2026) et chaque lundi ; dernière exécution du lundi réussie le 2 novembre 2026 (la précédente le 26 octobre).
 - **Mesure d'audience** : Cloudflare Web Analytics (sans cookie), balise constatée en ligne le
   14 octobre 2026 ; chiffres à vérifier dans la console.
 - **Publicité** : Google AdSense en place (script chargé sur les pages, `https://keurbook.com/ads.txt`

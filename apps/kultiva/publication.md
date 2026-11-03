@@ -1,6 +1,6 @@
 # PUBLICATION — état des boutiques
 
-> Mis à jour le 2 novembre 2026. Pour mettre à jour :
+> Mis à jour le 3 novembre 2026. Pour mettre à jour :
 > relancer ce même prompt.
 >
 > **Aucun secret ici** — uniquement des références publiques :
@@ -26,21 +26,21 @@
 
 | | 🍎 App Store | 🤖 Google Play |
 |---|---|---|
-| État | [pas encore] jamais soumise ; fiche App Store Connect créée (Apple ID `6762550020`), dernier build reçu : 166 (2 novembre 2026) | [pas encore] jamais envoyée ; fiche à vérifier dans la console |
-| Construction | [ok] Xcode Cloud (`ci_post_clone.sh`, Flutter 3.47.3) : **build 166 réussi le 2 novembre 2026**, disponible en TestFlight (vérifié le 2 novembre 2026 dans les mails d'Apple) ; le build 165 avait échoué le 1er novembre 2026 au soir dans `ci_post_clone.sh`, les autres builds du 1er novembre (dont le 152 et le 164) avaient réussi, comme ceux depuis le 31 octobre (dont le 134) ; build 127 réussi le 30 octobre 2026, après deux échecs le même soir (122 et 125, pin Flutter devenu plus ancien que le code). Auparavant : builds 95 et 96 réussis le 25 octobre 2026, build 97 le 27 octobre, avec l'étape « TestFlight internes - iOS » (vérifié le 28 octobre 2026) ; le build 94 avait échoué le 24 octobre | [ok] App Bundle construit par la CI GitHub Actions |
+| État | [pas encore] jamais soumise ; fiche App Store Connect créée (Apple ID `6762550020`), dernier build reçu : 195 (nuit du 2 au 3 novembre 2026) | [pas encore] jamais envoyée ; fiche à vérifier dans la console |
+| Construction | [ok] Xcode Cloud (`ci_post_clone.sh`, Flutter 3.47.3) : **build 195 réussi dans la nuit du 2 au 3 novembre 2026**, disponible en TestFlight (vérifié le 3 novembre 2026 dans les mails d'Apple) ; tous les builds du 2 novembre, du 166 au 195, ont réussi ; le build 165 avait échoué le 1er novembre 2026 au soir dans `ci_post_clone.sh`, les autres builds du 1er novembre (dont le 152 et le 164) avaient réussi, comme ceux depuis le 31 octobre (dont le 134) ; build 127 réussi le 30 octobre 2026, après deux échecs le même soir (122 et 125, pin Flutter devenu plus ancien que le code). Auparavant : builds 95 et 96 réussis le 25 octobre 2026, build 97 le 27 octobre, avec l'étape « TestFlight internes - iOS » (vérifié le 28 octobre 2026) ; le build 94 avait échoué le 24 octobre | [ok] App Bundle construit par la CI GitHub Actions |
 | Signature | [ok] gérée par Xcode Cloud, équipe `K597U7X3FZ` | [ok] keystore local, valable jusqu'en 2053 |
 | Classification | [à faire] 4+ attendu, questionnaire prêt à reporter | [à faire] questionnaire de contenu à remplir |
-| Cible | [ok] iOS 15.0 et plus (depuis le 25 octobre 2026 : Xcode et les pods, dont Sentry, l’exigent ; avant : 13.0), iPhone et iPad, portrait | [ok] valeurs par défaut de Flutter, rien de figé dans le dépôt |
+| Cible | [ok] iOS 15.0 et plus (depuis le 25 octobre 2026 : Xcode et les pods, dont Sentry, l’exigent ; avant : 13.0), iPhone en portrait, iPad dans les quatre sens | [ok] valeurs par défaut de Flutter, rien de figé dans le dépôt |
 | Permissions | [ok] caméra, photos, localisation en français ; clé `NSLocationAlwaysAndWhenInUseUsageDescription` ajoutée le 30 octobre 2026 (fin de l'avertissement ITMS-90683) | [ok] localisation, notifications, alarmes exactes |
-| Poids | [pas encore] à mesurer au premier envoi (37 Mo d'assets) | [ok] 48,6 Mio au téléchargement (release arm64, mesuré le 1er novembre 2026, avant l'ajout des 130 légumes détourés du 2 novembre) |
+| Poids | [pas encore] à mesurer au premier envoi (21 Mo d'assets depuis le ménage du 2 novembre 2026, contre 37 Mo avant) | [ok] 48,6 Mio au téléchargement (release arm64, mesuré le 1er novembre 2026, avant l'ajout des 130 légumes détourés et le retrait de 16 Mo d'images inutilisées, tous deux le 2 novembre) |
 
 ## Vue d'ensemble
 
 - **État du projet** : **en pause** (choix de Jean) — rien n'est soumis aux boutiques
-- **iOS** : jamais soumise — la fiche App Store Connect existe (Apple ID `6762550020`), ses textes sont rédigés et l'URL de confidentialité existe ; le build Xcode Cloud 94 a échoué le 24 octobre 2026 (cible iOS trop basse), corrigé le 25 octobre ; les builds 95 et 96 ont réussi le 25 octobre 2026, le build 97 le 27 octobre 2026, le build 127 le 30 octobre 2026, le build 134 le 31 octobre 2026, le build 152 le 1er novembre 2026 et le **build 166 le 2 novembre 2026**, disponible en TestFlight (le 165 avait échoué le 1er novembre au soir). La clé de localisation que réclamait Apple (ITMS-90683) a été ajoutée le 30 octobre 2026
+- **iOS** : jamais soumise — la fiche App Store Connect existe (Apple ID `6762550020`), ses textes sont rédigés et l'URL de confidentialité existe ; le build Xcode Cloud 94 a échoué le 24 octobre 2026 (cible iOS trop basse), corrigé le 25 octobre ; les builds 95 et 96 ont réussi le 25 octobre 2026, le build 97 le 27 octobre 2026, le build 127 le 30 octobre 2026, le build 134 le 31 octobre 2026, le build 152 le 1er novembre 2026, le build 166 le 2 novembre 2026 et le **build 195 dans la nuit du 2 au 3 novembre 2026**, disponible en TestFlight (le 165 avait échoué le 1er novembre au soir). La clé de localisation que réclamait Apple (ITMS-90683) a été ajoutée le 30 octobre 2026
 - **Android** : jamais envoyée à Play — le bundle release est signé et vérifié localement ; l'existence d'une fiche Play reste à vérifier dans la console
-- **Web** : site de présentation en ligne sur <https://kultiva.toakeur.com> depuis le 7 octobre 2026 (vérifié le 2 novembre 2026)
-- **Backend** : **aucun**. Les comptes ont été retirés de la v1 le 30 octobre 2026 — le jardin vit sur l'appareil. Le projet Supabase reste inactif (vérifié le 2 novembre 2026), inutilisé, et ne bloque plus rien
+- **Web** : site de présentation en ligne sur <https://kultiva.toakeur.com> depuis le 7 octobre 2026 (vérifié le 3 novembre 2026)
+- **Backend** : **aucun**. Les comptes ont été retirés de la v1 le 30 octobre 2026 — le jardin vit sur l'appareil. Le projet Supabase reste inactif (vérifié le 3 novembre 2026), inutilisé, et ne bloque plus rien
 - **Monétisation** : affiliation Amazon en France. Les 159 liens, retirés le 20 octobre 2026 (compte fermé le 18), sont **revenus le 30 octobre 2026** sous le tag `kultiva1-21`. ⚠️ Le statut **trader** au sens du DSA, décidé le 24 août 2026 à cause de ces liens, redevient donc applicable : à déclarer dans App Store Connect et Play Console avant soumission
 - **Classification attendue** : **4+** depuis le retrait du feed communautaire — plus aucun contenu généré par les utilisateurs
 - **Chemin critique** : captures d'écran → trancher la déclaration DSA → compléter la fiche App Store → soumettre iOS
@@ -61,10 +61,10 @@ et des champs de formulaire (le backend ne bloque plus rien depuis le 30 octobre
 | État | **Jamais soumise** — restent l'installation à garnir, les captures et les champs de la fiche (le projet Supabase, inactif, ne bloque plus rien depuis le retrait des comptes le 30 octobre 2026) |
 | Console | <https://appstoreconnect.apple.com> |
 | Version publiée | aucune — l'app n'est jamais sortie |
-| Version en cours | `1.0.0` — fiche App Store Connect créée (Apple ID `6762550020`), builds Xcode Cloud 95, 96, 97, 127 (30 octobre 2026), 134 (31 octobre 2026), 152 (1er novembre 2026) puis **166 (2 novembre 2026)** reçus ; aucune soumission |
-| Distribution | Xcode Cloud, script `ios/ci_scripts/ci_post_clone.sh` — équipe `K597U7X3FZ` ; build 94 en échec le 24 octobre 2026, cible iOS relevée à 15.0 le 25 octobre ; builds 95 et 96 réussis le 25 octobre 2026, build 97 le 27 octobre, builds 122 et 125 en échec le 30 octobre (pin Flutter périmé), build 127 réussi le 30 octobre 2026, build 134 le 31 octobre 2026, build 152 le 1er novembre 2026, build 165 en échec le 1er novembre au soir (`ci_post_clone.sh`) et **build 166 réussi le 2 novembre 2026**, disponible en TestFlight |
+| Version en cours | `1.0.0` — fiche App Store Connect créée (Apple ID `6762550020`), builds Xcode Cloud 95, 96, 97, 127 (30 octobre 2026), 134 (31 octobre 2026), 152 (1er novembre 2026), 166 (2 novembre 2026) puis **195 (nuit du 2 au 3 novembre 2026)** reçus ; aucune soumission |
+| Distribution | Xcode Cloud, script `ios/ci_scripts/ci_post_clone.sh` — équipe `K597U7X3FZ` ; build 94 en échec le 24 octobre 2026, cible iOS relevée à 15.0 le 25 octobre ; builds 95 et 96 réussis le 25 octobre 2026, build 97 le 27 octobre, builds 122 et 125 en échec le 30 octobre (pin Flutter périmé), build 127 réussi le 30 octobre 2026, build 134 le 31 octobre 2026, build 152 le 1er novembre 2026, build 165 en échec le 1er novembre au soir (`ci_post_clone.sh`), build 166 réussi le 2 novembre 2026 et **build 195 réussi dans la nuit du 2 au 3 novembre 2026**, disponible en TestFlight |
 | Familles d'appareils | `TARGETED_DEVICE_FAMILY = "1,2"` → iPhone **et** iPad |
-| Orientation | portrait seul, `UIRequiresFullScreen = true` (renonce au multitâche iPad) |
+| Orientation | iPhone en portrait seul ; iPad dans les quatre sens depuis le 30 octobre 2026 ; `UIRequiresFullScreen = true` (renonce au multitâche iPad) |
 
 **Ce qui est prêt.** Le texte de la fiche est écrit et les décomptes sont
 vérifiés : nom, sous-titre, texte promotionnel, description
@@ -90,11 +90,20 @@ est acceptée).
 **Sur l'iPad.** L'app se lance en plein écran portrait sur iPadOS 26.5 et
 produit des captures au format exact attendu par Apple. Les mises en page
 s'adaptent — le catalogue passe à 8 colonnes au-delà de 900 points, les
-grilles de badges et de défis se dimensionnent seules. L'allure générale des écrans en 13 pouces n'a toujours pas
-été jugée à l'œil : depuis le 31 octobre 2026, le simulateur iOS est installé
-sur le Mac et l'app s'y lance, mais `Simulator.app` manque à cette
-installation de Xcode et toutes les captures sortent noires ; les tests ne
-voient qu'une chose, qu'une boîte ne déborde pas.
+grilles de badges et de défis se dimensionnent seules.
+
+Les écrans ont été **regardés sur un iPad Pro 13″ le 3 novembre 2026**,
+et l'ergonomie y a été corrigée le même jour. Avant : les six cartes du
+tableau de bord mesuraient 510 points de large pour 138 de haut, une
+phrase traversait l'écran d'un bord à l'autre, et une feuille modale
+occupait les 1 032 points. Depuis : le contenu est borné et centré
+(720 points, 560 pour le tableau de bord et les feuilles modales), avec
+**une exception voulue**, l'Étal, dont la grille se répartit toute seule
+et profite de la largeur. Le bandeau de saison reste dans la colonne.
+
+Restent deux défauts d'allure, connus et non bloquants : le logo du
+splash natif s'affiche à sa taille de téléphone au milieu d'un écran de
+13 pouces, et le bas de l'écran est vide sur les pages courtes.
 
 **Compte de démonstration.** Sans objet depuis le retrait des comptes :
 laisse la case « Connexion requise » décochée dans App Store Connect. Il
@@ -111,7 +120,7 @@ acceptés, mais Apple signalait à chaque envoi l'erreur ITMS-90683 : la
 clé `NSLocationAlwaysAndWhenInUseUsageDescription` manquait dans
 `ios/Runner/Info.plist`. Elle a été ajoutée le 30 octobre 2026 —
 `geolocator` embarque les APIs « Always » même si l'app ne s'en sert
-pas, d'où la réclamation. Les builds 127, 134 et suivants (jusqu'au 166) ont été envoyés après
+pas, d'où la réclamation. Les builds 127, 134 et suivants (jusqu'au 195) ont été envoyés après
 l'ajout de la clé.
 
 **Vérifié le 1er novembre 2026** (mails d'Apple) : la fiche existe pour
@@ -132,7 +141,7 @@ payant* si la distribution doit couvrir tous les pays.
 | Distribution | App Bundle signé localement via `android/key.properties` (non commité, ignoré par git) |
 | Signature | certificat RSA 2048 / SHA384 au nom de l'organisation `Kultiva`, créé le 21 avril 2026, valable jusqu'au **6 septembre 2053** |
 | Niveaux d'API | valeurs par défaut de Flutter (`flutter.minSdkVersion`, `flutter.targetSdkVersion`, `flutter.compileSdkVersion` dans `android/app/build.gradle.kts`) — aucun chiffre figé dans le dépôt |
-| Poids | 48,6 Mio au téléchargement (release arm64, mesuré le 1er novembre 2026, avant l'ajout des 130 légumes détourés du 2 novembre) ; 37 Mo d'assets ; la CI produit aussi des APK `--split-per-abi` |
+| Poids | 48,6 Mio au téléchargement (release arm64, mesuré le 1er novembre 2026, avant l'ajout des 130 légumes détourés du 2 novembre) ; 21 Mo d'assets depuis le retrait de 16 Mo d'images inutilisées le 2 novembre 2026 (37 Mo avant) ; la CI produit aussi des APK `--split-per-abi` |
 
 **Ce qui est prêt.** Le build release fonctionne : il était cassé et a été
 réparé le 23 août 2026 (Kotlin 2.1.20), puis vérifié par un
@@ -172,9 +181,9 @@ la signature d'application par Play est activée.
 
 | | |
 |---|---|
-| Production | **En ligne** — <https://kultiva.toakeur.com> répond, `/privacy.html` aussi (vérifié le 2 novembre 2026) |
+| Production | **En ligne** — <https://kultiva.toakeur.com> répond, `/privacy.html` aussi (vérifié le 3 novembre 2026) |
 | Domaine & SSL | `kultiva.toakeur.com`, DNS chez Cloudflare (proxy actif), HTTPS valide ; contact affiché `kultiva@toakeur.com` |
-| Visibilité | publié par GitHub Pages (derrière Cloudflare, vérifié le 2 novembre 2026) via `.github/workflows/site.yml` (dossier `landing/`) depuis le 7 octobre 2026 ; l'ancienne adresse `teiki5320.github.io/Kultiva/` sert la même page |
+| Visibilité | publié par GitHub Pages (derrière Cloudflare, vérifié le 3 novembre 2026) via `.github/workflows/site.yml` (dossier `landing/`) depuis le 7 octobre 2026 ; l'ancienne adresse `teiki5320.github.io/Kultiva/` sert la même page |
 
 **Ce n'est pas une version web de l'app.** Le projet ne comporte que les
 cibles `android` et `ios`. Le site compte parce qu'il fournit les URL
@@ -214,7 +223,7 @@ la synchro (Cloudflare, ci-dessous).
 
 | | |
 |---|---|
-| Projet Supabase | `vkiwkeknfzwdvufcqbrp` — **inactif, inutilisé** (vérifié le 2 novembre 2026). Données et migrations conservées un an : **ne pas le supprimer**, il ne bloque plus rien |
+| Projet Supabase | `vkiwkeknfzwdvufcqbrp` — **inactif, inutilisé** (vérifié le 3 novembre 2026). Données et migrations conservées un an : **ne pas le supprimer**, il ne bloque plus rien |
 | Retiré de l'app | `supabase_flutter`, `google_sign_in`, `sign_in_with_apple`, `crypto` (−36 paquets), l'entitlement Apple Sign-In et le schéma d'URL Google |
 | Si la synchro revient | **Cloudflare** (Worker + D1 + R2) plutôt que Supabase : gratuit, ne s'endort jamais, juridiction EU disponible. Avec Google + Apple seulement, le Worker se contente de vérifier le jeton d'identité — aucun mot de passe à manipuler |
 
@@ -229,8 +238,8 @@ la synchro (Cloudflare, ci-dessous).
 5. **Garnir une installation pour les captures** : 2 ou 3 plants, une photo, un jardin dessiné. Plus de compte de démonstration à créer.
 6. **Captures d'écran** : 8 en iPhone 6,9″ (1320 × 2868) et 8 en iPad 13″ (2064 × 2752).
 7. ✅ **Liens Amazon remis** : ôtés le 20 octobre 2026 (compte fermé), les 159 liens sont revenus le 30 octobre 2026 sous le tag `kultiva1-21`. ⚠️ Pense au statut trader (DSA) à la soumission.
-8. ✅ **Clé de localisation** : `NSLocationAlwaysAndWhenInUseUsageDescription` ajoutée le 30 octobre 2026 (avertissement ITMS-90683) ; builds 127 à 166 envoyés depuis.
-9. **Soumettre iOS** : le build 166 (2 novembre 2026) depuis `docs/FICHE_APP_STORE.md`.
+8. ✅ **Clé de localisation** : `NSLocationAlwaysAndWhenInUseUsageDescription` ajoutée le 30 octobre 2026 (avertissement ITMS-90683) ; builds 127 à 195 envoyés depuis.
+9. **Soumettre iOS** : le build 195 (nuit du 2 au 3 novembre 2026) depuis `docs/FICHE_APP_STORE.md`.
 10. **Créer la fiche Google Play** : puis lancer le test fermé sans attendre, ses quatorze jours courent en arrière-plan.
 11. **Relier les boutons « Télécharger »** : remplacer les `href="#"` du site par les liens des boutiques (la mention « Partenaire Amazon » a été ôtée le 21 octobre 2026).
 
@@ -239,9 +248,9 @@ la synchro (Cloudflare, ci-dessous).
 ## Ce qui a été réglé depuis
 
 - **Builds iOS reçus par App Store Connect** (25, 27, 30, 31 octobre et
-  1er et 2 novembre) — les builds Xcode Cloud 95, 96, 97, 127, 134, 152 puis 166 sont
-  arrivés dans la fiche `6762550020` ; le 166 est disponible en TestFlight
-  depuis le 2 novembre.
+  1er et 2 novembre) — les builds Xcode Cloud 95, 96, 97, 127, 134, 152, 166 puis 195 sont
+  arrivés dans la fiche `6762550020` ; le 195 est disponible en TestFlight
+  depuis la nuit du 2 au 3 novembre.
 - **Liens Amazon remis** (30 octobre) — sous le tag `kultiva1-21`.
 - **Site en ligne** (7 octobre) — `landing/` publié sur GitHub Pages à
   l'adresse `kultiva.toakeur.com`.
