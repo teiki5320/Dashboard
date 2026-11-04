@@ -1,7 +1,7 @@
 # INFRA — fiche technique
 
 > Généré le 20 août 2026 par un scan du dépôt, mis à jour le
-> 3 novembre 2026. Pour mettre à jour : relancer ce même prompt.
+> 4 novembre 2026. Pour mettre à jour : relancer ce même prompt.
 
 ## En bref
 
@@ -9,19 +9,19 @@
 - **Stack** : Flutter (Dart ≥ 3.6), version `1.0.8+9` dans le code
 - **Backend** : aucun — tout reste sur l'appareil, jeu hors ligne
 - **Distribution** : Xcode Cloud vers l'App Store · App Bundle signé en local
-- **Site** : `erea.toakeur.com`, GitHub Pages derrière Cloudflare
+- **Site** : `erea.toakeur.com`, GitHub Pages derrière Cloudflare — 404 depuis le dépôt passé en privé (4 nov.)
 - **IA et outils** : aucune IA dans l'app ; AdMob, Game Center, StoreKit
 
 ## Parcours
 
-- 🍎 **iOS** : 🐙 GitHub — main, 1.0.8 dans le code, tests lancés à la main avant chaque commit (aucune CI) [ok] → ☁️ Xcode Cloud — build 214 réussi le 2 novembre [ok] → 🛍️ App Store Connect — 1.0.7 (build 210) approuvée le 31 octobre [ok] → 📱 App Store — 1.0.7 en ligne depuis le 31 octobre [ok]
-- 🤖 **Android** : 🐙 GitHub — main, 1.0.8 dans le code, tests lancés à la main avant chaque commit (aucune CI) [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — production accordée le 17 octobre, 1.0.7 envoyée le 30 octobre [ok] → 🛒 Google Play — 1.0.7 en ligne (vérifié le 31 octobre) [ok]
-- 🌐 **Web** : 🐙 GitHub — racine de main, sans CNAME [ok] → 📄 Hébergement web (GitHub Pages / Cloudflare Pages) — GitHub Pages [ok] → 🏷️ Nom de domaine — erea.toakeur.com via Cloudflare [ok] → 🌐 Site — vitrine, jeu, support, confidentialité [ok]
-- 🎬 **Contenu** : 🎬 Studio — 34 pubs vidéo au Planning [ok] → 🗓️ Planning — 12 vidéos programmées du 3 au 6 nov. [ok] → 📣 Réseaux sociaux & influenceurs — TikTok erea.jeu, 22 publiées du 29 oct. au 2 nov. [ok]
+- 🍎 **iOS** : 🐙 GitHub — main (dépôt privé), 1.0.8, checks au vert [ok] → ☁️ Xcode Cloud — build 215 réussi le 3 novembre [ok] → 🛍️ App Store Connect — 1.0.7 (build 210) approuvée le 31 octobre [ok] → 📱 App Store — 1.0.7 en ligne depuis le 31 octobre [ok]
+- 🤖 **Android** : 🐙 GitHub — main (dépôt privé), 1.0.8, checks au vert [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — production accordée le 17 octobre, 1.0.7 envoyée le 30 octobre [ok] → 🛒 Google Play — 1.0.7 en ligne (vérifié le 31 octobre) [ok]
+- 🌐 **Web** : 🐙 GitHub — racine de main, dépôt privé (constaté le 4 nov.) [bloquant] → 📄 Hébergement web (GitHub Pages / Cloudflare Pages) — GitHub Pages ne sert plus le dépôt [bloquant] → 🏷️ Nom de domaine — erea.toakeur.com via Cloudflare [ok] → 🌐 Site — 404 partout, confidentialité et app-ads.txt compris [bloquant]
+- 🎬 **Contenu** : 🎬 Studio — 38 pubs vidéo au Planning [ok] → 🗓️ Planning — 9 vidéos programmées du 4 au 6 nov. [ok] → 📣 Réseaux sociaux & influenceurs — TikTok erea.jeu, 29 publiées du 29 oct. au 3 nov. [ok]
 
 ## Vue d'ensemble
 
-- **Plateforme** : iOS 15+ (1.0.7 en ligne sur l'App Store depuis le 31 octobre 2026) · Android : 1.0.7 en ligne sur Google Play (vérifié le 31 octobre 2026 ; première version en ligne : 1.0.4, le 20 octobre) · site vitrine `erea.toakeur.com`
+- **Plateforme** : iOS 15+ (1.0.7 en ligne sur l'App Store depuis le 31 octobre 2026) · Android : 1.0.7 en ligne sur Google Play (vérifié le 31 octobre 2026 ; première version en ligne : 1.0.4, le 20 octobre) · site vitrine `erea.toakeur.com`, hors ligne (404 sur toutes les pages) depuis le passage du dépôt en privé (vérifié le 4 novembre 2026)
 - **Stack** : Flutter (Dart ≥ 3.6), version `1.0.8+9` dans le code, 185 tests, aucun serveur applicatif
 - **Backend** : aucun — tout l'état du joueur vit sur l'appareil (`shared_preferences`)
 - **Distribution** : App Store via Xcode Cloud · Play Store via App Bundle signé localement
@@ -44,7 +44,7 @@ appartenait à la 1.0.0.
 
 | | |
 |---|---|
-| Rôle | Hébergement du code, dépôt `teiki5320/erea` |
+| Rôle | Hébergement du code, dépôt `teiki5320/erea`, privé (constaté le 4 novembre 2026) |
 | Console | <https://github.com/teiki5320/erea> |
 | Compte propriétaire | `teiki5320` (connexion par le compte de gestion `admin@toakeur.com`) |
 | Coût | gratuit |
@@ -67,11 +67,11 @@ appartenait à la 1.0.0.
 | Coût | gratuit |
 
 **Identifiants publics :**
-- URL publique : `https://erea.toakeur.com/` — la vitrine de l'app, depuis le 7 octobre 2026.
+- URL publique : `https://erea.toakeur.com/` — la vitrine de l'app, depuis le 7 octobre 2026 ; hors ligne (404 sur toutes les pages) depuis le passage du dépôt en privé (vérifié le 4 novembre 2026). GitHub Pages ne sert pas un dépôt privé avec l'offre gratuite : le réglage Pages du dépôt est désactivé (vérifié le 4 novembre 2026), et `/`, `/app-ads.txt`, `/confidentialite.html`, `/support.html` et `/telecharger/` répondent 404.
 - Le jeu web jouable est sur `/jeu.html`, copie déployée de `index-v8.html`.
 - `/support.html` et `/confidentialite.html` : les deux URL exigées par l'App Store, contact `erea@toakeur.com`.
-- Site servi depuis la racine de `main` (fichier `.nojekyll` présent), redéployé à chaque poussée.
-- L'adresse `erea.toakeur.com` passe par Cloudflare, qui relaie GitHub Pages ; le dépôt ne contient pas de fichier `CNAME`. L'ancienne adresse `teiki5320.github.io/erea/` répond toujours (vérifié le 13 octobre 2026).
+- Site servi depuis la racine de `main` (fichier `.nojekyll` présent), redéployé à chaque poussée tant que le dépôt était public ; le dernier déploiement réussi date du 3 novembre 2026.
+- L'adresse `erea.toakeur.com` passe par Cloudflare, qui relaie GitHub Pages ; le dépôt ne contient pas de fichier `CNAME`. L'ancienne adresse `teiki5320.github.io/erea/` répond aussi 404 (vérifié le 4 novembre 2026).
 
 **Où vivent les secrets :** nulle part.
 
@@ -278,10 +278,12 @@ publics.
 Les quatre valeurs doivent appartenir au même compte, sinon la régie
 refuse de servir.
 
-**app-ads.txt** — publié le 30 octobre 2026 à la racine du dépôt, donc
+**app-ads.txt** — publié le 30 octobre 2026 à la racine du dépôt, et
 servi sur `https://erea.toakeur.com/app-ads.txt` (l'URL marketing de la
-fiche App Store). Une ligne : l'éditeur `pub-2680784147246798` en
-`DIRECT`. Jusque-là, l'adresse répondait 404.
+fiche App Store) jusqu'au passage du dépôt en privé. Une ligne : l'éditeur `pub-2680784147246798` en
+`DIRECT`. Avant le 30 octobre, l'adresse répondait 404 ; elle répond de
+nouveau 404 depuis le passage du dépôt en privé (vérifié le 4 novembre 2026) :
+AdMob ne peut plus le lire.
 
 **Consentement RGPD — message publié le 3 septembre 2026.** Jusqu'à
 cette date la console était vide, et le journal Android le disait sans
@@ -290,7 +292,8 @@ input app ID`. Aucune annonce n'aurait été servie en Europe. Le message
 « Erea — consentement RGPD » couvre les deux applications, s'affiche en
 français (anglais en secours), offre les trois boutons *Refuser*,
 *Autoriser* et *Gérer les options*, et renvoie à
-`https://erea.toakeur.com/confidentialite.html`. Côté code,
+`https://erea.toakeur.com/confidentialite.html` (404 depuis le passage du
+dépôt en privé, vérifié le 4 novembre 2026). Côté code,
 `lib/core/pub.dart` appelle le SDK UMP au démarrage et expose « Options
 de confidentialité » ; depuis la 1.0.4, la préparation de la régie attend
 vraiment la fermeture du formulaire. Formulaire vérifié sur le Pixel le
@@ -382,7 +385,7 @@ uniquement.
 Proposée après un PERFECT, un record ou trois défis d'affilée, une seule
 fois, jamais au lancement ; le système décide de l'affichage. Le même
 fichier fournit le lien de boutique ajouté aux grilles partagées : App
-Store sur iOS, Play Store sur Android depuis la 1.0.4. Au 3 novembre
+Store sur iOS, Play Store sur Android depuis la 1.0.4. Au 4 novembre
 2026, l'App Store compte 0 note.
 
 **Où vivent les secrets :** aucun.
@@ -418,13 +421,13 @@ Le mode guidé ne propose que des campagnes « Trafic » de 245 à 385 € par
 semaine. Jean a préféré booster les vidéos par « Promouvoir », dans
 l'application TikTok, avec quelques dizaines d'euros. Le lien de
 téléchargement à suivre par TikTok est
-`https://erea.toakeur.com/telecharger/?src=tiktok`. Sur un compte
+`https://erea.toakeur.com/telecharger/?src=tiktok` (404 depuis le passage du dépôt en privé, vérifié le 4 novembre 2026). Sur un compte
 personnel, TikTok n'affiche pas de lien dans la bio, et le compte
 Entreprise passe désormais par une vérification de l'entreprise, qui
 publie l'adresse sur le profil : ce choix attend la même décision que le
 DSA chez Apple. Les vidéos elles-mêmes sont publiées sans régie, par le
-Planning du Studio via Buffer : vingt-deux l'ont été en public
-sur « erea.jeu » du 29 octobre au 2 novembre 2026 (vérifié dans Buffer le 3 novembre 2026).
+Planning du Studio via Buffer : vingt-neuf l'ont été en public
+sur « erea.jeu » du 29 octobre au 3 novembre 2026 (vérifié dans Buffer le 4 novembre 2026).
 
 **Où vivent les secrets :** aucun ; la connexion se fait par un code
 envoyé à `admin@toakeur.com`.

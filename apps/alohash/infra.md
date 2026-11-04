@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 3 novembre 2026 (examen AdSense refusé le 31 octobre 2026, rien de nouveau au 3 novembre ; 43 articles « Conseils » en ligne ; sitemap de 260 adresses ; dernière publication le 3 novembre 2026) ; dernier scan complet du dépôt le 26 octobre 2026. Pour mettre à jour : relancer ce même prompt.
+Mis à jour le 4 novembre 2026 (examen AdSense refusé le 31 octobre 2026, rien de nouveau au 4 novembre ; 44 articles « Conseils » en ligne ; sitemap de 263 adresses ; dernière publication le 4 novembre 2026) ; dernier scan complet du dépôt le 26 octobre 2026. Pour mettre à jour : relancer ce même prompt.
 
 ## En bref
 
@@ -14,7 +14,7 @@ Mis à jour le 3 novembre 2026 (examen AdSense refusé le 31 octobre 2026, rien 
 ## Parcours
 
 - 🌐 **Web** : 🐙 GitHub — main · publication au vert [ok] → ☁️ Hébergement web — Cloudflare Pages, projet keurcook [ok] → 🔗 Nom de domaine — keurcook.com, SSL Cloudflare [ok] → 👥 Visiteurs — site ouvert au public [ok]
-- 📝 **Contenu** : 🐙 GitHub — 24 articles programmés [ok] → ⏰ GitHub Actions — publication lun., mer., ven. [ok] → 🌐 keurcook.com — 43 articles en ligne [ok] → ✍️ Réserve — vide le 28 décembre 2026 [à faire]
+- 📝 **Contenu** : 🐙 GitHub — 23 articles programmés [ok] → ⏰ GitHub Actions — publication lun., mer., ven. [ok] → 🌐 keurcook.com — 44 articles en ligne [ok] → ✍️ Réserve — vide le 28 décembre 2026 [à faire]
 - 🛒 **Affiliation** : 🌐 keurcook.com — boutons « Voir sur Amazon » [ok] → 🤝 Affiliation — Amazon Partenaires, tag keurcookfr-21 [ok] → 📦 Amazon.fr — Amazon encaisse et livre [ok]
 - 📰 **Veille actus** : 📡 Tâche de veille — 12 h et 19 h, 15 flux RSS [ok] → 🐙 Dépôt veille — actus/keurcook.json sur GitHub Pages [ok] → 🏗️ Build GitHub Actions — 12 h 50 et 19 h 50, une page /actus/<adresse> par article [ok] → 🌍 keurcook.com — accueil (4), /actus (20), pages pays (3), articles complets [ok]
 - 📢 **Publicité** : 🌐 keurcook.com — six emplacements « Publicité » [ok] → 💰 AdSense (publicité web) — examen refusé le 31 octobre, à corriger [bloquant]
@@ -92,7 +92,7 @@ Mis à jour le 3 novembre 2026 (examen AdSense refusé le 31 octobre 2026, rien 
 
 ## 7. AdSense (publicité web)
 
-- **Rôle** : annonces display Google sur six emplacements titrés « Publicité » (`src/components/ads/AdSlot.tsx`, `src/lib/ads.ts`) : au milieu et en fin de recette, au milieu et en fin d'article « Conseils », en fin d'article d'actu (depuis le 28 octobre 2026) et sur les pages pays ; un seul bloc d'annonces « Keur Cook » sert les six. Script `adsbygoogle.js` et balise `google-adsense-account` dans `src/app/layout.tsx`, fichier `public/ads.txt`. Le message de consentement de Google (Confidentialité et messages) gère les cookies publicitaires. Mis en place le 12 octobre 2026 (demande d'examen le même jour) ; examen refusé le 31 octobre 2026 : Google demande de corriger des problèmes sur le site avant d'y diffuser des annonces (e-mail AdSense du 31 octobre 2026, aucun nouvel e-mail au 3 novembre 2026 ; motif détaillé à lire dans la console, page Sites). Aucune annonce ne s'affiche.
+- **Rôle** : annonces display Google sur six emplacements titrés « Publicité » (`src/components/ads/AdSlot.tsx`, `src/lib/ads.ts`) : au milieu et en fin de recette, au milieu et en fin d'article « Conseils », en fin d'article d'actu (depuis le 28 octobre 2026) et sur les pages pays ; un seul bloc d'annonces « Keur Cook » sert les six. Script `adsbygoogle.js` et balise `google-adsense-account` dans `src/app/layout.tsx`, fichier `public/ads.txt`. Le message de consentement de Google (Confidentialité et messages) gère les cookies publicitaires. Mis en place le 12 octobre 2026 (demande d'examen le même jour) ; examen refusé le 31 octobre 2026 : Google demande de corriger des problèmes sur le site avant d'y diffuser des annonces (e-mail AdSense du 31 octobre 2026, aucun nouvel e-mail au 4 novembre 2026 ; motif détaillé à lire dans la console, page Sites). Aucune annonce ne s'affiche.
 - **Console** : https://adsense.google.com (compte `pub-2680784147246798`, géré avec `admin@toakeur.com`).
 - **Identifiants publics** : identifiant d'éditeur `ca-pub-…` et numéro de bloc d'annonces dans `src/lib/ads.ts` et `public/ads.txt` (publics par nature).
 - **Secrets** : aucun.

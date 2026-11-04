@@ -1,6 +1,6 @@
 # PUBLICATION — état de la mise en ligne
 
-> Généré le 21 octobre 2026, mis à jour le 3 novembre 2026. Aucun secret ici.
+> Généré le 21 octobre 2026, mis à jour le 4 novembre 2026. Aucun secret ici.
 
 ## En bref
 
@@ -29,12 +29,12 @@
 
 ## Web · Production
 
-- **État** : ✅ en ligne (réponse 200 constatée le 3 novembre 2026)
+- **État** : ✅ en ligne (réponse 200 constatée le 4 novembre 2026)
 - **URL** : https://www.kultiled.com/
 - **Hébergeur** : GitHub Pages, publication automatique à chaque envoi sur `main` et chaque lundi, mercredi et vendredi pour les articles programmés, et chaque jour à 11 h 50 et 18 h 50 UTC pour les articles d'actus depuis le 28 octobre 2026 (`.github/workflows/pages.yml` : tests unitaires, build, test de bout en bout, puis mise en ligne ; depuis le 28 octobre 2026, la publication vérifie que www.kultiled.com sert la nouvelle version, via `version.txt`, et échoue sinon). Aucune action manuelle.
 - **Anciennes adresses** : https://teiki5320.github.io/optiled/ et `kultiled.com` redirigent vers `www.kultiled.com` (301) ; `www.optiled.fr`, abandonné le 16 octobre 2026, affichait encore le 3 novembre 2026 une page « Kultiled a déménagé » vers le nouveau domaine (dépôt `teiki5320/optiled-redirection`).
-- **Dernière mise en production** : 3 novembre 2026, publication réussie (vérification quotidienne des lampes, 15 lampes toujours disponibles) ; le 2 novembre 2026, le conseil « Moisissure blanche sur la terre : est-ce grave ? » avait été publié ; le 31 octobre 2026, les fiches des cultures avaient commencé à afficher dès la construction les articles d'actus qui les concernent et la ViparSpectra Pro P1000 avait été retirée ; le 30 octobre 2026, le conseil « Pourquoi mes semis ne lèvent-ils pas ? » avait été publié ; le 29 octobre 2026, le conseil « PAR et PPFD » avait été ajouté hors programme ; les pages « Top 10 » ont été mises en ligne le 19 octobre 2026 ; le 16 octobre, le site est devenu Kultiled (nom, logo, contact) et a changé de domaine.
-- **Articles de conseil** : 44 en ligne (dont « PAR et PPFD », ajouté hors programme le 29 octobre 2026, « Pourquoi mes semis ne lèvent-ils pas ? », publié le 30 octobre 2026, et « Moisissure blanche sur la terre : est-ce grave ? », publié le 2 novembre 2026), 31 programmés jusqu'au 7 juin 2027 (le prochain le 4 novembre 2026), au 2 novembre 2026.
+- **Dernière mise en production** : 4 novembre 2026, publication réussie (vérification quotidienne des lampes, 15 lampes toujours disponibles) ; dans la nuit du 3 au 4 novembre 2026, le conseil « Billes d'argile, laine de roche, coco : quel substrat hydroponique ? » a été publié ; le 2 novembre 2026, le conseil « Moisissure blanche sur la terre : est-ce grave ? » avait été publié ; le 31 octobre 2026, les fiches des cultures avaient commencé à afficher dès la construction les articles d'actus qui les concernent et la ViparSpectra Pro P1000 avait été retirée ; le 30 octobre 2026, le conseil « Pourquoi mes semis ne lèvent-ils pas ? » avait été publié ; le 29 octobre 2026, le conseil « PAR et PPFD » avait été ajouté hors programme ; les pages « Top 10 » ont été mises en ligne le 19 octobre 2026 ; le 16 octobre, le site est devenu Kultiled (nom, logo, contact) et a changé de domaine.
+- **Articles de conseil** : 45 en ligne (dont « PAR et PPFD », ajouté hors programme le 29 octobre 2026, « Pourquoi mes semis ne lèvent-ils pas ? », publié le 30 octobre 2026, « Moisissure blanche sur la terre : est-ce grave ? », publié le 2 novembre 2026, et « Billes d'argile, laine de roche, coco : quel substrat hydroponique ? », publié le 4 novembre 2026), 30 programmés jusqu'au 7 juin 2027 (le prochain le 6 novembre 2026), au 4 novembre 2026 (sitemap vérifié le 4 novembre 2026).
 - **Contact affiché** : `kultiled@toakeur.com` (mentions légales et « À propos »).
 
 ## Domaine & SSL
@@ -48,7 +48,7 @@
 
 ## Visibilité
 
-- **Référencement** : sitemap (`sitemap.xml`, 102 adresses le 27 octobre 2026 avec la nouvelle page Actus ; 107 le 28 octobre 2026 avec les 4 premières pages d'articles d'actus `actus/<slug>/` et le 41e conseil, puis 106 le même jour après le retrait de la fiche du chanvre, qui répond désormais 404 ; 107 le 29 octobre 2026 avec le 42e conseil ; 112 le 30 octobre 2026 avec le 43e conseil et 8 pages d'articles d'actus ; 116 le 31 octobre 2026 avec 12 pages d'articles d'actus ; 119 le 2 novembre 2026 avec le 44e conseil et 14 pages d'articles d'actus ; 123 le 3 novembre 2026 avec 18 pages d'articles d'actus ; nombre qui grandit avec la veille) et `robots.txt` générés au build, adresses canoniques, balises Open Graph et Twitter Card avec une image de partage par page, données structurées schema.org sur toutes les pages.
+- **Référencement** : sitemap (`sitemap.xml`, 102 adresses le 27 octobre 2026 avec la nouvelle page Actus ; 107 le 28 octobre 2026 avec les 4 premières pages d'articles d'actus `actus/<slug>/` et le 41e conseil, puis 106 le même jour après le retrait de la fiche du chanvre, qui répond désormais 404 ; 107 le 29 octobre 2026 avec le 42e conseil ; 112 le 30 octobre 2026 avec le 43e conseil et 8 pages d'articles d'actus ; 116 le 31 octobre 2026 avec 12 pages d'articles d'actus ; 119 le 2 novembre 2026 avec le 44e conseil et 14 pages d'articles d'actus ; 123 le 3 novembre 2026 avec 18 pages d'articles d'actus ; 126 le 4 novembre 2026 avec le 45e conseil et 20 pages d'articles d'actus ; nombre qui grandit avec la veille) et `robots.txt` générés au build, adresses canoniques, balises Open Graph et Twitter Card avec une image de partage par page, données structurées schema.org sur toutes les pages.
 - **Google Search Console** : `kultiled.com` ajouté le 16 octobre 2026, comme dans Bing Webmaster Tools ; l'ancienne propriété `optiled.fr` y avait été vérifiée avant le changement de domaine ; le changement d'adresse vers kultiled.com n'y est pas encore signalé au 2 novembre 2026 (bouton « Valider et informer Google » toujours proposé, vérifié ce jour-là).
 - **Pages indexées** : 98 pages de kultiled.com dans l'index, 3 détectées et 2 explorées pas encore indexées, le reste en redirections ou doublons voulus (Search Console, vérifié le 31 octobre 2026) ; l'ancien `optiled.fr` en avait 62 sur 86 au 12 octobre 2026.
 - **IndexNow** : pages signalées à Bing et aux autres moteurs après chaque publication réussie (depuis le 28 octobre 2026) et chaque lundi (passage du lundi réussi le 2 novembre 2026).

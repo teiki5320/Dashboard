@@ -1,6 +1,6 @@
 # PUBLICATION — état des boutiques
 
-> Mis à jour le 3 novembre 2026 d'après l'App Store, la fiche publique
+> Mis à jour le 4 novembre 2026 d'après l'App Store, la fiche publique
 > Google Play et l'historique du dépôt ; ce que seules les consoles savent
 > est marqué « à vérifier dans la console ». Une ligne par système d'exploitation, dans un format
 > réutilisable d'une application à l'autre. Pour mettre à jour :
@@ -14,8 +14,8 @@
 - **Version commune** : **`1.0.7`** sur les deux boutiques — App Store : build 210, en ligne depuis le 31 octobre 2026 (15 h 05) · Google Play : `versionCode 8`, en ligne (vérifié le 31 octobre 2026) ; `1.0.8+9` dans le code depuis le 1er novembre
 - **Identifiant de bundle** : `com.teiki.erea`, identique sur iOS et Android
 - **Monétisation** : pub AdMob + achat unique « Erea sans publicité », 3,99 €
-- **Confidentialité** : six types déclarés (SDK AdMob), consentement RGPD et ATT
-- **Contact** : `erea@toakeur.com` · site `erea.toakeur.com`
+- **Confidentialité** : six types déclarés (SDK AdMob), consentement RGPD et ATT ; page `/confidentialite.html` en 404 (4 nov.)
+- **Contact** : `erea@toakeur.com` · site `erea.toakeur.com`, 404 depuis le dépôt passé en privé (4 nov.)
 
 ## Boutiques
 
@@ -37,7 +37,7 @@
 - **Identifiant** : `com.teiki.erea`, identique sur les deux plateformes
 - **Achat intégré** : `com.teiki.erea.sanspub` « Erea sans publicité », 3,99 €, non consommable — **approuvé** sur l'App Store, **actif** sur Google Play
 - **Monétisation** : interstitielle AdMob une partie sur deux, consentement RGPD publié le 3 septembre 2026
-- **Web** : vitrine `https://erea.toakeur.com/` en ligne, contact `erea@toakeur.com`
+- **Web** : vitrine `https://erea.toakeur.com/` hors ligne (404 sur toutes les pages) depuis le passage du dépôt en privé (vérifié le 4 novembre 2026), contact `erea@toakeur.com`
 
 La 1.0.4 a été mise en ligne sur l'App Store le 15 octobre, avec le nom
 long et les captures légendées, après deux builds refusés à l'import pour
@@ -58,11 +58,11 @@ et sur l'App Store depuis le 31 octobre 2026 à 15 h 05.
 | Console | <https://appstoreconnect.apple.com> |
 | Fiche publique | identifiant App Store `6794918301` |
 | Version publiée | `1.0.7`, build `210`, en ligne depuis le 31 octobre 2026 à 15 h 05 — remplace la `1.0.5` (build `195`), mise en ligne le 21 octobre 2026 à 17 h 44, qui remplaçait la `1.0.4` (build `182`), mise en ligne le 15 octobre 2026 à 14 h 01, qui remplaçait la `1.0.2` (build `150`) du 8 septembre, qui remplaçait la `1.0.0` du 3 septembre |
-| Dernier build connu | `214` (`1.0.8`), réussi sur Xcode Cloud le 2 novembre 2026 au matin, après le `213` (`1.0.8`) du 1er novembre ; avant eux, le `212` (`1.0.7`), réussi le 31 octobre 2026 au matin, avant l'approbation (après le `211` du 30 octobre) ; ils restent sur TestFlight, le `210` est celui en ligne ; les builds 1.0.6 (`204`, `205`, `207`, du 27 au 29 octobre 2026) sont restés sur TestFlight : aucune 1.0.6 soumise sur l'App Store ; le `196` (1.0.5, refusé après l'approbation) a imposé le passage du code en 1.0.6, comme le `187` (1.0.4, refusé par ITMS-90186 au lendemain de l'approbation) avait imposé le passage en 1.0.5 |
+| Dernier build connu | `215` (`1.0.8`), réussi sur Xcode Cloud le 3 novembre 2026 au matin, après le `214` (`1.0.8`) du 2 novembre et le `213` (`1.0.8`) du 1er novembre ; avant eux, le `212` (`1.0.7`), réussi le 31 octobre 2026 au matin, avant l'approbation (après le `211` du 30 octobre) ; ils restent sur TestFlight, le `210` est celui en ligne ; les builds 1.0.6 (`204`, `205`, `207`, du 27 au 29 octobre 2026) sont restés sur TestFlight : aucune 1.0.6 soumise sur l'App Store ; le `196` (1.0.5, refusé après l'approbation) a imposé le passage du code en 1.0.6, comme le `187` (1.0.4, refusé par ITMS-90186 au lendemain de l'approbation) avait imposé le passage en 1.0.5 |
 | Dernière soumission | `1.0.7`, build `210`, envoyée le 30 octobre 2026 à 19 h 04, arrêtée le 31 octobre à 9 h 02 par l'examen automatique (case « Publicité » de la classification par âge non cochée), renvoyée à 11 h 03, **approuvée à 15 h 04** (fiche publique `https://apps.apple.com/fr/app/erea-quiz-dhistoire-frise/id6794918301`) ; publication automatique, notes App Review du §0 de `APP_REVIEW.md` |
 | Soumission précédente | `1.0.5`, build `195`, envoyée le 21 octobre 2026 à 15 h 11, approuvée et mise en ligne à 17 h 44 |
 | Soumission plus ancienne | `1.0.4`, build `182`, le 15 octobre 2026 à 12 h 51, approuvée le jour même — les builds `176` et `180` ont été refusés à l'import (ITMS-91064) : le validateur n'accepte ni « suivi à vrai, liste de domaines vide » ni « suivi à vrai, sans clé » ; le 182 porte « suivi à faux, sans clé » (commit 6e981b6) ; nom « Erea : Quiz d'histoire & frise », mots-clés sans « quiz/frise/histoire » (déjà dans le nom), captures iPhone légendées écran moyen et grand écran (iPad : celles d'août), adresses passées sur `erea.toakeur.com` (assistance, site, confidentialité), notes App Review réécrites (AdMob, consentement, achat intégré) |
-| Notes / avis | 0 note au 3 novembre 2026 |
+| Notes / avis | 0 note au 4 novembre 2026 |
 | Achat intégré | `com.teiki.erea.sanspub` « Erea sans publicité », non consommable, **approuvé** le 8 septembre avec la 1.0.2 |
 | Distribution | Xcode Cloud, action *Archiver*, préparation **App Store Connect** |
 
@@ -157,8 +157,8 @@ Google Play répond (vérifié le 31 octobre 2026).
 
 | | |
 |---|---|
-| Production | `https://erea.toakeur.com/` — vitrine, jeu web sur `/jeu.html`, `/support.html`, `/confidentialite.html` ; répond le 3 novembre 2026 |
-| Domaine & SSL | sous-domaine de `toakeur.com` depuis le 7 octobre 2026, servi par GitHub Pages derrière Cloudflare, HTTPS valide ; l'ancienne adresse `teiki5320.github.io/erea/` répond toujours |
+| Production | `https://erea.toakeur.com/` — vitrine, jeu web sur `/jeu.html`, `/support.html`, `/confidentialite.html`, `/app-ads.txt`, `/telecharger/` ; hors ligne (404 sur toutes les pages) depuis le passage du dépôt en privé (vérifié le 4 novembre 2026) ; le site répondait encore le 3 novembre 2026 |
+| Domaine & SSL | sous-domaine de `toakeur.com` depuis le 7 octobre 2026, servi par GitHub Pages derrière Cloudflare, HTTPS valide côté Cloudflare ; GitHub Pages ne sert plus le dépôt devenu privé (réglage Pages désactivé, vérifié le 4 novembre 2026) ; l'ancienne adresse `teiki5320.github.io/erea/` répond aussi 404 |
 | Visibilité | Smart App Banner (`app-id=6794918301`) sur les pages ; badge officiel « Télécharger dans l'App Store » vers `https://apps.apple.com/fr/app/erea/id6794918301` depuis le 12 octobre 2026 ; badge officiel Google Play à côté depuis le 21 octobre 2026 ; page d'aiguillage `https://erea.toakeur.com/telecharger/` depuis le 15 octobre 2026 (iPhone et iPad vers l'App Store, Android vers Google Play depuis le 21 octobre 2026 (`PLAY_OUVERT` à vrai), `?src=` relayé aux boutiques) |
 
 ---
@@ -170,13 +170,14 @@ Google Play répond (vérifié le 31 octobre 2026).
 3. ✅ **Google Play** : la 1.0.4 a été mise en production le 20 octobre 2026 à 16 h 07 (notes de version : « Bienvenue dans Erea ! »).
 4. ✅ **App Review de la 1.0.4** : approuvée et en ligne le 15 octobre 2026, le jour de l'envoi.
 5. ✅ **Site et page d'aiguillage** passés sur Google Play le 21 octobre 2026 : badge sur la vitrine, `PLAY_OUVERT` à `true`.
-6. **Booster la pub TikTok** (« Promouvoir ») vers `https://erea.toakeur.com/telecharger/?src=tiktok` : 22 vidéos publiées sur « erea.jeu » du 29 octobre au 2 novembre 2026, 12 programmées jusqu'au 6 novembre (vérifié dans Buffer et le Planning le 3 novembre), sans promotion payante.
-7. ✅ **1.0.5** mise en ligne sur les deux boutiques le 21 octobre 2026 (Google Play 15 h 30, App Store 17 h 44). La **1.0.6** (R8, Android seul) a été mise en ligne sur Google Play le 22 octobre 2026.
-8. **DSA** : Jean a demandé le passage du compte Apple en compte organisation (octobre 2026) ; Apple a répondu le 23 octobre 2026 (dossier 102996469704) pour lancer la migration ; Jean lui a répondu le 29 octobre 2026 pour la lancer : c'est maintenant Apple qui a la main ; Jean l'a relancé le 2 novembre 2026 (pas de réponse au 3 novembre 2026). « TOA CORP » n'est que le nom affiché du compte ; se déclarer trader une fois le compte converti et le complément d'adresse nettoyé.
-9. ✅ **1.0.7 en ligne sur les deux boutiques** : envoyée le 30 octobre 2026 au soir, en ligne sur Google Play (vérifié le 31 octobre 2026) et sur l'App Store depuis le 31 octobre 2026 à 15 h 05 ; le code est passé en 1.0.8 le 1er novembre.
-10. **1.0.8** : centrer la pastille de série au-dessus du logo, puis l'envoyer aux deux boutiques.
-11. **app-ads.txt** : publié le 30 octobre 2026 à la racine du site (`erea.toakeur.com/app-ads.txt`) ; dans AdMob → Applications → Erea, lancer « Rechercher les mises à jour » et vérifier que l'état passe à « Validé ».
-12. **Élucider les builds Xcode Cloud 141 et 142** : échoués le 4 septembre sur des commits de documentation.
+6. **Remettre le site en ligne** : `erea.toakeur.com` répond 404 sur toutes ses pages depuis le passage du dépôt en privé (vérifié le 4 novembre 2026), y compris `/confidentialite.html` (exigée par les deux boutiques), `/support.html`, `/app-ads.txt` (AdMob) et `/telecharger/`.
+7. **Booster la pub TikTok** (« Promouvoir ») vers `https://erea.toakeur.com/telecharger/?src=tiktok`, une fois le site revenu : 29 vidéos publiées sur « erea.jeu » du 29 octobre au 3 novembre 2026, 9 programmées jusqu'au 6 novembre (vérifié dans Buffer et le Planning le 4 novembre), sans promotion payante.
+8. ✅ **1.0.5** mise en ligne sur les deux boutiques le 21 octobre 2026 (Google Play 15 h 30, App Store 17 h 44). La **1.0.6** (R8, Android seul) a été mise en ligne sur Google Play le 22 octobre 2026.
+9. **DSA** : Jean a demandé le passage du compte Apple en compte organisation (octobre 2026) ; Apple a répondu le 23 octobre 2026 (dossier 102996469704) pour lancer la migration ; Jean lui a répondu le 29 octobre 2026 pour la lancer : c'est maintenant Apple qui a la main ; Jean l'a relancé le 2 novembre 2026 (pas de réponse au 4 novembre 2026). « TOA CORP » n'est que le nom affiché du compte ; se déclarer trader une fois le compte converti et le complément d'adresse nettoyé.
+10. ✅ **1.0.7 en ligne sur les deux boutiques** : envoyée le 30 octobre 2026 au soir, en ligne sur Google Play (vérifié le 31 octobre 2026) et sur l'App Store depuis le 31 octobre 2026 à 15 h 05 ; le code est passé en 1.0.8 le 1er novembre.
+11. **1.0.8** : centrer la pastille de série au-dessus du logo, puis l'envoyer aux deux boutiques.
+12. **app-ads.txt** : publié le 30 octobre 2026 à la racine du site (`erea.toakeur.com/app-ads.txt`), en 404 depuis le passage du dépôt en privé (vérifié le 4 novembre 2026) ; une fois le site revenu, dans AdMob → Applications → Erea, lancer « Rechercher les mises à jour » et vérifier que l'état passe à « Validé ».
+13. **Élucider les builds Xcode Cloud 141 et 142** : échoués le 4 septembre sur des commits de documentation.
 
 ---
 

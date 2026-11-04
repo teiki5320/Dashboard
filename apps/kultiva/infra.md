@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 3 novembre 2026 d'après le dépôt et le site en ligne. Pour mettre à jour : relancer ce même prompt.
+Mis à jour le 4 novembre 2026 d'après le dépôt et le site en ligne. Pour mettre à jour : relancer ce même prompt.
 
 > Aucun secret, clé ni jeton dans ce fichier — uniquement des références
 > (nom de variable, endroit où le secret vit, lien vers la console).
@@ -11,16 +11,16 @@ Mis à jour le 3 novembre 2026 d'après le dépôt et le site en ligne. Pour met
 - **Stack** : Flutter/Dart Material 3, local-first, hors ligne
 - **Backend** : **aucun** — l'app ne contacte plus aucun serveur
 - **Distribution** : Xcode Cloud + App Bundle signé — jamais soumise
-- **Site** : kultiva.toakeur.com sur GitHub Pages, derrière Cloudflare
+- **Site** : kultiva.toakeur.com — GitHub Pages derrière Cloudflare, hors ligne depuis le passage du dépôt en privé (404, vérifié le 4 novembre 2026)
 - **IA et outils** : météo Open-Meteo, Sentry, aucune IA
 - **Affiliation** : Amazon Partenaires, tag `kultiva1-21`, France seulement — liens dans l'appli seulement, le site n'en porte aucun (c'est normal)
 
 ## Parcours
 
-- 🍎 **iOS** : 🐙 GitHub — main · CI au vert [ok] → ☁️ Xcode Cloud — build 195 réussi le 3/11, en TestFlight [ok] → 🛍️ App Store Connect — fiche créée, à compléter [à faire] → 📱 App Store — pas publiée [pas encore]
-- 🤖 **Android** : 🐙 GitHub — CI construit l'App Bundle [ok] → 🔑 Keystore Android — clé locale, valable 2053 [ok] → 🛍️ Google Play Console — fiche à créer [à faire] → 📱 Google Play — pas publiée [pas encore]
+- 🍎 **iOS** : 🐙 GitHub — main · CI au vert [ok] → ☁️ Xcode Cloud — build 220 réussi le 3/11, en TestFlight [ok] → 🛍️ App Store Connect — fiche à compléter, captures prises [à faire] → 📱 App Store — pas publiée [pas encore]
+- 🤖 **Android** : 🐙 GitHub — CI construit l'App Bundle [ok] → 🔑 Keystore Android — clé locale, valable 2053 [ok] → 🛍️ Google Play Console — compte Toa (personnel), captures, bannière et bundle prêts, fiche en cours de création [en cours] → 📱 Google Play — pas publiée [pas encore]
 - 🛒 **Affiliation** : 🥕 Fiche légume — bouton « Acheter » [ok] → 🛒 Amazon Partenaires (affiliation) — tag kultiva1-21 [ok] → 📱 Utilisateurs — app pas publiée [pas encore]
-- 🌐 **Web** : 🐙 GitHub — dossier landing/ [ok] → 📄 GitHub Pages — publié par site.yml [ok] → 🌐 Nom de domaine — kultiva.toakeur.com, HTTPS [ok] → ⬇️ Boutons « Télécharger » — encore sans lien [pas encore]
+- 🌐 **Web** : 🐙 GitHub — dossier landing/ [ok] → 📄 GitHub Pages — désactivé, dépôt passé en privé [bloquant] → 🌐 Nom de domaine — kultiva.toakeur.com répond 404 [bloquant] → ⬇️ Boutons « Télécharger » — encore sans lien [pas encore]
 
 ## Vue d'ensemble
 
@@ -28,8 +28,8 @@ Mis à jour le 3 novembre 2026 d'après le dépôt et le site en ligne. Pour met
 - **Plateforme** : iOS + Android (Flutter ≥ 3.47), iPhone en portrait, iPad dans les quatre sens depuis le 30 octobre 2026 — app `com.toa.kultiva`, v1.0.0+5. ⚠️ L'app a été **regardée sur un iPad Pro 13″ le 3 novembre 2026**, pour la première fois : le contenu y est désormais borné et centré (720 points, 560 pour le tableau de bord et les feuilles modales), sauf le catalogue, dont la grille profite volontairement de la largeur.
 - **Stack** : Flutter/Dart Material 3, local-first (SharedPreferences + services singletons, `ValueNotifier`, sans framework d'état)
 - **Backend** : **aucun depuis le 30 octobre 2026.** Les comptes ont été retirés de la v1 : le jardin, les photos et les badges vivent uniquement sur l'appareil. Les seuls appels sortants sont Open-Meteo (météo), Sentry (plantages) et, au toucher d'un bouton « Acheter », Amazon.fr.
-- **Distribution** : App Store via Xcode Cloud + Play Store (AAB signé) — jamais soumise (un script local `update-testflight.command` construit aussi l'IPA à envoyer par Transporter), textes des fiches prêts (`docs/store-listings.md`)
-- **Site** : <https://kultiva.toakeur.com> (présentation + confidentialité), en ligne depuis le 7 octobre 2026 (vérifié le 3 novembre 2026)
+- **Distribution** : App Store via Xcode Cloud + Play Store (AAB signé) — jamais soumise (un script local `update-testflight.command` construit aussi l'IPA à envoyer par Transporter), textes des fiches prêts (`docs/store-listings.md`, et `docs/FICHE_PLAY.md` pour la console Play)
+- **Site** : <https://kultiva.toakeur.com> (présentation + confidentialité) — **en ligne**, vérifié le 4 novembre 2026. Coupé du 3 au 4 novembre : passer le dépôt en privé ne suspend pas GitHub Pages, il **supprime** le site. Dépôt repassé en public, site recréé, et le domaine fixé dans `landing/CNAME` pour qu'il survive à l'opération.
 - **Marchés** : **73 pays sur six continents** depuis le 1er novembre 2026, France en priorité. Deux bases de calendrier (tempérée, tropicale), **neuf** zones climatiques depuis le 2 novembre 2026 — la neuvième, « tropical à hiver frais », couvre le nord de l'Inde et du Viêt Nam, seule zone tropicale où poussent chou et carotte — et un décalage de six mois pour l'hémisphère sud. Tout ce qui est climatique (saisons, seuil de canicule, médailles, alerte premières pluies) lit la zone et non la région depuis cette date. Détection automatique du pays et de la sous-zone, recherche dans le sélecteur. Les 8 pays francophones d'Afrique de l'Ouest gardent seuls leur contenu propre (noms locaux, achat au marché). Les calendriers méditerranéen, continental **et subtropical** sont **écrits culture par culture** (52, 53 et 58 depuis le 3 novembre 2026) ; les autres zones tempérées restent dérivées de la base française par décalage, et l'app l'indique sous chaque calendrier concerné. ⚠️ Passe de vérification du 2 novembre 2026 : **la base de calendrier suit désormais la zone climatique et non le pays** — São Paulo recevait un calendrier tropical, Darwin un calendrier français retourné — et **cinq zones ont été corrigées** (Croatie en continental, Égypte en méditerranéen, Nouvelle-Calédonie en tropical, Afrique du Sud et Australie en subtropical). Le détail et ce qui reste approximatif sont dans la fiche de couverture `https://claude.ai/artifact/Dpxa9TsY3QQ4Au3L56cLgF`.
 - **Langues** : français (source), **anglais complet** depuis le 2 novembre 2026, **espagnol complet** le même jour. **Toute l'application est traduite dans les trois langues depuis le 2 novembre 2026 — 4 894 chaînes par langue** : 736 recettes, 33 tutos (1 267 phrases), 1 943 phrases de contenu (maladies, lexique, badges, défis, modes d'emploi des 39 accessoires, et **les textes des 169 fiches du catalogue**), 779 chaînes d'interface (`ui_en.dart`, `ui_es.dart`) et 169 noms de cultures et d'accessoires. ⚠️ Les fiches du catalogue — note, description et neuf champs techniques — n'étaient pas traduites du tout avant cette date : 1 032 chaînes en français sous une interface anglaise ou espagnole, trouvées en regardant l'écran et non le code. Les mois, les jours et les 73 noms de pays passent par des tables indexées et non par le dictionnaire, parce qu'une clé « juin » ne peut pas rendre à la fois « jun » et « june ». Les 33 clés ARB orphelines ont été retirées ; il en reste 7, celles qui servent vraiment. Tout passe par une surcouche par langue (`recipes_{en,es}.dart`, `tutos_{en,es}.dart`, `content_{en,es}.dart`) ; le français reste la source de vérité et sert de repli champ par champ. Les tutos restent **un seul fichier par tuto**, jamais dupliqué par langue : le dictionnaire est appliqué dans le DOM au chargement, et le français du fichier reste la source. Quatre suites de tests (recettes, tutos, contenu, interface) vérifient qu'aucune clé n'est orpheline, qu'aucune langue n'est à moitié traduite, et que les nombres des conseils sanitaires ne bougent pas. Voir `docs/traduction-recettes.md`.
 - **Particularités** : météo Open-Meteo sans clé d'API, notifications locales uniquement, tutos, recettes animées et contenu 100 % hors ligne (aucun CDN, aucune police distante)
@@ -41,7 +41,7 @@ Mis à jour le 3 novembre 2026 d'après le dépôt et le site en ligne. Pour met
 ### 1. GitHub
 
 - **Rôle** : dépôt du code + CI GitHub Actions — `ci.yml` (analyze + tests + builds Android AAB/APK) et `site.yml` (publication du dossier `landing/`, voir plus bas). Le workflow `sync-catalog.yml`, qui exportait le catalogue vers Kultivaprix, a été supprimé le 30 octobre 2026 : les deux projets n'ont plus de lien.
-- **Console** : <https://github.com/teiki5320/Kultiva> (branche par défaut : `main`)
+- **Console** : <https://github.com/teiki5320/Kultiva> (branche par défaut : `main`) — dépôt **privé** (constaté le 4 novembre 2026) : l'adresse répond 404 hors connexion, c'est normal.
 - **Identifiants publics** : —
 - **Secrets** : aucun secret de CI n'est plus nécessaire. `KULTIVA_SEED_SECRET` ne sert plus depuis le retrait de la sync Kultivaprix (30 octobre 2026) et peut être supprimé dans repo → Settings → Secrets → Actions.
 - **Coût** : gratuit.
@@ -66,7 +66,7 @@ Mis à jour le 3 novembre 2026 d'après le dépôt et le site en ligne. Pour met
 
 - **Rôle** : fiche App Store, TestFlight, soumission à la review. Textes prêts à coller dans `docs/FICHE_APP_STORE.md` et `docs/store-listings.md`.
 - **Console** : <https://appstoreconnect.apple.com>
-- **État** : la fiche existe (App Apple ID `6762550020`) et reçoit les builds de Xcode Cloud — le dernier, le build 195, est disponible en TestFlight depuis la nuit du 2 au 3 novembre 2026 (vérifié le 3 novembre 2026 dans les mails d'Apple) ; aucune soumission à la review.
+- **État** : la fiche existe (App Apple ID `6762550020`) et reçoit les builds de Xcode Cloud — le dernier, le build 220, est disponible en TestFlight depuis le 3 novembre 2026 au soir (vérifié le 4 novembre 2026 dans les mails d'Apple) ; auparavant, le build 195 était arrivé dans la nuit du 2 au 3 novembre 2026 ; aucune soumission à la review.
 - **Identifiants publics** : bundle `com.toa.kultiva`, App Apple ID `6762550020`, version 1.0.0 (build 5 dans `pubspec.yaml`, numéros de build Xcode Cloud à part). Conformité chiffrement déclarée dans l'`Info.plist` (`ITSAppUsesNonExemptEncryption = false`).
 - **Secrets** : — (accès via le compte Apple Developer).
 - **Coût** : inclus dans l'adhésion Apple Developer.
@@ -74,7 +74,7 @@ Mis à jour le 3 novembre 2026 d'après le dépôt et le site en ligne. Pour met
 ### 5. Xcode Cloud
 
 - **Rôle** : CI iOS — build automatique via `ios/ci_scripts/ci_post_clone.sh` (Flutter épinglé 3.47.3 depuis le 30 octobre 2026, auparavant 3.41.6 ; SPM désactivé, `flutter analyze` puis `--config-only` avant `pod install`). Cible minimale iOS 15.0 pour l'appli et tous les pods (`ios/Podfile`) depuis le 25 octobre 2026 ; avant : 13.0.
-- **État** : le **build 195 a réussi dans la nuit du 2 au 3 novembre 2026** (2 novembre, 23 h 55 UTC) et est disponible en TestFlight (vérifié le 3 novembre 2026 dans les mails d'Apple) ; tous les builds du 2 novembre 2026, du 166 au 195, ont réussi. Le build 166 avait réussi le 2 novembre 2026 au matin. Le build 165 avait échoué le 1er novembre 2026 au soir dans `ci_post_clone.sh` (code de sortie 1, sur un envoi qui ne touchait que la documentation) ; le 166, lancé ensuite, est passé. Les autres builds du 1er novembre 2026 (dont le 152 et le 164) avaient réussi, comme ceux depuis le 31 octobre 2026 (dont le 134) aussi ; le build 127 avait réussi le 30 octobre 2026. Les builds 122 et 125 avaient échoué le même soir sur « Command PhaseScriptExecution failed », sans que le rapport dise pourquoi : le script de post-clone installait encore Flutter 3.41.6, où `pdf_service.dart` ne compile plus. Pin relevé à 3.47.3, et `flutter analyze` ajouté au post-clone pour que ce genre d'échec s'affiche en clair. Avant cela, les builds 95 et 96 avaient réussi le 25 octobre 2026 et le build 97 le 27 octobre 2026, chacun avec l'étape « TestFlight internes - iOS » (vérifié le 28 octobre 2026). Jusqu'au 30 octobre 2026, Apple signalait à chaque envoi l'avertissement ITMS-90683 (clé `NSLocationAlwaysAndWhenInUseUsageDescription` absente de `ios/Runner/Info.plist`) ; la clé a été ajoutée le 30 octobre 2026. Le build 94 avait échoué le 24 octobre 2026 (Sentry et d'autres pods visaient une version d'iOS trop basse), corrigé le 25 octobre.
+- **État** : le **build 220 a réussi le 3 novembre 2026 au soir** (23 h 42 UTC) et est disponible en TestFlight (vérifié le 4 novembre 2026 dans les mails d'Apple) ; aucun mail d'échec depuis. Le build 195 avait réussi dans la nuit du 2 au 3 novembre 2026 (2 novembre, 23 h 55 UTC) ; tous les builds du 2 novembre 2026, du 166 au 195, ont réussi. Le build 166 avait réussi le 2 novembre 2026 au matin. Le build 165 avait échoué le 1er novembre 2026 au soir dans `ci_post_clone.sh` (code de sortie 1, sur un envoi qui ne touchait que la documentation) ; le 166, lancé ensuite, est passé. Les autres builds du 1er novembre 2026 (dont le 152 et le 164) avaient réussi, comme ceux depuis le 31 octobre 2026 (dont le 134) aussi ; le build 127 avait réussi le 30 octobre 2026. Les builds 122 et 125 avaient échoué le même soir sur « Command PhaseScriptExecution failed », sans que le rapport dise pourquoi : le script de post-clone installait encore Flutter 3.41.6, où `pdf_service.dart` ne compile plus. Pin relevé à 3.47.3, et `flutter analyze` ajouté au post-clone pour que ce genre d'échec s'affiche en clair. Avant cela, les builds 95 et 96 avaient réussi le 25 octobre 2026 et le build 97 le 27 octobre 2026, chacun avec l'étape « TestFlight internes - iOS » (vérifié le 28 octobre 2026). Jusqu'au 30 octobre 2026, Apple signalait à chaque envoi l'avertissement ITMS-90683 (clé `NSLocationAlwaysAndWhenInUseUsageDescription` absente de `ios/Runner/Info.plist`) ; la clé a été ajoutée le 30 octobre 2026. Le build 94 avait échoué le 24 octobre 2026 (Sentry et d'autres pods visaient une version d'iOS trop basse), corrigé le 25 octobre.
 - **Console** : App Store Connect → onglet Xcode Cloud.
 - **Identifiants publics** : —
 - **Secrets** : aucun secret dans le dépôt (signature gérée par Apple).
@@ -84,8 +84,9 @@ Mis à jour le 3 novembre 2026 d'après le dépôt et le site en ligne. Pour met
 
 - **Rôle** : publication Android — AAB signé (Gradle 8.14, Java 17, min SDK 24, target SDK 36, desugaring activé).
 - **Console** : <https://play.google.com/console>
-- **Identifiants publics** : applicationId `com.toa.kultiva`.
+- **Identifiants publics** : applicationId `com.toa.kultiva` (disponible, vérifié le 4 novembre 2026) ; compte développeur **Toa**, ID `4741246028443998966`, **compte personnel**.
 - **Secrets** : voir « Keystore Android » ci-dessous.
+- **État** : fiche en cours de création depuis le 4 novembre 2026 — marche à suivre dans `docs/FICHE_PLAY.md`.
 - **Coût** : frais d'inscription unique.
 
 ### 7. Keystore Android (signature)
@@ -99,7 +100,7 @@ Mis à jour le 3 novembre 2026 d'après le dépôt et le site en ligne. Pour met
 ### 8. Hébergement web (GitHub Pages)
 
 - **Rôle** : site de présentation `landing/` (`index.html` + `privacy.html` + images WebP), publié sur **GitHub Pages** par le workflow `.github/workflows/site.yml` à chaque modification de `landing/`. Fournit l'URL d'assistance, l'URL marketing et l'URL de confidentialité exigées par les stores.
-- **État** : en ligne — <https://kultiva.toakeur.com> répond, servi par GitHub Pages derrière le proxy Cloudflare (en-têtes `server: cloudflare` et `x-github-request-id`, vérifié le 3 novembre 2026). Les boutons « Télécharger » pointent encore vers `#` (app non publiée).
+- **État** : **hors ligne depuis le passage du dépôt en privé** — <https://kultiva.toakeur.com>, `/privacy.html` et l'ancienne adresse `teiki5320.github.io/Kultiva/` répondent **404**, et GitHub ne déclare plus de site Pages pour le dépôt (vérifié le 4 novembre 2026). Les en-têtes montrent toujours Cloudflare devant GitHub Pages (`server: cloudflare`, `x-github-request-id`). Le site était en ligne du 7 octobre au 3 novembre 2026. Les deux boutons « Télécharger » sont inertes (« Bientôt sur l'App Store » / « Bientôt sur Google Play »).
 - **Console** : <https://github.com/teiki5320/Kultiva/settings/pages>
 - **Identifiants publics** : adresse du site.
 - **Secrets** : aucun (jeton GitHub automatique du workflow).
@@ -148,8 +149,8 @@ Mis à jour le 3 novembre 2026 d'après le dépôt et le site en ligne. Pour met
 
 ## Notes
 
-- **Supabase et connexion utilisateurs — plus utilisés depuis le 30 octobre 2026** : les comptes ont été retirés de la v1 (supprimés : `lib/screens/auth/`, `auth_service.dart`, `cloud_sync_service.dart`, `supabase_config.dart`, les dépendances `supabase_flutter`, `google_sign_in`, `sign_in_with_apple`, `crypto`). Le projet Supabase `vkiwkeknfzwdvufcqbrp` (région `eu-west-1`) existe toujours, inactif (vérifié le 3 novembre 2026) : **ne pas le supprimer**, il ne bloque rien. Les migrations restent dans `supabase/migrations/` à titre d'historique. Si la synchro revient, la piste retenue est Cloudflare (Worker + D1 + R2) plutôt que Supabase.
+- **Supabase et connexion utilisateurs — plus utilisés depuis le 30 octobre 2026** : les comptes ont été retirés de la v1 (supprimés : `lib/screens/auth/`, `auth_service.dart`, `cloud_sync_service.dart`, `supabase_config.dart`, les dépendances `supabase_flutter`, `google_sign_in`, `sign_in_with_apple`, `crypto`). Le projet Supabase `vkiwkeknfzwdvufcqbrp` (région `eu-west-1`) existe toujours, inactif (vérifié le 4 novembre 2026) : **ne pas le supprimer**, il ne bloque rien. Les migrations restent dans `supabase/migrations/` à titre d'historique. Si la synchro revient, la piste retenue est Cloudflare (Worker + D1 + R2) plutôt que Supabase.
 
 - Valeur **publique par design** (sa présence dans le code est normale) : le DSN Sentry (`lib/main.dart`). Depuis le 30 octobre 2026, il n'y a plus ni URL Supabase, ni `anonKey`, ni client ID Google dans le code ; et le tag Amazon Partenaires (`kultiva1-21`, remis le 30 octobre) est public par nature — c'est un identifiant d'affiliation, pas un secret.
-- E-mail de support public : `kultiva@toakeur.com` (site, politique de confidentialité en ligne et dans l'app).
+- E-mail de support public : `kultiva@toakeur.com` (site, politique de confidentialité du site — hors ligne depuis le 4 novembre 2026 — et de l'app).
 - Reprise sur machine neuve : cloner le dépôt, Flutter ≥ 3.47, `flutter pub get` puis `flutter run` — aucun secret requis côté client ; release Android = keystore + `key.properties` depuis le coffre-fort ; release iOS = accès au compte Apple.

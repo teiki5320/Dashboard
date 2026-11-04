@@ -1,6 +1,6 @@
 # Erea — plan marketing & rémunération
 
-> Généré le 3 août 2026, mis à jour le 3 novembre 2026. Le modèle de
+> Généré le 3 août 2026, mis à jour le 4 novembre 2026. Le modèle de
 > rémunération est en ligne sur l'App Store depuis la 1.0.2 et sur Google
 > Play depuis le 20 octobre 2026 (publicité + achat unique qui la retire). Pour le mettre à jour : relancer ce même prompt. Aucun secret
 > ici.
@@ -42,7 +42,7 @@ classiques :
 ## Rémunération par phases
 
 - [fait] **Aujourd'hui** : pub AdMob une partie sur deux, achat unique 3,99 € qui la retire, sur iOS et sur Android depuis le 20 octobre 2026
-- [en cours] **Statut trader (DSA)** : obligatoire sur les deux boutiques ; Jean a demandé à Apple le 29 octobre de lancer le passage en organisation et l'a relancé le 2 novembre, sans réponse au 3 novembre
+- [en cours] **Statut trader (DSA)** : obligatoire sur les deux boutiques ; Jean a demandé à Apple le 29 octobre de lancer le passage en organisation et l'a relancé le 2 novembre, sans réponse au 4 novembre
 - **Premiers versements AdMob** : seuil de 70 €, puis code PIN postal et vérification d'identité
 - **Licence éducation** : seulement si un établissement se présente de lui-même
 
@@ -115,11 +115,11 @@ pas encore faite.
 | Partage de grille (bouche-à-oreille) | Grille emoji sans spoiler + série 🔥, feuille de partage native, lien de la boutique de l'appareil dans le texte (`lib/ui/game/verdict_textes.dart`, lien Play depuis la 1.0.4) | ✅ |
 | Défi du jour + rappel | Mêmes questions pour tous, une tentative/jour, rappel local 18 h 30 (`lib/core/rappels.dart`) — le moteur de rétention qui alimente le partage | ✅ |
 | Classements mondiaux | Game Center : défi, série, Classique ×3, Chrono (`lib/core/classement.dart`) — actifs sur iOS ; Play Games pas configuré, classements masqués sur Android | ✅ iOS · ⬜ Android |
-| Vitrine web | `erea.toakeur.com` (depuis le 7 octobre 2026) : page de présentation dédiée, le jeu jouable sur `/jeu.html`, Smart App Banner sur les pages | ✅ |
-| Badges des boutiques | Badge officiel d'Apple sur la vitrine, en tête et en bas de page, vers la fiche `id6794918301`, depuis le 12 octobre 2026 ; badge officiel Google Play à côté et page `/telecharger/` ouverte à Android depuis le 21 octobre 2026 | ✅ |
+| Vitrine web | `erea.toakeur.com` (depuis le 7 octobre 2026) : page de présentation dédiée, le jeu jouable sur `/jeu.html`, Smart App Banner sur les pages ; hors ligne (404 sur toutes les pages) depuis le passage du dépôt en privé (vérifié le 4 novembre 2026) | ⬜ |
+| Badges des boutiques | Badge officiel d'Apple sur la vitrine, en tête et en bas de page, vers la fiche `id6794918301`, depuis le 12 octobre 2026 ; badge officiel Google Play à côté et page `/telecharger/` ouverte à Android depuis le 21 octobre 2026 ; vitrine et `/telecharger/` en 404 depuis le passage du dépôt en privé (vérifié le 4 novembre 2026) | ⬜ |
 | Enseignants & parents | Dossier d'une page « Erea en classe » (repères du brevet couverts, mode Facile, sans compte ni inscription) à envoyer aux profs d'histoire-géo, groupes Facebook de profs, La Salle des Maîtres | ⬜ |
 | Afrique de l'Ouest | Mise en avant du pack Afrique auprès des communautés éducatives francophones (Sénégal, Côte d'Ivoire…) ; presse tech locale ; créateurs de contenu éducation | ⬜ |
-| Réseaux sociaux | TikTok « erea.jeu » est le seul compte rattaché à Erea dans le Studio ; YouTube « toa.afrotok » et TikTok « Afrotok » sont branchés mais rattachés à aucune app. Pubs vidéo produites par le Studio depuis le 5 octobre 2026 : le format « documentaire qui déraille » validé par Jean le 5 octobre, puis, depuis le 26 octobre, « Avant ou après ? », « Interro surprise », « Petite histoire » et « Le défi en famille » ; 34 sont au Planning. Publication en public par le Planning via Buffer depuis le 29 octobre 2026 (« Blériot, le saut de la Manche » et « Henry Dunant, la naissance de la Croix-Rouge » ce soir-là) : 22 publiées du 29 octobre au 2 novembre, 12 programmées du 3 au 6 novembre (vérifié dans Buffer et le Planning le 3 novembre 2026) | ✅ |
+| Réseaux sociaux | TikTok « erea.jeu » est le seul compte rattaché à Erea dans le Studio ; YouTube « toa.afrotok » et TikTok « Afrotok » sont branchés mais rattachés à aucune app. Pubs vidéo produites par le Studio depuis le 5 octobre 2026 : le format « documentaire qui déraille » validé par Jean le 5 octobre, puis, depuis le 26 octobre, « Avant ou après ? », « Interro surprise », « Petite histoire » et « Le défi en famille » ; 38 sont au Planning. Publication en public par le Planning via Buffer depuis le 29 octobre 2026 (« Blériot, le saut de la Manche » et « Henry Dunant, la naissance de la Croix-Rouge » ce soir-là) : 29 publiées du 29 octobre au 3 novembre, 9 programmées du 4 au 6 novembre (vérifié dans Buffer et le Planning le 4 novembre 2026) | ✅ |
 | Presse & sites spécialisés | App du jour (iPhon.fr, iGen, Frandroid), sites parents (Geek Junior, Super Julie — références du jeu éducatif) | ⬜ |
 | Featuring Apple | Formulaire « App Store featuring » : app famille, française, hors ligne, avec Game Center — bon dossier, même si l'argument « sans pub » est tombé avec la 1.0.2 | ⬜ |
 | Play Store | Second magasin, donc second public : les douze testeurs ont tenu quatorze jours (22 septembre), l'accès à la production a été accordé le 17 octobre 2026, la 1.0.4 a été mise en ligne le 20 octobre, la 1.0.6 le 22 octobre, et la 1.0.7 est en ligne (vérifié le 31 octobre 2026) (`docs/PUBLICATION.md`) | ✅ |
@@ -142,7 +142,7 @@ pas encore faite.
 ## Mesures
 
 - **Téléchargements** : à vérifier dans la console (App Store Connect et Play Console)
-- **Note App Store** : aucune note au 3 novembre 2026
+- **Note App Store** : aucune note au 4 novembre 2026
 - **Note Google Play** : à vérifier dans la console (en ligne depuis le 20 octobre 2026)
 - **Rétention J1 et J7** : à vérifier dans la console
 - **Participants au Défi du jour** : à vérifier dans la console (classement `erea.daily`)
@@ -179,9 +179,9 @@ une collecte à la fiche de confidentialité.
 
 ## Les 3 priorités
 
-- **Booster par « Promouvoir » les pubs TikTok qui prennent le mieux** sur « erea.jeu » (22 publiées du 29 octobre au 2 novembre, 12 programmées jusqu'au 6 novembre), avec le lien `https://erea.toakeur.com/telecharger/?src=tiktok` qui mène aux deux boutiques : aucune promotion payante n'a encore été lancée.
-- **Envoyer le dossier « Erea en classe »** aux professeurs d'histoire-géographie et à leurs groupes : c'est le public naturel d'un jeu familial calé sur les repères du brevet, et rien ne lui a encore été adressé.
-- **Se déclarer trader (DSA)** sur l'App Store et Google Play : l'app rapporte maintenant sur les deux boutiques, et la déclaration « non-trader » ne tient plus ; à faire dès que le compte Apple est converti en compte organisation (Jean a répondu à Apple le 29 octobre 2026 pour lancer la migration et l'a relancé le 2 novembre ; aucune réponse d'Apple au 3 novembre 2026).
+- **Remettre le site `erea.toakeur.com` en ligne** : il répond 404 sur toutes ses pages depuis le passage du dépôt en privé (vérifié le 4 novembre 2026) ; les deux boutiques exigent la page `/confidentialite.html`, AdMob lit `/app-ads.txt`, et les pubs TikTok renvoient vers `/telecharger/`.
+- **Booster par « Promouvoir » les pubs TikTok qui prennent le mieux** sur « erea.jeu » (29 publiées du 29 octobre au 3 novembre, 9 programmées jusqu'au 6 novembre), une fois `https://erea.toakeur.com/telecharger/?src=tiktok` revenu en ligne : aucune promotion payante n'a encore été lancée.
+- **Se déclarer trader (DSA)** sur l'App Store et Google Play : l'app rapporte maintenant sur les deux boutiques, et la déclaration « non-trader » ne tient plus ; à faire dès que le compte Apple est converti en compte organisation (Jean a répondu à Apple le 29 octobre 2026 pour lancer la migration et l'a relancé le 2 novembre ; aucune réponse d'Apple au 4 novembre 2026).
 
 ## Déjà fait
 
@@ -198,6 +198,6 @@ une collecte à la fiche de confidentialité.
 - ✅ **Badge Google Play sur la vitrine et page `/telecharger/` ouverte à Android** — 21 octobre 2026.
 - ✅ **1.0.4 sur l'App Store** sous le nom long, captures légendées — mise en ligne le 15 octobre 2026.
 - ✅ **1.0.5 mise en ligne sur les deux boutiques** — le 21 octobre 2026 ; 1.0.6 (Android seul) mise en ligne sur Google Play le 22 octobre.
-- ✅ **1.0.7 en ligne sur les deux boutiques** — envoyée le 30 octobre 2026 au soir (Album, Classique en tête de l'accueil, icônes dessinées) : en ligne sur Google Play (vérifié le 31 octobre 2026) et sur l'App Store depuis le 31 octobre 2026 ; `app-ads.txt` publié le 30 octobre sur `erea.toakeur.com`.
+- ✅ **1.0.7 en ligne sur les deux boutiques** — envoyée le 30 octobre 2026 au soir (Album, Classique en tête de l'accueil, icônes dessinées) : en ligne sur Google Play (vérifié le 31 octobre 2026) et sur l'App Store depuis le 31 octobre 2026 ; `app-ads.txt` publié le 30 octobre sur `erea.toakeur.com` (404 depuis le passage du dépôt en privé, vérifié le 4 novembre 2026).
 - ✅ **Adresse et contact propres** — `erea.toakeur.com` et `erea@toakeur.com`, 7 octobre 2026.
 - ✅ **Premières pubs publiées sur TikTok « erea.jeu »** — 29 octobre 2026, par le Planning via Buffer.
