@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 4 novembre 2026. Un canal n'est coché que s'il est prouvé (compte branché et
+Mis à jour le 5 novembre 2026. Un canal n'est coché que s'il est prouvé (compte branché et
 publications réelles, ou routine qui publie).
 
 ## Positionnement
@@ -16,7 +16,7 @@ publications réelles, ou routine qui publie).
 
 - [fait] **Aujourd'hui** : affiliation Amazon Partenaires (tag `keurbookfr-21`, nouveau compte depuis le 18 octobre) ; le site ne vend rien.
 - [en cours] **Validation AdSense** : refusée le 21 octobre (contenu jugé trop mince), fiches rallongées, nouvel examen demandé le 22 octobre, « En préparation » dans la console AdSense (vérifié le 4 novembre 2026) ; aucune annonce d'ici là.
-- **Liens Amazon directs** : 436 livres et BD sur 796 mènent à leur fiche Amazon (29 octobre 2026) ; les autres (sans ISBN, ou seulement d'occasion) gardent une recherche.
+- **Liens Amazon directs** : 435 livres et BD sur 796 mènent à leur fiche Amazon (5 novembre 2026 ; 436 du 29 octobre au 4 novembre) ; les autres (sans ISBN, ou seulement d'occasion) gardent une recherche.
 - **Partenariats** : mises en avant payées par des éditeurs ou libraires, une fois l'audience mesurée.
 
 ## Points forts
@@ -30,7 +30,7 @@ publications réelles, ou routine qui publie).
 - ✅ Site en ligne sur `keurbook.com`.
 - ✅ Référencement naturel : sitemap envoyé à Google Search Console (propriété `keurbook.com`),
   IndexNow après chaque publication et chaque lundi, articles Conseils publiés trois fois par semaine (lundi, mercredi,
-  vendredi). Au 4 novembre 2026 : 44 articles publiés, 24 programmés ; le rythme régulier va
+  vendredi). Au 5 novembre 2026 : 44 articles publiés, 24 programmés ; le rythme régulier va
   jusqu'au 28 décembre (7 articles ajoutés le 30 octobre ; il s'arrêtait au 7 décembre avant), puis seuls des articles de saison sont programmés
   (1er et 8 février 2027). Depuis fin octobre 2026, la routine « Articles » du Studio vérifie chaque matin l'avance du site
   et complète la série quand il reste moins de 20 articles ou moins de 4 semaines (elle passait avant le 1er et le 15 de chaque mois).
@@ -48,17 +48,17 @@ publications réelles, ou routine qui publie).
 
 ## Mesures
 
-- **Pages indexées par Google** : 663 sur 993 (Search Console, onglet Indexation du Studio, 4 novembre 2026 ; 663 sur 991 le 2 novembre, 675 sur 988 le 1er novembre, 675 sur 987 le 31 octobre, 677 sur 984 le 30 octobre, 680 sur 982 le 29 octobre, 680 sur 980 le 28 octobre, 679 sur 975 le 27 octobre, 673 sur 971 le 20 octobre)
-- **Pages pas encore indexées** : 330 (4 novembre 2026), dont 313 inconnues de Google et 17 explorées mais pas indexées (328 le 2 novembre, 313 le 1er novembre, 312 le 31 octobre, 307 le 30 octobre, 302 le 29 octobre)
-- **Liens Amazon directs** : 436 livres et BD sur 796 (29 octobre 2026 ; 90 le 19 octobre, 91 jusqu'au 24 octobre). Fiches qui reçoivent des visites : 38 sur 81 en lien direct (17 avant)
-- **Articles Conseils** : 44 publiés, 24 programmés (4 novembre 2026 ; 43 publiés et 25 programmés le 2 novembre, 42 publiés et 26 programmés le 1er novembre, 41 publiés et 20 programmés le 29 octobre)
+- **Pages indexées par Google** : 650 sur 993 (Search Console, onglet Indexation du Studio, 5 novembre 2026 ; 663 sur 993 le 4 novembre, 663 sur 991 le 2 novembre, 675 sur 988 le 1er novembre, 675 sur 987 le 31 octobre, 677 sur 984 le 30 octobre, 680 sur 982 le 29 octobre, 680 sur 980 le 28 octobre, 679 sur 975 le 27 octobre, 673 sur 971 le 20 octobre)
+- **Pages pas encore indexées** : 343 (5 novembre 2026), dont 309 inconnues de Google et 34 explorées mais pas indexées (330 le 4 novembre, 328 le 2 novembre, 313 le 1er novembre, 312 le 31 octobre, 307 le 30 octobre, 302 le 29 octobre)
+- **Liens Amazon directs** : 435 livres et BD sur 796 (5 novembre 2026 ; 436 le 29 octobre, 90 le 19 octobre, 91 jusqu'au 24 octobre). Fiches qui reçoivent des visites : 38 sur 81 en lien direct (17 avant)
+- **Articles Conseils** : 44 publiés, 24 programmés (5 novembre 2026 ; 43 publiés et 25 programmés le 2 novembre, 42 publiés et 26 programmés le 1er novembre, 41 publiés et 20 programmés le 29 octobre)
 - **Visites** : à vérifier dans la console Cloudflare Web Analytics (mesure active depuis le 13 octobre 2026)
 - **Clics et revenus Amazon** : à vérifier dans la console
 - **Revenus AdSense** : aucun ; site refusé le 21 octobre 2026, nouvel examen demandé le 22 octobre, « En préparation » dans la console (vérifié le 4 novembre 2026)
 
 ## Les 3 priorités
 
-- Faire indexer par Google les 330 pages qui ne le sont pas encore (BD, pages auteurs, livres,
+- Faire indexer par Google les 343 pages qui ne le sont pas encore (BD, pages auteurs, livres,
   pays et pages de liste) : renforcer les liens internes vers elles et suivre leur
   évolution dans l'onglet Indexation du Studio.
 - Garder les liens Amazon directs justes : lancer `npm run verifier-produits -- --ecrire --lot 30`

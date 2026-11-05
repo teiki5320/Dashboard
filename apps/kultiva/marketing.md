@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 4 novembre 2026. Compagnon de `INFRA.md` : là où INFRA répertorie
+Mis à jour le 5 novembre 2026. Compagnon de `INFRA.md` : là où INFRA répertorie
 la technique, ce fichier suit la stratégie marketing et de rémunération.
 Pour l'actualiser : relancer le même prompt.
 
@@ -22,15 +22,15 @@ Pour l'actualiser : relancer le même prompt.
 ## Rémunération par phases
 
 - [fait] **Aujourd'hui** : app gratuite, rémunérée par l'affiliation Amazon en France. Les liens avaient été retirés le 20 octobre 2026 (tag rattaché au compte fermé par Amazon le 18 octobre) ; ils sont revenus le 30 octobre 2026 sous le tag `kultiva1-21`.
-- [en cours] **Relance et lancement** : le projet est en pause (choix de Jean) ; décider s'il repart, puis publier — les captures Apple et Google Play sont prises (3 et 4 novembre 2026), et le site comme sa page de confidentialité sont de nouveau en ligne depuis le 4 novembre 2026. L'app n'a plus de backend depuis le 30 octobre 2026, rien de ce côté ne bloque. La piste de vidéo récompensée AdMob est sans objet : elle reposait sur l'XP du Tamassi, supprimé le 31 octobre 2026.
+- [en cours] **Relance et lancement** : le projet est en pause (choix de Jean) ; décider s'il repart, puis publier — les fiches App Store et Google Play ont été remplies le 4 novembre 2026, et le site comme sa page de confidentialité sont en ligne (vérifié le 5 novembre 2026). L'app n'a plus de backend depuis le 30 octobre 2026, rien de ce côté ne bloque. La piste de vidéo récompensée AdMob est sans objet : elle reposait sur l'XP du Tamassi, supprimé le 31 octobre 2026.
 - **Affiliation** : en place depuis le 30 octobre 2026, France seulement (Amazon ne livre pas en Afrique de l'Ouest). Changer de compte = changer une constante.
 - **Rétention prouvée** : abonnement Kultiva Plus via RevenueCat (jardins illimités, export PDF), France d'abord.
 - **Afrique de l'Ouest** : sponsoring par des ONG et programmes agricoles qui financent la diffusion de conseils.
 
 Statut DSA : « trader » dans l'UE, décidé le 24 août 2026 à cause des
 liens d'affiliation ; retirés le 20 octobre 2026, ces liens sont revenus
-le 30 octobre 2026 : le statut de trader s'applique de nouveau, à déclarer
-à la soumission. Écarté pour l'instant : bannières et interstitiels, vente de biens
+le 30 octobre 2026 : le statut de trader s'applique de nouveau — déjà déclaré
+dans App Store Connect (constaté le 4 novembre 2026), reste à déclarer dans la Play Console. Écarté pour l'instant : bannières et interstitiels, vente de biens
 physiques, dons.
 
 ## Points forts
@@ -81,6 +81,6 @@ n'est branché (Sentry ne suit que les crashs).
 
 ## Les 3 priorités
 
-- Reprendre les 14 captures Apple : elles vivaient dans `build/`, qu'un `flutter clean` a effacé le 4 novembre 2026. Les ranger hors du dépôt cette fois.
-- Compléter la fiche App Store déjà créée (trois URL, `kultiva@toakeur.com`, les 14 captures prises le 3 novembre, déclaration de trader DSA, téléphone de revue), puis soumettre le build 220 déjà en TestFlight.
-- Finir la fiche Google Play : tout est prêt depuis le 4 novembre 2026 (textes, icône 512, bannière 1024 × 500, dix captures, bundle signé, réponses aux questionnaires dans `docs/FICHE_PLAY.md`), il reste les deux cases de déclaration à cocher soi-même. Puis lancer le test fermé — ses quatorze jours ne s'appliquent peut-être pas, Erea étant déjà en production sur le même compte.
+- Débloquer le rattachement du build dans App Store Connect (tous grisés, jusqu'au 231 du 4 novembre 2026), remplir le téléphone de revue, le questionnaire de confidentialité et les tarifs, puis soumettre l'app.
+- Finir les déclarations Google Play dans l'ordre imposé : classification IARC et statut de professionnel (à accepter par Jean), puis « Cible et contenu » et « Sécurité des données », déjà en brouillon.
+- Lancer le test fermé Google Play avec 12 testeurs inscrits pendant 14 jours : le compte est personnel, c'est le seul délai qu'aucune décision ne raccourcit.

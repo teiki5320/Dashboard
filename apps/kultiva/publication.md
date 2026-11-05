@@ -1,6 +1,6 @@
 # PUBLICATION — état des boutiques
 
-> Mis à jour le 4 novembre 2026. Pour mettre à jour :
+> Mis à jour le 5 novembre 2026. Pour mettre à jour :
 > relancer ce même prompt.
 >
 > **Aucun secret ici** — uniquement des références publiques :
@@ -15,21 +15,21 @@
 
 ## En bref
 
-- **Version commune** : `1.0.0+5` (`pubspec.yaml`), jamais soumise
+- **Version commune** : `1.0.0+5` (`pubspec.yaml`), jamais soumise — projet en pause (choix de Jean)
 - **Identifiant de bundle** : `com.toa.kultiva` (iOS et Android)
 - **Monétisation** : gratuite ; ni pub ni achat intégré, mais affiliation Amazon en France (liens remis le 30 octobre 2026, tag `kultiva1-21`)
 - **Comptes** : **aucun** depuis le 30 octobre 2026 — ni connexion, ni serveur, ni synchronisation
-- **Confidentialité** : <https://kultiva.toakeur.com/privacy.html> — **en ligne** (200, vérifié le 4 novembre 2026) ; exigée par les deux boutiques
+- **Confidentialité** : <https://kultiva.toakeur.com/privacy.html> — **en ligne** (200, vérifié le 5 novembre 2026) ; exigée par les deux boutiques
 - **Contact** : `kultiva@toakeur.com`
 
 ## Boutiques
 
 | | 🍎 App Store | 🤖 Google Play |
 |---|---|---|
-| État | [pas encore] jamais soumise ; fiche App Store Connect créée (Apple ID `6762550020`), dernier build reçu : 220 (3 novembre 2026 au soir) | [pas encore] jamais envoyée ; fiche à vérifier dans la console |
-| Construction | [ok] Xcode Cloud (`ci_post_clone.sh`, Flutter 3.47.3) : **build 220 réussi le 3 novembre 2026 au soir**, disponible en TestFlight (vérifié le 4 novembre 2026 dans les mails d'Apple) ; le build 195 avait réussi dans la nuit du 2 au 3 novembre 2026 ; tous les builds du 2 novembre, du 166 au 195, ont réussi ; le build 165 avait échoué le 1er novembre 2026 au soir dans `ci_post_clone.sh`, les autres builds du 1er novembre (dont le 152 et le 164) avaient réussi, comme ceux depuis le 31 octobre (dont le 134) ; build 127 réussi le 30 octobre 2026, après deux échecs le même soir (122 et 125, pin Flutter devenu plus ancien que le code). Auparavant : builds 95 et 96 réussis le 25 octobre 2026, build 97 le 27 octobre, avec l'étape « TestFlight internes - iOS » (vérifié le 28 octobre 2026) ; le build 94 avait échoué le 24 octobre | [ok] App Bundle construit par la CI GitHub Actions ; plantage au lancement en release corrigé le 3 novembre 2026 |
+| État | [pas encore] jamais soumise ; fiche App Store Connect (Apple ID `6762550020`) remplie le 4 novembre 2026, build impossible à rattacher ; dernier build reçu : 231 (4 novembre 2026) | [pas encore] jamais envoyée ; app créée et fiche Play Store remplie le 4 novembre 2026, rien de téléversé |
+| Construction | [ok] Xcode Cloud (`ci_post_clone.sh`, Flutter 3.47.3) : **build 231 réussi le 4 novembre 2026** (15 h 58 UTC), disponible en TestFlight, comme tous les builds du 4 novembre depuis le 222 (vérifié le 5 novembre 2026 dans les mails d'Apple) ; le build 220 avait réussi le 3 novembre 2026 au soir ; le build 195 avait réussi dans la nuit du 2 au 3 novembre 2026 ; tous les builds du 2 novembre, du 166 au 195, ont réussi ; le build 165 avait échoué le 1er novembre 2026 au soir dans `ci_post_clone.sh`, les autres builds du 1er novembre (dont le 152 et le 164) avaient réussi, comme ceux depuis le 31 octobre (dont le 134) ; build 127 réussi le 30 octobre 2026, après deux échecs le même soir (122 et 125, pin Flutter devenu plus ancien que le code). Auparavant : builds 95 et 96 réussis le 25 octobre 2026, build 97 le 27 octobre, avec l'étape « TestFlight internes - iOS » (vérifié le 28 octobre 2026) ; le build 94 avait échoué le 24 octobre | [ok] App Bundle construit par la CI GitHub Actions ; plantage au lancement en release corrigé le 3 novembre 2026 |
 | Signature | [ok] gérée par Xcode Cloud, équipe `K597U7X3FZ` | [ok] keystore local, valable jusqu'en 2053 |
-| Classification | [à faire] 4+ attendu, questionnaire prêt à reporter | [à faire] questionnaire de contenu à remplir |
+| Classification | [ok] 4+ posée le 4 novembre 2026 (172 pays) | [à faire] classification IARC, qui exige une acceptation de Jean |
 | Cible | [ok] iOS 15.0 et plus (depuis le 25 octobre 2026 : Xcode et les pods, dont Sentry, l’exigent ; avant : 13.0), iPhone en portrait, iPad dans les quatre sens | [ok] valeurs par défaut de Flutter, rien de figé dans le dépôt |
 | Permissions | [ok] caméra, photos, localisation en français ; clé `NSLocationAlwaysAndWhenInUseUsageDescription` ajoutée le 30 octobre 2026 (fin de l'avertissement ITMS-90683) | [ok] localisation, notifications, alarmes exactes |
 | Poids | [pas encore] à mesurer au premier envoi (21 Mo d'assets depuis le ménage du 2 novembre 2026, contre 37 Mo avant) | [ok] 48,6 Mio au téléchargement (release arm64, mesuré le 1er novembre 2026, avant l'ajout des 130 légumes détourés et le retrait de 16 Mo d'images inutilisées, tous deux le 2 novembre) |
@@ -37,21 +37,21 @@
 ## Vue d'ensemble
 
 - **État du projet** : **en pause** (choix de Jean) — rien n'est soumis aux boutiques
-- **iOS** : jamais soumise — la fiche App Store Connect existe (Apple ID `6762550020`), ses textes sont rédigés et l'URL de confidentialité répond de nouveau (vérifiée le 4 novembre 2026) ; le build Xcode Cloud 94 a échoué le 24 octobre 2026 (cible iOS trop basse), corrigé le 25 octobre ; les builds 95 et 96 ont réussi le 25 octobre 2026, le build 97 le 27 octobre 2026, le build 127 le 30 octobre 2026, le build 134 le 31 octobre 2026, le build 152 le 1er novembre 2026, le build 166 le 2 novembre 2026, le build 195 dans la nuit du 2 au 3 novembre 2026 et le **build 220 le 3 novembre 2026 au soir**, disponible en TestFlight (le 165 avait échoué le 1er novembre au soir). La clé de localisation que réclamait Apple (ITMS-90683) a été ajoutée le 30 octobre 2026
-- **Android** : jamais envoyée à Play. Vérifié dans la console le 4 novembre 2026 : **aucune fiche Kultiva n'existait**, et `com.toa.kultiva` est disponible. Le formulaire de création est rempli, il reste les deux cases de déclaration, que seul Jean peut cocher. App Bundle signé reconstruit le 4 novembre 2026 — premier à porter le correctif du plantage au lancement en release ; icône 512, bannière 1024 × 500 et dix captures produites. Marche à suivre complète : `docs/FICHE_PLAY.md`
+- **iOS** : jamais soumise — la fiche App Store Connect (Apple ID `6762550020`) a été **remplie le 4 novembre 2026** (16 captures, textes, URL, classification 4+, déclaration DSA déjà faite), mais le build reste impossible à rattacher. Dernier build : le **231**, réussi le 4 novembre 2026 et disponible en TestFlight (vérifié le 5 novembre 2026 dans les mails d'Apple) ; avant lui, de nombreux builds depuis le 95 du 25 octobre 2026 (le 94 avait échoué le 24 octobre, cible iOS trop basse ; le 165 le 1er novembre au soir). La clé de localisation que réclamait Apple (ITMS-90683) a été ajoutée le 30 octobre 2026
+- **Android** : jamais envoyée à Play. L'app `Kultiva : potager kawaii` a été **créée dans la console le 4 novembre 2026** (aucune fiche Kultiva n'existait avant, `com.toa.kultiva` était disponible) et sa fiche Play Store remplie le même jour. Restent la classification IARC, la cible, la sécurité des données (en brouillon), le statut de professionnel et le test fermé de 14 jours. App Bundle signé reconstruit le 4 novembre 2026 — premier à porter le correctif du plantage au lancement en release. Marche à suivre complète : `docs/FICHE_PLAY.md`
 - **Web** : site de présentation <https://kultiva.toakeur.com>, en ligne depuis le 7 octobre 2026. Il a répondu **404 du 3 au 4 novembre 2026**, le dépôt étant passé en privé : GitHub avait alors **supprimé** le site Pages. Dépôt repassé en public et site recréé le 4 novembre 2026 ; `/privacy.html` répond aussi (200, vérifié)
 - **Backend** : **aucun**. Les comptes ont été retirés de la v1 le 30 octobre 2026 — le jardin vit sur l'appareil. Le projet Supabase reste inactif (vérifié le 4 novembre 2026), inutilisé, et ne bloque plus rien
-- **Monétisation** : affiliation Amazon en France. Les 159 liens, retirés le 20 octobre 2026 (compte fermé le 18), sont **revenus le 30 octobre 2026** sous le tag `kultiva1-21`. ⚠️ Le statut **trader** au sens du DSA, décidé le 24 août 2026 à cause de ces liens, redevient donc applicable : à déclarer dans App Store Connect et Play Console avant soumission
+- **Monétisation** : affiliation Amazon en France. Les 159 liens, retirés le 20 octobre 2026 (compte fermé le 18), sont **revenus le 30 octobre 2026** sous le tag `kultiva1-21`. ⚠️ Le statut **trader** au sens du DSA, décidé le 24 août 2026 à cause de ces liens, redevient donc applicable : déjà déclaré dans App Store Connect (constaté le 4 novembre 2026), reste à déclarer dans la Play Console
 - **Classification attendue** : **4+** depuis le retrait du feed communautaire — plus aucun contenu généré par les utilisateurs
-- **Chemin critique** : ~~remettre en ligne la page de confidentialité~~ (fait le 4 novembre 2026) → compléter la fiche App Store (téléphone de revue, trois URL, déclaration de trader DSA) → soumettre iOS. Côté Play, tout est prêt sauf les deux cases de déclaration (`docs/FICHE_PLAY.md`). ⚠️ Les 14 captures Apple sont **à reprendre** : elles vivaient dans `build/`, effacé par un `flutter clean` le 4 novembre 2026
+- **Chemin critique** : la fiche App Store est remplie au 4 novembre 2026 (16 captures, textes, URL, version 1.0.0, droits d'auteur, sous-titre, catégories, classification **4+**, notes au testeur, publication manuelle). Restent **le numéro de téléphone de revue** — seule erreur affichée par la page — le **questionnaire de confidentialité**, les **tarifs et la disponibilité**, et le **build**, que la console refuse de rattacher (voir `docs/FICHE_APP_STORE.md`) → soumettre iOS. Côté Play, la fiche est remplie depuis le 4 novembre 2026 ; restent IARC → cible → sécurité des données, le statut de professionnel et le test fermé (`docs/FICHE_PLAY.md`). Les captures Apple ont été **refaites le 4 novembre 2026** : 10 en iPhone 6,9″ et 6 en iPad 13″, dans `captures/`
 
 Aucune boutique n'a reçu de soumission : côté Apple, seuls des builds
 TestFlight internes sont arrivés dans la fiche ; côté Google, rien n'a
 été téléversé. Ce n'est pas le code qui retient la soumission — l'app compile,
 passe l'analyse et ses tests sont verts. L'URL de confidentialité est
-revenue en ligne le 4 novembre 2026 ; les captures Google Play sont
-prises, celles d'Apple sont à reprendre (voir plus bas) ;
-restent des champs de formulaire (le backend ne bloque plus rien depuis le 30 octobre 2026).
+revenue en ligne le 4 novembre 2026 ; les captures Google Play et Apple
+sont prises et posées dans les deux fiches (4 novembre 2026) ;
+restent des champs de formulaire, le rattachement du build iOS et le test fermé Play (le backend ne bloque plus rien depuis le 30 octobre 2026).
 
 ---
 
@@ -59,11 +59,11 @@ restent des champs de formulaire (le backend ne bloque plus rien depuis le 30 oc
 
 | | |
 |---|---|
-| État | **Jamais soumise** — captures Apple à reprendre (effacées le 4 novembre 2026) ; restent les champs de la fiche (le projet Supabase, inactif, ne bloque plus rien depuis le retrait des comptes le 30 octobre 2026) |
+| État | **Jamais soumise** — fiche remplie le 4 novembre 2026 (16 captures, textes, classification 4+) ; restent le téléphone de revue, le questionnaire de confidentialité, les tarifs et le rattachement du build, impossible au 4 novembre 2026 |
 | Console | <https://appstoreconnect.apple.com> |
 | Version publiée | aucune — l'app n'est jamais sortie |
-| Version en cours | `1.0.0` — fiche App Store Connect créée (Apple ID `6762550020`), builds Xcode Cloud 95, 96, 97, 127 (30 octobre 2026), 134 (31 octobre 2026), 152 (1er novembre 2026), 166 (2 novembre 2026), 195 (nuit du 2 au 3 novembre 2026) puis **220 (3 novembre 2026 au soir)** reçus ; aucune soumission |
-| Distribution | Xcode Cloud, script `ios/ci_scripts/ci_post_clone.sh` — équipe `K597U7X3FZ` ; build 94 en échec le 24 octobre 2026, cible iOS relevée à 15.0 le 25 octobre ; builds 95 et 96 réussis le 25 octobre 2026, build 97 le 27 octobre, builds 122 et 125 en échec le 30 octobre (pin Flutter périmé), build 127 réussi le 30 octobre 2026, build 134 le 31 octobre 2026, build 152 le 1er novembre 2026, build 165 en échec le 1er novembre au soir (`ci_post_clone.sh`), build 166 réussi le 2 novembre 2026, build 195 dans la nuit du 2 au 3 novembre 2026 et **build 220 réussi le 3 novembre 2026 au soir**, disponible en TestFlight |
+| Version en cours | `1.0.0` — fiche App Store Connect créée (Apple ID `6762550020`), builds Xcode Cloud 95, 96, 97, 127 (30 octobre 2026), 134 (31 octobre 2026), 152 (1er novembre 2026), 166 (2 novembre 2026), 195 (nuit du 2 au 3 novembre 2026), 220 (3 novembre 2026 au soir) puis 222 à **231 (4 novembre 2026)** reçus ; aucune soumission |
+| Distribution | Xcode Cloud, script `ios/ci_scripts/ci_post_clone.sh` — équipe `K597U7X3FZ` ; build 94 en échec le 24 octobre 2026, cible iOS relevée à 15.0 le 25 octobre ; builds 95 et 96 réussis le 25 octobre 2026, build 97 le 27 octobre, builds 122 et 125 en échec le 30 octobre (pin Flutter périmé), build 127 réussi le 30 octobre 2026, build 134 le 31 octobre 2026, build 152 le 1er novembre 2026, build 165 en échec le 1er novembre au soir (`ci_post_clone.sh`), build 166 réussi le 2 novembre 2026, build 195 dans la nuit du 2 au 3 novembre 2026, build 220 le 3 novembre 2026 au soir et **build 231 réussi le 4 novembre 2026**, disponible en TestFlight |
 | Familles d'appareils | `TARGETED_DEVICE_FAMILY = "1,2"` → iPhone **et** iPad |
 | Orientation | iPhone en portrait seul ; iPad dans les quatre sens depuis le 30 octobre 2026 ; `UIRequiresFullScreen = true` (renonce au multitâche iPad) |
 
@@ -77,20 +77,20 @@ coller champ par champ.
 
 **Ce qui bloque, dans l'ordre.** Les trois URL de la fiche —
 assistance et marketing `https://kultiva.toakeur.com`, confidentialité
-`https://kultiva.toakeur.com/privacy.html` — **répondent de nouveau**
-depuis le 4 novembre 2026 : restent à coller dans App Store Connect
-(à vérifier dans la console). Le testeur Apple n'a plus ni connexion ni suppression de compte à
+`https://kultiva.toakeur.com/privacy.html` — répondent (vérifié le
+5 novembre 2026) et ont été collées dans App Store Connect le
+4 novembre 2026. Le testeur Apple n'a plus ni connexion ni suppression de compte à
 essayer : l'app n'en a plus depuis le 30 octobre 2026. Les **captures d'écran** sont faites
-⚠️ **à reprendre** : les 14 fichiers du 3 novembre 2026 — 7 en
-iPhone 6,9″ (1320 × 2868) et 7 en iPad 13″ (2064 × 2752) — ont été
-effacés le 4 novembre par un `flutter clean`, qui vide `build/`. Ils
-se refont sur une installation garnie. Restent
-le **numéro de téléphone** des informations de revue et la
-déclaration DSA dans *Entreprise → Accords → Digital Services Act* :
-le statut de trader, choisi pour les liens d'affiliation, s'applique
-puisque ces liens sont revenus le 30 octobre 2026, et les coordonnées
-seront publiques dans les 27 pays de l'UE (une boîte postale est
-acceptée).
+**refaites le 4 novembre 2026** : 10 en iPhone 6,9″ (1320 × 2868)
+et 6 en iPad 13″ (2064 × 2752), dans `captures/`. Les 14 du
+3 novembre avaient été effacées le matin même par un `flutter clean`,
+qui vide `build/`. Elles ont été posées dans la fiche le 4 novembre 2026, comme la
+classification 4+ ; la déclaration DSA de commerçant était déjà faite.
+Restent le **numéro de téléphone** des informations de revue, le
+questionnaire de confidentialité, les tarifs et la disponibilité, et
+surtout le **build**, que la console refuse de rattacher : tous, jusqu'au
+231, sont grisés (constaté le 4 novembre 2026, cause non trouvée — voir
+`docs/FICHE_APP_STORE.md`).
 
 **Sur l'iPad.** L'app se lance en plein écran portrait sur iPadOS 26.5 et
 produit des captures au format exact attendu par Apple. Les mises en page
@@ -129,7 +129,7 @@ acceptés, mais Apple signalait à chaque envoi l'erreur ITMS-90683 : la
 clé `NSLocationAlwaysAndWhenInUseUsageDescription` manquait dans
 `ios/Runner/Info.plist`. Elle a été ajoutée le 30 octobre 2026 —
 `geolocator` embarque les APIs « Always » même si l'app ne s'en sert
-pas, d'où la réclamation. Les builds 127, 134 et suivants (jusqu'au 220) ont été envoyés après
+pas, d'où la réclamation. Les builds 127, 134 et suivants (jusqu'au 231) ont été envoyés après
 l'ajout de la clé.
 
 **Vérifié le 1er novembre 2026** (mails d'Apple) : la fiche existe pour
@@ -143,7 +143,7 @@ payant* si la distribution doit couvrir tous les pays.
 
 | | |
 |---|---|
-| État | **Jamais envoyée — rien n'a été téléversé sur Play.** Fiche en cours de création depuis le 4 novembre 2026 |
+| État | **Jamais envoyée.** App créée le 4 novembre 2026 (`Kultiva : potager kawaii`) ; fiche Play Store remplie — nom, descriptions, icône, bannière, 8 captures, catégorie Style de vie, coordonnées |
 | Console | <https://play.google.com/console> — compte **Toa**, ID `4741246028443998966`, **compte personnel** (lu dans la console le 4 novembre 2026) |
 | Version publiée | aucune |
 | Version en cours | App Bundle `1.0.0` (`versionCode 5`) — construit par la CI à chaque envoi, et **reconstruit en local le 4 novembre 2026** : c'est le premier à porter le correctif R8 du 3 novembre, qui répare le plantage au lancement en release. ⚠️ Celui du 23 août 2026 ne l'a pas : ne pas le téléverser |
@@ -165,11 +165,13 @@ par Play pour les nouvelles applications.
 description longue, la description courte (78/80 caractères) et des
 variantes d'accroche par pays pour les storefronts d'Afrique de l'Ouest.
 
-**Ce qui bloque.** Rien côté code, et plus grand-chose côté rédaction :
-`docs/FICHE_PLAY.md` donne page par page les réponses à la
-classification du contenu, à *Sécurité des données* et au reste. Il
-reste les deux cases de déclaration à la création, le statut
-« contient des annonces » à trancher, et les coordonnées de trader.
+**Ce qui bloque.** Rien côté code. L'app est créée et la fiche remplie
+depuis le 4 novembre 2026, « annonces » déclaré **Non**. Restent, dans
+l'ordre imposé par la console, la classification **IARC** (conditions
+d'un tiers à accepter par Jean), « Cible et contenu », puis « Sécurité
+des données » (réponses en brouillon) ; le statut de professionnel
+(acceptation de Jean) ; et le test fermé. `docs/FICHE_PLAY.md` donne
+les réponses page par page.
 
 ⚠️ **L'identifiant publicitaire est réglé, et c'est une mesure.** Cette
 fiche disait qu'aucune permission `AD_ID` « ne devrait » figurer. Le
@@ -182,22 +184,24 @@ exactement sept permissions — `INTERNET`, `VIBRATE`,
 console le 4 novembre 2026), et Google impose alors **douze testeurs
 pendant quatorze jours consécutifs** avant toute mise en production.
 
-⚠️ **Mais il est peut-être déjà purgé.** Cette obligation vise le
-**compte** et non l'application, une seule fois — or **Erea est déjà
-en production sur ce même compte**. Soit le compte est antérieur au
-13 novembre 2023, soit l'accès à la production a déjà été accordé.
-C'est une **déduction, pas une mesure** : la page *Production* de
-Kultiva affichera la condition si elle s'applique. Ne rien replanifier
-avant de l'avoir vue. Le décompte
+⚠️ **Et ce n'est pas purgé — ma déduction était fausse.** J'avais
+écrit que l'obligation visant le compte et non l'application, Erea
+étant déjà en production, Kultiva n'aurait rien à attendre. Le
+tableau de bord de Kultiva dit le contraire, noir sur blanc :
+« Publier une version de test fermé », « Avoir au moins 12 testeurs
+inscrits — *0 testeur actuellement inscrit* », « Exécuter votre test
+fermé avec au moins 12 testeurs pour au moins 14 jours ».
+**Mesurer avant de citer** : la page existait, il suffisait de
+l'ouvrir. Le décompte
 ne démarre qu'au douzième inscrit, et s'inscrire veut dire ouvrir le lien
 reçu et l'accepter — pas figurer sur une liste. C'est le seul délai
 qu'aucune décision ne raccourcit : il mérite d'être lancé tôt, en
 parallèle de la soumission iOS.
 
 **Vérifié dans la console le 4 novembre 2026** : aucune fiche
-`com.toa.kultiva` n'existait (le compte ne portait qu'Erea, en
-production, et Palabre, en brouillon), le compte est **personnel**, et
-l'identifiant de package est disponible. **Reste à vérifier** : que la
+`com.toa.kultiva` n'existait encore (le compte ne portait qu'Erea, en
+production, et Palabre, en brouillon), le compte est **personnel** ;
+l'app a été créée le même jour. **Reste à vérifier** : que la
 signature d'application par Play soit activée à la création de la
 première version — sans elle, perdre le keystore rendrait toute mise à
 jour impossible.
@@ -208,7 +212,7 @@ jour impossible.
 
 | | |
 |---|---|
-| Production | **En ligne** — <https://kultiva.toakeur.com> et `/privacy.html` répondent 200 (vérifié le 4 novembre 2026). Interruption du 3 au 4 novembre 2026, le temps que le dépôt soit repassé en public |
+| Production | **En ligne** — <https://kultiva.toakeur.com> et `/privacy.html` répondent 200 (vérifié le 5 novembre 2026). Interruption du 3 au 4 novembre 2026, le temps que le dépôt soit repassé en public |
 | Domaine & SSL | `kultiva.toakeur.com`, DNS chez Cloudflare (proxy actif), HTTPS valide ; le domaine est porté par **`landing/CNAME`** depuis le 4 novembre 2026, et non plus par un réglage de la console ; contact du site `kultiva@toakeur.com` (dans `landing/`) |
 | Visibilité | publié par GitHub Pages via `.github/workflows/site.yml` (dossier `landing/`) depuis le 7 octobre 2026. ⚠️ Passer le dépôt en **privé** ne suspend pas le site : GitHub le **supprime** (l'API `/pages` répondait 404). Il a fallu repasser le dépôt en public et recréer le site, le 4 novembre 2026 |
 
@@ -262,20 +266,35 @@ la synchro (Cloudflare, ci-dessous).
 1. ✅ **Site et confidentialité** : remis en ligne le 4 novembre 2026 — dépôt repassé en public, site Pages recréé, et le domaine fixé dans `landing/CNAME` pour qu'il ne se reperde plus.
 2. ✅ **Adresse de contact** : `kultiva@toakeur.com` sur le site, la confidentialité et les textes des fiches.
 3. ✅ **Backend supprimé** : les comptes ont été retirés de la v1 le 30 octobre 2026. Plus rien à rallumer, plus de clés Google à recréer.
-4. **Compléter la fiche App Store** : fiche créée (Apple ID `6762550020`) ; restent les trois URL, l'adresse de contact, la déclaration DSA (trader) et le téléphone de revue.
+4. **Compléter la fiche App Store** : remplie le 4 novembre 2026 — URL, textes, 16 captures, classification 4+, notes au testeur, publication manuelle, déclaration DSA. Restent le **téléphone de revue**, le questionnaire de confidentialité, les tarifs, et le **build** (impossible à rattacher, jusqu'au 231).
 5. ✅ **Garnir une installation pour les captures** : fait, et outillé — `tool/garnir_simulateur.py`.
-6. ⬜ **Captures d'écran Apple — à reprendre.** Les 14 fichiers du
-    3 novembre 2026 (7 en iPhone 6,9″, 1320 × 2868 ; 7 en iPad 13″,
-    2064 × 2752) sont **perdus** : ils étaient dans `build/captures/`,
-    et `flutter clean` vide `build/`. Ils se refont en une session —
-    `tool/garnir_simulateur.py` garnit le jardin, la recette du
-    simulateur est dans l'alerte 9 de `CLAUDE.md`.
+6. ✅ **Captures d'écran Apple — refaites le 4 novembre 2026.**
+    **10 en iPhone 6,9″** (1320 × 2868) : tableau de bord, cahier de
+    culture, potager carré, Étal, fiche tomate, Garder ta récolte,
+    **météo**, à semer en novembre, badges, journal. **6 en
+    iPad 13″** (2064 × 2752) : tableau de bord, cahier, potager
+    carré, Étal, Garder ta récolte, tutos. Dans `captures/`.
 
-    ⚠️ **Et il ne faut pas les y remettre.** `build/` est le dossier
-    de travail du compilateur : tout ce qu'on y dépose est à la merci
-    du prochain `clean`. Les captures d'une boutique sont une
-    livraison, pas un artefact de build.
-6 bis. ✅ **Captures d'écran Google Play — faites le 4 novembre 2026.** Dix captures en **1080 × 1920** (dossier non suivi par git ; ⚠️ à sortir de `build/`, voir le point 6) : tableau de bord, « à semer en novembre », cahier de culture, potager carré, journal, « Garder ta récolte », fiche tomate, badges, plus l'Étal et « au jardin en ce moment » en réserve. Play en accepte huit par type d'appareil.
+    Les 14 du 3 novembre étaient dans `build/captures/`, qu'un
+    `flutter clean` a vidé le matin du 4. ⚠️ **`build/` est le
+    dossier de travail du compilateur** : une livraison n'y a rien à
+    faire. `captures/` est ignoré par git mais hors de portée d'un
+    `clean`.
+
+    ⚠️ **Et les simulateurs avaient disparu avec**, tous :
+    `~/Library/Developer/CoreSimulator` pesait 0 octet, les appareils
+    étaient déclarés par `simctl` sans données sur le disque. Le
+    runtime iOS 27.2, lui, était intact — deux appareils neufs
+    recréés en une commande.
+
+    ⚠️ **Deux pièges du pilotage par `simctl`**, tous deux rencontrés :
+    le **collage de texte échoue en silence** (la recherche d'un
+    légume est donc inatteignable, il faut filtrer par catégorie), et
+    une **fiche poussée n'a pas de barre d'onglets** — taper à
+    l'emplacement habituel touche le bouton flottant « Je l'ai
+    planté », ce qui ajoute un plant et fausse les captures
+    suivantes.
+6 bis. ✅ **Captures d'écran Google Play — faites le 4 novembre 2026.** Dix captures en **1080 × 1920** (dans `captures/`, ignoré par git, depuis le 4 novembre 2026), dont huit posées dans la fiche Play : tableau de bord, « à semer en novembre », cahier de culture, potager carré, journal, « Garder ta récolte », fiche tomate, badges, plus l'Étal et « au jardin en ce moment » en réserve. Play en accepte huit par type d'appareil.
 
     **Pourquoi il a fallu un émulateur Android** : aucune des 14 captures Apple ne convenait. Play exige que le côté le plus long fasse **moins du double** du côté le plus court, et l'iPhone 6,9″ est à 2,17 (1320 × 2868). Celles-ci sont à **1,78**, le 9:16 que Play recommande.
 
@@ -286,14 +305,14 @@ la synchro (Cloudflare, ci-dessous).
     ✅ **Et cette installation a servi à autre chose** : elle a trouvé que l'app **plantait au lancement en release sur Android**, pour tout le monde. Corrigé le 3 novembre 2026 (`android/app/proguard-rules.pro`), détail dans l'alerte 26 de `CLAUDE.md`.
 7. ✅ **Liens Amazon remis** : ôtés le 20 octobre 2026 (compte fermé), les 159 liens sont revenus le 30 octobre 2026 sous le tag `kultiva1-21`. ⚠️ Pense au statut trader (DSA) à la soumission.
 8. ✅ **Clé de localisation** : `NSLocationAlwaysAndWhenInUseUsageDescription` ajoutée le 30 octobre 2026 (avertissement ITMS-90683) ; builds 127 à 220 envoyés depuis.
-9. **Soumettre iOS** : le build 220 (3 novembre 2026 au soir, en TestFlight) depuis `docs/FICHE_APP_STORE.md`.
-10. **Créer la fiche Google Play** : le formulaire de création est
-    rempli et attend ses **deux cases de déclaration**, que seul Jean
-    peut cocher (règlement du programme, lois d'exportation). Tout le
-    reste — textes, icône 512, bannière 1024 × 500, dix captures, bundle
-    signé, réponses aux questionnaires — est prêt dans
-    `docs/FICHE_PLAY.md`. Lancer le test fermé dans la foulée ;
-    ses quatorze jours ne s'appliquent peut-être même pas (§ Android).
+9. **Soumettre iOS** : le build le plus récent (231, 4 novembre 2026, en TestFlight) depuis `docs/FICHE_APP_STORE.md`, une fois le rattachement débloqué.
+10. **Finir la fiche Google Play** : ✅ app créée et fiche Play Store
+    remplie le 4 novembre 2026 (textes, icône 512, bannière 1024 × 500,
+    huit captures). Restent la classification IARC et le statut de
+    professionnel, que seul Jean peut accepter, puis « Cible et
+    contenu » et « Sécurité des données » (en brouillon). Lancer ensuite
+    le test fermé : 12 testeurs pendant 14 jours, obligatoires pour ce
+    compte personnel (§ Android).
 11. **Relier les boutons « Télécharger »** : le site n'a plus de `href="#"` — les deux boutons sont inertes et disent « Bientôt sur l'App Store » / « Bientôt sur Google Play ». À remplacer par de vrais liens une fois l'app en ligne.
 12. ⬜ **Le disque du Mac est plein** : **5 Go libres** le 4 novembre 2026, et l'émulateur refuse de démarrer sous 1 Go. Le swap monte à 16 Go pendant une session d'émulateur, puis se résorbe.
 
@@ -309,7 +328,7 @@ la synchro (Cloudflare, ci-dessous).
 - **Builds iOS reçus par App Store Connect** (25, 27, 30, 31 octobre et
   1er, 2 et 3 novembre) — les builds Xcode Cloud 95, 96, 97, 127, 134, 152, 166 puis 195 sont
   arrivés dans la fiche `6762550020`, puis le 220 le 3 novembre au soir,
-  disponible en TestFlight.
+  et du 222 au 231 le 4 novembre, disponibles en TestFlight.
 - **Liens Amazon remis** (30 octobre) — sous le tag `kultiva1-21`.
 - **Site en ligne** (7 octobre) — `landing/` publié sur GitHub Pages à
   l'adresse `kultiva.toakeur.com`. Coupé du 3 au 4 novembre (dépôt
@@ -344,7 +363,8 @@ la synchro (Cloudflare, ci-dessous).
   `flutter build appbundle --release` complet.
 - **Décision DSA** (24 août) — les liens d'affiliation sont conservés,
   donc statut **trader**. Ces liens, retirés le 20 octobre 2026, sont
-  revenus le 30 octobre 2026 : le statut de trader reste celui à déclarer.
+  revenus le 30 octobre 2026 : le statut de trader reste celui à déclarer
+  (fait dans App Store Connect, constaté le 4 novembre 2026).
 - **Chiffres marketing corrigés** (24 août) — une passe antérieure avait
   gonflé défis et badges de 50 à 51 dans toutes les fiches. Le catalogue
   en contient bien 50 et 50. Le chiffre de 33 tutoriels, lui, était
