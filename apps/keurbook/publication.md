@@ -1,6 +1,6 @@
 # PUBLICATION — état de la mise en ligne
 
-> Mis à jour le 5 novembre 2026, d'après le site en ligne, la Search Console et les exécutions GitHub Actions.
+> Mis à jour le 6 novembre 2026, d'après le site en ligne, la Search Console, la console AdSense et les exécutions GitHub Actions.
 >
 > Aucun secret ici — uniquement des références.
 
@@ -8,7 +8,7 @@
 
 - **Production** : en ligne sur keurbook.com depuis le 1er octobre 2026
 - **Domaine & SSL** : Cloudflare, certificat valide jusqu'au 30 décembre 2026, renouvelé seul
-- **Visibilité** : 650 pages indexées par Google sur 993, IndexNow après chaque publication et chaque lundi
+- **Visibilité** : 649 pages indexées par Google sur 995, IndexNow après chaque publication et chaque lundi
 - **Contact** : keurbook@toakeur.com
 
 ## Boutiques
@@ -19,8 +19,8 @@
 | Hébergement | [ok] Cloudflare Pages, projet keurbook |
 | Domaine | [ok] keurbook.com, www redirigé (301) |
 | SSL | [ok] Certificat Cloudflare, HSTS actif |
-| Indexation | [à faire] 650 / 993 pages indexées par Google |
-| Mesure d'audience | [ok] Cloudflare Web Analytics, sans cookie |
+| Indexation | [à faire] 649 / 995 pages indexées par Google |
+| Mesure d'audience | [ok] Cloudflare Web Analytics, sans cookie ; Umami en essai depuis le 5 novembre |
 
 ## Ce qui reste, dans l'ordre
 
@@ -28,8 +28,8 @@
 2. ✅ **Search Console et IndexNow** : sitemap envoyé à Google, tout le site signalé après chaque publication et chaque lundi.
 3. ✅ **Publicité préparée** : script AdSense, ads.txt et 4 blocs d'annonces publiés le 12 octobre (aucune annonce affichée avant la validation).
 4. ✅ **Fiches rallongées** : refus AdSense du 21 octobre (contenu trop mince) ; les 796 fiches ont reçu « Le livre en détail » le 21 octobre.
-5. **Validation AdSense** : nouvel examen demandé le 22 octobre, « En préparation » dans la console au 4 novembre 2026 (dernier constat ; aucun courriel d'AdSense depuis, vérifié le 5 novembre 2026) ; suivre l'avis de Google dans la console AdSense.
-6. **Indexation complète** : faire entrer dans Google les 343 pages encore absentes.
+5. **Validation AdSense** : nouvel examen demandé le 22 octobre, « En préparation » dans la console (vérifié le 6 novembre 2026 ; aucun courriel d'AdSense depuis) ; suivre l'avis de Google dans la console AdSense.
+6. **Indexation complète** : faire entrer dans Google les 346 pages encore absentes.
 7. ✅ **Mesure d'audience** : Cloudflare Web Analytics autorisé dans `public/_headers` le 13 octobre.
 8. **Design définitif** : remplacer l'habillage provisoire par le design fait à part.
 
@@ -37,12 +37,12 @@
 
 | | |
 |---|---|
-| Adresse | **En ligne** sur https://keurbook.com (vérifié le 5 novembre 2026 : réponse 200) |
+| Adresse | **En ligne** sur https://keurbook.com (vérifié le 6 novembre 2026 : réponse 200) |
 | Hébergeur | Cloudflare Pages (projet `keurbook`), workflow `deploy.yml` |
-| Dernière publication | 5 novembre 2026 (lancée à 4 h 31 UTC par l'envoi sur `main`), réussie, suivie d'IndexNow réussi ; `version.txt` sert cette publication (vérifié le 5 novembre 2026) ; les précédentes, le 4 novembre à 3 h 00, 16 h 00 et 18 h 53 UTC, ont aussi réussi |
+| Dernière publication | 6 novembre 2026 (lancée à 4 h 31 UTC par l'envoi sur `main`), réussie, suivie d'IndexNow réussi ; `version.txt` sert cette publication (vérifié le 6 novembre 2026) ; les précédentes, le 6 novembre à 3 h 27 UTC et le 5 novembre à 13 h 20 et 19 h 03 UTC, ont aussi réussi |
 | Mise en ligne | 1er octobre 2026 |
 | Dépôt | https://github.com/teiki5320/keurbook |
-| Taille publiée | 992 adresses dans le sitemap (5 novembre 2026 : dont 44 articles Conseils et 13 articles d'actus ; 993 le 4 novembre, 991 le 2 novembre, 988 le 1er novembre, 987 le 31 octobre, 984 le 30 octobre, 982 le 29 octobre, 980 le 28 octobre, 975 le 27 octobre, 974 jusqu'au 26 octobre, avant la page Actus) |
+| Taille publiée | 995 adresses dans le sitemap (6 novembre 2026 : dont 45 articles Conseils et 15 articles d'actus ; 992 le 5 novembre, 993 le 4 novembre, 991 le 2 novembre, 988 le 1er novembre, 987 le 31 octobre, 984 le 30 octobre, 982 le 29 octobre, 980 le 28 octobre, 975 le 27 octobre, 974 jusqu'au 26 octobre, avant la page Actus) |
 | Contact affiché | `keurbook@toakeur.com` |
 | Maintenance | désactivée (`content/maintenance.json`) |
 
@@ -56,16 +56,17 @@
 
 ## Visibilité
 
-- **Sitemap** : https://keurbook.com/sitemap.xml répond (992 adresses le 5 novembre 2026 ; 993 le 4 novembre, 991 le 2 novembre, 988 le 1er novembre, 987 le 31 octobre, 984 le 30 octobre, 982 le 29 octobre, 980 le 28 octobre, 975 le 27 octobre) ; `robots.txt` autorise
+- **Sitemap** : https://keurbook.com/sitemap.xml répond (995 adresses le 6 novembre 2026 ; 992 le 5 novembre, 993 le 4 novembre, 991 le 2 novembre, 988 le 1er novembre, 987 le 31 octobre, 984 le 30 octobre, 982 le 29 octobre, 980 le 28 octobre, 975 le 27 octobre) ; `robots.txt` autorise
   tout et cite le sitemap.
 - **Google Search Console** : propriété de domaine `keurbook.com`, sitemap envoyé le 1er octobre
   2026, renvoyé le 16, le 20 et le 28 octobre puis le 4 novembre 2026, lu par Google le 4 novembre (aucune erreur). Search Console
-  (onglet Indexation du Studio) au 5 novembre 2026 : 650 pages indexées sur 993, 343 pas encore
-  (309 inconnues de Google, 34 explorées mais pas indexées) ; 663 sur 993 le 4 novembre, 663 sur 991 le 2 novembre, 675 sur 988 le 1er novembre, 675 sur 987 le 31 octobre, 677 sur 984 le 30 octobre, 680 sur 982 le 29 octobre, 680 sur 980 le 28 octobre, 679 sur 975 le 27 octobre, 673 sur 971 le 20 octobre.
+  (onglet Indexation du Studio) au 6 novembre 2026 : 649 pages indexées sur 995, 346 pas encore
+  (311 inconnues de Google, 35 explorées mais pas indexées) ; 650 sur 993 le 5 novembre, 663 sur 993 le 4 novembre, 663 sur 991 le 2 novembre, 675 sur 988 le 1er novembre, 675 sur 987 le 31 octobre, 677 sur 984 le 30 octobre, 680 sur 982 le 29 octobre, 680 sur 980 le 28 octobre, 679 sur 975 le 27 octobre, 673 sur 971 le 20 octobre.
 - **IndexNow** (Bing, Yandex…) : tout le sitemap est signalé après chaque publication réussie de `main`
   (depuis le 28 octobre 2026) et chaque lundi ; dernière exécution du lundi réussie le 2 novembre 2026 (la précédente le 26 octobre).
 - **Mesure d'audience** : Cloudflare Web Analytics (sans cookie), balise constatée en ligne le
-  14 octobre 2026 ; chiffres à vérifier dans la console.
+  14 octobre 2026 ; Umami (sans cookie) en essai depuis le 5 novembre 2026, balise constatée en ligne le
+  6 novembre 2026 ; chiffres à vérifier dans les consoles.
 - **Publicité** : Google AdSense en place (script chargé sur les pages, `https://keurbook.com/ads.txt`
-  répond). Validation du site par AdSense : première demande d'examen le 12 octobre 2026, refusée le 21 octobre 2026 (« contenu à faible valeur informative ») ; les 796 fiches ont été rallongées le 21 octobre et l'examen a été redemandé le 22 octobre 2026 (nouvel examen « En préparation » dans la console, vérifié le 4 novembre 2026) ; aucune annonce
+  répond). Validation du site par AdSense : première demande d'examen le 12 octobre 2026, refusée le 21 octobre 2026 (« contenu à faible valeur informative ») ; les 796 fiches ont été rallongées le 21 octobre et l'examen a été redemandé le 22 octobre 2026 (nouvel examen « En préparation » dans la console, vérifié le 6 novembre 2026) ; aucune annonce
   affichée pour l'instant.

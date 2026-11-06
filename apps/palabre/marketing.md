@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 3 novembre 2026. Compagnon de INFRA.md. Pour l'actualiser : relancer le même prompt.
+Mis à jour le 6 novembre 2026. Compagnon de INFRA.md. Pour l'actualiser : relancer le même prompt.
 
 ## Positionnement
 
@@ -26,7 +26,7 @@ Trois choses que les concurrents directs n'ont pas :
 
 ## Modèle de rémunération
 
-**État réel du code au 3 novembre 2026 : aucune monétisation n'est implémentée.** Le scan est sans ambiguïté — `pubspec.yaml` ne déclare ni `google_mobile_ads`, ni `in_app_purchase`, ni aucun SDK publicitaire ou de paiement ; `lib/` ne contient aucun code de publicité ni d'achat intégré ; l'application ne fait aucun appel réseau. Le jeu est aujourd'hui **entièrement jouable hors ligne, sans aucune source de revenu**.
+**État réel du code au 6 novembre 2026 : aucune monétisation n'est implémentée.** Le scan est sans ambiguïté — `pubspec.yaml` ne déclare ni `google_mobile_ads`, ni `in_app_purchase`, ni aucun SDK publicitaire ou de paiement ; `lib/` ne contient aucun code de publicité ni d'achat intégré ; l'application ne fait aucun appel réseau. Le jeu est aujourd'hui **entièrement jouable hors ligne, sans aucune source de revenu**.
 
 Le levier envisagé à ce stade est la paire habituelle du genre — publicité interstitielle plus un achat unique « Sans pub » — mais **la décision est explicitement reportée** : la question de la publicité mobile en Afrique de l'Ouest (remplissage, valeur du mille, moyens de paiement disponibles) n'est pas tranchée, et rien ne doit être câblé avant qu'elle le soit.
 
@@ -62,9 +62,10 @@ Aucune campagne payante n'est prévue tant que le modèle de rémunération n'es
 - **Note moyenne et avis** : à vérifier dans la console
 - **Mandats terminés par joueur** : à instrumenter
 - **Joueurs qui atteignent le jour 100** : à instrumenter
+- **Visites du site** : mesurées par Umami depuis le 5 novembre 2026 — à vérifier dans la console
 - **Achèvement des 59 histoires** : mesuré par simulation (`outils/mesure_par_histoire.dart`)
 
-L'application n'embarque aucun outil d'analyse et ne fait aucun appel réseau : les chiffres d'audience se liront dans les consoles une fois la distribution ouverte. Le seul chiffre mesuré aujourd'hui l'est hors application : `outils/mesure_par_histoire.dart` joue mille mandats et écrit le taux d'achèvement de chaque histoire — un indicateur d'équilibrage, pas d'audience. Revenu par mille affichages et conversion « Sans pub » sont sans objet tant qu'aucune régie ni aucun achat n'existe.
+L'application n'embarque aucun outil d'analyse et ne fait aucun appel réseau : les chiffres d'audience de l'appli se liront dans les consoles une fois la distribution ouverte ; seul le site est mesuré (Umami, depuis le 5 novembre 2026). Côté jeu, le seul chiffre mesuré aujourd'hui l'est hors application : `outils/mesure_par_histoire.dart` joue mille mandats et écrit le taux d'achèvement de chaque histoire — un indicateur d'équilibrage, pas d'audience. Revenu par mille affichages et conversion « Sans pub » sont sans objet tant qu'aucune régie ni aucun achat n'existe.
 
 ## Calendrier
 
