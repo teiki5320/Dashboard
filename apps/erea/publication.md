@@ -1,6 +1,6 @@
 # PUBLICATION — état des boutiques
 
-> Mis à jour le 6 novembre 2026 d'après l'App Store, la fiche publique
+> Mis à jour le 7 novembre 2026 d'après l'App Store, la fiche publique
 > Google Play et l'historique du dépôt ; ce que seules les consoles savent
 > est marqué « à vérifier dans la console ». Une ligne par système d'exploitation, dans un format
 > réutilisable d'une application à l'autre. Pour mettre à jour :
@@ -11,17 +11,17 @@
 
 ## En bref
 
-- **Version commune** : **`1.0.7`** sur les deux boutiques — App Store : build 210, en ligne depuis le 31 octobre 2026 (15 h 05) · Google Play : `versionCode 8`, en ligne (vérifié le 6 novembre 2026) ; `1.0.8+9` dans le code depuis le 1er novembre
+- **Version commune** : **`1.0.7`** sur les deux boutiques — App Store : build 210, en ligne depuis le 31 octobre 2026 (15 h 05) · Google Play : `versionCode 8`, en ligne (vérifié le 7 novembre 2026) ; `1.0.8+9` dans le code depuis le 1er novembre
 - **Identifiant de bundle** : `com.teiki.erea`, identique sur iOS et Android
-- **Monétisation** : pub AdMob (diffusion limitée : applis AdMob pas encore associées aux boutiques, 6 nov.) + achat unique « Erea sans publicité », 3,99 €
-- **Confidentialité** : six types déclarés (SDK AdMob), consentement RGPD et ATT ; page `/confidentialite.html` en ligne (6 nov.)
-- **Contact** : `erea@toakeur.com` · site `erea.toakeur.com`, en ligne (vérifié le 6 nov.)
+- **Monétisation** : pub AdMob (diffusion limitée : applis AdMob pas encore associées aux boutiques, 7 nov.) + achat unique « Erea sans publicité », 3,99 €
+- **Confidentialité** : six types déclarés (SDK AdMob), consentement RGPD et ATT ; page `/confidentialite.html` en ligne (7 nov.)
+- **Contact** : `erea@toakeur.com` · site `erea.toakeur.com`, en ligne (vérifié le 7 nov.)
 
 ## Boutiques
 
 | | 🍎 App Store | 🤖 Google Play |
 |---|---|---|
-| État | [ok] 1.0.7 (build 210) en ligne depuis le 31 octobre 2026 ; la 1.0.5 l'était depuis le 21 octobre | [ok] 1.0.7 (`versionCode 8`) en ligne (vérifié le 6 novembre 2026), envoyée le 30 octobre |
+| État | [ok] 1.0.7 (build 210) en ligne depuis le 31 octobre 2026 ; la 1.0.5 l'était depuis le 21 octobre | [ok] 1.0.7 (`versionCode 8`) en ligne (vérifié le 7 novembre 2026), envoyée le 30 octobre |
 | Construction | [ok] Xcode Cloud, à chaque poussée sur `main` | [ok] App Bundle construit sur le Mac |
 | Signature | [ok] automatique, gérée par Apple | [ok] keystore `CN=Toa`, copie de secours |
 | Classification | [ok] 4+ | [ok] questionnaire rempli, note à vérifier dans la console |
@@ -32,12 +32,12 @@
 ## Vue d'ensemble
 
 - **iOS** : **1.0.7 (build 210) en ligne depuis le 31 octobre 2026 à 15 h 05** ; avant elle, la 1.0.5 (build 195) a été mise en ligne le 21 octobre 2026 à 17 h 44, et la 1.0.4 (build 182) a été mise en ligne le 15 octobre 2026 à 14 h 01, soumise à 12 h 51 et publiée automatiquement à l'approbation ; nouveau nom « Erea : Quiz d'histoire & frise »
-- **Android** : **accès à la production accordé le 17 octobre 2026** (demandé le 14 octobre à 18 h 39) ; **release de production `5 (1.0.4)` envoyée pour examen le 17 octobre vers 8 h 25**, promue depuis la piste Alpha, déploiement complet, publication gérée désactivée ; première mise en ligne sur Google Play le 20 octobre 2026 à 16 h 07 ; la 1.0.5 a été mise en ligne le 21 octobre, la 1.0.6 (versionCode 7) le 22 octobre 2026 ; **1.0.7 (versionCode 8) en ligne (vérifié le 6 novembre 2026)**
-- **Version dans le code** : `1.0.8+9` depuis le 1er novembre 2026, montée parce que la 1.0.7 approuvée n'accepte plus de build ; avant elle, `1.0.7+8` à partir du 30 octobre 2026, envoyée le 30 octobre au soir aux deux boutiques (App Store : build 210 soumis à l'App Review, notes du §0 de `APP_REVIEW.md`, arrêté le 31 octobre à 9 h 02 par l'examen automatique faute de la case « Publicité » dans la classification par âge, renvoyé à 11 h 03, approuvé à 15 h 04 et en ligne depuis 15 h 05 ; Google Play : bundle `versionCode 8` en production, en ligne (vérifié le 6 novembre 2026), copie dans iCloud → Erea) — un seul rappel du soir, au soir où la série est en jeu (au lieu de sept qui pouvaient annoncer une série déjà perdue), question cachée pendant la pause du Chrono, aucune pub demandée sans consentement valable, doublon « La radio franchit l'Atlantique » retiré (1 830 faits), deux phrases corrigées (choix du pays, Défi du jour), rappel coupé par le joueur jamais rallumé, Chrono figé derrière la boîte « Quitter ? », écran de révélation qui tient sur iPhone SE en très grande police, lien « Confidentialité » dans les réglages, pubs de test de Google en mode debug, écran Album, Classique en pleine largeur sur l'accueil, icônes dessinées à la place des emoji de l'interface, flamme de série redressée, Facile par défaut pour tout joueur qui n'a jamais choisi de difficulté (les joueurs d'avant la 1.0.5 restaient en Normal) ; le build 209 (30 octobre, 12 h 45) a servi au premier essai sur TestFlight, le 210 (16 h 11) a été validé par Jean sur iPad et soumis ; avant elle, `1.0.6+7` à partir du 21 octobre au soir (le build 196, encore en 1.0.5, a été refusé après l'approbation) ; elle n'ajoute que la réduction optimisée des ressources par R8 et part sur Google Play seul (bundle `versionCode 7`, copie dans iCloud → Erea), rien ne change sur iPhone ; la `1.0.5+6` a été envoyée le 21 octobre 2026 (build iOS `195`, bundle Android `versionCode 6`, copie dans iCloud → Erea) : la bonne année en grand à la révélation, Facile par défaut et niveau retenu, succès sous la carte de niveau en fin de partie, icône adaptative Android, notification en silhouette, logo au démarrage ; Flutter figé à 3.47.3 sur Xcode Cloud
+- **Android** : **accès à la production accordé le 17 octobre 2026** (demandé le 14 octobre à 18 h 39) ; **release de production `5 (1.0.4)` envoyée pour examen le 17 octobre vers 8 h 25**, promue depuis la piste Alpha, déploiement complet, publication gérée désactivée ; première mise en ligne sur Google Play le 20 octobre 2026 à 16 h 07 ; la 1.0.5 a été mise en ligne le 21 octobre, la 1.0.6 (versionCode 7) le 22 octobre 2026 ; **1.0.7 (versionCode 8) en ligne (vérifié le 7 novembre 2026)**
+- **Version dans le code** : `1.0.8+9` depuis le 1er novembre 2026, montée parce que la 1.0.7 approuvée n'accepte plus de build ; avant elle, `1.0.7+8` à partir du 30 octobre 2026, envoyée le 30 octobre au soir aux deux boutiques (App Store : build 210 soumis à l'App Review, notes du §0 de `APP_REVIEW.md`, arrêté le 31 octobre à 9 h 02 par l'examen automatique faute de la case « Publicité » dans la classification par âge, renvoyé à 11 h 03, approuvé à 15 h 04 et en ligne depuis 15 h 05 ; Google Play : bundle `versionCode 8` en production, en ligne (vérifié le 7 novembre 2026), copie dans iCloud → Erea) — un seul rappel du soir, au soir où la série est en jeu (au lieu de sept qui pouvaient annoncer une série déjà perdue), question cachée pendant la pause du Chrono, aucune pub demandée sans consentement valable, doublon « La radio franchit l'Atlantique » retiré (1 830 faits), deux phrases corrigées (choix du pays, Défi du jour), rappel coupé par le joueur jamais rallumé, Chrono figé derrière la boîte « Quitter ? », écran de révélation qui tient sur iPhone SE en très grande police, lien « Confidentialité » dans les réglages, pubs de test de Google en mode debug, écran Album, Classique en pleine largeur sur l'accueil, icônes dessinées à la place des emoji de l'interface, flamme de série redressée, Facile par défaut pour tout joueur qui n'a jamais choisi de difficulté (les joueurs d'avant la 1.0.5 restaient en Normal) ; le build 209 (30 octobre, 12 h 45) a servi au premier essai sur TestFlight, le 210 (16 h 11) a été validé par Jean sur iPad et soumis ; avant elle, `1.0.6+7` à partir du 21 octobre au soir (le build 196, encore en 1.0.5, a été refusé après l'approbation) ; elle n'ajoute que la réduction optimisée des ressources par R8 et part sur Google Play seul (bundle `versionCode 7`, copie dans iCloud → Erea), rien ne change sur iPhone ; la `1.0.5+6` a été envoyée le 21 octobre 2026 (build iOS `195`, bundle Android `versionCode 6`, copie dans iCloud → Erea) : la bonne année en grand à la révélation, Facile par défaut et niveau retenu, succès sous la carte de niveau en fin de partie, icône adaptative Android, notification en silhouette, logo au démarrage ; Flutter figé à 3.47.3 sur Xcode Cloud
 - **Identifiant** : `com.teiki.erea`, identique sur les deux plateformes
 - **Achat intégré** : `com.teiki.erea.sanspub` « Erea sans publicité », 3,99 €, non consommable — **approuvé** sur l'App Store, **actif** sur Google Play
-- **Monétisation** : interstitielle AdMob une partie sur deux, consentement RGPD publié le 3 septembre 2026 ; les deux applis AdMob (Erea iOS et Erea Android) sont en « Examen requis », avec une diffusion d'annonces limitée, parce qu'elles ne sont pas encore associées à leur fiche App Store et Google Play ; tant que ce n'est pas fait, AdMob ne peut pas valider `app-ads.txt` (vérifié le 6 novembre 2026)
-- **Web** : vitrine `https://erea.toakeur.com/` en ligne (vérifié le 6 novembre 2026) ; hors ligne le 4 novembre au matin, quand le dépôt était passé en privé, remis en ligne le même jour à 15 h 09, contact `erea@toakeur.com`
+- **Monétisation** : interstitielle AdMob une partie sur deux, consentement RGPD publié le 3 septembre 2026 ; les deux applis AdMob (Erea iOS et Erea Android) sont en « Examen requis », avec une diffusion d'annonces limitée, parce qu'elles ne sont pas encore associées à leur fiche App Store et Google Play ; tant que ce n'est pas fait, AdMob ne peut pas valider `app-ads.txt` (vérifié le 7 novembre 2026)
+- **Web** : vitrine `https://erea.toakeur.com/` en ligne (vérifié le 7 novembre 2026) ; hors ligne le 4 novembre au matin, quand le dépôt était passé en privé, remis en ligne le même jour à 15 h 09, contact `erea@toakeur.com`
 
 La 1.0.4 a été mise en ligne sur l'App Store le 15 octobre, avec le nom
 long et les captures légendées, après deux builds refusés à l'import pour
@@ -45,7 +45,7 @@ le manifeste de confidentialité. Sur Google Play, la même 1.0.4
 est passée en production le 20 octobre. Erea est en ligne sur les deux
 boutiques. La 1.0.5, envoyée le 21 octobre, a été mise en ligne sur les deux
 boutiques le jour même ; la 1.0.6 (Android seul) a été mise en ligne sur Google Play
-le 22 octobre. La 1.0.7 est en ligne sur Google Play (vérifié le 6 novembre 2026)
+le 22 octobre. La 1.0.7 est en ligne sur Google Play (vérifié le 7 novembre 2026)
 et sur l'App Store depuis le 31 octobre 2026 à 15 h 05.
 
 ---
@@ -62,7 +62,7 @@ et sur l'App Store depuis le 31 octobre 2026 à 15 h 05.
 | Dernière soumission | `1.0.7`, build `210`, envoyée le 30 octobre 2026 à 19 h 04, arrêtée le 31 octobre à 9 h 02 par l'examen automatique (case « Publicité » de la classification par âge non cochée), renvoyée à 11 h 03, **approuvée à 15 h 04** (fiche publique `https://apps.apple.com/fr/app/erea-quiz-dhistoire-frise/id6794918301`) ; publication automatique, notes App Review du §0 de `APP_REVIEW.md` |
 | Soumission précédente | `1.0.5`, build `195`, envoyée le 21 octobre 2026 à 15 h 11, approuvée et mise en ligne à 17 h 44 |
 | Soumission plus ancienne | `1.0.4`, build `182`, le 15 octobre 2026 à 12 h 51, approuvée le jour même — les builds `176` et `180` ont été refusés à l'import (ITMS-91064) : le validateur n'accepte ni « suivi à vrai, liste de domaines vide » ni « suivi à vrai, sans clé » ; le 182 porte « suivi à faux, sans clé » (commit 6e981b6) ; nom « Erea : Quiz d'histoire & frise », mots-clés sans « quiz/frise/histoire » (déjà dans le nom), captures iPhone légendées écran moyen et grand écran (iPad : celles d'août), adresses passées sur `erea.toakeur.com` (assistance, site, confidentialité), notes App Review réécrites (AdMob, consentement, achat intégré) |
-| Notes / avis | 0 note au 6 novembre 2026 |
+| Notes / avis | 0 note au 7 novembre 2026 |
 | Achat intégré | `com.teiki.erea.sanspub` « Erea sans publicité », non consommable, **approuvé** le 8 septembre avec la 1.0.2 |
 | Distribution | Xcode Cloud, action *Archiver*, préparation **App Store Connect** |
 
@@ -116,9 +116,9 @@ Le contact public de l'app est `erea@toakeur.com` depuis le 7 octobre
 
 | | |
 |---|---|
-| État | **1.0.7 en ligne (vérifié le 6 novembre 2026)** — release de production `8 (1.0.7)` envoyée le 30 octobre 2026 au soir ; avant elle, la release `7 (1.0.6)`, envoyée pour examen le 22 octobre 2026 vers 12 h 05 et mise en ligne le même jour (déploiement complet, la `6 (1.0.5)` non incluse, notes « Appli plus légère et plus économe en mémoire ») ; la `6 (1.0.5)` a été mise en ligne le 21 octobre 2026 à 15 h 30 — la première, `5 (1.0.4)`, l'était depuis le 20 octobre (accès à la production accordé le 17, demandé le 14) ; fiche publique `https://play.google.com/store/apps/details?id=com.teiki.erea` |
+| État | **1.0.7 en ligne (vérifié le 7 novembre 2026)** — release de production `8 (1.0.7)` envoyée le 30 octobre 2026 au soir ; avant elle, la release `7 (1.0.6)`, envoyée pour examen le 22 octobre 2026 vers 12 h 05 et mise en ligne le même jour (déploiement complet, la `6 (1.0.5)` non incluse, notes « Appli plus légère et plus économe en mémoire ») ; la `6 (1.0.5)` a été mise en ligne le 21 octobre 2026 à 15 h 30 — la première, `5 (1.0.4)`, l'était depuis le 20 octobre (accès à la production accordé le 17, demandé le 14) ; fiche publique `https://play.google.com/store/apps/details?id=com.teiki.erea` |
 | Console | <https://play.google.com/console> |
-| Version publiée | `8 (1.0.7)`, **en ligne (vérifié le 6 novembre 2026)** — remplace la `7 (1.0.6)`, mise en ligne le 22 octobre 2026, qui remplaçait la `6 (1.0.5)`, mise en ligne le 21 octobre 2026 à 15 h 30, qui remplaçait la `5 (1.0.4)` du 20 octobre |
+| Version publiée | `8 (1.0.7)`, **en ligne (vérifié le 7 novembre 2026)** — remplace la `7 (1.0.6)`, mise en ligne le 22 octobre 2026, qui remplaçait la `6 (1.0.5)`, mise en ligne le 21 octobre 2026 à 15 h 30, qui remplaçait la `5 (1.0.4)` du 20 octobre |
 | Actions recommandées | bord à bord (`LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES` dans `B.1.r`) et sous-échantillonnage (`F1.s.run`) : d'après le mapping du bundle, code du SDK publicitaire de Google et de Play Core, pas le nôtre ; R8 : réduction optimisée des ressources activée dans la 1.0.6 (`android.r8.optimizedShrinking` sous AGP 8.11) ; plug-in Android Gradle 9 à attendre de Flutter |
 | Canal en cours | production — release `8 (1.0.7)` ; la première release de production, `5 (1.0.4)` (consentement attendu, achats restaurés, lien Play, classement masqué), avait été promue depuis le test fermé « Alpha », qui servait la `4 (1.0.3)` depuis le 16 septembre |
 | Accès à la production | demandable depuis le 22 septembre ; demandé le 14 octobre à 18 h 39, **accordé le 17 octobre 2026** |
@@ -148,8 +148,8 @@ quatorze jours consécutifs**, exigés d'un compte personnel, ont été
 tenus du 8 au 22 septembre. L'accès à la production, demandé le
 14 octobre avec les vrais changements des 1.0.3 et 1.0.4, a été accordé
 le 17 octobre ; la première release de production a été mise en ligne le
-20 octobre ; la 1.0.6 l'a été le 22 octobre, et la 1.0.7 est en ligne (vérifié le 6 novembre 2026). La fiche publique
-Google Play répond (vérifié le 6 novembre 2026).
+20 octobre ; la 1.0.6 l'a été le 22 octobre, et la 1.0.7 est en ligne (vérifié le 7 novembre 2026). La fiche publique
+Google Play répond (vérifié le 7 novembre 2026).
 
 ---
 
@@ -157,8 +157,8 @@ Google Play répond (vérifié le 6 novembre 2026).
 
 | | |
 |---|---|
-| Production | `https://erea.toakeur.com/` — vitrine, jeu web sur `/jeu.html`, `/support.html`, `/confidentialite.html`, `/app-ads.txt`, `/telecharger/` ; en ligne (vérifié le 6 novembre 2026) ; hors ligne le 4 novembre au matin, quand le dépôt était passé en privé, remis en ligne le même jour à 15 h 09 |
-| Domaine & SSL | sous-domaine de `toakeur.com` depuis le 7 octobre 2026, servi par GitHub Pages derrière Cloudflare, HTTPS valide côté Cloudflare ; GitHub Pages actif sur `main` (vérifié le 6 novembre 2026) ; l'ancienne adresse `teiki5320.github.io/erea/` répond aussi |
+| Production | `https://erea.toakeur.com/` — vitrine, jeu web sur `/jeu.html`, `/support.html`, `/confidentialite.html`, `/app-ads.txt`, `/telecharger/` ; en ligne (vérifié le 7 novembre 2026) ; hors ligne le 4 novembre au matin, quand le dépôt était passé en privé, remis en ligne le même jour à 15 h 09 |
+| Domaine & SSL | sous-domaine de `toakeur.com` depuis le 7 octobre 2026, servi par GitHub Pages derrière Cloudflare, HTTPS valide côté Cloudflare ; GitHub Pages actif sur `main` (vérifié le 7 novembre 2026) ; l'ancienne adresse `teiki5320.github.io/erea/` répond aussi |
 | Visibilité | Smart App Banner (`app-id=6794918301`) sur les pages ; badge officiel « Télécharger dans l'App Store » vers `https://apps.apple.com/fr/app/erea/id6794918301` depuis le 12 octobre 2026 ; badge officiel Google Play à côté depuis le 21 octobre 2026 ; page d'aiguillage `https://erea.toakeur.com/telecharger/` depuis le 15 octobre 2026 (iPhone et iPad vers l'App Store, Android vers Google Play depuis le 21 octobre 2026 (`PLAY_OUVERT` à vrai), `?src=` relayé aux boutiques) |
 
 ---
@@ -170,13 +170,13 @@ Google Play répond (vérifié le 6 novembre 2026).
 3. ✅ **Google Play** : la 1.0.4 a été mise en production le 20 octobre 2026 à 16 h 07 (notes de version : « Bienvenue dans Erea ! »).
 4. ✅ **App Review de la 1.0.4** : approuvée et en ligne le 15 octobre 2026, le jour de l'envoi.
 5. ✅ **Site et page d'aiguillage** passés sur Google Play le 21 octobre 2026 : badge sur la vitrine, `PLAY_OUVERT` à `true`.
-6. ✅ **Remettre le site en ligne** : hors ligne le 4 novembre au matin (dépôt passé en privé), `erea.toakeur.com` a été remis en ligne le même jour à 15 h 09 ; toutes ses pages répondent (vérifié le 6 novembre 2026).
-7. **Booster la pub TikTok** (« Promouvoir ») vers `https://erea.toakeur.com/telecharger/?src=tiktok`, en ligne : 36 vidéos publiées sur « erea.jeu » du 29 octobre au 5 novembre 2026, 2 programmées le 6 novembre (vérifié dans Buffer et le Planning le 6 novembre), sans promotion payante.
+6. ✅ **Remettre le site en ligne** : hors ligne le 4 novembre au matin (dépôt passé en privé), `erea.toakeur.com` a été remis en ligne le même jour à 15 h 09 ; toutes ses pages répondent (vérifié le 7 novembre 2026).
+7. **Booster la pub TikTok** (« Promouvoir ») vers `https://erea.toakeur.com/telecharger/?src=tiktok`, en ligne : 38 vidéos publiées sur « erea.jeu » du 29 octobre au 6 novembre 2026, aucune autre programmée (vérifié dans Buffer et le Planning le 7 novembre), sans promotion payante.
 8. ✅ **1.0.5** mise en ligne sur les deux boutiques le 21 octobre 2026 (Google Play 15 h 30, App Store 17 h 44). La **1.0.6** (R8, Android seul) a été mise en ligne sur Google Play le 22 octobre 2026.
 9. **DSA** : Jean a demandé le passage du compte Apple en compte organisation (octobre 2026) ; Apple a répondu le 23 octobre 2026 (dossier 102996469704) pour lancer la migration ; Jean lui a répondu le 29 octobre 2026 pour la lancer : c'est maintenant Apple qui a la main ; Jean l'a relancé le 2 novembre 2026 ; Apple a répondu le 5 novembre 2026 : la demande d'inscription en organisation est partie le même jour et attend la vérification d'Apple. Google Play exige aussi la déclaration du statut de professionnel avant le 1er février 2027 (e-mail du 4 novembre 2026) : pas encore faite, « Action requise » dans la Play Console (vérifié le 6 novembre 2026). « TOA CORP » n'est que le nom affiché du compte ; se déclarer trader une fois le compte converti et le complément d'adresse nettoyé.
-10. ✅ **1.0.7 en ligne sur les deux boutiques** : envoyée le 30 octobre 2026 au soir, en ligne sur Google Play (vérifié le 6 novembre 2026) et sur l'App Store depuis le 31 octobre 2026 à 15 h 05 ; le code est passé en 1.0.8 le 1er novembre.
+10. ✅ **1.0.7 en ligne sur les deux boutiques** : envoyée le 30 octobre 2026 au soir, en ligne sur Google Play (vérifié le 7 novembre 2026) et sur l'App Store depuis le 31 octobre 2026 à 15 h 05 ; le code est passé en 1.0.8 le 1er novembre.
 11. **1.0.8** : centrer la pastille de série au-dessus du logo, puis l'envoyer aux deux boutiques.
-12. **app-ads.txt** : publié le 30 octobre 2026 à la racine du site (`erea.toakeur.com/app-ads.txt`), servi (vérifié le 6 novembre 2026) après la coupure du 4 novembre au matin ; d'abord associer Erea iOS et Erea Android à leur fiche App Store et Google Play dans AdMob (« Ajouter un magasin ») : les deux sont en « Examen requis », diffusion d'annonces limitée (vérifié le 6 novembre 2026) ; AdMob pourra ensuite valider le fichier.
+12. **app-ads.txt** : publié le 30 octobre 2026 à la racine du site (`erea.toakeur.com/app-ads.txt`), servi (vérifié le 7 novembre 2026) après la coupure du 4 novembre au matin ; d'abord associer Erea iOS et Erea Android à leur fiche App Store et Google Play dans AdMob (« Ajouter un magasin ») : les deux sont en « Examen requis », diffusion d'annonces limitée (vérifié le 7 novembre 2026) ; AdMob pourra ensuite valider le fichier.
 13. **Élucider les builds Xcode Cloud 141 et 142** : échoués le 4 septembre sur des commits de documentation.
 
 ---
