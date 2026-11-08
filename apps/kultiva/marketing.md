@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 7 novembre 2026. Compagnon de `INFRA.md` : là où INFRA répertorie
+Mis à jour le 8 novembre 2026. Compagnon de `INFRA.md` : là où INFRA répertorie
 la technique, ce fichier suit la stratégie marketing et de rémunération.
 Pour l'actualiser : relancer le même prompt.
 
@@ -22,7 +22,8 @@ Pour l'actualiser : relancer le même prompt.
 ## Rémunération par phases
 
 - [fait] **Aujourd'hui** : app gratuite, rémunérée par l'affiliation Amazon en France. Les liens avaient été retirés le 20 octobre 2026 (tag rattaché au compte fermé par Amazon le 18 octobre) ; ils sont revenus le 30 octobre 2026 sous le tag `kultiva1-21`.
-- [en cours] **Relance et lancement** : le projet est en pause (choix de Jean) ; décider s'il repart, puis publier — l'app a été soumise aux deux boutiques le 4 novembre 2026 ; Apple a validé la version 1.0.0 le 6 novembre 2026 (publication manuelle, à lancer) et Google Play est en test fermé (12 testeurs inscrits, jour 2 sur 14 le 7 novembre 2026). Le site et sa page de confidentialité sont en ligne (vérifié le 7 novembre 2026). L'app n'a plus de backend depuis le 30 octobre 2026, rien de ce côté ne bloque. La piste de vidéo récompensée AdMob est sans objet : elle reposait sur l'XP du Tamassi, supprimé le 31 octobre 2026.
+- **Décision du 8 novembre 2026** : 1.0.0 validée par Apple le 6 novembre, publication gardée en attente par choix de Jean (pause).
+- [en cours] **Relance et lancement** : le projet est en pause (choix de Jean) ; décider s'il repart, puis publier — l'app a été soumise aux deux boutiques le 4 novembre 2026 ; Apple a validé la version 1.0.0 le 6 novembre 2026 (publication manuelle, à lancer) et Google Play est en test fermé (12 testeurs inscrits, jour 3 sur 14 le 8 novembre 2026). Le site et sa page de confidentialité sont en ligne (vérifié le 7 novembre 2026). L'app n'a plus de backend depuis le 30 octobre 2026, rien de ce côté ne bloque. La piste de vidéo récompensée AdMob est sans objet : elle reposait sur l'XP du Tamassi, supprimé le 31 octobre 2026.
 - **Affiliation** : en place depuis le 30 octobre 2026, France seulement (Amazon ne livre pas en Afrique de l'Ouest). Changer de compte = changer une constante.
 - **Rétention prouvée** : abonnement Kultiva Plus via RevenueCat (jardins illimités, export PDF), France d'abord.
 - **Afrique de l'Ouest** : sponsoring par des ONG et programmes agricoles qui financent la diffusion de conseils.
@@ -66,7 +67,7 @@ un petit budget Meta ciblé Sénégal/Côte d'Ivoire ira loin le moment venu.
 L'app n'est publiée sur aucune boutique et aucun outil d'analytics produit
 n'est branché (Sentry ne suit que les crashs).
 
-- **Installations** : aucune en public — app pas publiée ; 12 testeurs inscrits au test fermé Google Play (7 novembre 2026)
+- **Installations** : aucune en public — app pas publiée ; 12 testeurs inscrits au test fermé Google Play (8 novembre 2026)
 - **Rétention J1 / J7 / J30** : à instrumenter
 - **Note moyenne en boutique** : aucune — app pas publiée
 - **Crashs** : à vérifier dans la console Sentry
@@ -82,5 +83,5 @@ n'est branché (Sentry ne suit que les crashs).
 ## Les 3 priorités
 
 - Publier la version 1.0.0, validée par Apple le 6 novembre 2026, d'un clic dans App Store Connect (publication manuelle) — décision de Jean, le projet étant en pause.
-- Mener le test fermé Google Play à son terme : 12 testeurs inscrits sans interruption pendant 14 jours (jour 2 le 7 novembre 2026, donc vers le 19 novembre), puis demander l'accès en production.
+- Mener le test fermé Google Play à son terme : 12 testeurs inscrits sans interruption pendant 14 jours (jour 3 le 8 novembre 2026, donc vers le 19 novembre), puis demander l'accès en production.
 - Déclarer le statut de professionnel dans la Play Console (« Action requise », avant février 2027), sans quoi l'app et le compte seraient retirés de Google Play.

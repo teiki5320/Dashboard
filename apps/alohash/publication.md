@@ -1,10 +1,10 @@
 # PUBLICATION — état de la mise en ligne
 
-> Mis à jour le 7 novembre 2026. Aucun secret ici.
+> Mis à jour le 8 novembre 2026. Aucun secret ici.
 
 ## En bref
 
-- **Production** : https://keurcook.com, ouvert au public, dernière publication le 7 novembre 2026
+- **Production** : https://keurcook.com, ouvert au public, dernière publication le 7 novembre 2026 à 23 h 22
 - **Domaine & SSL** : keurcook.com chez Cloudflare, HTTPS géré, www redirigé
 - **Visibilité** : Search Console, IndexNow, Pinterest ; sitemap de 266 adresses
 - **Monétisation** : affiliation Amazon (keurcookfr-21) ; AdSense refusé le 31 octobre 2026 (contenu à faible valeur), aucune annonce
@@ -28,14 +28,14 @@
 3. ✅ **Ouverture au public** : maintenance coupée le 29 septembre 2026.
 4. ✅ **Référencement** : Search Console déclarée, IndexNow après chaque publication et chaque lundi, Pinterest revendiqué.
 5. ✅ **AdSense préparé** : script, emplacements et ads.txt publiés le 12 octobre 2026, examen demandé le même jour.
-6. **Approbation AdSense** : examen refusé le 31 octobre 2026 pour « contenu à faible valeur informative » (console revérifiée le 7 novembre 2026) ; étoffer le contenu puis redemander l'examen.
+6. **Approbation AdSense** : examen refusé le 31 octobre 2026 pour « contenu à faible valeur informative » (console revérifiée le 8 novembre 2026) ; étoffer le contenu puis redemander l'examen.
 7. ✅ **Mesure d'audience** : Cloudflare Web Analytics autorisé dans la CSP le 13 octobre 2026.
 
 ## Web · Production
 
 | Version | En production ? | URL | Hébergeur |
 | --- | --- | --- | --- |
-| Web — Keur Cook (recettes, conseils, boutique) | **En ligne, ouvert au public** (maintenance désactivée) ; dernière publication réussie le 7 novembre 2026 vers 5 h 15 (envoi sur main : photo de l'article Black Friday ; version servie vérifiée le 7 novembre 2026) ; examen AdSense demandé le 12 octobre 2026, refusé le 31 octobre 2026, aucune annonce | https://keurcook.com (`www` redirigé) | Cloudflare Pages (projet `keurcook`) |
+| Web — Keur Cook (recettes, conseils, boutique) | **En ligne, ouvert au public** (maintenance désactivée) ; dernière publication réussie le 7 novembre 2026 à 23 h 22 (build programmé des actus, sur l'envoi `6ce9657` du 7 novembre 14 h 18 : page /actus étoffée ; version servie vérifiée le 8 novembre 2026) ; examen AdSense demandé le 12 octobre 2026, refusé le 31 octobre 2026, aucune annonce | https://keurcook.com (`www` redirigé) | Cloudflare Pages (projet `keurcook`) |
 
 Site 100 % statique (Next.js `output: "export"`, dossier `out/`), sans serveur ni base de données. Il est construit et publié par GitHub Actions (`.github/workflows/deploy.yml`, « Publier le site ») :
 
@@ -65,11 +65,11 @@ Pendant une maintenance : écran « On prépare la marmite », pages en `noindex
 
 ## Visibilité
 
-- **Référencement** : sitemap en ligne (`/sitemap.xml`, 266 adresses au 7 novembre 2026 (266 le 6 novembre ; 264 le 5 novembre ; 263 le 4 novembre ; 260 le 3 et le 2 novembre ; 258 le 1er novembre et le 31 octobre ; 257 le 30 octobre ; 254 le 29 octobre ; 264 le 28 octobre au matin, avant le retrait des fiches produit d'Afrique du Nord et des actus du Maghreb, gardées en noindex), dont 45 articles « Conseils », la page Actus et 9 articles d'actus : recettes, pays, produits, articles publiés, Top 10, Actus et articles d'actus, pages légales ; les articles d'actus s'ajoutent 2 fois par jour), robots.txt, balise robots « max-image-preview:large », métadonnées Open Graph et données JSON-LD (Recipe, Article, NewsArticle, BreadcrumbList, FAQPage, ItemList, WebSite et Organization ; pas de Product sur les fiches produit). Journal des retouches page par page : `docs/referencement.md` (premières retouches le 20 octobre 2026). Le build de production utilise `NEXT_PUBLIC_SITE_URL=https://keurcook.com`.
+- **Référencement** : sitemap en ligne (`/sitemap.xml`, 266 adresses au 8 novembre 2026 (266 le 7 et le 6 novembre ; 264 le 5 novembre ; 263 le 4 novembre ; 260 le 3 et le 2 novembre ; 258 le 1er novembre et le 31 octobre ; 257 le 30 octobre ; 254 le 29 octobre ; 264 le 28 octobre au matin, avant le retrait des fiches produit d'Afrique du Nord et des actus du Maghreb, gardées en noindex), dont 45 articles « Conseils », la page Actus et 9 articles d'actus : recettes, pays, produits, articles publiés, Top 10, Actus et articles d'actus, pages légales ; les articles d'actus s'ajoutent 2 fois par jour), robots.txt, balise robots « max-image-preview:large », métadonnées Open Graph et données JSON-LD (Recipe, Article, NewsArticle, BreadcrumbList, FAQPage, ItemList, WebSite et Organization ; pas de Product sur les fiches produit). Journal des retouches page par page : `docs/referencement.md` (premières retouches le 20 octobre 2026). Le build de production utilise `NEXT_PUBLIC_SITE_URL=https://keurcook.com`.
 - **Google Search Console** : propriété de domaine `keurcook.com` déclarée ; 248 pages indexées sur 259 au relevé du Studio du 27 octobre 2026 ; 11 pas encore (7 inconnues de Google, 4 détectées mais non explorées) ; sitemap renvoyé le 20 octobre 2026, relu par Google le 26 octobre 2026. Une routine (`keurcook-demandes-indexation`) sert à demander l'indexation des nouvelles recettes.
-- **IndexNow** : sitemap signalé après chaque publication réussie (depuis le 28 octobre 2026) et chaque lundi (`.github/workflows/indexnow.yml`) ; dernier envoi réussi le 7 novembre 2026.
+- **IndexNow** : sitemap signalé après chaque publication réussie (depuis le 28 octobre 2026) et chaque lundi (`.github/workflows/indexnow.yml`) ; dernier envoi réussi le 7 novembre 2026 à 23 h 24 (vérifié le 8 novembre).
 - **Pinterest** : site revendiqué sur le compte « Keur Cook » ; 52 recettes épinglées du 2 au 14 octobre 2026 ; publication automatique par l'API (`.github/workflows/pinterest.yml`, chaque jour à 4 h 17 UTC, 5 épingles au plus) en place depuis le 23 octobre 2026, clé du compte créée le même jour ; les 6 boissons épinglées le 24 octobre, soit les 58 recettes.
-- **Publicité** : Google AdSense en place depuis le 12 octobre 2026 ; examen refusé le 31 octobre 2026 : Google demande de corriger des problèmes sur le site avant d'y diffuser des annonces (e-mail AdSense du 31 octobre, aucun nouvel e-mail au 7 novembre 2026 ; console revérifiée le 7 novembre 2026 : motif « contenu à faible valeur informative », état d'ads.txt « Introuvable » (« Autorisé » le 6 novembre), alors que le fichier est bien servi en ligne), aucune annonce affichée.
+- **Publicité** : Google AdSense en place depuis le 12 octobre 2026 ; examen refusé le 31 octobre 2026 : Google demande de corriger des problèmes sur le site avant d'y diffuser des annonces (e-mail AdSense du 31 octobre, aucun nouvel e-mail au 8 novembre 2026 ; console revérifiée le 8 novembre 2026 : motif « contenu à faible valeur informative », état d'ads.txt « Introuvable » (comme le 7 novembre ; « Autorisé » le 6 novembre), alors que le fichier est bien servi en ligne), aucune annonce affichée.
 - **Analytics** : Cloudflare Web Analytics (sans cookie), balise constatée en ligne le 14 octobre 2026, chiffres à vérifier dans la console ; Umami (sans cookie, essai gratuit depuis le 5 novembre 2026, balise constatée en ligne le 6 novembre 2026), chiffres à vérifier dans la console Umami ; consentement aux cookies publicitaires recueilli par le message de Google, rouvert par le lien « Cookies » du pied de page.
 - **Newsletter** : aucune.
 

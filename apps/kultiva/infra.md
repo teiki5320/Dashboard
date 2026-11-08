@@ -1,12 +1,13 @@
 # INFRA — fiche technique
 
-Mis à jour le 7 novembre 2026 d'après le dépôt et le site en ligne. Pour mettre à jour : relancer ce même prompt.
+Mis à jour le 8 novembre 2026 d'après le dépôt et le site en ligne. Pour mettre à jour : relancer ce même prompt.
 
 > Aucun secret, clé ni jeton dans ce fichier — uniquement des références
 > (nom de variable, endroit où le secret vit, lien vers la console).
 
 ## En bref
 
+- **Décision du 8 novembre 2026** : 1.0.0 validée par Apple le 6 novembre, publication gardée en attente par choix de Jean (pause).
 - **Plateforme** : iOS + Android (Flutter), iPhone en portrait, iPad dans les quatre sens
 - **Stack** : Flutter/Dart Material 3, local-first, hors ligne
 - **Backend** : **aucun** — ni compte ni serveur à soi (seulement Open-Meteo et Sentry)
@@ -17,13 +18,13 @@ Mis à jour le 7 novembre 2026 d'après le dépôt et le site en ligne. Pour met
 ## Parcours
 
 - 🍎 **iOS** : 🐙 GitHub — main · CI au vert [ok] → ☁️ Xcode Cloud — build 233 réussi le 5/11, en TestFlight [ok] → 🛍️ App Store Connect — 1.0.0 (231) validée par Apple le 6/11 [ok] → 📱 App Store — publication manuelle à lancer [à faire]
-- 🤖 **Android** : 🐙 GitHub — CI construit l'App Bundle [ok] → 🔑 Keystore Android — clé locale, valable 2053 [ok] → 🛍️ Google Play Console — test fermé publié, 12 testeurs inscrits [ok] → ⏳ Test fermé — jour 2 sur 14 le 7/11 [pas encore] → 📱 Google Play — accès production à demander [pas encore]
+- 🤖 **Android** : 🐙 GitHub — CI construit l'App Bundle [ok] → 🔑 Keystore Android — clé locale, valable 2053 [ok] → 🛍️ Google Play Console — test fermé publié, 12 testeurs inscrits [ok] → ⏳ Test fermé — jour 3 sur 14 le 8/11 [pas encore] → 📱 Google Play — accès production à demander [pas encore]
 - 🛒 **Affiliation** : 🥕 Fiche légume — bouton « Acheter » [ok] → 🛒 Amazon Partenaires (affiliation) — tag kultiva1-21 [ok] → 📱 Utilisateurs — app pas publiée [pas encore]
 - 🌐 **Web** : 🐙 GitHub — dossier landing/ [ok] → 📄 GitHub Pages — site recréé le 4/11, en ligne [ok] → 🌐 Nom de domaine — kultiva.toakeur.com répond 200 [ok] → ⬇️ Boutons « Télécharger » — encore sans lien [pas encore]
 
 ## Vue d'ensemble
 
-- **État du projet** : **en pause** (choix de Jean). Les soumissions faites le 4 novembre 2026 suivent leur cours : Apple a **validé la version 1.0.0 (build 231) le 6 novembre 2026** (mail d'App Store Review, 19 h 19 UTC) — publication manuelle, l'app n'est donc pas encore dans l'App Store ; Google Play est en **test fermé**, 12 testeurs inscrits depuis 2 jours sans interruption (vérifié le 7 novembre 2026 dans la console). Ni l'une ni l'autre boutique ne propose l'app au public.
+- **État du projet** : **en pause** (choix de Jean). Les soumissions faites le 4 novembre 2026 suivent leur cours : Apple a **validé la version 1.0.0 (build 231) le 6 novembre 2026** (mail d'App Store Review, 19 h 19 UTC) — publication manuelle, l'app n'est donc pas encore dans l'App Store ; Google Play est en **test fermé**, 12 testeurs inscrits pour 3 jours sans interruption (vérifié le 8 novembre 2026 dans la console). Ni l'une ni l'autre boutique ne propose l'app au public.
 - **Plateforme** : iOS + Android (Flutter ≥ 3.47), iPhone en portrait, iPad dans les quatre sens depuis le 30 octobre 2026 — app `com.toa.kultiva`, v1.0.0+5. ⚠️ L'app a été **regardée sur un iPad Pro 13″ le 3 novembre 2026**, pour la première fois : le contenu y est désormais borné et centré (720 points, 560 pour le tableau de bord et les feuilles modales), sauf le catalogue, dont la grille profite volontairement de la largeur.
 - **Stack** : Flutter/Dart Material 3, local-first (SharedPreferences + services singletons, `ValueNotifier`, sans framework d'état)
 - **Backend** : **aucun depuis le 30 octobre 2026.** Les comptes ont été retirés de la v1 : le jardin, les photos et les badges vivent uniquement sur l'appareil. Les seuls appels sortants sont Open-Meteo (météo), Sentry (plantages) et, au toucher d'un bouton « Acheter », Amazon.fr.
@@ -85,7 +86,7 @@ Mis à jour le 7 novembre 2026 d'après le dépôt et le site en ligne. Pour met
 - **Console** : <https://play.google.com/console>
 - **Identifiants publics** : applicationId `com.toa.kultiva` (app « Kultiva : potager kawaii » créée le 4 novembre 2026) ; compte développeur **Toa**, ID `4741246028443998966`, **compte personnel**.
 - **Secrets** : voir « Keystore Android » ci-dessous.
-- **État** : fiche remplie et première soumission envoyée le 4 novembre 2026 à 17 h 20. **Test fermé publié**, **12 testeurs inscrits depuis 2 jours sans interruption** (lu dans la console le 7 novembre 2026, via Testers Community) : il faut 14 jours d'affilée avant de demander l'accès en production, soit vers le 19 novembre 2026. Le **statut de professionnel** est à déclarer (« Action requise », avant février 2027). Marche à suivre dans `docs/FICHE_PLAY.md`.
+- **État** : fiche remplie et première soumission envoyée le 4 novembre 2026 à 17 h 20. **Test fermé publié**, **12 testeurs inscrits pour 3 jours sans interruption** (lu dans la console le 8 novembre 2026, via Testers Community) : il faut 14 jours d'affilée avant de demander l'accès en production, soit vers le 19 novembre 2026. Le **statut de professionnel** est à déclarer (« Action requise », avant février 2027). Marche à suivre dans `docs/FICHE_PLAY.md`.
 - **Coût** : frais d'inscription unique.
 
 ### 7. Keystore Android (signature)

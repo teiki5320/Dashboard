@@ -1,18 +1,19 @@
 # PUBLICATION — état des boutiques
 
-> Mis à jour le 7 novembre 2026. Pour mettre à jour :
+> Mis à jour le 8 novembre 2026. Pour mettre à jour :
 > relancer ce même prompt.
 >
 > **Aucun secret ici** — uniquement des références publiques :
 > identifiants d'app, numéros de version, liens de console.
 >
 > ⚠️ **Sources** : le dépôt, les mails d'Apple et la Play Console (lue le
-> 7 novembre 2026). App Store Connect n'a pas été ouvert : ce qui ne
+> 8 novembre 2026). App Store Connect n'a pas été ouvert : ce qui ne
 > figure ni dans un mail ni dans le dépôt est marqué « à vérifier dans
 > la console ».
 
 ## En bref
 
+- **Décision du 8 novembre 2026** : 1.0.0 validée par Apple le 6 novembre, publication gardée en attente par choix de Jean (pause).
 - **Version commune** : `1.0.0+5` (`pubspec.yaml`) — validée par Apple le 6 novembre 2026, en test fermé sur Google Play
 - **Identifiant de bundle** : `com.toa.kultiva` (iOS et Android)
 - **Monétisation** : gratuite ; ni pub ni achat intégré, mais affiliation Amazon en France (liens remis le 30 octobre 2026, tag `kultiva1-21`)
@@ -24,8 +25,8 @@
 
 | | 🍎 App Store | 🤖 Google Play |
 |---|---|---|
-| État | [à faire] ⭐ **version 1.0.0 (build 231) validée par Apple le 6 novembre 2026** (envoyée le 4 novembre à 17 h 39) ; publication manuelle : pas encore dans l'App Store | [pas encore] **test fermé Alpha publié**, 12 testeurs inscrits depuis 2 jours sans interruption (console, 7 novembre 2026) ; 14 jours requis avant l'accès en production |
-| Construction | [ok] Xcode Cloud (`ci_post_clone.sh`, Flutter 3.47.3) : **build 233 réussi le 5 novembre 2026**, disponible en TestFlight ; le build 231, le premier archivé pour l'App Store, avait réussi le 4 novembre 2026 ; aucun mail d'échec depuis (vérifié le 7 novembre 2026) | [ok] App Bundle construit par la CI GitHub Actions ; plantage au lancement en release corrigé le 3 novembre 2026 |
+| État | [à faire] ⭐ **version 1.0.0 (build 231) validée par Apple le 6 novembre 2026** (envoyée le 4 novembre à 17 h 39) ; publication manuelle : pas encore dans l'App Store | [pas encore] **test fermé Alpha publié**, 12 testeurs inscrits pour 3 jours sans interruption (console, 8 novembre 2026) ; 14 jours requis avant l'accès en production |
+| Construction | ⛔ **Xcode Cloud est à l'arrêt depuis le 5 novembre 2026, et ce n'est pas une panne** : Apple a suspendu les avantages de l'adhésion pendant la **migration du compte de « personne physique » vers « organisation »** (bandeau sur developer.apple.com, vu le 8 novembre 2026). Conséquences : plus aucun produit Xcode Cloud dans App Store Connect, Xcode répond « your developer account is not a member of a team that is eligible to use Xcode Cloud », et un `flutter build ipa` local échoue sur « No signing certificate "iOS Distribution" found ». Une seule cause, quatre symptômes — **rien à réparer, ça repartira à la fin de la migration**. Xcode Cloud (`ci_post_clone.sh`, Flutter 3.47.3) : **build 233 réussi le 5 novembre 2026**, disponible en TestFlight ; le build 231, le premier archivé pour l'App Store, avait réussi le 4 novembre 2026 ; aucun mail d'échec depuis (vérifié le 7 novembre 2026) | [ok] App Bundle construit par la CI GitHub Actions ; plantage au lancement en release corrigé le 3 novembre 2026 |
 | Signature | [ok] gérée par Xcode Cloud, équipe `K597U7X3FZ` | [ok] keystore local, valable jusqu'en 2053 |
 | Classification | [ok] **4+**, questionnaire de confidentialité rempli le 4 novembre 2026 (position approximative, position exacte, données de pannes — fonctionnalité de l'app, sans lien avec l'identité, sans suivi) ; étiquettes publiées par Jean le 4 novembre 2026 avant l'envoi | [ok] **PEGI 3 / ESRB Everyone / USK 0 / IARC 3+** — questionnaire IARC envoyé par Jean le 4 novembre 2026 à 16 h 54 |
 | Tarifs et disponibilité | [ok] **gratuite dans 175 pays**, pays de base France (EUR), réglé le 4 novembre 2026 | [ok] test fermé **Alpha** ciblant **178 pays** ; release « 1.0.0 (5) — premier test fermé » avec son bundle, **31,7 Mo à l'installation**, envoyée le 4 novembre 2026 et publiée en test fermé |
@@ -37,7 +38,7 @@
 
 - **État du projet** : **en pause** (choix de Jean). Les soumissions envoyées le 4 novembre 2026 — Google Play à 17 h 20, Apple à 17 h 39 — suivent leur cours : ni l'une ni l'autre boutique ne propose encore l'app au public.
 - **iOS** : ⭐ **version 1.0.0 (build 231) validée par l'App Review le 6 novembre 2026** (« eligible for distribution », mail du 6 novembre à 19 h 19 UTC, vérifié le 7 novembre 2026). La fiche est réglée en **publication manuelle** : l'app n'apparaîtra dans l'App Store que lorsque Jean cliquera sur « Publier cette version » dans App Store Connect. Le dernier build reçu en TestFlight est le 233 (5 novembre 2026)
-- **Android** : app « Kultiva : potager kawaii » créée le 4 novembre 2026, première soumission envoyée le même jour à 17 h 20 (13 modifications, puis 2 de plus à 17 h 29). **Test fermé publié** ; **12 testeurs inscrits depuis 2 jours sans interruption** (tableau de bord de la console, 7 novembre 2026), fournis par le service Testers Community commandé le 4 novembre. Il faut 14 jours d'affilée — vers le 19 novembre 2026 — avant de demander l'accès en production. Le **statut de professionnel** reste à déclarer (« Action requise », avant février 2027)
+- **Android** : app « Kultiva : potager kawaii » créée le 4 novembre 2026, première soumission envoyée le même jour à 17 h 20 (13 modifications, puis 2 de plus à 17 h 29). **Test fermé publié** ; **12 testeurs inscrits pour 3 jours sans interruption** (tableau de bord de la console, 7 novembre 2026), fournis par le service Testers Community commandé le 4 novembre. Il faut 14 jours d'affilée — vers le 19 novembre 2026 — avant de demander l'accès en production. Le **statut de professionnel** reste à déclarer (« Action requise », avant février 2027)
 - **Web** : site de présentation <https://kultiva.toakeur.com>, en ligne depuis le 7 octobre 2026. Il a répondu **404 du 3 au 4 novembre 2026**, le dépôt étant passé en privé : GitHub avait alors **supprimé** le site Pages. Dépôt repassé en public et site recréé le 4 novembre 2026 ; le site et `/privacy.html` répondent 200 (vérifié le 7 novembre 2026)
 - **Backend** : **aucun**. Les comptes ont été retirés de la v1 le 30 octobre 2026 — le jardin vit sur l'appareil. Le projet Supabase reste inactif (vérifié le 7 novembre 2026), inutilisé, et ne bloque plus rien
 - **Monétisation** : affiliation Amazon en France. Les 159 liens, retirés le 20 octobre 2026 (compte fermé le 18), sont **revenus le 30 octobre 2026** sous le tag `kultiva1-21`. Le statut **trader** au sens du DSA, décidé le 24 août 2026 à cause de ces liens, est déclaré dans App Store Connect ; côté Play, il passe par la déclaration du statut de professionnel
@@ -129,7 +130,7 @@ payant* si la distribution doit couvrir tous les pays.
 
 | | |
 |---|---|
-| État | **En test fermé** — app créée le 4 novembre 2026 (`Kultiva : potager kawaii`), première soumission le même jour à 17 h 20 ; test fermé publié, 12 testeurs inscrits depuis 2 jours sans interruption (console, 7 novembre 2026) |
+| État | **En test fermé** — app créée le 4 novembre 2026 (`Kultiva : potager kawaii`), première soumission le même jour à 17 h 20 ; test fermé publié, 12 testeurs inscrits pour 3 jours sans interruption (console, 8 novembre 2026) |
 | Console | <https://play.google.com/console> — compte **Toa**, ID `4741246028443998966`, **compte personnel** (lu dans la console le 4 novembre 2026) |
 | Version publiée | aucune |
 | Version en cours | App Bundle `1.0.0` (`versionCode 5`) — construit par la CI à chaque envoi, et **reconstruit en local le 4 novembre 2026** : c'est le premier à porter le correctif R8 du 3 novembre, qui répare le plantage au lancement en release. ⚠️ Celui du 23 août 2026 ne l'a pas : ne pas le téléverser |
@@ -151,10 +152,10 @@ par Play pour les nouvelles applications.
 description longue, la description courte (78/80 caractères) et des
 variantes d'accroche par pays pour les storefronts d'Afrique de l'Ouest.
 
-**Ce qui reste (7 novembre 2026).** Les **11 tâches de configuration
+**Ce qui reste (8 novembre 2026).** Les **11 tâches de configuration
 sont terminées** depuis le 4 novembre 2026 (classification du contenu
 **PEGI 3 / ESRB Everyone / USK 0**, envoyée par Jean à 16 h 54). Le
-test fermé est publié et compte **12 testeurs inscrits depuis 2 jours
+test fermé est publié et compte **12 testeurs inscrits pour 3 jours
 sans interruption** : il en faut 14 d'affilée (vers le 19 novembre
 2026) avant de **demander l'accès en production**, ce qui passe par un
 questionnaire sur le test. Reste aussi le **statut de professionnel**
@@ -302,7 +303,7 @@ la synchro (Cloudflare, ci-dessous).
 9. ✅ **Soumettre iOS** : version 1.0.0 (build 231) envoyée le 4 novembre 2026 à 17 h 39, **validée par Apple le 6 novembre 2026**.
 9 bis. **Publier sur l'App Store** : un clic dans App Store Connect (publication manuelle) — décision de Jean, le projet étant en pause.
 10. ✅ **Créer la fiche Google Play** : faite et soumise le 4 novembre 2026 à 17 h 20 ; test fermé publié.
-10 bis. **Tenir le test fermé 14 jours** : 12 testeurs inscrits depuis 2 jours sans interruption au 7 novembre 2026, donc vers le 19 novembre — puis demander l'accès en production.
+10 bis. **Tenir le test fermé 14 jours** : 12 testeurs inscrits pour 3 jours sans interruption au 8 novembre 2026, donc vers le 19 novembre — puis demander l'accès en production.
 10 ter. **Déclarer le statut de professionnel** dans la Play Console (« Action requise », avant février 2027).
 11. **Relier les boutons « Télécharger »** : le site n'a plus de `href="#"` — les deux boutons sont inertes et disent « Bientôt sur l'App Store » / « Bientôt sur Google Play ». À remplacer par de vrais liens une fois l'app en ligne.
 12. ⬜ **Le disque du Mac est plein** : **5 Go libres** le 4 novembre 2026, et l'émulateur refuse de démarrer sous 1 Go. Le swap monte à 16 Go pendant une session d'émulateur, puis se résorbe.
