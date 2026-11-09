@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 8 novembre 2026. Compagnon de INFRA.md.
+Mis à jour le 9 novembre 2026. Compagnon de INFRA.md.
 
 ## Positionnement
 
@@ -10,9 +10,9 @@ Mis à jour le 8 novembre 2026. Compagnon de INFRA.md.
 
 ## Rémunération par phases
 
-- [fait] **Aujourd'hui** : liens Amazon Partenaires (tag `keurdecofr-21` depuis le 18 octobre 2026), 226 produits actifs sur 238, en ligne au 8 novembre 2026.
-- [en cours] **Validation AdSense** : examen demandé le 16 octobre 2026, « En préparation » au dernier contrôle de la console, le 8 novembre 2026 ; aucun mail de Google au 8 novembre 2026.
-- **Trafic Pinterest automatique** : publication quotidienne par l'API (5 épingles par passage) depuis le 20 octobre 2026, 151 au 8 novembre.
+- [fait] **Aujourd'hui** : liens Amazon Partenaires (tag `keurdecofr-21` depuis le 18 octobre 2026), 226 produits actifs sur 238, en ligne au 9 novembre 2026.
+- [en cours] **Validation AdSense** : examen demandé le 16 octobre 2026, « En préparation » au dernier contrôle de la console, le 9 novembre 2026 ; aucun mail de Google au 9 novembre 2026.
+- **Trafic Pinterest automatique** : publication quotidienne par l'API (5 épingles par passage) depuis le 20 octobre 2026, 151 au 9 novembre (aucune au passage du 9 novembre : les 247 épingles du manifeste d'alors étaient toutes publiées ou programmées ; 255 au manifeste depuis l'article du 9 novembre).
 - **Trafic de recherche** : pages indexées par Google et Bing, qui font vivre les deux revenus.
 
 ## Points forts
@@ -23,8 +23,8 @@ Mis à jour le 8 novembre 2026. Compagnon de INFRA.md.
 
 ## Canaux
 
-- ✅ **Pinterest « Keur Déco »** (principal) : compte branché au Planning du Studio ; 96 épingles importées par CSV (2 par jour, du 2 octobre au 18 novembre 2026, `data/pinterest-etat.json`). Publication par l'API : accès standard accordé, 20 tableaux reliés, 5 épingles par passage ; maximum corrigé et secret renouvelé le 20 octobre, 5 premières épingles publiées par l'API le même jour, 151 au 8 novembre 2026.
-- ✅ **Google** : Search Console vérifiée (propriété de domaine) ; 133 pages indexées sur 145 au relevé du Studio du 8 novembre 2026 (124 sur 143 le 6 novembre, 121 sur 137 le 3 novembre, 118 sur 133 du 31 octobre au 2 novembre, 107 sur 128 le 29 octobre, 104 sur 120 le 27 octobre, 71 au 7 octobre ; demandes d'indexation faites les 7 et 8 octobre). Le 21 octobre, la routine « Référencement du jour » a retravaillé 5 pages (titres, descriptions, liens internes), à relire à partir du 18 novembre ; le 22 octobre, 3 pages presque en première page retravaillées, à relire à partir du 19 novembre ; le 28 octobre, 3 autres pages (décoration bogolan, déco afro bohème, chambre style africain), à relire à partir du 25 novembre ; le 4 novembre, le Top terre cuite (en ligne depuis le 4 novembre au soir) (`docs/referencement.md`).
+- ✅ **Pinterest « Keur Déco »** (principal) : compte branché au Planning du Studio ; 96 épingles importées par CSV (2 par jour, du 2 octobre au 18 novembre 2026, `data/pinterest-etat.json`). Publication par l'API : accès standard accordé, 20 tableaux reliés, 5 épingles par passage ; maximum corrigé et secret renouvelé le 20 octobre, 5 premières épingles publiées par l'API le même jour, 151 au 9 novembre 2026.
+- ✅ **Google** : Search Console vérifiée (propriété de domaine) ; 135 pages indexées sur 147 au relevé du Studio du 9 novembre 2026 (133 sur 145 le 8 novembre, 124 sur 143 le 6 novembre, 121 sur 137 le 3 novembre, 118 sur 133 du 31 octobre au 2 novembre, 107 sur 128 le 29 octobre, 104 sur 120 le 27 octobre, 71 au 7 octobre ; demandes d'indexation faites les 7 et 8 octobre). Le 21 octobre, la routine « Référencement du jour » a retravaillé 5 pages (titres, descriptions, liens internes), à relire à partir du 18 novembre ; le 22 octobre, 3 pages presque en première page retravaillées, à relire à partir du 19 novembre ; le 28 octobre, 3 autres pages (décoration bogolan, déco afro bohème, chambre style africain), à relire à partir du 25 novembre ; le 4 novembre, le Top terre cuite (en ligne depuis le 4 novembre au soir) (`docs/referencement.md`).
 - ✅ **Bing** : pages signalées par IndexNow après chaque publication : reconstructions programmées (lundi, mercredi, vendredi, veille) et, depuis le 28 octobre 2026, chaque envoi sur `main`.
 - ⬜ **TikTok et YouTube** : TikTok « Afrotok » est branché au Studio mais rattaché à aucune app, YouTube « toa.afrotok » à Erea seule (Studio, 13 octobre 2026) ; aucune publication pour Keur Déco.
 
@@ -37,20 +37,20 @@ Mis à jour le 8 novembre 2026. Compagnon de INFRA.md.
 ## Mesures
 
 - **Audience** : Cloudflare Web Analytics et, depuis le 5 novembre 2026, Umami (sans cookie, visites, clics Amazon et clics du menu des sites Keur) — à vérifier dans la console.
-- **Pages indexées** : 133 sur 145 au 8 novembre 2026 (relevé du Studio) : 4 détectées non explorées (3 articles d'actus et 1 conseil), 4 inconnues de Google (2 articles d'actus et 2 conseils), 4 exclues volontairement par `noindex` ; le sitemap en ligne compte 146 adresses le 8 novembre 2026, dont 45 conseils et 19 articles d'actus.
-- **Épingles** : 96 importées par CSV (programmées jusqu'au 18 novembre 2026) et 151 publiées par l'API du 20 octobre au 8 novembre 2026 (`data/pinterest-etat.json`).
+- **Pages indexées** : 135 sur 147 au 9 novembre 2026 (relevé du Studio) : 4 détectées non explorées (3 articles d'actus et 1 conseil), 4 inconnues de Google (2 articles d'actus et 2 conseils), 4 exclues volontairement par `noindex` ; le sitemap en ligne compte 149 adresses le 9 novembre 2026, dont 46 conseils et 20 articles d'actus.
+- **Épingles** : 96 importées par CSV (programmées jusqu'au 18 novembre 2026) et 151 publiées par l'API du 20 octobre au 9 novembre 2026 (255 au manifeste depuis l'article du 9 novembre, dont 8 pas encore publiées) (`data/pinterest-etat.json`).
 - **Statistiques Pinterest** : à vérifier dans la console Pinterest.
 - **Commissions Amazon** : à vérifier dans la console Amazon Partenaires.
 - **Revenus AdSense** : aucun, site encore en examen chez Google.
 
 ## Calendrier
 
-- Articles et conseils **publiés à leur date** (en-tête `publie_le`), le site étant reconstruit à chaque push et chaque lundi, mercredi et vendredi à 5 h UTC. Au 8 novembre 2026 : 40 articles, dont 26 en ligne et 14 programmés, un par lundi jusqu'au 25 janvier 2027 (plus le guide Black Friday, programmé exceptionnellement le mercredi 18 novembre 2026), puis le balcon le 26 avril 2027. Page « Top 10 » à onglets (10 sujets) en ligne depuis le 19 octobre.
-- Conseils : 69, dont 45 en ligne au 8 novembre 2026 et 24 programmés (lundi, mercredi, vendredi) jusqu'au 1er janvier 2027 (45 pages `conseil-…` au sitemap en ligne le 8 novembre, dont celui du jour sur les symboles adinkra ; 7 conseils ajoutés le 2 novembre par la routine « Articles », du 18 décembre 2026 au 1er janvier 2027, avec une carte générée aux couleurs du site ; 12 ajoutés le 26 octobre par la routine « Articles », restés sans image jusqu'au 27 octobre : Jean a choisi de les compléter, 6 avec une photo libre de Wikimedia Commons créditée et 6 avec une carte générée aux couleurs du site ; les 50 images IA déjà en place sont gardées). Depuis le 23 octobre 2026, le site est reconstruit le lundi, le mercredi et le vendredi (`pages.yml`, cron `0 5 * * 1,3,5`) et à chaque push : chaque conseil paraît le jour de sa date.
+- Articles et conseils **publiés à leur date** (en-tête `publie_le`), le site étant reconstruit à chaque push et chaque lundi, mercredi et vendredi à 5 h UTC. Au 9 novembre 2026 : 40 articles, dont 27 en ligne (celui du jour, la table de réveillon wax et or, compris) et 13 programmés, un par lundi jusqu'au 25 janvier 2027 (plus le guide Black Friday, programmé exceptionnellement le mercredi 18 novembre 2026), puis le balcon le 26 avril 2027. Page « Top 10 » à onglets (10 sujets) en ligne depuis le 19 octobre.
+- Conseils : 69, dont 46 en ligne au 9 novembre 2026 et 23 programmés (lundi, mercredi, vendredi) jusqu'au 1er janvier 2027 (46 pages `conseil-…` au sitemap en ligne le 9 novembre, dont celui du jour sur le tabouret ashanti ; 7 conseils ajoutés le 2 novembre par la routine « Articles », du 18 décembre 2026 au 1er janvier 2027, avec une carte générée aux couleurs du site ; 12 ajoutés le 26 octobre par la routine « Articles », restés sans image jusqu'au 27 octobre : Jean a choisi de les compléter, 6 avec une photo libre de Wikimedia Commons créditée et 6 avec une carte générée aux couleurs du site ; les 50 images IA déjà en place sont gardées). Depuis le 23 octobre 2026, le site est reconstruit le lundi, le mercredi et le vendredi (`pages.yml`, cron `0 5 * * 1,3,5`) et à chaque push : chaque conseil paraît le jour de sa date.
 - Épingles : import CSV par lots de 30 jours, 2 par jour (lot en cours jusqu'au 18 novembre) ; en plus, l'API publie 5 épingles par passage du workflow quotidien.
 
 ## Les 3 priorités
 
-- Faire indexer les 8 pages encore absentes (4 détectées non explorées, 4 inconnues de Google ; 5 sont des articles d'actus et 3 des conseils, relevé du 8 novembre 2026) ; les 10 pages Top 10 sont déjà indexées.
+- Faire indexer les 8 pages encore absentes (4 détectées non explorées, 4 inconnues de Google ; 5 sont des articles d'actus et 3 des conseils, relevé du 9 novembre 2026) ; les 10 pages Top 10 sont déjà indexées.
 - Remplacer les 9 produits Amazon indisponibles et sans remplaçant (jarre toscane, coussin femme africaine en jute, plaid chenille, lampadaire rotin, sphère étoiles, suspension parasol, plateaux tressés lot de 2, tissu bogolan indigo à flèches, chemin de table paisley 40 × 225 cm) ; le tapis rond jute lurex a été remplacé le 4 novembre 2026 et les paniers en jonc de mer le 5 novembre 2026.
 - Refaire la clé Pinterest avant son échéance : le secret `PINTEREST_REFRESH_TOKEN` date du 20 octobre 2026 (valable environ 60 jours, soit vers le 19 décembre) ; sans elle, la publication automatique des épingles s'arrête (ticket de rappel n° 15 ouvert).
