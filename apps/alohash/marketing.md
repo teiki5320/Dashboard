@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 9 novembre 2026. Compagnon de INFRA.md.
+Mis à jour le 10 novembre 2026. Compagnon de INFRA.md.
 
 ## Positionnement
 
@@ -9,7 +9,7 @@ Mis à jour le 9 novembre 2026. Compagnon de INFRA.md.
 - **Contenu** :
   - 58 recettes de 16 pays (Afrique de l'Ouest, centrale, de l'Est, australe et Madagascar), dont six thés, cafés et infusions (ataya, kinkeliba, chai kényan, rooibos glacé, buna, kahawa chungu) depuis le 19 octobre 2026, avec histoire du plat, ingrédients, étapes, astuces et valeurs nutritionnelles estimées ; une section « La cuisine de … » sur chaque page pays ;
   - rubrique « Conseils » : 68 articles, dont 46 publiés et 22 programmés, trois par semaine (lundi, mercredi, vendredi) jusqu'au 28 décembre 2026 (`content/conseils/`, `docs/CONSEILS.md`, `docs/CONSEILS-CALENDRIER.md`) ;
-  - boutique de 127 produits en 9 gammes : Épices & aromates, Farines & céréales, Feuilles & fleurs séchées, Poissons & fumés, Huiles & pâtes, Snacks & fruits secs, Cafés & thés, Ustensiles (dont mortiers, marmites, mixeurs et objets de service), Livres de cuisine. Produits retenus : plus de 3,5 étoiles sur Amazon ;
+  - boutique de 125 produits en 9 gammes : Épices & aromates, Farines & céréales, Feuilles & fleurs séchées, Poissons & fumés, Huiles & pâtes, Snacks & fruits secs, Cafés & thés, Ustensiles (dont mortiers, marmites, mixeurs et objets de service), Livres de cuisine. Produits retenus : plus de 3,5 étoiles sur Amazon ;
   - « Actus de la cuisine africaine » (depuis le 27 octobre 2026) : page `/actus` (20 actus), bloc de 4 actus sur l'accueil et 3 actus du pays sur chaque page pays, mis à jour 2 fois par jour (12 h et 19 h) par la veille actus ; chaque actu est résumée par nous, avec le lien vers sa source et le crédit de l'image ; depuis le 28 octobre 2026, toucher une actu ouvre son article complet (300 à 450 mots) sur sa propre page du site (`/actus/<adresse>`, trouvable par Google) ; jamais d'actu santé ni de vocabulaire de vente ;
   - « Top 10 » (depuis le 19 octobre 2026) : 10 classements de produits (ustensiles, ingrédients pour débuter, mortiers, marmites, mixeurs, épices, farines, livres, thés et cafés, service et thé), selon la note moyenne des acheteurs sur Amazon.fr, chacun relié aux recettes concernées.
 - **Lien recettes → boutique** : chaque ingrédient disponible en boutique est signalé « Produit rare » dans la recette, avec un bouton d'achat Amazon ; chaque fiche produit liste les recettes qui l'utilisent.
@@ -21,13 +21,13 @@ Mis à jour le 9 novembre 2026. Compagnon de INFRA.md.
 Deux sources, sans rien vendre soi-même :
 
 - **Affiliation Amazon Partenaires** : les boutons « Voir sur Amazon » mènent à Amazon.fr (tag `keurcookfr-21`, `src/lib/amazon.ts`) ; Amazon encaisse, livre et verse une commission sur les achats. Depuis le 28 octobre 2026 : boutons d'au moins 44 px avec texte partout, produits remontés (juste après les ingrédients sur téléphone, en haut des pages pays, après la première partie des conseils), tout le catalogue visible d'emblée en boutique, bloc « Nos coups de cœur » (8 produits en images, reliés à leurs fiches du site, juste après « Cuisiner par pays ») et rangée « Nos Top 10 » sur l'accueil (sans bouton Amazon) et liens internes vers les Top 10 depuis les fiches, recettes, conseils et actus ; codes de suivi par type de page prêts (tous encore `keurcookfr-21`).
-- **Publicité Google AdSense** (examen demandé le 12 octobre 2026, refusé par Google le 31 octobre 2026 pour « contenu à faible valeur informative », motif revérifié dans la console AdSense le 9 novembre 2026, aucun nouvel e-mail depuis) : emplacements titrés « Publicité » prêts sur les recettes, les articles « Conseils », les articles d'actus (depuis le 28 octobre 2026) et les pages pays ; aucune annonce ne s'affiche tant que Google n'a pas validé le site ; consentement recueilli par le message de Google.
+- **Publicité Google AdSense** (examen demandé le 12 octobre 2026, refusé par Google le 31 octobre 2026 pour « contenu à faible valeur informative », motif lu dans la console AdSense le 9 novembre 2026, aucun nouvel e-mail pour keurcook.com au 10 novembre 2026) : emplacements titrés « Publicité » prêts sur les recettes, les articles « Conseils », les articles d'actus (depuis le 28 octobre 2026) et les pages pays ; aucune annonce ne s'affiche tant que Google n'a pas validé le site ; consentement recueilli par le message de Google.
 
 Les recettes et les conseils sont gratuits et attirent les visiteurs. Aucun prix affiché sur le site depuis le 28 octobre 2026 : seul celui d'Amazon fait foi.
 
 ## Rémunération par phases
 
-- [fait] **Aujourd'hui** : affiliation Amazon sur 127 produits et 10 Top 10, AdSense en place mais examen refusé le 31 octobre (aucune annonce), audience mesurée depuis le 13 octobre (Umami en essai depuis le 5 novembre)
+- [fait] **Aujourd'hui** : affiliation Amazon sur 125 produits et 10 Top 10, AdSense en place mais examen refusé le 31 octobre (aucune annonce), audience mesurée depuis le 13 octobre (Umami en essai depuis le 5 novembre)
 - [en cours] **Faire valider AdSense** : corriger le « contenu à faible valeur » signalé le 31 octobre puis redemander l'examen
 - **Mesurer** : lire dans Cloudflare Web Analytics et Umami quelles pages attirent et rapportent
 - **Fidéliser** : newsletter « la recette de la semaine », outil à choisir
@@ -53,7 +53,7 @@ Les recettes et les conseils sont gratuits et attirent les visiteurs. Aucun prix
 ## Mesures
 
 - **Pages indexées par Google** : 248 sur 259 ; 11 pas encore, dont 7 inconnues de Google et 4 détectées non explorées (relevé du Studio, 27 octobre 2026)
-- **Adresses du sitemap** : 267 (9 novembre 2026, dont 46 articles « Conseils » et 9 articles d'actus ; 266 les 6, 7 et 8 novembre ; 264 le 5 novembre ; 263 le 4 novembre ; 260 le 3 et le 2 novembre ; 258 le 1er et le 31 octobre ; 257 le 30 octobre ; 254 le 29 octobre ; 264 le 28 octobre au matin, avant le retrait des contenus du Maghreb du sitemap le même jour) ; le nombre grandit 2 fois par jour avec les nouveaux articles d'actus
+- **Adresses du sitemap** : 267 (10 novembre 2026, dont 46 articles « Conseils » et 11 articles d'actus ; 267 le 9 novembre ; 266 les 6, 7 et 8 novembre ; 264 le 5 novembre ; 263 le 4 novembre ; 260 le 3 et le 2 novembre ; 258 le 1er et le 31 octobre ; 257 le 30 octobre ; 254 le 29 octobre ; 264 le 28 octobre au matin, avant le retrait des contenus du Maghreb du sitemap le même jour) ; le nombre grandit 2 fois par jour avec les nouveaux articles d'actus
 - **Clics, achats et commissions Amazon** : à vérifier dans la console (partenaires.amazon.fr)
 - **Affichages et revenus des annonces** : aucun, examen AdSense refusé le 31 octobre 2026 pour « contenu à faible valeur informative » (adsense.google.com)
 - **Épingles Pinterest** : 58 recettes sur 58 épinglées (24 octobre 2026) ; impressions et clics à vérifier dans la console
