@@ -1,6 +1,6 @@
 # Erea — plan marketing & rémunération
 
-> Généré le 3 août 2026, mis à jour le 10 novembre 2026. Le modèle de
+> Généré le 3 août 2026, mis à jour le 11 novembre 2026. Le modèle de
 > rémunération est en ligne sur l'App Store depuis la 1.0.2 et sur Google
 > Play depuis le 20 octobre 2026 (publicité + achat unique qui la retire). Pour le mettre à jour : relancer ce même prompt. Aucun secret
 > ici.
@@ -41,7 +41,7 @@ classiques :
 
 ## Rémunération par phases
 
-- [fait] **Aujourd'hui** : pub AdMob une partie sur deux (diffusion limitée au 9 nov.), achat unique 3,99 € qui la retire, iOS et Android
+- [fait] **Aujourd'hui** : pub AdMob une partie sur deux (diffusion limitée au 11 nov.), achat unique 3,99 € qui la retire, iOS et Android
 - [en cours] **Statut trader (DSA)** : fait chez Apple le 9 novembre (compte ALOHASH) ; Google Play : à déclarer avant le 1er février 2027
 - **Premiers versements AdMob** : seuil de 70 €, puis code PIN postal et vérification d'identité
 - **Licence éducation** : seulement si un établissement se présente de lui-même
@@ -62,10 +62,10 @@ publicité fait elle-même la promotion de l'achat.
 
 | Pièce | Détail | Statut |
 |---|---|---|
-| Interstitielle AdMob | À la sortie de l'écran de fin, une partie sur deux, jamais dans le Défi du jour (`lib/core/pub.dart`) | ✅ en ligne sur iOS depuis la 1.0.2 (8 septembre 2026), sur Android depuis le 20 octobre 2026 ; diffusion d'annonces limitée : applis AdMob pas encore associées aux boutiques (vérifié le 9 novembre 2026) |
+| Interstitielle AdMob | À la sortie de l'écran de fin, une partie sur deux, jamais dans le Défi du jour (`lib/core/pub.dart`) | ✅ en ligne sur iOS depuis la 1.0.2 (8 septembre 2026), sur Android depuis le 20 octobre 2026 ; diffusion d'annonces limitée : applis AdMob pas encore associées aux boutiques (vérifié le 11 novembre 2026) |
 | « Erea sans publicité » | Achat unique non consommable `com.teiki.erea.sanspub`, **3,99 €** — il ne débloque rien, le jeu est déjà complet | ✅ approuvé sur l'App Store le 8 septembre, actif sur Google Play |
 | Consentement | Formulaire UMP de Google + ATT sur iOS, révocable depuis les réglages ; message RGPD et message IDFA publiés dans AdMob | ✅ |
-| Android | Même modèle, sur Google Play depuis le 20 octobre 2026 (1.0.4) ; 1.0.7 en ligne (vérifié le 10 novembre 2026) | ✅ |
+| Android | Même modèle, sur Google Play depuis le 20 octobre 2026 (1.0.4) ; 1.0.7 en ligne (vérifié le 11 novembre 2026) | ✅ |
 
 **Ce que ça a coûté, en connaissance de cause :** le badge « Aucune
 donnée collectée » (la fiche de confidentialité de l'App Store a changé
@@ -115,14 +115,14 @@ chez Apple le 9 novembre 2026, pas encore sur Google Play.
 | Partage de grille (bouche-à-oreille) | Grille emoji sans spoiler + série 🔥, feuille de partage native, lien de la boutique de l'appareil dans le texte (`lib/ui/game/verdict_textes.dart`, lien Play depuis la 1.0.4) | ✅ |
 | Défi du jour + rappel | Mêmes questions pour tous, une tentative/jour, rappel local 18 h 30 (`lib/core/rappels.dart`) — le moteur de rétention qui alimente le partage | ✅ |
 | Classements mondiaux | Game Center : défi, série, Classique ×3, Chrono (`lib/core/classement.dart`) — actifs sur iOS ; Play Games pas configuré, classements masqués sur Android | ✅ iOS · ⬜ Android |
-| Vitrine web | `erea.toakeur.com` (depuis le 7 octobre 2026) : page de présentation dédiée, le jeu jouable sur `/jeu.html`, Smart App Banner sur les pages ; en ligne (vérifié le 10 novembre 2026), après une coupure le 4 novembre au matin ; visites mesurées par Umami depuis le 5 novembre 2026 | ✅ |
-| Badges des boutiques | Badge officiel d'Apple sur la vitrine, en tête et en bas de page, vers la fiche `id6794918301`, depuis le 12 octobre 2026 ; badge officiel Google Play à côté et page `/telecharger/` ouverte à Android depuis le 21 octobre 2026 ; vitrine et `/telecharger/` en ligne (vérifié le 10 novembre 2026) | ✅ |
+| Vitrine web | `erea.toakeur.com` (depuis le 7 octobre 2026) : page de présentation dédiée, le jeu jouable sur `/jeu.html`, Smart App Banner sur les pages ; en ligne (vérifié le 11 novembre 2026), après une coupure le 4 novembre au matin ; visites mesurées par Umami depuis le 5 novembre 2026 | ✅ |
+| Badges des boutiques | Badge officiel d'Apple sur la vitrine, en tête et en bas de page, vers la fiche `id6794918301`, depuis le 12 octobre 2026 ; badge officiel Google Play à côté et page `/telecharger/` ouverte à Android depuis le 21 octobre 2026 ; vitrine et `/telecharger/` en ligne (vérifié le 11 novembre 2026) | ✅ |
 | Enseignants & parents | Dossier d'une page « Erea en classe » (repères du brevet couverts, mode Facile, sans compte ni inscription) à envoyer aux profs d'histoire-géo, groupes Facebook de profs, La Salle des Maîtres | ⬜ |
 | Afrique de l'Ouest | Mise en avant du pack Afrique auprès des communautés éducatives francophones (Sénégal, Côte d'Ivoire…) ; presse tech locale ; créateurs de contenu éducation | ⬜ |
-| Réseaux sociaux | TikTok « erea.jeu » est le seul compte rattaché à Erea dans le Studio. Pubs vidéo produites par le Studio depuis le 5 octobre 2026 : le format « documentaire qui déraille » validé par Jean le 5 octobre, puis, depuis le 26 octobre, « Avant ou après ? », « Interro surprise », « Petite histoire » et « Le défi en famille » ; 48 sont au Planning : 38 publiées, 10 programmées. Publication en public par le Planning via Buffer depuis le 29 octobre 2026 (« Blériot, le saut de la Manche » et « Henry Dunant, la naissance de la Croix-Rouge » ce soir-là) : 38 publiées du 29 octobre au 6 novembre, 10 autres programmées du 10 au 15 novembre (vérifié au Planning le 10 novembre 2026) | ✅ |
+| Réseaux sociaux | TikTok « erea.jeu » est le seul compte rattaché à Erea dans le Studio. Pubs vidéo produites par le Studio depuis le 5 octobre 2026 : le format « documentaire qui déraille » validé par Jean le 5 octobre, puis, depuis le 26 octobre, « Avant ou après ? », « Interro surprise », « Petite histoire » et « Le défi en famille » ; 48 sont au Planning : 39 publiées, 1 envoi échoué le 10 novembre, 8 programmées. Publication en public par le Planning via Buffer depuis le 29 octobre 2026 (« Blériot, le saut de la Manche » et « Henry Dunant, la naissance de la Croix-Rouge » ce soir-là) : 39 publiées du 29 octobre au 10 novembre, 8 autres programmées du 11 au 15 novembre (vérifié au Planning le 11 novembre 2026) | ✅ |
 | Presse & sites spécialisés | App du jour (iPhon.fr, iGen, Frandroid), sites parents (Geek Junior, Super Julie — références du jeu éducatif) | ⬜ |
 | Featuring Apple | Formulaire « App Store featuring » : app famille, française, hors ligne, avec Game Center — bon dossier, même si l'argument « sans pub » est tombé avec la 1.0.2 | ⬜ |
-| Play Store | Second magasin, donc second public : les douze testeurs ont tenu quatorze jours (22 septembre), l'accès à la production a été accordé le 17 octobre 2026, la 1.0.4 a été mise en ligne le 20 octobre, la 1.0.6 le 22 octobre, et la 1.0.7 est en ligne (vérifié le 10 novembre 2026) (`docs/PUBLICATION.md`) | ✅ |
+| Play Store | Second magasin, donc second public : les douze testeurs ont tenu quatorze jours (22 septembre), l'accès à la production a été accordé le 17 octobre 2026, la 1.0.4 a été mise en ligne le 20 octobre, la 1.0.6 le 22 octobre, et la 1.0.7 est en ligne (vérifié le 11 novembre 2026) (`docs/PUBLICATION.md`) | ✅ |
 
 ---
 
@@ -142,14 +142,14 @@ chez Apple le 9 novembre 2026, pas encore sur Google Play.
 ## Mesures
 
 - **Téléchargements** : à vérifier dans la console (App Store Connect et Play Console)
-- **Note App Store** : aucune note au 10 novembre 2026
+- **Note App Store** : aucune note au 11 novembre 2026
 - **Visites du site et clics « Télécharger l'appli »** : mesurés par Umami depuis le 5 novembre 2026, chiffres à vérifier dans la console
 - **Note Google Play** : à vérifier dans la console (en ligne depuis le 20 octobre 2026)
-- **Appareils actifs par mois (Google Play)** : 2 (accueil de la Play Console, vérifié le 9 novembre 2026)
+- **Appareils actifs par mois (Google Play)** : 2 (accueil de la Play Console, vérifié le 11 novembre 2026)
 - **Rétention J1 et J7** : à vérifier dans la console
 - **Participants au Défi du jour** : à vérifier dans la console (classement `erea.daily`)
 - **Ventes « Erea sans publicité »** : à vérifier dans la console
-- **Revenus publicitaires AdMob** : à vérifier dans la console ; diffusion limitée au 9 novembre 2026 (applis AdMob en « Examen requis »)
+- **Revenus publicitaires AdMob** : à vérifier dans la console ; diffusion limitée au 11 novembre 2026 (applis AdMob en « Examen requis »)
 - **Usage des modes dans l'app** : à instrumenter — aucun analytics propre, par choix
 
 Contrainte assumée : **pas d'analytics à nous dans l'app**. Seul le SDK
@@ -181,9 +181,9 @@ une collecte à la fiche de confidentialité.
 
 ## Les 3 priorités
 
-- **Associer les deux applis AdMob à leur boutique** (AdMob → Applications → Erea iOS et Erea Android → « Ajouter un magasin ») : elles sont en « Examen requis », avec une diffusion d'annonces limitée, et `app-ads.txt`, pourtant servi sur `https://erea.toakeur.com/app-ads.txt`, ne pourra être validé qu'ensuite (vérifié le 9 novembre 2026).
-- **Déclarer le statut de professionnel sur Google Play avant le 1er février 2027** (Play Console → Gérer le compte → Détails du compte, puis la déclaration de l'appli) : pas encore fait, bannière « Action requise » (vérifié le 9 novembre 2026) ; chez Apple, c'est fait depuis le 9 novembre 2026.
-- **Booster par « Promouvoir » les pubs TikTok qui prennent le mieux** sur « erea.jeu » (38 publiées du 29 octobre au 6 novembre, 10 programmées du 10 au 15 novembre), vers `https://erea.toakeur.com/telecharger/?src=tiktok` : aucune promotion payante n'a encore été lancée.
+- **Associer les deux applis AdMob à leur boutique** (AdMob → Applications → Erea iOS et Erea Android → « Ajouter un magasin ») : elles sont en « Examen requis », avec une diffusion d'annonces limitée, et `app-ads.txt`, pourtant servi sur `https://erea.toakeur.com/app-ads.txt`, ne pourra être validé qu'ensuite (vérifié le 11 novembre 2026).
+- **Déclarer le statut de professionnel sur Google Play avant le 1er février 2027** (Play Console → Gérer le compte → Détails du compte, puis la déclaration de l'appli) : pas encore fait, bannière « Action requise » (vérifié le 11 novembre 2026) ; chez Apple, c'est fait depuis le 9 novembre 2026.
+- **Booster par « Promouvoir » les pubs TikTok qui prennent le mieux** sur « erea.jeu » (39 publiées du 29 octobre au 10 novembre, 8 programmées du 11 au 15 novembre), vers `https://erea.toakeur.com/telecharger/?src=tiktok` : aucune promotion payante n'a encore été lancée.
 
 ## Déjà fait
 
@@ -200,7 +200,7 @@ une collecte à la fiche de confidentialité.
 - ✅ **Badge Google Play sur la vitrine et page `/telecharger/` ouverte à Android** — 21 octobre 2026.
 - ✅ **1.0.4 sur l'App Store** sous le nom long, captures légendées — mise en ligne le 15 octobre 2026.
 - ✅ **1.0.5 mise en ligne sur les deux boutiques** — le 21 octobre 2026 ; 1.0.6 (Android seul) mise en ligne sur Google Play le 22 octobre.
-- ✅ **1.0.7 en ligne sur les deux boutiques** — envoyée le 30 octobre 2026 au soir (Album, Classique en tête de l'accueil, icônes dessinées) : en ligne sur Google Play (vérifié le 10 novembre 2026) et sur l'App Store depuis le 31 octobre 2026 ; `app-ads.txt` publié le 30 octobre sur `erea.toakeur.com`.
+- ✅ **1.0.7 en ligne sur les deux boutiques** — envoyée le 30 octobre 2026 au soir (Album, Classique en tête de l'accueil, icônes dessinées) : en ligne sur Google Play (vérifié le 11 novembre 2026) et sur l'App Store depuis le 31 octobre 2026 ; `app-ads.txt` publié le 30 octobre sur `erea.toakeur.com`.
 - ✅ **Adresse et contact propres** — `erea.toakeur.com` et `erea@toakeur.com`, 7 octobre 2026.
 - ✅ **Premières pubs publiées sur TikTok « erea.jeu »** — 29 octobre 2026, par le Planning via Buffer.
 - ✅ **Mesure d'audience du site** — Umami (gratuit, UE, sans cookie) sur toutes les pages en ligne, 5 novembre 2026.
