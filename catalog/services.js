@@ -1037,7 +1037,7 @@ const SERVICES = [
   // ── IA ─────────────────────────────────────────────────────────────────────
   {
     id: 'api-ia',
-    alias: ['openart', 'elevenlabs', 'fal.ai', 'claude', 'anthropic', 'generation d images'],
+    alias: ['openart', 'fal.ai', 'claude', 'anthropic', 'generation d images'],
     nom: "API d'IA (Claude / OpenAI / Gemini)",
     emoji: '🤖',
     categorie: 'IA',
