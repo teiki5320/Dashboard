@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 12 novembre 2026, d'après le code du dépôt et le site en ligne. Aucun secret ici :
+Mis à jour le 13 novembre 2026, d'après le code du dépôt et le site en ligne. Aucun secret ici :
 uniquement des noms de variables et de consoles.
 
 ## En bref
@@ -9,13 +9,13 @@ uniquement des noms de variables et de consoles.
 - **Stack** : Next.js 16 en export statique, React 19, Tailwind CSS 4
 - **Backend** : aucun — site statique, sans base ni compte
 - **Distribution** : Cloudflare Pages, publié par GitHub Actions
-- **Site** : keurbook.com (1001 adresses dans le sitemap)
+- **Site** : keurbook.com (1003 adresses dans le sitemap)
 - **IA et outils** : routine « Articles » du Studio (articles Conseils), veille actus (2 passages par jour), IndexNow, Cloudflare Web Analytics
 
 ## Parcours
 
 - 🌐 **Web** : 🐙 GitHub — main · publication au vert [ok] → ⚙️ GitHub Actions — lint, types, tests, build [ok] → ☁️ Cloudflare Pages — projet keurbook [ok] → 🌍 keurbook.com — en ligne, réponse 200 [ok]
-- 📝 **Contenu** : ✍️ Articles Conseils — 47 publiés, 22 programmés (12 novembre 2026) [ok] → ⚙️ GitHub Actions — publie lundi, mercredi, vendredi [ok] → 📡 IndexNow — sitemap signalé après chaque publication et chaque lundi [ok] → 🔍 Google — 321 pages indexées sur 1001 [à faire]
+- 📝 **Contenu** : ✍️ Articles Conseils — 48 publiés, 21 programmés (13 novembre 2026) [ok] → ⚙️ GitHub Actions — publie lundi, mercredi, vendredi [ok] → 📡 IndexNow — sitemap signalé après chaque publication et chaque lundi [ok] → 🔍 Google — 321 pages indexées sur 1003 [à faire]
 - 📰 **Veille actus** : 📡 Tâche de veille — 12 h et 19 h, 10 flux RSS [ok] → 🐙 Dépôt veille — actus/keurbook.json sur GitHub Pages [ok] → 🌍 keurbook.com — accueil (4), /actus (20), fiches auteur (3) [ok]
 - 🛒 **Affiliation** : 📚 Fiche livre ou BD — bouton « Voir sur Amazon » [ok] → 🛒 Amazon Partenaires (affiliation) — tag keurbookfr-21 [ok] → 🔗 Liens directs — 438 ASIN sur 796 livres et BD [à faire]
 - 📰 **Publicité** : 📰 AdSense (publicité web) — script et 4 blocs en place [ok] → ✅ Validation du site — refusée le 21/10, réexamen demandé le 22/10, « En préparation » vérifié le 12/11 [pas encore] → 💶 Revenus — aucun constaté [pas encore]
@@ -30,9 +30,9 @@ uniquement des noms de variables et de consoles.
 - **Backend** : aucun. Site entièrement statique (dossier `out/`), sans base de données, sans
   compte. La pile à lire reste dans le navigateur du visiteur. Seuls cookies : ceux de Google AdSense,
   après accord dans le bandeau de consentement de Google (voir docs/PUBLICITE.md).
-- **Taille** : 1001 adresses dans le sitemap aux 11 et 12 novembre 2026 (675 livres, 121 BD, 92 auteurs,
-  26 pays, 47 articles Conseils publiés, 11 pages Top 10, la page Actus, 19 articles d'actus, pages de liste
-  et pages légales ; l'article d'actus sur le colloque Boubacar Boris Diop, absent de la publication du 5 novembre à 4 h 31 UTC, est revenu le 5 novembre — chaque article est désormais relu jusqu'à 3 fois — et sa page répond 200, vérifié le 7 novembre 2026 ; 999 le 10 novembre avec 46 articles Conseils et 18 articles d'actus, 998 le 9 novembre avec 17 articles d'actus, 996 le 8 novembre avec 45 articles Conseils et 16 articles d'actus, 995 les 6 et 7 novembre avec 15 articles d'actus, 992 le 5 novembre avec 44 articles Conseils et 13 articles d'actus, 993 le 4 novembre avec 14 articles d'actus, 991 le 2 novembre avec 43 articles Conseils et 13 articles d'actus, 988 le 1er novembre avec 42 articles Conseils et 11 articles d'actus, 987 le 31 octobre avec 10 articles d'actus, 984 le 30 octobre avec 7 articles d'actus, 982 le 29 octobre avec 41 articles Conseils et 6 articles d'actus, 980 le 28 octobre avec 4 articles d'actus, 975 le 27 octobre, avant les articles d'actus, et 974 jusqu'au 26 octobre, avant la page Actus).
+- **Taille** : 1003 adresses dans le sitemap au 13 novembre 2026 (675 livres, 121 BD, 92 auteurs,
+  26 pays, 48 articles Conseils publiés, 11 pages Top 10, la page Actus, 20 articles d'actus, pages de liste
+  et pages légales ; l'article d'actus sur le colloque Boubacar Boris Diop, absent de la publication du 5 novembre à 4 h 31 UTC, est revenu le 5 novembre — chaque article est désormais relu jusqu'à 3 fois — et sa page répond 200, vérifié le 7 novembre 2026 ; 1001 les 11 et 12 novembre avec 47 articles Conseils et 19 articles d'actus, 999 le 10 novembre avec 46 articles Conseils et 18 articles d'actus, 998 le 9 novembre avec 17 articles d'actus, 996 le 8 novembre avec 45 articles Conseils et 16 articles d'actus, 995 les 6 et 7 novembre avec 15 articles d'actus, 992 le 5 novembre avec 44 articles Conseils et 13 articles d'actus, 993 le 4 novembre avec 14 articles d'actus, 991 le 2 novembre avec 43 articles Conseils et 13 articles d'actus, 988 le 1er novembre avec 42 articles Conseils et 11 articles d'actus, 987 le 31 octobre avec 10 articles d'actus, 984 le 30 octobre avec 7 articles d'actus, 982 le 29 octobre avec 41 articles Conseils et 6 articles d'actus, 980 le 28 octobre avec 4 articles d'actus, 975 le 27 octobre, avant les articles d'actus, et 974 jusqu'au 26 octobre, avant la page Actus).
 - **Particularités** : interrupteur de maintenance dans `content/maintenance.json` (désactivé),
   tests de cohérence des contenus dans `tests/`, contrôle du site construit avant chaque mise en ligne
   (`tests/sortie/`, depuis le 28 octobre 2026), signalement IndexNow après chaque publication et chaque lundi.
