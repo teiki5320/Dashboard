@@ -2,9 +2,9 @@
   "release": null,
   "ci": {
     "status": "completed",
-    "conclusion": "failure",
-    "updatedAt": "2026-11-13T13:37:08Z",
-    "url": "https://github.com/teiki5320/optiled/actions/runs/43433845543"
+    "conclusion": "success",
+    "updatedAt": "2026-11-14T11:31:22Z",
+    "url": "https://github.com/teiki5320/optiled/actions/runs/43589658914"
   },
-  "fetchedAt": "2026-11-13T13:56:09.334Z"
+  "fetchedAt": "2026-11-14T12:58:11.565Z"
 }

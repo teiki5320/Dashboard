@@ -1,7 +1,7 @@
 # INFRA — fiche technique
 
 > Généré le 20 août 2026 par un scan du dépôt, mis à jour le
-> 13 novembre 2026. Pour mettre à jour : relancer ce même prompt.
+> 14 novembre 2026. Pour mettre à jour : relancer ce même prompt.
 
 ## En bref
 
@@ -9,19 +9,19 @@
 - **Stack** : Flutter (Dart ≥ 3.6), version `1.0.8+9` dans le code
 - **Backend** : aucun — tout reste sur l'appareil, jeu hors ligne
 - **Distribution** : Xcode Cloud vers l'App Store · App Bundle signé en local
-- **Site** : `https://erea.toakeur.com/`, GitHub Pages derrière Cloudflare, en ligne (vérifié le 13 nov.)
+- **Site** : `https://erea.toakeur.com/`, GitHub Pages derrière Cloudflare, en ligne (vérifié le 14 nov.)
 - **IA et outils** : aucune IA dans l'app ; AdMob, Game Center, StoreKit
 
 ## Parcours
 
-- 🍎 **iOS** : 🐙 GitHub — main (dépôt public), 1.0.8, CI au vert [ok] → ☁️ Xcode Cloud — build 228 réussi le 12 novembre [ok] → 🛍️ App Store Connect — 1.0.7 (build 210) approuvée le 31 octobre [ok] → 📱 App Store — 1.0.7 en ligne depuis le 31 octobre [ok]
-- 🤖 **Android** : 🐙 GitHub — main (dépôt public), 1.0.8, CI au vert [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — production accordée le 17 octobre, 1.0.7 envoyée le 30 octobre [ok] → 🛒 Google Play — 1.0.7 en ligne (vérifié le 13 novembre) [ok]
+- 🍎 **iOS** : 🐙 GitHub — main (dépôt public), 1.0.8, CI au vert [ok] → ☁️ Xcode Cloud — build 229 réussi le 13 novembre [ok] → 🛍️ App Store Connect — 1.0.7 (build 210) approuvée le 31 octobre [ok] → 📱 App Store — 1.0.7 en ligne depuis le 31 octobre [ok]
+- 🤖 **Android** : 🐙 GitHub — main (dépôt public), 1.0.8, CI au vert [ok] → 🔑 Keystore Android — App Bundle signé sur le Mac [ok] → 🎮 Google Play Console — production accordée le 17 octobre, 1.0.7 envoyée le 30 octobre [ok] → 🛒 Google Play — 1.0.7 en ligne (vérifié le 14 novembre) [ok]
 - 🌐 **Web** : 🐙 GitHub — racine de main, dépôt public [ok] → 📄 Hébergement web (GitHub Pages) — redéployé à chaque poussée sur main [ok] → 🏷️ Nom de domaine — erea.toakeur.com via Cloudflare [ok] → 🌐 Site — en ligne, confidentialité et app-ads.txt compris [ok]
-- 🎬 **Contenu** : 🎬 Studio — 48 pubs vidéo au Planning [ok] → 🗓️ Planning — 4 programmées du 13 au 15 nov. [ok] → 📣 Réseaux sociaux & influenceurs — TikTok erea.jeu, 43 publiées du 29 oct. au 12 nov. [ok]
+- 🎬 **Contenu** : 🎬 Studio — 48 pubs vidéo au Planning [ok] → 🗓️ Planning — 2 programmées les 14 et 15 nov. [ok] → 📣 Réseaux sociaux & influenceurs — TikTok erea.jeu, 45 publiées du 29 oct. au 13 nov. [ok]
 
 ## Vue d'ensemble
 
-- **Plateforme** : iOS 15+ (1.0.7 en ligne sur l'App Store depuis le 31 octobre 2026) · Android : 1.0.7 en ligne sur Google Play (vérifié le 13 novembre 2026 ; première version en ligne : 1.0.4, le 20 octobre) · site vitrine `erea.toakeur.com`, en ligne (vérifié le 13 novembre 2026) ; hors ligne le 4 novembre au matin, quand le dépôt était passé en privé, remis en ligne le même jour à 15 h 09
+- **Plateforme** : iOS 15+ (1.0.7 en ligne sur l'App Store depuis le 31 octobre 2026) · Android : 1.0.7 en ligne sur Google Play (vérifié le 14 novembre 2026 ; première version en ligne : 1.0.4, le 20 octobre) · site vitrine `erea.toakeur.com`, en ligne (vérifié le 14 novembre 2026) ; hors ligne le 4 novembre au matin, quand le dépôt était passé en privé, remis en ligne le même jour à 15 h 09
 - **Stack** : Flutter (Dart ≥ 3.6), version `1.0.8+9` dans le code, 185 tests, aucun serveur applicatif
 - **Backend** : aucun — tout l'état du joueur vit sur l'appareil (`shared_preferences`)
 - **Distribution** : App Store via Xcode Cloud · Play Store via App Bundle signé localement
@@ -44,7 +44,7 @@ appartenait à la 1.0.0.
 
 | | |
 |---|---|
-| Rôle | Hébergement du code, dépôt `teiki5320/erea`, public (vérifié le 13 novembre 2026 ; passé en privé puis redevenu public le 4 novembre) |
+| Rôle | Hébergement du code, dépôt `teiki5320/erea`, public (vérifié le 14 novembre 2026 ; passé en privé puis redevenu public le 4 novembre) |
 | Console | <https://github.com/teiki5320/erea> |
 | Compte propriétaire | `teiki5320` (connexion par le compte de gestion `admin@toakeur.com`) |
 | Coût | gratuit |
@@ -53,10 +53,10 @@ appartenait à la 1.0.0.
 GitHub Actions (`.github/workflows/ci.yml`) lance `flutter pub get`,
 `flutter analyze` et `flutter test` (Flutter 3.47.3) à chaque poussée sur
 `main` et sur chaque demande de fusion ; dernier passage réussi le
-12 novembre 2026. Dependabot (`.github/dependabot.yml`) propose chaque
+13 novembre 2026. Dependabot (`.github/dependabot.yml`) propose chaque
 semaine les mises à jour des paquets Dart et des actions GitHub : sept
 demandes de fusion ouvertes le 10 novembre 2026, pas encore fusionnées
-(vérifié le 13 novembre 2026).
+(vérifié le 14 novembre 2026).
 
 **Où vivent les secrets :** nulle part. Le workflow n'utilise aucun
 secret de CI. L'accès en écriture passe par le compte GitHub lui-même.
@@ -75,11 +75,11 @@ secret de CI. L'accès en écriture passe par le compte GitHub lui-même.
 | Coût | gratuit |
 
 **Identifiants publics :**
-- URL publique : `https://erea.toakeur.com/` — la vitrine de l'app, depuis le 7 octobre 2026 ; en ligne (vérifié le 13 novembre 2026) : `/`, `/app-ads.txt`, `/confidentialite.html`, `/support.html`, `/jeu.html` et `/telecharger/` répondent 200. Le 4 novembre au matin, le dépôt passé en privé n'était plus servi par GitHub Pages (offre gratuite) et tout répondait 404 ; redevenu public, il a été redéployé le même jour à 15 h 09.
+- URL publique : `https://erea.toakeur.com/` — la vitrine de l'app, depuis le 7 octobre 2026 ; en ligne (vérifié le 14 novembre 2026) : `/`, `/app-ads.txt`, `/confidentialite.html`, `/support.html`, `/jeu.html` et `/telecharger/` répondent 200. Le 4 novembre au matin, le dépôt passé en privé n'était plus servi par GitHub Pages (offre gratuite) et tout répondait 404 ; redevenu public, il a été redéployé le même jour à 15 h 09.
 - Le jeu web jouable est sur `/jeu.html`, copie déployée de `index-v8.html`.
 - `/support.html` et `/confidentialite.html` : les deux URL exigées par l'App Store, contact `erea@toakeur.com`.
-- Site servi depuis la racine de `main` (fichier `.nojekyll` présent), redéployé à chaque poussée ; dernier déploiement réussi le 12 novembre 2026 à 16 h 56 (celui de la fiche Play Store par pays) ; celui de la mesure d'audience date du 5 novembre à 10 h 06.
-- L'adresse `erea.toakeur.com` passe par Cloudflare, qui relaie GitHub Pages ; le dépôt ne contient pas de fichier `CNAME` (un `CNAME` ajouté le 4 novembre a été retiré le même jour). L'ancienne adresse `teiki5320.github.io/erea/` répond aussi (vérifié le 13 novembre 2026).
+- Site servi depuis la racine de `main` (fichier `.nojekyll` présent), redéployé à chaque poussée ; dernier déploiement réussi le 13 novembre 2026 à 6 h 42 (celui des fiches du 13 novembre) ; celui de la mesure d'audience date du 5 novembre à 10 h 06.
+- L'adresse `erea.toakeur.com` passe par Cloudflare, qui relaie GitHub Pages ; le dépôt ne contient pas de fichier `CNAME` (un `CNAME` ajouté le 4 novembre a été retiré le même jour). L'ancienne adresse `teiki5320.github.io/erea/` répond aussi (vérifié le 14 novembre 2026).
 - **Mesure d'audience du site (depuis le 5 novembre 2026)** : Umami Cloud, offre gratuite, région UE, sans cookie ; un seul identifiant de site public partagé par les sites de la maison (`d1715415-5452-48af-a9fa-69e3e2de06f3`), balise dans le `<head>` de `index.html`, `jeu.html`, `support.html`, `confidentialite.html` et `telecharger/index.html`, limitée à `erea.toakeur.com`. Clics comptés : « Télécharger l'appli » (avec le magasin : App Store ou Google Play). Console : https://cloud.umami.is. L'application, elle, n'a toujours aucune mesure d'audience. Sur `telecharger/`, un iPhone ou un Android est renvoyé tout de suite vers sa boutique, avant que la visite soit comptée.
 
 **Où vivent les secrets :** nulle part.
@@ -136,7 +136,7 @@ sauvegarder, rien à recopier sur une machine neuve.
 
 **Identifiants publics :**
 - App « Erea », bundle `com.teiki.erea` ; nom « Erea : Quiz d'histoire & frise » à partir de la 1.0.4.
-- Version `1.0.8+9` dans `erea_flutter/pubspec.yaml` depuis le 1er novembre 2026, montée parce que la 1.0.7 approuvée n'accepte plus de build (avant elle, `1.0.7+8` à partir du 30 octobre, et `1.0.6+7` à partir du 21 octobre, quand la 1.0.5 approuvée a fermé son numéro au build 196). La 1.0.7 (build 210) est en ligne sur l'App Store depuis le 31 octobre 2026 et sur Google Play (vérifié le 13 novembre 2026).
+- Version `1.0.8+9` dans `erea_flutter/pubspec.yaml` depuis le 1er novembre 2026, montée parce que la 1.0.7 approuvée n'accepte plus de build (avant elle, `1.0.7+8` à partir du 30 octobre, et `1.0.6+7` à partir du 21 octobre, quand la 1.0.5 approuvée a fermé son numéro au build 196). La 1.0.7 (build 210) est en ligne sur l'App Store depuis le 31 octobre 2026 et sur Google Play (vérifié le 14 novembre 2026).
 - iOS minimum : 15.0 (`IPHONEOS_DEPLOYMENT_TARGET`, `Podfile`).
 - Chiffrement : `ITSAppUsesNonExemptEncryption = false` dans `ios/Runner/Info.plist` — pas de formulaire d'export à chaque build.
 
@@ -166,7 +166,7 @@ build 210 ; l'examen automatique l'a arrêtée le 31 octobre à 9 h 02
 (case « Publicité » de la classification par âge non cochée), elle a été
 renvoyée à 11 h 03, approuvée à 15 h 04 et **est en ligne depuis le
 31 octobre 2026 à 15 h 05** (publication automatique). Envoyée le même soir
-sur Google Play, elle y est en ligne (vérifié le 13 novembre 2026).
+sur Google Play, elle y est en ligne (vérifié le 14 novembre 2026).
 
 **Où vivent les secrets :** aucun côté dépôt. L'authentification est
 celle du compte Apple (+ double facteur).
@@ -292,7 +292,7 @@ refuse de servir.
 
 **app-ads.txt** — publié le 30 octobre 2026 à la racine du dépôt, et
 servi sur `https://erea.toakeur.com/app-ads.txt` (l'URL marketing de la
-fiche App Store), de nouveau en ligne (vérifié le 13 novembre 2026). Une ligne : l'éditeur `pub-2680784147246798` en
+fiche App Store), de nouveau en ligne (vérifié le 14 novembre 2026). Une ligne : l'éditeur `pub-2680784147246798` en
 `DIRECT`. Avant le 30 octobre, l'adresse répondait 404, et de nouveau le
 4 novembre au matin, le temps que le dépôt redevienne public. Dans AdMob, les deux applis AdMob (Erea iOS et Erea Android) sont en « Examen requis », avec une diffusion d'annonces limitée, parce qu'elles ne sont pas encore associées à leur fiche App Store et Google Play ; tant que ce n'est pas fait, AdMob ne peut pas valider `app-ads.txt` (vérifié le 13 novembre 2026).
 
@@ -304,7 +304,7 @@ input app ID`. Aucune annonce n'aurait été servie en Europe. Le message
 français (anglais en secours), offre les trois boutons *Refuser*,
 *Autoriser* et *Gérer les options*, et renvoie à
 `https://erea.toakeur.com/confidentialite.html` (en ligne, vérifié le
-13 novembre 2026). Côté code,
+14 novembre 2026). Côté code,
 `lib/core/pub.dart` appelle le SDK UMP au démarrage et expose « Options
 de confidentialité » ; depuis la 1.0.4, la préparation de la régie attend
 vraiment la fermeture du formulaire. Formulaire vérifié sur le Pixel le
@@ -339,7 +339,7 @@ passe par le compte Google (+ double facteur).
 
 | | |
 |---|---|
-| Rôle | Distribution Android — 1.0.7 en ligne (vérifié le 13 novembre 2026 ; première mise en production le 20 octobre) |
+| Rôle | Distribution Android — 1.0.7 en ligne (vérifié le 14 novembre 2026 ; première mise en production le 20 octobre) |
 | Console | <https://play.google.com/console> |
 | Compte propriétaire | Compte développeur **personnel**, créé le 20 août 2026, sur le compte Google de gestion |
 | Coût | 25 $ une seule fois |
@@ -347,7 +347,7 @@ passe par le compte Google (+ double facteur).
 **État réel :**
 - Application ID `com.teiki.erea`, identique à iOS (`android/app/build.gradle.kts`).
 - Test fermé « Alpha » : release `4 (1.0.3)` servie aux testeurs à partir du 16 septembre 2026, puis release `5 (1.0.4)` envoyée le 14 octobre. Les **douze testeurs pendant quatorze jours** exigés d'un compte personnel ont été tenus du 8 au 22 septembre (voir « Testeurs » plus bas).
-- **Accès à la production demandé le 14 octobre 2026 à 18 h 39, accordé le 17 octobre** ; la release de production `5 (1.0.4)`, promue depuis la piste Alpha et envoyée le 17 octobre vers 8 h 25, a été mise en ligne le 20 octobre 2026 à 16 h 07 ; la `6 (1.0.5)` l'a remplacée le 21 octobre, la `7 (1.0.6)` le 22 octobre 2026, et la **`8 (1.0.7)`, envoyée le 30 octobre 2026, est en ligne (vérifié le 13 novembre 2026)**. La fiche publique `play.google.com/store/apps/details?id=com.teiki.erea` répond (vérifié le 13 novembre 2026).
+- **Accès à la production demandé le 14 octobre 2026 à 18 h 39, accordé le 17 octobre** ; la release de production `5 (1.0.4)`, promue depuis la piste Alpha et envoyée le 17 octobre vers 8 h 25, a été mise en ligne le 20 octobre 2026 à 16 h 07 ; la `6 (1.0.5)` l'a remplacée le 21 octobre, la `7 (1.0.6)` le 22 octobre 2026, et la **`8 (1.0.7)`, envoyée le 30 octobre 2026, est en ligne (vérifié le 14 novembre 2026)**. La fiche publique `play.google.com/store/apps/details?id=com.teiki.erea` répond (vérifié le 14 novembre 2026).
 - **Statut de professionnel (DSA)** : Google a écrit le 4 novembre 2026 qu'il faut le déclarer dans la Play Console (Gérer le compte → Détails du compte) **d'ici le 1er février 2027**, faute de quoi plus aucune mise à jour ne passe et les applis sont retirées ; le statut de professionnel n'est pas encore déclaré : l'accueil de la Play Console affiche « Déclarez votre statut de professionnel d'ici février 2027 » avec « Action requise » (vérifié le 13 novembre 2026). Erea y est en « Production », mise à jour du 30 octobre 2026.
 - Achat intégré actif (voir « StoreKit / Play Billing »). Classements Play Games non configurés (voir « Game Center / Play Games »).
 - Appareil physique de vérification : un Pixel 8a, utilisé pour les tests du 16 septembre.
@@ -397,7 +397,7 @@ uniquement.
 Proposée après un PERFECT, un record ou trois défis d'affilée, une seule
 fois, jamais au lancement ; le système décide de l'affichage. Le même
 fichier fournit le lien de boutique ajouté aux grilles partagées : App
-Store sur iOS, Play Store sur Android depuis la 1.0.4. Au 13 novembre
+Store sur iOS, Play Store sur Android depuis la 1.0.4. Au 14 novembre
 2026, l'App Store compte 0 note.
 
 **Où vivent les secrets :** aucun.
@@ -433,14 +433,14 @@ Le mode guidé ne propose que des campagnes « Trafic » de 245 à 385 € par
 semaine. Jean a préféré booster les vidéos par « Promouvoir », dans
 l'application TikTok, avec quelques dizaines d'euros. Le lien de
 téléchargement à suivre par TikTok est
-`https://erea.toakeur.com/telecharger/?src=tiktok` (en ligne, vérifié le 13 novembre 2026). Sur un compte
+`https://erea.toakeur.com/telecharger/?src=tiktok` (en ligne, vérifié le 14 novembre 2026). Sur un compte
 personnel, TikTok n'affiche pas de lien dans la bio, et le compte
 Entreprise passe désormais par une vérification de l'entreprise, qui
 publie l'adresse sur le profil : ce choix reste à faire (chez Apple, le
 statut de commerçant DSA est réglé depuis le 9 novembre 2026, au nom
 d'ALOHASH). Les vidéos elles-mêmes sont publiées sans régie, par le
-Planning du Studio via Buffer : quarante-trois l'ont été en public
-sur « erea.jeu » du 29 octobre au 12 novembre 2026 ; l'envoi du 10 novembre à 18 h 02 (« Ludger Sylbaris, sauvé par son cachot ») a échoué, coupé par un redémarrage du Studio, et quatre autres sont programmées au Planning du 13 au 15 novembre (vérifié le 13 novembre 2026).
+Planning du Studio via Buffer : quarante-cinq l'ont été en public
+sur « erea.jeu » du 29 octobre au 13 novembre 2026 ; l'envoi du 10 novembre à 18 h 02 (« Ludger Sylbaris, sauvé par son cachot ») a échoué, coupé par un redémarrage du Studio, et deux autres sont programmées au Planning les 14 et 15 novembre (vérifié le 14 novembre 2026).
 
 **Où vivent les secrets :** aucun ; la connexion se fait par un code
 envoyé à `admin@toakeur.com`.
