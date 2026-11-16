@@ -1,6 +1,6 @@
 # PUBLICATION — état de la mise en ligne
 
-> Mis à jour le 15 novembre 2026, d'après le site en ligne, la Search Console, la console AdSense et les exécutions GitHub Actions.
+> Mis à jour le 16 novembre 2026, d'après le site en ligne, la Search Console, la console AdSense et les exécutions GitHub Actions.
 >
 > Aucun secret ici — uniquement des références.
 
@@ -8,7 +8,7 @@
 
 - **Production** : en ligne sur keurbook.com depuis le 1er octobre 2026
 - **Domaine & SSL** : Cloudflare, certificat valide jusqu'au 30 décembre 2026, renouvelé seul
-- **Visibilité** : 282 pages indexées par Google sur 1003, IndexNow après chaque publication et chaque lundi
+- **Visibilité** : 282 pages indexées par Google sur 1003 (15 novembre), IndexNow après chaque publication et chaque lundi
 - **Contact** : keurbook@toakeur.com
 
 ## Boutiques
@@ -37,12 +37,12 @@
 
 | | |
 |---|---|
-| Adresse | **En ligne** sur https://keurbook.com (vérifié le 15 novembre 2026 : réponse 200) |
+| Adresse | **En ligne** sur https://keurbook.com (vérifié le 16 novembre 2026 : réponse 200) |
 | Hébergeur | Cloudflare Pages (projet `keurbook`), workflow `deploy.yml` |
-| Dernière publication | 14 novembre 2026 à 22 h 46 UTC (publication programmée), réussie, suivie d'IndexNow réussi à 22 h 48 UTC ; `version.txt` sert le dernier envoi (8694fab, 14 novembre 2026) (vérifié le 15 novembre 2026) ; la précédente, le 14 novembre à 17 h 19 UTC (publication programmée), a réussi |
+| Dernière publication | 16 novembre 2026 à 4 h 32 UTC (envoi sur main), réussie, suivie d'IndexNow réussi à 4 h 34 UTC ; `version.txt` sert le dernier envoi (0d3d5c2, 16 novembre 2026) (vérifié le 16 novembre 2026) ; la précédente, le 16 novembre à 2 h 45 UTC (publication programmée), a réussi |
 | Mise en ligne | 1er octobre 2026 |
 | Dépôt | https://github.com/teiki5320/keurbook |
-| Taille publiée | 1003 adresses dans le sitemap (du 13 au 15 novembre 2026 : dont 48 articles Conseils et 20 articles d'actus ; 1001 les 11 et 12 novembre, avec 47 articles Conseils et 19 articles d'actus ; 999 le 10 novembre, 998 le 9 novembre, 996 le 8 novembre, 995 les 6 et 7 novembre, 992 le 5 novembre, 993 le 4 novembre, 991 le 2 novembre, 988 le 1er novembre, 987 le 31 octobre, 984 le 30 octobre, 982 le 29 octobre, 980 le 28 octobre, 975 le 27 octobre, 974 jusqu'au 26 octobre, avant la page Actus) |
+| Taille publiée | 1006 adresses dans le sitemap (16 novembre 2026 : dont 49 articles Conseils, 21 articles d'actus et la page À propos ; 1003 du 13 au 15 novembre, avec 48 articles Conseils et 20 articles d'actus ; 1001 les 11 et 12 novembre, avec 47 articles Conseils et 19 articles d'actus ; 999 le 10 novembre, 998 le 9 novembre, 996 le 8 novembre, 995 les 6 et 7 novembre, 992 le 5 novembre, 993 le 4 novembre, 991 le 2 novembre, 988 le 1er novembre, 987 le 31 octobre, 984 le 30 octobre, 982 le 29 octobre, 980 le 28 octobre, 975 le 27 octobre, 974 jusqu'au 26 octobre, avant la page Actus) |
 | Contact affiché | `keurbook@toakeur.com` |
 | Maintenance | désactivée (`content/maintenance.json`) |
 
@@ -56,7 +56,7 @@
 
 ## Visibilité
 
-- **Sitemap** : https://keurbook.com/sitemap.xml répond (1003 adresses du 13 au 15 novembre 2026 ; 1001 les 11 et 12 novembre, 999 le 10 novembre, 998 le 9 novembre, 996 le 8 novembre, 995 les 6 et 7 novembre, 992 le 5 novembre, 993 le 4 novembre, 991 le 2 novembre, 988 le 1er novembre, 987 le 31 octobre, 984 le 30 octobre, 982 le 29 octobre, 980 le 28 octobre, 975 le 27 octobre) ; `robots.txt` autorise
+- **Sitemap** : https://keurbook.com/sitemap.xml répond (1006 adresses le 16 novembre 2026 ; 1003 du 13 au 15 novembre ; 1001 les 11 et 12 novembre, 999 le 10 novembre, 998 le 9 novembre, 996 le 8 novembre, 995 les 6 et 7 novembre, 992 le 5 novembre, 993 le 4 novembre, 991 le 2 novembre, 988 le 1er novembre, 987 le 31 octobre, 984 le 30 octobre, 982 le 29 octobre, 980 le 28 octobre, 975 le 27 octobre) ; `robots.txt` autorise
   tout et cite le sitemap.
 - **Google Search Console** : propriété de domaine `keurbook.com`, sitemap envoyé le 1er octobre
   2026, renvoyé le 16, le 20 et le 28 octobre puis le 4 et le 11 novembre 2026, lu par Google le 11 novembre (aucune erreur). Search Console
