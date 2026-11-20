@@ -1,6 +1,6 @@
 # PUBLICATION — état de la mise en ligne
 
-> Mis à jour le 19 novembre 2026, d'après le site en ligne, la Search Console, la console AdSense et les exécutions GitHub Actions.
+> Mis à jour le 20 novembre 2026, d'après le site en ligne, la Search Console, la console AdSense et les exécutions GitHub Actions.
 >
 > Aucun secret ici — uniquement des références.
 
@@ -8,7 +8,7 @@
 
 - **Production** : en ligne sur keurbook.com depuis le 1er octobre 2026
 - **Domaine & SSL** : Cloudflare, certificat valide jusqu'au 30 décembre 2026, renouvelé seul
-- **Visibilité** : 282 pages indexées par Google sur 1010 (19 novembre), IndexNow après chaque publication et chaque lundi
+- **Visibilité** : 282 pages indexées par Google sur 986 (20 novembre), IndexNow après chaque publication et chaque lundi
 - **Contact** : keurbook@toakeur.com
 
 ## Boutiques
@@ -19,7 +19,7 @@
 | Hébergement | [ok] Cloudflare Pages, projet keurbook |
 | Domaine | [ok] keurbook.com, www redirigé (301) |
 | SSL | [ok] Certificat Cloudflare, HSTS actif |
-| Indexation | [à faire] 282 / 1010 pages indexées par Google |
+| Indexation | [à faire] 282 / 986 pages indexées par Google |
 | Mesure d'audience | [ok] Cloudflare Web Analytics, sans cookie ; Umami en essai depuis le 5 novembre |
 
 ## Ce qui reste, dans l'ordre
@@ -29,7 +29,7 @@
 3. ✅ **Publicité préparée** : script AdSense, ads.txt et 4 blocs d'annonces publiés le 12 octobre (aucune annonce affichée avant la validation).
 4. ✅ **Fiches rallongées** : refus AdSense du 21 octobre (contenu trop mince) ; les 796 fiches ont reçu « Le livre en détail » le 21 octobre.
 5. **Validation AdSense** : nouvel examen demandé le 22 octobre, « En préparation » dans la console (vérifié le 15 novembre 2026 ; aucun courriel d'AdSense depuis) ; suivre l'avis de Google dans la console AdSense.
-6. **Indexation complète** : faire entrer dans Google les 728 pages encore absentes.
+6. **Indexation complète** : faire entrer dans Google les 704 pages encore absentes.
 7. ✅ **Mesure d'audience** : Cloudflare Web Analytics autorisé dans `public/_headers` le 13 octobre.
 8. **Design définitif** : remplacer l'habillage provisoire par le design fait à part.
 
@@ -37,12 +37,12 @@
 
 | | |
 |---|---|
-| Adresse | **En ligne** sur https://keurbook.com (vérifié le 19 novembre 2026 : réponse 200) |
+| Adresse | **En ligne** sur https://keurbook.com (vérifié le 20 novembre 2026 : réponse 200) |
 | Hébergeur | Cloudflare Pages (projet `keurbook`), workflow `deploy.yml` |
-| Dernière publication | 18 novembre 2026 à 19 h 38 UTC (publication programmée), réussie, suivie d'IndexNow réussi à 19 h 41 UTC ; `version.txt` sert le dernier envoi (6413845, 18 novembre 2026) (vérifié le 19 novembre 2026) ; la précédente, le 18 novembre à 15 h 40 UTC (envoi sur main), a réussi |
+| Dernière publication | 20 novembre 2026 à 3 h 59 UTC (publication programmée), réussie, suivie d'IndexNow réussi à 4 h 01 UTC ; `version.txt` sert le dernier envoi (16cb1e9, 19 novembre 2026) (vérifié le 20 novembre 2026) ; la précédente, le 19 novembre à 19 h 38 UTC (publication programmée), a réussi |
 | Mise en ligne | 1er octobre 2026 |
 | Dépôt | https://github.com/teiki5320/keurbook |
-| Taille publiée | 1010 adresses dans le sitemap (19 novembre 2026, comme le 18 novembre : dont 51 articles Conseils, 23 articles d'actus et la page À propos ; 1006 les 16 et 17 novembre, avec 49 articles Conseils et 21 articles d'actus ; 1003 du 13 au 15 novembre, avec 48 articles Conseils et 20 articles d'actus ; 1001 les 11 et 12 novembre, avec 47 articles Conseils et 19 articles d'actus ; 999 le 10 novembre, 998 le 9 novembre, 996 le 8 novembre, 995 les 6 et 7 novembre, 992 le 5 novembre, 993 le 4 novembre, 991 le 2 novembre, 988 le 1er novembre, 987 le 31 octobre, 984 le 30 octobre, 982 le 29 octobre, 980 le 28 octobre, 975 le 27 octobre, 974 jusqu'au 26 octobre, avant la page Actus) |
+| Taille publiée | 987 adresses dans le sitemap (20 novembre 2026 : dont 52 articles Conseils et la page À propos ; la page Actus et les 23 articles d'actus en sont sortis le 19 novembre 2026, en `noindex`) ; 1010 les 18 et 19 novembre, avec 51 articles Conseils et 23 articles d'actus ; 1006 les 16 et 17 novembre, avec 49 articles Conseils et 21 articles d'actus ; 1003 du 13 au 15 novembre, avec 48 articles Conseils et 20 articles d'actus ; 1001 les 11 et 12 novembre, avec 47 articles Conseils et 19 articles d'actus ; 999 le 10 novembre, 998 le 9 novembre, 996 le 8 novembre, 995 les 6 et 7 novembre, 992 le 5 novembre, 993 le 4 novembre, 991 le 2 novembre, 988 le 1er novembre, 987 le 31 octobre, 984 le 30 octobre, 982 le 29 octobre, 980 le 28 octobre, 975 le 27 octobre, 974 jusqu'au 26 octobre, avant la page Actus) |
 | Contact affiché | `keurbook@toakeur.com` |
 | Maintenance | désactivée (`content/maintenance.json`) |
 
@@ -56,12 +56,12 @@
 
 ## Visibilité
 
-- **Sitemap** : https://keurbook.com/sitemap.xml répond (1010 adresses les 18 et 19 novembre 2026 ; 1006 les 16 et 17 novembre ; 1003 du 13 au 15 novembre ; 1001 les 11 et 12 novembre, 999 le 10 novembre, 998 le 9 novembre, 996 le 8 novembre, 995 les 6 et 7 novembre, 992 le 5 novembre, 993 le 4 novembre, 991 le 2 novembre, 988 le 1er novembre, 987 le 31 octobre, 984 le 30 octobre, 982 le 29 octobre, 980 le 28 octobre, 975 le 27 octobre) ; `robots.txt` autorise
-  tout et cite le sitemap et, depuis le 18 novembre 2026, le flux RSS des actus et des conseils (https://keurbook.com/feed.xml, 30 derniers éléments, répond 200 le 19 novembre 2026).
+- **Sitemap** : https://keurbook.com/sitemap.xml répond (987 adresses le 20 novembre 2026, sans les actus ; 1010 les 18 et 19 novembre 2026 ; 1006 les 16 et 17 novembre ; 1003 du 13 au 15 novembre ; 1001 les 11 et 12 novembre, 999 le 10 novembre, 998 le 9 novembre, 996 le 8 novembre, 995 les 6 et 7 novembre, 992 le 5 novembre, 993 le 4 novembre, 991 le 2 novembre, 988 le 1er novembre, 987 le 31 octobre, 984 le 30 octobre, 982 le 29 octobre, 980 le 28 octobre, 975 le 27 octobre) ; `robots.txt` autorise
+  tout et cite le sitemap et, depuis le 18 novembre 2026, le flux RSS des conseils (https://keurbook.com/feed.xml, 30 derniers éléments, sans les actus depuis le 19 novembre 2026, répond 200 le 20 novembre 2026).
 - **Google Search Console** : propriété de domaine `keurbook.com`, sitemap envoyé le 1er octobre
-  2026, renvoyé le 16, le 20 et le 28 octobre puis le 4 et le 11 novembre 2026, lu par Google le 11 novembre (aucune erreur). Search Console
-  (onglet Indexation du Studio) au 19 novembre 2026 : 282 pages indexées sur 1010, 728 pas encore
-  (312 inconnues de Google, 416 explorées mais pas indexées, dont 351 fiches livres) ; 282 sur 1008 le 18 novembre (312 inconnues, 414 explorées) ; 282 sur 1003 le 15 novembre (308 inconnues, 413 explorées) ; 321 sur 1003 le 14 novembre (308 inconnues, 374 explorées), 321 sur 1003 le 13 novembre (310 inconnues, 372 explorées), 321 sur 1001 le 12 novembre (308 inconnues, 372 explorées), 440 sur 1001 le 11 novembre (308 inconnues, 253 explorées), 490 sur 999 le 10 novembre (306 inconnues, 203 explorées), 490 sur 998 le 9 novembre (305 inconnues, 203 explorées), 591 sur 996 le 8 novembre (303 inconnues, 102 explorées), 649 sur 995 le 7 novembre (305 inconnues, 41 explorées) et le 6 novembre (311 et 35), 650 sur 993 le 5 novembre, 663 sur 993 le 4 novembre, 663 sur 991 le 2 novembre, 675 sur 988 le 1er novembre, 675 sur 987 le 31 octobre, 677 sur 984 le 30 octobre, 680 sur 982 le 29 octobre, 680 sur 980 le 28 octobre, 679 sur 975 le 27 octobre, 673 sur 971 le 20 octobre.
+  2026, renvoyé le 16, le 20 et le 28 octobre puis le 4 et le 11 novembre 2026, et le 19 novembre 2026 avec le flux RSS, tous deux lus par Google le 19 novembre (aucune erreur). Search Console
+  (onglet Indexation du Studio) au 20 novembre 2026 : 282 pages indexées sur 986, 704 pas encore
+  (288 inconnues de Google, 416 explorées mais pas indexées, dont 351 fiches livres) ; 282 sur 1010 le 19 novembre (312 inconnues, 416 explorées) ; 282 sur 1008 le 18 novembre (312 inconnues, 414 explorées) ; 282 sur 1003 le 15 novembre (308 inconnues, 413 explorées) ; 321 sur 1003 le 14 novembre (308 inconnues, 374 explorées), 321 sur 1003 le 13 novembre (310 inconnues, 372 explorées), 321 sur 1001 le 12 novembre (308 inconnues, 372 explorées), 440 sur 1001 le 11 novembre (308 inconnues, 253 explorées), 490 sur 999 le 10 novembre (306 inconnues, 203 explorées), 490 sur 998 le 9 novembre (305 inconnues, 203 explorées), 591 sur 996 le 8 novembre (303 inconnues, 102 explorées), 649 sur 995 le 7 novembre (305 inconnues, 41 explorées) et le 6 novembre (311 et 35), 650 sur 993 le 5 novembre, 663 sur 993 le 4 novembre, 663 sur 991 le 2 novembre, 675 sur 988 le 1er novembre, 675 sur 987 le 31 octobre, 677 sur 984 le 30 octobre, 680 sur 982 le 29 octobre, 680 sur 980 le 28 octobre, 679 sur 975 le 27 octobre, 673 sur 971 le 20 octobre.
 - **IndexNow** (Bing, Yandex…) : tout le sitemap est signalé après chaque publication réussie de `main`
   (depuis le 28 octobre 2026) et chaque lundi ; dernière exécution du lundi réussie le 16 novembre 2026 (les précédentes le 9 et le 2 novembre).
 - **Mesure d'audience** : Cloudflare Web Analytics (sans cookie), balise constatée en ligne le

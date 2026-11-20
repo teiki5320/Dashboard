@@ -1,6 +1,6 @@
 # INFRA — fiche technique
 
-Mis à jour le 19 novembre 2026, d'après le code du dépôt et le site en ligne. Aucun secret ici :
+Mis à jour le 20 novembre 2026, d'après le code du dépôt et le site en ligne. Aucun secret ici :
 uniquement des noms de variables et de consoles.
 
 ## En bref
@@ -9,14 +9,14 @@ uniquement des noms de variables et de consoles.
 - **Stack** : Next.js 16 en export statique, React 19, Tailwind CSS 4
 - **Backend** : aucun — site statique, sans base ni compte
 - **Distribution** : Cloudflare Pages, publié par GitHub Actions
-- **Site** : keurbook.com (1010 adresses dans le sitemap)
+- **Site** : keurbook.com (987 adresses dans le sitemap)
 - **IA et outils** : routine « Articles » du Studio (articles Conseils), veille actus (2 passages par jour), IndexNow, flux RSS, Cloudflare Web Analytics
 
 ## Parcours
 
 - 🌐 **Web** : 🐙 GitHub — main · publication au vert [ok] → ⚙️ GitHub Actions — lint, types, tests, build [ok] → ☁️ Cloudflare Pages — projet keurbook [ok] → 🌍 keurbook.com — en ligne, réponse 200 [ok]
-- 📝 **Contenu** : ✍️ Articles Conseils — 51 publiés, 29 programmés (19 novembre 2026 ; 3 articles ajoutés ce jour pour le 23 et le 30 novembre et le 7 décembre) [ok] → ⚙️ GitHub Actions — publie lundi, mercredi, vendredi [ok] → 📡 IndexNow — sitemap signalé après chaque publication et chaque lundi [ok] → 🔍 Google — 282 pages indexées sur 1010 (19/11) [à faire]
-- 📰 **Veille actus** : 📡 Tâche de veille — 12 h et 19 h, 10 flux RSS [ok] → 🐙 Dépôt veille — actus/keurbook.json sur GitHub Pages [ok] → 🌍 keurbook.com — accueil (4), /actus (20), fiches auteur (3) [ok]
+- 📝 **Contenu** : ✍️ Articles Conseils — 52 publiés, 28 programmés (20 novembre 2026) [ok] → ⚙️ GitHub Actions — publie lundi, mercredi, vendredi [ok] → 📡 IndexNow — sitemap signalé après chaque publication et chaque lundi [ok] → 🔍 Google — 282 pages indexées sur 986 (20/11) [à faire]
+- 📰 **Veille actus** : 📡 Tâche de veille — 12 h et 19 h, 10 flux RSS [ok] → 🐙 Dépôt veille — actus/keurbook.json sur GitHub Pages [ok] → 🌍 keurbook.com — /actus (20), hors Google depuis le 19/11 [ok]
 - 🛒 **Affiliation** : 📚 Fiche livre ou BD — bouton « Voir sur Amazon » [ok] → 🛒 Amazon Partenaires (affiliation) — tag keurbookfr-21 [ok] → 🔗 Liens directs — 438 ASIN sur 796 livres et BD [à faire]
 - 📰 **Publicité** : 📰 AdSense (publicité web) — script et 4 blocs en place [ok] → ✅ Validation du site — refusée le 21/10, réexamen demandé le 22/10, « En préparation » vérifié le 15/11 [pas encore] → 💶 Revenus — aucun constaté [pas encore]
 
@@ -30,13 +30,14 @@ uniquement des noms de variables et de consoles.
 - **Backend** : aucun. Site entièrement statique (dossier `out/`), sans base de données, sans
   compte. La pile à lire reste dans le navigateur du visiteur. Seuls cookies : ceux de Google AdSense,
   après accord dans le bandeau de consentement de Google (voir docs/PUBLICITE.md).
-- **Taille** : 1010 adresses dans le sitemap le 19 novembre 2026, comme le 18 novembre (675 livres, 121 BD, 92 auteurs,
-  26 pays, 51 articles Conseils publiés, 11 pages Top 10, la page Actus, 23 articles d'actus, la page À propos
-  (en ligne depuis le 16 novembre 2026), pages de liste et pages légales ; 1006 les 16 et 17 novembre avec 49 articles Conseils et 21 articles d'actus ; 1003 du 13 au 15 novembre avec 48 articles Conseils et 20 articles d'actus ; l'article d'actus sur le colloque Boubacar Boris Diop, absent de la publication du 5 novembre à 4 h 31 UTC, est revenu le 5 novembre — chaque article est désormais relu jusqu'à 3 fois — et sa page répond 200, vérifié le 7 novembre 2026 ; 1001 les 11 et 12 novembre avec 47 articles Conseils et 19 articles d'actus, 999 le 10 novembre avec 46 articles Conseils et 18 articles d'actus, 998 le 9 novembre avec 17 articles d'actus, 996 le 8 novembre avec 45 articles Conseils et 16 articles d'actus, 995 les 6 et 7 novembre avec 15 articles d'actus, 992 le 5 novembre avec 44 articles Conseils et 13 articles d'actus, 993 le 4 novembre avec 14 articles d'actus, 991 le 2 novembre avec 43 articles Conseils et 13 articles d'actus, 988 le 1er novembre avec 42 articles Conseils et 11 articles d'actus, 987 le 31 octobre avec 10 articles d'actus, 984 le 30 octobre avec 7 articles d'actus, 982 le 29 octobre avec 41 articles Conseils et 6 articles d'actus, 980 le 28 octobre avec 4 articles d'actus, 975 le 27 octobre, avant les articles d'actus, et 974 jusqu'au 26 octobre, avant la page Actus).
+- **Taille** : 987 adresses dans le sitemap le 20 novembre 2026 (675 livres, 121 BD, 92 auteurs,
+  26 pays, 52 articles Conseils publiés, 11 pages Top 10, la page À propos (en ligne depuis le 16 novembre 2026),
+  pages de liste et pages légales) ; la page Actus et les 23 articles d'actus sont sortis du sitemap le 19 novembre 2026
+  (pages en `noindex`) ; 1010 les 18 et 19 novembre avec 51 articles Conseils, la page Actus et 23 articles d'actus ; 1006 les 16 et 17 novembre avec 49 articles Conseils et 21 articles d'actus ; 1003 du 13 au 15 novembre avec 48 articles Conseils et 20 articles d'actus ; l'article d'actus sur le colloque Boubacar Boris Diop, absent de la publication du 5 novembre à 4 h 31 UTC, est revenu le 5 novembre — chaque article est désormais relu jusqu'à 3 fois — et sa page répond 200, vérifié le 7 novembre 2026 ; 1001 les 11 et 12 novembre avec 47 articles Conseils et 19 articles d'actus, 999 le 10 novembre avec 46 articles Conseils et 18 articles d'actus, 998 le 9 novembre avec 17 articles d'actus, 996 le 8 novembre avec 45 articles Conseils et 16 articles d'actus, 995 les 6 et 7 novembre avec 15 articles d'actus, 992 le 5 novembre avec 44 articles Conseils et 13 articles d'actus, 993 le 4 novembre avec 14 articles d'actus, 991 le 2 novembre avec 43 articles Conseils et 13 articles d'actus, 988 le 1er novembre avec 42 articles Conseils et 11 articles d'actus, 987 le 31 octobre avec 10 articles d'actus, 984 le 30 octobre avec 7 articles d'actus, 982 le 29 octobre avec 41 articles Conseils et 6 articles d'actus, 980 le 28 octobre avec 4 articles d'actus, 975 le 27 octobre, avant les articles d'actus, et 974 jusqu'au 26 octobre, avant la page Actus).
 - **Particularités** : interrupteur de maintenance dans `content/maintenance.json` (désactivé),
   tests de cohérence des contenus dans `tests/`, contrôle du site construit avant chaque mise en ligne
-  (`tests/sortie/`, depuis le 28 octobre 2026), signalement IndexNow après chaque publication et chaque lundi, flux RSS des actus et des conseils
-  (`/feed.xml`, 30 derniers éléments, en ligne depuis le 18 novembre 2026), signalé dans chaque page et dans `robots.txt`.
+  (`tests/sortie/`, depuis le 28 octobre 2026), signalement IndexNow après chaque publication et chaque lundi, flux RSS des conseils
+  (`/feed.xml`, 30 derniers éléments, en ligne depuis le 18 novembre 2026 ; sans les actus depuis le 19 novembre 2026), signalé dans chaque page et dans `robots.txt`.
 
 ## GitHub
 
@@ -133,7 +134,7 @@ uniquement des noms de variables et de consoles.
   pas d'accès API), région UE, sans cookie. Balise dans `src/app/layout.tsx` (identifiant public
   `UMAMI_WEBSITE_ID` dans `src/lib/config.ts`, limitée à `keurbook.com`) ; `public/_headers` autorise
   `cloud.umami.is` (script) et `gateway.umami.is` (envoi). Clics comptés : « Clic Amazon » (avec le titre du
-  livre et, depuis le 7 novembre 2026, l'emplacement du bouton : fiche, top, conseil, rubrique…) et « Menu sites Keur » (avec le site). Console : https://cloud.umami.is. Cloudflare reste en place.
+  livre et, depuis le 7 novembre 2026, l'emplacement du bouton : fiche, top, conseil, rubrique…) et « Menu sites Keur » (avec le site) jusqu'au 19 novembre 2026, date du retrait de ce menu. Console : https://cloud.umami.is. Cloudflare reste en place.
 
 ## Veille actus
 
@@ -144,15 +145,16 @@ uniquement des noms de variables et de consoles.
   dans le navigateur du visiteur, sans reconstruction (`src/lib/veille.ts` : délai de 8 s, cache de
   15 minutes dans le navigateur ; fichier injoignable = bloc absent, page intacte). Les images viennent
   aussi de `teiki5320.github.io`.
-- **Emplacements** : bloc « Actus du livre » sur l'accueil (4 actus), page `/actus` (20 actus, dans le
-  menu et le sitemap), bloc « L'actu de … » sur chaque fiche auteur (3 actus liées à l'auteur ; absent
-  s'il n'y en a pas). Composants dans `src/components/actus/`. Jamais de lien Amazon dans ces blocs.
+- **Emplacements** : page `/actus` (20 actus, dans le menu ; en `noindex` et hors sitemap depuis le
+  19 novembre 2026). Le bloc « Actus du livre » de l'accueil (4 actus) et le bloc « L'actu de … » des fiches
+  auteur (3 actus) ont été retirés le 19 novembre 2026. Composants dans `src/components/actus/`. Jamais de lien Amazon dans ces blocs.
 - **Articles complets** (depuis le 28 octobre 2026) : chaque actu a son article de 300 à 450 mots, écrit
   par la veille (`articles/keurbook/<id>.json`, schéma article v1), jamais supprimé ensuite. Au build,
   `scripts/veille-articles.mjs` lit l'index de tous les articles (`articles/keurbook/index.json`) et les actus
   récentes (fichier `.veille/articles.json`, non suivi ; veille injoignable = 0 page, build intact) et le site construit une page `/actus/<adresse>` par article (fil d'Ariane, chapô, image et
   crédit, intertitres, encadré « Sources », liens vers les fiches auteurs, 3 autres actus, 1 annonce
-  AdSense « article »), avec `NewsArticle` en JSON-LD, dans le sitemap (et donc IndexNow). Reconstruction
+  AdSense « article »), avec `NewsArticle` en JSON-LD ; dans le sitemap (et donc IndexNow) jusqu'au 19 novembre 2026, en `noindex`,
+  hors sitemap et hors flux RSS depuis. Reconstruction
   2 fois par jour (11 h 50 et 18 h 50 UTC) par `deploy.yml`. Les articles parus entre deux constructions
   s'ouvrent dans la page de secours `/actus/article?id=<id>` (lue dans le navigateur, `noindex`, hors
   sitemap). Toute la carte d'une actu ouvre l'article sur le site ; sans article, elle ouvre la source.
