@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 20 novembre 2026. Compagnon de `INFRA.md` : là où INFRA répertorie
+Mis à jour le 21 novembre 2026. Compagnon de `INFRA.md` : là où INFRA répertorie
 la technique, ce fichier suit la stratégie marketing et de rémunération.
 Pour l'actualiser : relancer le même prompt.
 
@@ -23,7 +23,7 @@ Pour l'actualiser : relancer le même prompt.
 
 - [fait] **Aujourd'hui** : app gratuite, rémunérée par l'affiliation Amazon en France. Les liens avaient été retirés le 20 octobre 2026 (tag rattaché au compte fermé par Amazon le 18 octobre) ; ils sont revenus le 30 octobre 2026 sous le tag `kultiva1-21`.
 - **Décision du 18 novembre 2026** : Kultiva est relancée, le projet est de nouveau **actif** (choix de Jean, relance décidée le 30 octobre). La 1.0.0, validée par Apple le 6 novembre, reste à publier d'un clic.
-- [en cours] **Lancement** : le projet est de nouveau actif (relancé par Jean le 18 novembre 2026) ; reste à publier — l'app a été soumise aux deux boutiques le 4 novembre 2026 ; Apple a validé la version 1.0.0 le 6 novembre 2026 (publication manuelle, à lancer) et Google Play est en test fermé (12 testeurs inscrits ; les 14 jours sont atteints, les trois critères sont cochés et « Demander à publier en production » est proposé (console, vérifié le 19 novembre 2026) : l'accès en production reste à demander). Le site et sa page de confidentialité sont en ligne (vérifié le 20 novembre 2026). L'app n'a plus de backend depuis le 30 octobre 2026, rien de ce côté ne bloque. La piste de vidéo récompensée AdMob est sans objet : elle reposait sur l'XP du Tamassi, supprimé le 31 octobre 2026.
+- [en cours] **Lancement** : le projet est de nouveau actif (relancé par Jean le 18 novembre 2026) ; reste à publier — l'app a été soumise aux deux boutiques le 4 novembre 2026 ; Apple a validé la version 1.0.0 le 6 novembre 2026 (publication manuelle, à lancer) et Google Play est en test fermé (12 testeurs inscrits ; les 14 jours sont atteints, les trois critères sont cochés et « Demander à publier en production » est proposé (console, vérifié le 19 novembre 2026) : l'accès en production reste à demander). Le site et sa page de confidentialité sont en ligne (vérifié le 21 novembre 2026). L'app n'a plus de backend depuis le 30 octobre 2026, rien de ce côté ne bloque. La piste de vidéo récompensée AdMob est sans objet : elle reposait sur l'XP du Tamassi, supprimé le 31 octobre 2026.
 - **Affiliation** : en place depuis le 30 octobre 2026, France seulement (Amazon ne livre pas en Afrique de l'Ouest). Changer de compte = changer une constante.
 - **Rétention prouvée** : abonnement Kultiva Plus via RevenueCat (jardins illimités, export PDF), France d'abord.
 - **Afrique de l'Ouest** : sponsoring par des ONG et programmes agricoles qui financent la diffusion de conseils.
