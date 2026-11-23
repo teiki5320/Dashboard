@@ -1,6 +1,6 @@
 # MARKETING — plan marketing & rémunération
 
-Mis à jour le 22 novembre 2026. Un canal n'est coché que s'il est prouvé (compte branché et
+Mis à jour le 23 novembre 2026. Un canal n'est coché que s'il est prouvé (compte branché et
 publications réelles, ou routine qui publie).
 
 ## Positionnement
@@ -23,14 +23,14 @@ publications réelles, ou routine qui publie).
 
 - 📚 **Catalogue ciblé** : 675 livres et 121 BD d'auteurs d'Afrique subsaharienne et de la diaspora, introuvables ensemble ailleurs.
 - 🌍 **Entrée par auteurs, pays et Top 10** : 92 fiches d'auteurs, 26 pages pays et 11 Top 10 thématiques relient chaque livre à son contexte.
-- ✍️ **Conseils de lecture** : 52 articles écrits par nous, un nouveau le lundi, le mercredi et le vendredi, reliés aux fiches et aux Top 10.
+- ✍️ **Conseils de lecture** : 54 articles écrits par nous, un nouveau le lundi, le mercredi et le vendredi, reliés aux fiches et aux Top 10.
 
 ## Canaux
 
 - ✅ Site en ligne sur `keurbook.com`.
 - ✅ Référencement naturel : sitemap envoyé à Google Search Console (propriété `keurbook.com`),
   IndexNow après chaque publication et chaque lundi, articles Conseils publiés trois fois par semaine (lundi, mercredi,
-  vendredi). Du 20 au 22 novembre 2026 : 52 articles publiés, 28 programmés (51 et 29 le 19 novembre, avec 3 articles ajoutés ce jour-là, datés du 23 novembre, du 30 novembre et du 7 décembre ; 26 programmés le 18 novembre ; 49 et 20 les 16 et 17 novembre ; 48 et 21 du 13 au 15 novembre ; 47 et 22 les 11 et 12 novembre ; 46 et 23 les 9 et 10 novembre ; 45 et 24 les 7 et 8 novembre ; 45 et 23 le 6 novembre ; l'article Black Friday, hors série, a paru le 18 novembre 2026) ; le rythme régulier va
+  vendredi). Le 23 novembre 2026 : 54 articles publiés, 26 programmés (52 et 28 du 20 au 22 novembre ; 51 et 29 le 19 novembre, avec 3 articles ajoutés ce jour-là, datés du 23 novembre, du 30 novembre et du 7 décembre ; 26 programmés le 18 novembre ; 49 et 20 les 16 et 17 novembre ; 48 et 21 du 13 au 15 novembre ; 47 et 22 les 11 et 12 novembre ; 46 et 23 les 9 et 10 novembre ; 45 et 24 les 7 et 8 novembre ; 45 et 23 le 6 novembre ; l'article Black Friday, hors série, a paru le 18 novembre 2026) ; le rythme régulier va
   jusqu'au 18 janvier 2027 (8 articles ajoutés le 18 novembre 2026 ; il s'arrêtait au 28 décembre avant, et au 7 décembre avant le 30 octobre), puis seuls des articles de saison sont programmés
   (1er et 8 février 2027). Depuis fin octobre 2026, la routine « Articles » du Studio vérifie chaque matin l'avance du site
   et complète la série quand il reste moins de 20 articles ou moins de 4 semaines (elle passait avant le 1er et le 15 de chaque mois).
@@ -49,17 +49,17 @@ publications réelles, ou routine qui publie).
 
 ## Mesures
 
-- **Pages indexées par Google** : 282 sur 987 (Search Console, onglet Indexation du Studio, 21 et 22 novembre 2026 ; 282 sur 986 le 20 novembre, après la sortie des actus du sitemap ; 282 sur 1010 le 19 novembre ; 282 sur 1008 le 18 novembre ; 282 sur 1003 le 15 novembre ; 321 sur 1003 les 13 et 14 novembre, 321 sur 1001 le 12 novembre, 440 sur 1001 le 11 novembre, 490 sur 999 le 10 novembre, 490 sur 998 le 9 novembre, 591 sur 996 le 8 novembre, 649 sur 995 les 6 et 7 novembre, 650 sur 993 le 5 novembre, 663 sur 993 le 4 novembre, 663 sur 991 le 2 novembre, 675 sur 988 le 1er novembre, 675 sur 987 le 31 octobre, 677 sur 984 le 30 octobre, 680 sur 982 le 29 octobre, 680 sur 980 le 28 octobre, 679 sur 975 le 27 octobre, 673 sur 971 le 20 octobre)
-- **Pages pas encore indexées** : 705 (21 et 22 novembre 2026), dont 289 inconnues de Google et 416 explorées mais pas indexées, parmi lesquelles 351 fiches livres (704 le 20 novembre, dont 288 inconnues et 416 explorées ; 728 le 19 novembre, dont 312 inconnues et 416 explorées ; 726 le 18 novembre, dont 312 inconnues et 414 explorées ; 721 le 15 novembre, dont 308 inconnues et 413 explorées ; 682 le 14 novembre, dont 308 inconnues et 374 explorées ; 682 le 13 novembre, dont 310 inconnues et 372 explorées ; 680 le 12 novembre, dont 308 inconnues et 372 explorées ; 561 le 11 novembre, dont 308 inconnues et 253 explorées ; 509 le 10 novembre, dont 306 inconnues et 203 explorées ; 508 le 9 novembre, dont 305 inconnues et 203 explorées ; 405 le 8 novembre, dont 303 inconnues et 102 explorées ; 346 le 7 novembre, dont 305 inconnues et 41 explorées ; 346 le 6 novembre, dont 311 inconnues et 35 explorées ; 343 le 5 novembre, 330 le 4 novembre, 328 le 2 novembre, 313 le 1er novembre, 312 le 31 octobre, 307 le 30 octobre, 302 le 29 octobre)
+- **Pages indexées par Google** : 276 sur 989 (Search Console, onglet Indexation du Studio, 23 novembre 2026 ; 282 sur 987 les 21 et 22 novembre ; 282 sur 986 le 20 novembre, après la sortie des actus du sitemap ; 282 sur 1010 le 19 novembre ; 282 sur 1008 le 18 novembre ; 282 sur 1003 le 15 novembre ; 321 sur 1003 les 13 et 14 novembre, 321 sur 1001 le 12 novembre, 440 sur 1001 le 11 novembre, 490 sur 999 le 10 novembre, 490 sur 998 le 9 novembre, 591 sur 996 le 8 novembre, 649 sur 995 les 6 et 7 novembre, 650 sur 993 le 5 novembre, 663 sur 993 le 4 novembre, 663 sur 991 le 2 novembre, 675 sur 988 le 1er novembre, 675 sur 987 le 31 octobre, 677 sur 984 le 30 octobre, 680 sur 982 le 29 octobre, 680 sur 980 le 28 octobre, 679 sur 975 le 27 octobre, 673 sur 971 le 20 octobre)
+- **Pages pas encore indexées** : 713 (23 novembre 2026), dont 289 inconnues de Google et 424 explorées mais pas indexées, parmi lesquelles 357 fiches livres (705 les 21 et 22 novembre, dont 289 inconnues et 416 explorées, parmi lesquelles 351 fiches livres ; 704 le 20 novembre, dont 288 inconnues et 416 explorées ; 728 le 19 novembre, dont 312 inconnues et 416 explorées ; 726 le 18 novembre, dont 312 inconnues et 414 explorées ; 721 le 15 novembre, dont 308 inconnues et 413 explorées ; 682 le 14 novembre, dont 308 inconnues et 374 explorées ; 682 le 13 novembre, dont 310 inconnues et 372 explorées ; 680 le 12 novembre, dont 308 inconnues et 372 explorées ; 561 le 11 novembre, dont 308 inconnues et 253 explorées ; 509 le 10 novembre, dont 306 inconnues et 203 explorées ; 508 le 9 novembre, dont 305 inconnues et 203 explorées ; 405 le 8 novembre, dont 303 inconnues et 102 explorées ; 346 le 7 novembre, dont 305 inconnues et 41 explorées ; 346 le 6 novembre, dont 311 inconnues et 35 explorées ; 343 le 5 novembre, 330 le 4 novembre, 328 le 2 novembre, 313 le 1er novembre, 312 le 31 octobre, 307 le 30 octobre, 302 le 29 octobre)
 - **Liens Amazon directs** : 438 livres et BD sur 796 (18 novembre 2026 ; 439 le 14 novembre, 438 le 9 novembre, 437 le 7 novembre, 435 le 5 novembre, 436 le 29 octobre, 90 le 19 octobre, 91 jusqu'au 24 octobre). Fiches qui reçoivent des visites : 38 sur 81 en lien direct (17 avant)
-- **Articles Conseils** : 52 publiés, 28 programmés (du 20 au 22 novembre 2026 ; 51 et 29 le 19 novembre ; 26 programmés le 18 novembre ; 49 et 20 les 16 et 17 novembre ; 48 et 21 du 13 au 15 novembre ; 47 et 22 les 11 et 12 novembre ; 46 et 23 les 9 et 10 novembre ; 45 publiés et 24 programmés les 7 et 8 novembre, 45 publiés et 23 programmés le 6 novembre, 44 publiés et 24 programmés le 5 novembre, 43 publiés et 25 programmés le 2 novembre, 42 publiés et 26 programmés le 1er novembre, 41 publiés et 20 programmés le 29 octobre)
+- **Articles Conseils** : 54 publiés, 26 programmés (23 novembre 2026 ; 52 et 28 du 20 au 22 novembre ; 51 et 29 le 19 novembre ; 26 programmés le 18 novembre ; 49 et 20 les 16 et 17 novembre ; 48 et 21 du 13 au 15 novembre ; 47 et 22 les 11 et 12 novembre ; 46 et 23 les 9 et 10 novembre ; 45 publiés et 24 programmés les 7 et 8 novembre, 45 publiés et 23 programmés le 6 novembre, 44 publiés et 24 programmés le 5 novembre, 43 publiés et 25 programmés le 2 novembre, 42 publiés et 26 programmés le 1er novembre, 41 publiés et 20 programmés le 29 octobre)
 - **Visites** : à vérifier dans la console Cloudflare Web Analytics (mesure active depuis le 13 octobre 2026) et dans Umami (essai depuis le 5 novembre 2026)
 - **Clics et revenus Amazon** : à vérifier dans la console
 - **Revenus AdSense** : aucun ; site refusé le 21 octobre 2026, nouvel examen demandé le 22 octobre, « En préparation » dans la console (vérifié le 15 novembre 2026)
 
 ## Les 3 priorités
 
-- Faire indexer par Google les 705 pages qui ne le sont pas encore, dont 416 explorées mais écartées
+- Faire indexer par Google les 713 pages qui ne le sont pas encore, dont 424 explorées mais écartées
   (surtout des fiches livres) : enrichir ces fiches, renforcer les liens internes vers elles et suivre
   leur évolution dans l'onglet Indexation du Studio.
 - Garder les liens Amazon directs justes : lancer `npm run verifier-produits -- --ecrire --lot 30`
